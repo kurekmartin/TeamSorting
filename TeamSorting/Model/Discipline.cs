@@ -13,7 +13,7 @@ public class Discipline
     public DisciplineInfo DisciplineInfo
     {
         get => _disciplineInfo;
-        init
+        private init
         {
             if (value == _disciplineInfo) return;
             _disciplineInfo = value;
