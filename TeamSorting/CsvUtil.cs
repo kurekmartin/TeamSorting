@@ -7,10 +7,9 @@ namespace TeamSorting;
 
 public static class CsvUtil
 {
-    public static async Task LoadMembersData(MembersData membersData, string inputFile)
+    public static async Task LoadMembersData(MembersData membersData, StreamReader inputFile)
     {
-        using var reader = new StreamReader(inputFile);
-        var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
 
         await csv.ReadAsync();
         csv.ReadHeader();

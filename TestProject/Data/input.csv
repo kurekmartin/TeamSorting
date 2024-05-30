@@ -1,9 +1,6 @@
 ﻿Name,With,NotWith,Age,Discipline1,Discipline2
 ,,,,Time,Number
-,,,,Asc,Asc
+,,,,Asc,Desc
 Jmeno1,,,10,00:00:10,10
 Jmeno2,,"Jmeno1,Jmeno2",11,00:01:15,20
 Jmeno3,Jmeno1,,12,,
-Jmeno4,,,10,,
-Jmeno5,,,12,,
-Jmeno6,,,12,,
