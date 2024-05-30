@@ -32,44 +32,50 @@ public class Discipline
         {
             if (value == _rawValue) return;
             _rawValue = value;
-            _valueIsValid = false;
+            UpdateValue();
         }
     }
 
     private object? _value;
-    private bool _valueIsValid;
 
     public object Value
     {
         get
         {
-            if (_value is not null && _valueIsValid)
+            if (_value == null)
             {
-                return _value;
+                return DisciplineInfo.DataType switch
+                {
+                    DisciplineDataType.Time => TimeSpan.Zero,
+                    DisciplineDataType.Number => decimal.Zero,
+                    _ => throw new FormatException()
+                };
             }
 
-            Value = DisciplineInfo.DataType switch
-            {
-                DisciplineDataType.Time => string.IsNullOrWhiteSpace(RawValue)
-                    ? TimeSpan.Zero
-                    : TimeSpan.Parse(RawValue),
-                DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
-                    ? decimal.Zero
-                    : decimal.Parse(RawValue),
-                _ => throw new FormatException()
-            };
-            _valueIsValid = true;
-
-            DisciplineInfo.UpdateValueRange(DoubleValue);
-
-            return _value!;
+            return _value;
         }
+
         private set
         {
             if (_value == value) return;
             _value = value;
             _scoreIsValid = false;
         }
+    }
+
+    private void UpdateValue()
+    {
+        Value = DisciplineInfo.DataType switch
+        {
+            DisciplineDataType.Time => string.IsNullOrWhiteSpace(RawValue)
+                ? TimeSpan.Zero
+                : TimeSpan.Parse(RawValue),
+            DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
+                ? decimal.Zero
+                : decimal.Parse(RawValue),
+            _ => throw new FormatException()
+        };
+        DisciplineInfo.UpdateValueRange(DoubleValue);
     }
 
     private decimal DoubleValue =>
@@ -110,7 +116,7 @@ public class Discipline
 
     private void DisciplineDataTypeInfoChanged(object? sender, EventArgs e)
     {
-        _valueIsValid = false;
+        UpdateValue();
     }
 
     private void DisciplineSortTypeChanged(object? sender, EventArgs e)
