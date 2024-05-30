@@ -129,21 +129,18 @@ public class Tests
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
 
-        List<Discipline> disciplinesAsc =
-        [
-            new Discipline(disciplineInfoAsc, "10"),
-            new Discipline(disciplineInfoAsc, "5"),
-            new Discipline(disciplineInfoAsc, "3"),
-            new Discipline(disciplineInfoAsc, "50")
-        ];
 
-        List<Discipline> disciplinesDesc =
-        [
-            new Discipline(disciplineInfoDesc, "10"),
-            new Discipline(disciplineInfoDesc, "5"),
-            new Discipline(disciplineInfoDesc, "3"),
-            new Discipline(disciplineInfoDesc, "50")
-        ];
+        _ = new Discipline(disciplineInfoAsc, "10");
+        _ = new Discipline(disciplineInfoAsc, "5");
+        _ = new Discipline(disciplineInfoAsc, "3");
+        _ = new Discipline(disciplineInfoAsc, "50");
+
+
+        _ = new Discipline(disciplineInfoDesc, "10");
+        _ = new Discipline(disciplineInfoDesc, "5");
+        _ = new Discipline(disciplineInfoDesc, "3");
+        _ = new Discipline(disciplineInfoDesc, "50");
+
 
         disciplineInfoAsc.MaxValue.Should().Be(50);
         disciplineInfoAsc.MinValue.Should().Be(3);
@@ -159,28 +156,26 @@ public class Tests
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
 
-        List<Discipline> disciplinesAsc =
-        [
-            new Discipline(disciplineInfoAsc, "00:00:10"),
-            new Discipline(disciplineInfoAsc, "00:15:00"),
-            new Discipline(disciplineInfoAsc, "00:01:00"),
-            new Discipline(disciplineInfoAsc, "00:00:05")
-        ];
 
-        List<Discipline> disciplinesDesc =
-        [
-            new Discipline(disciplineInfoDesc, "00:00:10"),
-            new Discipline(disciplineInfoDesc, "00:15:00"),
-            new Discipline(disciplineInfoDesc, "00:01:00"),
-            new Discipline(disciplineInfoDesc, "00:00:05")
-        ];
+        _ = new Discipline(disciplineInfoAsc, "00:00:10");
+        _ = new Discipline(disciplineInfoAsc, "00:15:00");
+        _ = new Discipline(disciplineInfoAsc, "00:01:00");
+        _ = new Discipline(disciplineInfoAsc, "00:00:05");
+
+
+        _ = new Discipline(disciplineInfoDesc, "00:00:10");
+        _ = new Discipline(disciplineInfoDesc, "00:15:00");
+        _ = new Discipline(disciplineInfoDesc, "00:01:00");
+        _ = new Discipline(disciplineInfoDesc, "00:00:05");
+
 
         disciplineInfoAsc.MaxValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds));
         disciplineInfoAsc.MinValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds));
-        disciplineInfoDesc.MaxValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds));
+        disciplineInfoDesc.MaxValue.Should()
+            .Be((decimal)(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds));
         disciplineInfoDesc.MinValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds));
     }
-    
+
     [Test]
     public void Discipline_Score_Number()
     {
@@ -206,12 +201,12 @@ public class Tests
         disciplinesAsc[0].Score.Should().Be(20);
         disciplinesAsc[1].Score.Should().Be(0);
         disciplinesAsc[2].Score.Should().Be(100);
-        
+
         disciplinesDesc[0].Score.Should().Be(80);
         disciplinesDesc[1].Score.Should().Be(100);
         disciplinesDesc[2].Score.Should().Be(0);
     }
-    
+
     [Test]
     public void Discipline_Score_Time()
     {
@@ -237,12 +232,12 @@ public class Tests
         disciplinesAsc[0].Score.Should().Be(20);
         disciplinesAsc[1].Score.Should().Be(0);
         disciplinesAsc[2].Score.Should().Be(100);
-        
+
         disciplinesDesc[0].Score.Should().Be(80);
         disciplinesDesc[1].Score.Should().Be(100);
         disciplinesDesc[2].Score.Should().Be(0);
     }
-    
+
     [Test]
     public void Discipline_Score_SortTypeChanged()
     {
@@ -267,11 +262,11 @@ public class Tests
 
         disciplineInfoAscToDesc.SortType = DisciplineSortType.Desc;
         disciplineInfoDescToAsc.SortType = DisciplineSortType.Asc;
-        
+
         disciplinesDescToAsc[0].Score.Should().Be(20);
         disciplinesDescToAsc[1].Score.Should().Be(0);
         disciplinesDescToAsc[2].Score.Should().Be(100);
-        
+
         disciplinesAscToDesc[0].Score.Should().Be(80);
         disciplinesAscToDesc[1].Score.Should().Be(100);
         disciplinesAscToDesc[2].Score.Should().Be(0);
