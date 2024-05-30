@@ -109,8 +109,8 @@ public class Discipline
         var value = DoubleValue;
         var minValue = DisciplineInfo.MinValue;
         var maxValue = DisciplineInfo.MaxValue;
-        const int max = 100;
-        const int min = 0;
+        var max = DisciplineInfo.SortType == DisciplineSortType.Asc ? 100 : 0;
+        var min = DisciplineInfo.SortType == DisciplineSortType.Asc ? 0 : 100;
         return (((value - minValue) / (maxValue - minValue)) * (max - min)) + min;
     }
 
