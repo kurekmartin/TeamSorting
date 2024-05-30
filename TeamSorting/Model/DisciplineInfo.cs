@@ -30,8 +30,8 @@ public class DisciplineInfo
         }
     }
 
-    private decimal _minValue;
-    private decimal _maxValue;
+    private decimal _minValue = decimal.MaxValue;
+    private decimal _maxValue = decimal.MinValue;
 
     public decimal MinValue
     {

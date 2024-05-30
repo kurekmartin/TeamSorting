@@ -132,6 +132,7 @@ public class Tests
         List<Discipline> disciplinesAsc =
         [
             new Discipline(disciplineInfoAsc, "10"),
+            new Discipline(disciplineInfoAsc, "5"),
             new Discipline(disciplineInfoAsc, "0"),
             new Discipline(disciplineInfoAsc, "50")
         ];
@@ -139,6 +140,7 @@ public class Tests
         List<Discipline> disciplinesDesc =
         [
             new Discipline(disciplineInfoDesc, "10"),
+            new Discipline(disciplineInfoDesc, "5"),
             new Discipline(disciplineInfoDesc, "0"),
             new Discipline(disciplineInfoDesc, "50")
         ];
