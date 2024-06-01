@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using CsvHelper;
 using TeamSorting.Model;
 using TeamSorting.ViewModel;
@@ -17,8 +18,8 @@ public static class CsvUtil
         var disciplines = ReadDisciplinesInfo(csv);
         var members = ReadTeamMembers(csv, disciplines);
 
-        membersData.DisciplinesInfo = disciplines;
-        membersData.TeamMembers = members;
+        membersData.DisciplinesInfo = new ObservableCollection<DisciplineInfo>(disciplines);
+        membersData.TeamMembers = new ObservableCollection<TeamMember>(members);
     }
 
     private static List<DisciplineInfo> ReadDisciplinesInfo(CsvReader csv)

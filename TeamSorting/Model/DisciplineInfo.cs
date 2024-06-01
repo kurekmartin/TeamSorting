@@ -67,6 +67,8 @@ public class DisciplineInfo
         }
     }
 
+    public List<TeamMember> TeamMembers = [];
+
     public event EventHandler? DisciplineDataTypeChanged;
 
     protected virtual void OnDisciplineDataTypeChanged()
