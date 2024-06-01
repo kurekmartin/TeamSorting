@@ -69,7 +69,7 @@ public static class CsvUtil
 
             foreach (var disciplineInfo in disciplines)
             {
-                teamMember.Disciplines.Add(new Discipline(disciplineInfo, csv[disciplineInfo.Name]));
+                teamMember.Disciplines.Add(new DisciplineRecord(disciplineInfo, csv[disciplineInfo.Name]));
             }
 
             teamMembers.Add(teamMember);

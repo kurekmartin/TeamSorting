@@ -6,5 +6,5 @@ public class TeamMember
     public List<string> With { get; set; } = [];
     public List<string> NotWith { get; set; } = [];
     public int Age { get; set; }
-    public List<Discipline> Disciplines { get; } = [];
+    public List<DisciplineRecord> Disciplines { get; } = [];
 }

@@ -130,16 +130,16 @@ public class Tests
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
 
 
-        _ = new Discipline(disciplineInfoAsc, "10");
-        _ = new Discipline(disciplineInfoAsc, "5");
-        _ = new Discipline(disciplineInfoAsc, "3");
-        _ = new Discipline(disciplineInfoAsc, "50");
+        _ = new DisciplineRecord(disciplineInfoAsc, "10");
+        _ = new DisciplineRecord(disciplineInfoAsc, "5");
+        _ = new DisciplineRecord(disciplineInfoAsc, "3");
+        _ = new DisciplineRecord(disciplineInfoAsc, "50");
 
 
-        _ = new Discipline(disciplineInfoDesc, "10");
-        _ = new Discipline(disciplineInfoDesc, "5");
-        _ = new Discipline(disciplineInfoDesc, "3");
-        _ = new Discipline(disciplineInfoDesc, "50");
+        _ = new DisciplineRecord(disciplineInfoDesc, "10");
+        _ = new DisciplineRecord(disciplineInfoDesc, "5");
+        _ = new DisciplineRecord(disciplineInfoDesc, "3");
+        _ = new DisciplineRecord(disciplineInfoDesc, "50");
 
 
         disciplineInfoAsc.MaxValue.Should().Be(50);
@@ -157,16 +157,16 @@ public class Tests
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
 
 
-        _ = new Discipline(disciplineInfoAsc, "00:00:10");
-        _ = new Discipline(disciplineInfoAsc, "00:15:00");
-        _ = new Discipline(disciplineInfoAsc, "00:01:00");
-        _ = new Discipline(disciplineInfoAsc, "00:00:05");
+        _ = new DisciplineRecord(disciplineInfoAsc, "00:00:10");
+        _ = new DisciplineRecord(disciplineInfoAsc, "00:15:00");
+        _ = new DisciplineRecord(disciplineInfoAsc, "00:01:00");
+        _ = new DisciplineRecord(disciplineInfoAsc, "00:00:05");
 
 
-        _ = new Discipline(disciplineInfoDesc, "00:00:10");
-        _ = new Discipline(disciplineInfoDesc, "00:15:00");
-        _ = new Discipline(disciplineInfoDesc, "00:01:00");
-        _ = new Discipline(disciplineInfoDesc, "00:00:05");
+        _ = new DisciplineRecord(disciplineInfoDesc, "00:00:10");
+        _ = new DisciplineRecord(disciplineInfoDesc, "00:15:00");
+        _ = new DisciplineRecord(disciplineInfoDesc, "00:01:00");
+        _ = new DisciplineRecord(disciplineInfoDesc, "00:00:05");
 
 
         disciplineInfoAsc.MaxValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds));
@@ -184,18 +184,18 @@ public class Tests
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
 
-        List<Discipline> disciplinesAsc =
+        List<DisciplineRecord> disciplinesAsc =
         [
-            new Discipline(disciplineInfoAsc, "10"),
-            new Discipline(disciplineInfoAsc, "0"),
-            new Discipline(disciplineInfoAsc, "50")
+            new DisciplineRecord(disciplineInfoAsc, "10"),
+            new DisciplineRecord(disciplineInfoAsc, "0"),
+            new DisciplineRecord(disciplineInfoAsc, "50")
         ];
 
-        List<Discipline> disciplinesDesc =
+        List<DisciplineRecord> disciplinesDesc =
         [
-            new Discipline(disciplineInfoDesc, "10"),
-            new Discipline(disciplineInfoDesc, "0"),
-            new Discipline(disciplineInfoDesc, "50")
+            new DisciplineRecord(disciplineInfoDesc, "10"),
+            new DisciplineRecord(disciplineInfoDesc, "0"),
+            new DisciplineRecord(disciplineInfoDesc, "50")
         ];
 
         disciplinesAsc[0].Score.Should().Be(20);
@@ -215,18 +215,18 @@ public class Tests
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
 
-        List<Discipline> disciplinesAsc =
+        List<DisciplineRecord> disciplinesAsc =
         [
-            new Discipline(disciplineInfoAsc, "00:01:00"),
-            new Discipline(disciplineInfoAsc, "00:00:00"),
-            new Discipline(disciplineInfoAsc, "00:05:00")
+            new DisciplineRecord(disciplineInfoAsc, "00:01:00"),
+            new DisciplineRecord(disciplineInfoAsc, "00:00:00"),
+            new DisciplineRecord(disciplineInfoAsc, "00:05:00")
         ];
 
-        List<Discipline> disciplinesDesc =
+        List<DisciplineRecord> disciplinesDesc =
         [
-            new Discipline(disciplineInfoDesc, "00:01:00"),
-            new Discipline(disciplineInfoDesc, "00:00:00"),
-            new Discipline(disciplineInfoDesc, "00:05:00")
+            new DisciplineRecord(disciplineInfoDesc, "00:01:00"),
+            new DisciplineRecord(disciplineInfoDesc, "00:00:00"),
+            new DisciplineRecord(disciplineInfoDesc, "00:05:00")
         ];
 
         disciplinesAsc[0].Score.Should().Be(20);
@@ -246,18 +246,18 @@ public class Tests
         var disciplineInfoDescToAsc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
 
-        List<Discipline> disciplinesAscToDesc =
+        List<DisciplineRecord> disciplinesAscToDesc =
         [
-            new Discipline(disciplineInfoAscToDesc, "10"),
-            new Discipline(disciplineInfoAscToDesc, "0"),
-            new Discipline(disciplineInfoAscToDesc, "50")
+            new DisciplineRecord(disciplineInfoAscToDesc, "10"),
+            new DisciplineRecord(disciplineInfoAscToDesc, "0"),
+            new DisciplineRecord(disciplineInfoAscToDesc, "50")
         ];
 
-        List<Discipline> disciplinesDescToAsc =
+        List<DisciplineRecord> disciplinesDescToAsc =
         [
-            new Discipline(disciplineInfoDescToAsc, "10"),
-            new Discipline(disciplineInfoDescToAsc, "0"),
-            new Discipline(disciplineInfoDescToAsc, "50")
+            new DisciplineRecord(disciplineInfoDescToAsc, "10"),
+            new DisciplineRecord(disciplineInfoDescToAsc, "0"),
+            new DisciplineRecord(disciplineInfoDescToAsc, "50")
         ];
 
         disciplineInfoAscToDesc.SortType = DisciplineSortType.Desc;

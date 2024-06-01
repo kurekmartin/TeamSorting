@@ -1,8 +1,8 @@
 ﻿namespace TeamSorting.Model;
 
-public class Discipline
+public class DisciplineRecord
 {
-    public Discipline(DisciplineInfo disciplineInfo, string rawValue)
+    public DisciplineRecord(DisciplineInfo disciplineInfo, string rawValue)
     {
         DisciplineInfo = disciplineInfo;
         RawValue = rawValue;
