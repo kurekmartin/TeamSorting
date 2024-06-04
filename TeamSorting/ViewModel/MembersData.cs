@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using TeamSorting.Model;
 
@@ -17,10 +18,10 @@ public class MembersData
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                //TODO TeamMember added
+                TeamMemberAdded(e.NewItems!);
                 break;
             case NotifyCollectionChangedAction.Remove:
-                //TODO TeamMember removed
+                TeamMemberRemoved(e.OldItems!);
                 break;
             default:
                 return;
@@ -32,37 +33,36 @@ public class MembersData
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                DisciplinesAdded((List<DisciplineInfo>)e.NewItems!);
+                DisciplinesAdded(e.NewItems!);
                 break;
             case NotifyCollectionChangedAction.Remove:
-                DisciplinesRemoved((List<DisciplineInfo>)e.NewItems!);
+                DisciplinesRemoved(e.OldItems!);
                 break;
             default:
                 return;
         }
     }
 
-    public ObservableCollection<DisciplineInfo> DisciplinesInfo { get; set; } = [];
-    public ObservableCollection<TeamMember> TeamMembers { get; set; } = [];
+    public ObservableCollection<DisciplineInfo> DisciplinesInfo { get; } = [];
+    public ObservableCollection<TeamMember> TeamMembers { get; } = [];
 
-    private void DisciplinesAdded(List<DisciplineInfo> disciplinesAdded)
+    private void DisciplinesAdded(IList disciplinesAdded)
     {
-        foreach (var disciplineInfo in disciplinesAdded)
+        foreach (DisciplineInfo disciplineInfo in disciplinesAdded)
         {
-            if (DisciplinesInfo.Any(discipline => discipline.Name == disciplineInfo.Name)) return;
             foreach (var teamMember in TeamMembers)
             {
+                if (teamMember.Disciplines.Any(discipline => discipline.DisciplineInfo.Name == disciplineInfo.Name)) continue;
                 var newDisciplineRecord = new DisciplineRecord(disciplineInfo, "");
                 teamMember.Disciplines.Add(newDisciplineRecord);
             }
         }
     }
 
-    private void DisciplinesRemoved(List<DisciplineInfo> disciplinesRemoved)
+    private void DisciplinesRemoved(IList disciplinesRemoved)
     {
-        foreach (var disciplineInfo in disciplinesRemoved)
+        foreach (DisciplineInfo disciplineInfo in disciplinesRemoved)
         {
-            DisciplinesInfo.Remove(disciplineInfo);
             foreach (var teamMember in TeamMembers)
             {
                 teamMember.Disciplines.RemoveAll(record => record.DisciplineInfo == disciplineInfo);
@@ -70,14 +70,26 @@ public class MembersData
         }
     }
 
-    public void TeamMemberAdded(TeamMember teamMember)
+    private void TeamMemberAdded(IList teamMembersAdded)
     {
-        if (TeamMembers.Any(member => member.Name == teamMember.Name)) return;
-        foreach (var disciplineInfo in DisciplinesInfo)
+        foreach (TeamMember teamMember in teamMembersAdded)
         {
-            disciplineInfo.TeamMembers.Add(teamMember);
+            foreach (var disciplineInfo in DisciplinesInfo)
+            {
+                if (disciplineInfo.TeamMembers.Any(member => member.Name == teamMember.Name)) continue;
+                disciplineInfo.TeamMembers.Add(teamMember);
+            }
         }
+    }
 
-        TeamMembers.Add(teamMember);
+    private void TeamMemberRemoved(IList teamMembersRemoved)
+    {
+        foreach (TeamMember teamMember in teamMembersRemoved)
+        {
+            foreach (var disciplineInfo in DisciplinesInfo)
+            {
+                disciplineInfo.TeamMembers.RemoveAll(member => member.Name == teamMember.Name);
+            }
+        }
     }
 }

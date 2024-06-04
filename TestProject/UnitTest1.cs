@@ -22,33 +22,13 @@ public class Tests
 
         members.TeamMembers.Count.Should().Be(3);
         members.DisciplinesInfo.Count.Should().Be(2);
+        members.DisciplinesInfo.Should().AllSatisfy(info => info.TeamMembers.Count.Should().Be(3));
 
-        //  var member1 = members.TeamMembers.First(member => member.Name == "Jmeno1");
-        // member1.Disciplines.Count.Should().Be(2);
-        //  var mem1dis1 = member1.Disciplines.First(discipline => discipline.DisciplineInfo.Name == discipline1.Name);
-        //  // mem1dis1.DisciplineInfo.Should().BeEquivalentTo(discipline1);
-        //  mem1dis1.Value.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10));
-        //  var mem1dis2 = member1.Disciplines.First(discipline => discipline.DisciplineInfo.Name == discipline2.Name);
-        //  //mem1dis2.DisciplineInfo.Should().BeEquivalentTo(discipline2);
-        //  mem1dis2.Value.Should().Be(10);
-        //
-        //  var member2 = members.TeamMembers.First(member => member.Name == "Jmeno2");
-        //  member2.Disciplines.Count.Should().Be(2);
-        //  var mem2dis1 = member2.Disciplines.First(discipline => discipline.DisciplineInfo.Name == discipline1.Name);
-        //  //mem2dis1.DisciplineInfo.Should().BeEquivalentTo(discipline1);
-        //  mem2dis1.Value.Should().Be(new TimeSpan(hours: 0, minutes: 1, seconds: 15));
-        //  var mem2dis2 = member2.Disciplines.First(discipline => discipline.DisciplineInfo.Name == discipline2.Name);
-        //  //mem2dis2.DisciplineInfo.Should().BeEquivalentTo(discipline2);
-        //  mem2dis2.Value.Should().Be(20);
-        //
-        //  var member3 = members.TeamMembers.First(member => member.Name == "Jmeno3");
-        //  member3.Disciplines.Count.Should().Be(2);
-        //  var mem3dis1 = member3.Disciplines.First(discipline => discipline.DisciplineInfo.Name == discipline1.Name);
-        //  //mem3dis1.DisciplineInfo.Should().BeEquivalentTo(discipline1);
-        //  mem3dis1.Value.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 0));
-        //  var mem3dis2 = member3.Disciplines.First(discipline => discipline.DisciplineInfo.Name == discipline2.Name);
-        //  //mem3dis2.DisciplineInfo.Should().BeEquivalentTo(discipline2);
-        //  mem3dis2.Value.Should().Be(0);
+        members.DisciplinesInfo.Should()
+            .AllSatisfy(info => info.TeamMembers.Should().BeEquivalentTo(members.TeamMembers));
+        members.TeamMembers.Should().AllSatisfy(member =>
+            member.Disciplines.Select(
+                discipline => discipline.DisciplineInfo).Should().BeEquivalentTo(members.DisciplinesInfo));
     }
 
     [Test]
