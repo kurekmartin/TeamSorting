@@ -5,7 +5,7 @@ using TeamSorting.ViewModel;
 
 namespace TestProject;
 
-public class Tests
+public class FileLoadingTests
 {
     [SetUp]
     public void Setup()
