@@ -64,7 +64,11 @@ public class MembersData
         {
             foreach (var teamMember in TeamMembers)
             {
-                teamMember.Disciplines.RemoveAll(record => record.DisciplineInfo == disciplineInfo);
+                var disciplines = teamMember.Disciplines.Where(record => record.DisciplineInfo == disciplineInfo);
+                foreach (var discipline in disciplines)
+                {
+                    teamMember.Disciplines.Remove(discipline);
+                }
             }
         }
     }

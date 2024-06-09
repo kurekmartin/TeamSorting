@@ -18,8 +18,6 @@ public class DisciplineRecord
             if (value == _disciplineInfo) return;
             _disciplineInfo = value;
             _disciplineInfo.DisciplineDataTypeChanged += DisciplineDataTypeInfoChanged;
-            _disciplineInfo.DisciplineSortTypeChanged += DisciplineSortTypeChanged;
-            _disciplineInfo.ValueRangeChanged += OnValueRangeChanged;
         }
     }
 
@@ -55,12 +53,7 @@ public class DisciplineRecord
             return _value;
         }
 
-        private set
-        {
-            if (_value == value) return;
-            _value = value;
-            _scoreIsValid = false;
-        }
+        private set => _value = value;
     }
 
     private void UpdateValue()
@@ -85,23 +78,8 @@ public class DisciplineRecord
             _ => throw new FormatException()
         };
 
-    private double _score;
-    private bool _scoreIsValid;
+    public double Score => NormalizedValue();
 
-    public double Score
-    {
-        get
-        {
-            if (_scoreIsValid) return _score;
-
-            var normalizedScore = NormalizedValue();
-            Score = normalizedScore;
-            _scoreIsValid = true;
-
-            return _score;
-        }
-        private set => _score = value;
-    }
 
     private double NormalizedValue()
     {
@@ -116,15 +94,5 @@ public class DisciplineRecord
     private void DisciplineDataTypeInfoChanged(object? sender, EventArgs e)
     {
         UpdateValue();
-    }
-
-    private void DisciplineSortTypeChanged(object? sender, EventArgs e)
-    {
-        _scoreIsValid = false;
-    }
-
-    private void OnValueRangeChanged(object? sender, EventArgs e)
-    {
-        _scoreIsValid = false;
     }
 }

@@ -337,4 +337,37 @@ public class DisciplineTests
         disciplineDescRecord2.Score.Should().Be(0);
         disciplineDescRecord3.Score.Should().Be(100);
     }
+    
+    [Test]
+    public void DisciplineRecordChanged_Score_Number()
+    {
+        var disciplineInfo = new DisciplineInfo()
+            { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+
+        var member1 = new TeamMember(name: "Jmeno1", age: 10);
+        var member2 = new TeamMember(name: "Jmeno2", age: 10);
+        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+
+        var disciplineRecord1 = new DisciplineRecord(disciplineInfo, "10");
+        var disciplineRecord2 = new DisciplineRecord(disciplineInfo, "0");
+        var disciplineRecord3 = new DisciplineRecord(disciplineInfo, "100");
+
+        member1.Disciplines.Add(disciplineRecord1);
+        member2.Disciplines.Add(disciplineRecord2);
+        member3.Disciplines.Add(disciplineRecord3);
+
+        disciplineInfo.TeamMembers.Add(member1);
+        disciplineInfo.TeamMembers.Add(member2);
+        disciplineInfo.TeamMembers.Add(member3);
+
+        disciplineRecord1.Score.Should().Be(10);
+        disciplineRecord2.Score.Should().Be(0);
+        disciplineRecord3.Score.Should().Be(100);
+        
+        disciplineRecord3.RawValue = "50";
+
+        disciplineRecord1.Score.Should().Be(20);
+        disciplineRecord2.Score.Should().Be(0);
+        disciplineRecord3.Score.Should().Be(100);
+    }
 }

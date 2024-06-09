@@ -1,16 +1,7 @@
-﻿using System.Collections;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-
-namespace TeamSorting.Model;
+﻿namespace TeamSorting.Model;
 
 public class DisciplineInfo
 {
-    public DisciplineInfo()
-    {
-        TeamMembers.CollectionChanged += TeamMembersOnCollectionChanged;
-    }
-
     public string Name { get; set; } = string.Empty;
 
     private DisciplineDataType _dataType;
@@ -39,78 +30,11 @@ public class DisciplineInfo
         }
     }
 
-    private double _minValue = double.MaxValue;
-    private double _maxValue = double.MinValue;
+    public double MinValue => GetDisciplineValues().Min();
 
-    public double MinValue
-    {
-        get => _minValue;
-        private set
-        {
-            if (Math.Abs(_minValue - value) < 0.0001) return;
-            _minValue = value;
-            OnValueRangeChanged();
-        }
-    }
+    public double MaxValue => GetDisciplineValues().Max();
 
-    public double MaxValue
-    {
-        get => _maxValue;
-        private set
-        {
-            if (Math.Abs(_maxValue - value) < 0.0001) return;
-            _maxValue = value;
-            OnValueRangeChanged();
-        }
-    }
-
-    public readonly ObservableCollection<TeamMember> TeamMembers = [];
-
-    private void TeamMembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        switch (e.Action)
-        {
-            case NotifyCollectionChangedAction.Add:
-                TeamMembersAdded(e.NewItems!);
-                break;
-            case NotifyCollectionChangedAction.Remove:
-                TeamMembersRemoved(e.OldItems!);
-                break;
-        }
-    }
-
-    private void TeamMembersAdded(IList teamMembersAdded)
-    {
-        foreach (TeamMember teamMember in teamMembersAdded)
-        {
-            var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)
-                ?.DoubleValue;
-            if (disciplineValue < MinValue)
-            {
-                MinValue = (double)disciplineValue;
-            }
-            else if (disciplineValue > MaxValue)
-            {
-                MaxValue = (double)disciplineValue;
-            }
-        }
-    }
-
-    private void TeamMembersRemoved(IList teamMembersRemoved)
-    {
-        foreach (TeamMember teamMember in teamMembersRemoved)
-        {
-            var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)?.DoubleValue;
-            if (disciplineValue is not null && Math.Abs((double)(disciplineValue - MinValue)) < 0.0001)
-            {
-                MinValue = GetDisciplineValues().Min();
-            }
-            else if (disciplineValue is not null && Math.Abs((double)(disciplineValue - MaxValue)) < 0.0001)
-            {
-                MaxValue = GetDisciplineValues().Max();
-            }
-        }
-    }
+    public readonly List<TeamMember> TeamMembers = [];
 
     private IEnumerable<double> GetDisciplineValues()
     {
