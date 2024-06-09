@@ -95,12 +95,12 @@ public class DisciplineRecord
             if (_scoreIsValid) return _score;
 
             var normalizedScore = NormalizedValue();
-            _score = normalizedScore;
+            Score = normalizedScore;
             _scoreIsValid = true;
 
             return _score;
         }
-        set => _score = value;
+        private set => _score = value;
     }
 
     private double NormalizedValue()
