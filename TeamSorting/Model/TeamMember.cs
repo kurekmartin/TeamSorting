@@ -1,10 +1,10 @@
 ﻿namespace TeamSorting.Model;
 
-public class TeamMember
+public class TeamMember(string name, int age)
 {
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = name;
     public List<string> With { get; set; } = [];
     public List<string> NotWith { get; set; } = [];
-    public int Age { get; set; }
+    public int Age { get; set; } = age;
     public List<DisciplineRecord> Disciplines { get; } = [];
 }

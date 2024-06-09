@@ -1,7 +1,16 @@
-﻿namespace TeamSorting.Model;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+
+namespace TeamSorting.Model;
 
 public class DisciplineInfo
 {
+    public DisciplineInfo()
+    {
+        TeamMembers.CollectionChanged += TeamMembersOnCollectionChanged;
+    }
+
     public string Name { get; set; } = string.Empty;
 
     private DisciplineDataType _dataType;
@@ -55,19 +64,59 @@ public class DisciplineInfo
         }
     }
 
-    public void UpdateValueRange(decimal value)
+    public readonly ObservableCollection<TeamMember> TeamMembers = [];
+
+    private void TeamMembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (value < MinValue)
+        switch (e.Action)
         {
-            MinValue = value;
-        }
-        else if (value > MaxValue)
-        {
-            MaxValue = value;
+            case NotifyCollectionChangedAction.Add:
+                TeamMembersAdded(e.NewItems!);
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                TeamMembersRemoved(e.OldItems!);
+                break;
         }
     }
 
-    public List<TeamMember> TeamMembers = [];
+    private void TeamMembersAdded(IList teamMembersAdded)
+    {
+        foreach (TeamMember teamMember in teamMembersAdded)
+        {
+            var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)
+                ?.DecimalValue;
+            if (disciplineValue < MinValue)
+            {
+                MinValue = (decimal)disciplineValue;
+            }
+            else if (disciplineValue > MaxValue)
+            {
+                MaxValue = (decimal)disciplineValue;
+            }
+        }
+    }
+
+    private void TeamMembersRemoved(IList teamMembersRemoved)
+    {
+        foreach (TeamMember teamMember in teamMembersRemoved)
+        {
+            var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)?.DecimalValue;
+            if (disciplineValue == MinValue)
+            {
+                MinValue = GetDisciplineValues().Min();
+            }
+            else if (disciplineValue == MaxValue)
+            {
+                MaxValue = GetDisciplineValues().Max();
+            }
+        }
+    }
+
+    private IEnumerable<decimal> GetDisciplineValues()
+    {
+        return TeamMembers.Select(member =>
+            member.Disciplines.First(record => record.DisciplineInfo == this).DecimalValue);
+    }
 
     public event EventHandler? DisciplineDataTypeChanged;
 

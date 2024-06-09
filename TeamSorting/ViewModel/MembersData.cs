@@ -23,8 +23,6 @@ public class MembersData
             case NotifyCollectionChangedAction.Remove:
                 TeamMemberRemoved(e.OldItems!);
                 break;
-            default:
-                return;
         }
     }
 
@@ -52,7 +50,8 @@ public class MembersData
         {
             foreach (var teamMember in TeamMembers)
             {
-                if (teamMember.Disciplines.Any(discipline => discipline.DisciplineInfo.Name == disciplineInfo.Name)) continue;
+                if (teamMember.Disciplines.Any(discipline => discipline.DisciplineInfo.Name == disciplineInfo.Name))
+                    continue;
                 var newDisciplineRecord = new DisciplineRecord(disciplineInfo, "");
                 teamMember.Disciplines.Add(newDisciplineRecord);
             }
@@ -88,7 +87,11 @@ public class MembersData
         {
             foreach (var disciplineInfo in DisciplinesInfo)
             {
-                disciplineInfo.TeamMembers.RemoveAll(member => member.Name == teamMember.Name);
+                var members = disciplineInfo.TeamMembers.Where(member => member.Name == teamMember.Name);
+                foreach (var member in members)
+                {
+                    disciplineInfo.TeamMembers.Remove(member);
+                }
             }
         }
     }

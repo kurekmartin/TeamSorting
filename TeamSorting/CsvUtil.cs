@@ -66,12 +66,12 @@ public static class CsvUtil
 
         while (csv.Read())
         {
-            var teamMember = new TeamMember()
+            var teamMember = new TeamMember(name: csv[nameof(TeamMember.Name)], age:int.Parse(csv[nameof(TeamMember.Age)]))
             {
-                Name = csv[nameof(TeamMember.Name)],
+
                 With = csv[nameof(TeamMember.With)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
                 NotWith = csv[nameof(TeamMember.NotWith)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
-                Age = int.Parse(csv[nameof(TeamMember.Age)])
+
             };
 
             foreach (var disciplineInfo in disciplines)

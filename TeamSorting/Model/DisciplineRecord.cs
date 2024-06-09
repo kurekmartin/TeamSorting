@@ -75,10 +75,9 @@ public class DisciplineRecord
                 : decimal.Parse(RawValue),
             _ => throw new FormatException()
         };
-        DisciplineInfo.UpdateValueRange(DoubleValue);
     }
 
-    private decimal DoubleValue =>
+    public decimal DecimalValue =>
         DisciplineInfo.DataType switch
         {
             DisciplineDataType.Time => (decimal)((TimeSpan)Value).TotalSeconds,
@@ -106,7 +105,7 @@ public class DisciplineRecord
 
     private decimal NormalizedValue()
     {
-        var value = DoubleValue;
+        var value = DecimalValue;
         var minValue = DisciplineInfo.MinValue;
         var maxValue = DisciplineInfo.MaxValue;
         var max = DisciplineInfo.SortType == DisciplineSortType.Asc ? 100 : 0;
