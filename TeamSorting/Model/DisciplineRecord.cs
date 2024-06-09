@@ -47,7 +47,7 @@ public class DisciplineRecord
                 return DisciplineInfo.DataType switch
                 {
                     DisciplineDataType.Time => TimeSpan.Zero,
-                    DisciplineDataType.Number => decimal.Zero,
+                    DisciplineDataType.Number => 0d,
                     _ => throw new FormatException()
                 };
             }
@@ -71,24 +71,24 @@ public class DisciplineRecord
                 ? TimeSpan.Zero
                 : TimeSpan.Parse(RawValue),
             DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
-                ? decimal.Zero
-                : decimal.Parse(RawValue),
+                ? 0d
+                : double.Parse(RawValue),
             _ => throw new FormatException()
         };
     }
 
-    public decimal DecimalValue =>
+    public double DoubleValue =>
         DisciplineInfo.DataType switch
         {
-            DisciplineDataType.Time => (decimal)((TimeSpan)Value).TotalSeconds,
-            DisciplineDataType.Number => ((decimal)Value),
+            DisciplineDataType.Time => ((TimeSpan)Value).TotalSeconds,
+            DisciplineDataType.Number => (double)Value,
             _ => throw new FormatException()
         };
 
-    private decimal _score;
+    private double _score;
     private bool _scoreIsValid;
 
-    public decimal Score
+    public double Score
     {
         get
         {
@@ -103,9 +103,9 @@ public class DisciplineRecord
         set => _score = value;
     }
 
-    private decimal NormalizedValue()
+    private double NormalizedValue()
     {
-        var value = DecimalValue;
+        var value = DoubleValue;
         var minValue = DisciplineInfo.MinValue;
         var maxValue = DisciplineInfo.MaxValue;
         var max = DisciplineInfo.SortType == DisciplineSortType.Asc ? 100 : 0;

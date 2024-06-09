@@ -120,11 +120,11 @@ public class DisciplineTests
         disciplineInfoDesc.TeamMembers.Add(member3);
         disciplineInfoDesc.TeamMembers.Add(member4);
 
-        disciplineInfoAsc.MaxValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds));
-        disciplineInfoAsc.MinValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds));
+        disciplineInfoAsc.MaxValue.Should().Be(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds);
+        disciplineInfoAsc.MinValue.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds);
         disciplineInfoDesc.MaxValue.Should()
-            .Be((decimal)(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds));
-        disciplineInfoDesc.MinValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds));
+            .Be(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds);
+        disciplineInfoDesc.MinValue.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds);
     }
 
     [Test]
@@ -164,12 +164,12 @@ public class DisciplineTests
         disciplineInfoDesc.TeamMembers.Remove(member4);
         disciplineInfoDesc.TeamMembers.Remove(member2);
 
-        disciplineInfoAsc.MaxValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds));
-        disciplineInfoAsc.MinValue.Should().Be((decimal)(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds));
+        disciplineInfoAsc.MaxValue.Should().Be(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds);
+        disciplineInfoAsc.MinValue.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds);
         disciplineInfoDesc.MaxValue.Should()
-            .Be((decimal)(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds));
+            .Be(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds);
         disciplineInfoDesc.MinValue.Should()
-            .Be((decimal)(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds));
+            .Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds);
     }
 
     [Test]

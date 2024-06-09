@@ -39,26 +39,26 @@ public class DisciplineInfo
         }
     }
 
-    private decimal _minValue = decimal.MaxValue;
-    private decimal _maxValue = decimal.MinValue;
+    private double _minValue = double.MaxValue;
+    private double _maxValue = double.MinValue;
 
-    public decimal MinValue
+    public double MinValue
     {
         get => _minValue;
         private set
         {
-            if (_minValue == value) return;
+            if (Math.Abs(_minValue - value) < 0.0001) return;
             _minValue = value;
             OnValueRangeChanged();
         }
     }
 
-    public decimal MaxValue
+    public double MaxValue
     {
         get => _maxValue;
         private set
         {
-            if (_maxValue == value) return;
+            if (Math.Abs(_maxValue - value) < 0.0001) return;
             _maxValue = value;
             OnValueRangeChanged();
         }
@@ -84,14 +84,14 @@ public class DisciplineInfo
         foreach (TeamMember teamMember in teamMembersAdded)
         {
             var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)
-                ?.DecimalValue;
+                ?.DoubleValue;
             if (disciplineValue < MinValue)
             {
-                MinValue = (decimal)disciplineValue;
+                MinValue = (double)disciplineValue;
             }
             else if (disciplineValue > MaxValue)
             {
-                MaxValue = (decimal)disciplineValue;
+                MaxValue = (double)disciplineValue;
             }
         }
     }
@@ -100,22 +100,22 @@ public class DisciplineInfo
     {
         foreach (TeamMember teamMember in teamMembersRemoved)
         {
-            var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)?.DecimalValue;
-            if (disciplineValue == MinValue)
+            var disciplineValue = teamMember.Disciplines.FirstOrDefault(record => record.DisciplineInfo == this)?.DoubleValue;
+            if (disciplineValue is not null && Math.Abs((double)(disciplineValue - MinValue)) < 0.0001)
             {
                 MinValue = GetDisciplineValues().Min();
             }
-            else if (disciplineValue == MaxValue)
+            else if (disciplineValue is not null && Math.Abs((double)(disciplineValue - MaxValue)) < 0.0001)
             {
                 MaxValue = GetDisciplineValues().Max();
             }
         }
     }
 
-    private IEnumerable<decimal> GetDisciplineValues()
+    private IEnumerable<double> GetDisciplineValues()
     {
         return TeamMembers.Select(member =>
-            member.Disciplines.First(record => record.DisciplineInfo == this).DecimalValue);
+            member.Disciplines.First(record => record.DisciplineInfo == this).DoubleValue);
     }
 
     public event EventHandler? DisciplineDataTypeChanged;
