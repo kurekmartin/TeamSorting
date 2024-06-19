@@ -135,4 +135,42 @@ public class MembersData
 
         return notValidMembers.Distinct().ToList();
     }
+
+    public List<TeamMember> GetWithMembers(TeamMember teamMember)
+    {
+        List<TeamMember> group = [teamMember];
+        var i = 0;
+        bool newMembersAdded;
+        do
+        {
+            newMembersAdded = false;
+            var newMembers = group[i..];
+            var withMembers = newMembers.SelectMany(member => member.With).Distinct();
+            foreach (string withMember in withMembers)
+            {
+                var member = TeamMembers.First(member => member.Name == withMember);
+                if (group.Contains(member)) continue;
+                newMembersAdded = true;
+                group.Add(member);
+                i++;
+            }
+        } while (newMembersAdded);
+
+        group.Remove(teamMember);
+        return group;
+    }
+
+    public List<TeamMember> GetNotWithMembers(TeamMember teamMember)
+    {
+        List<TeamMember> group = [];
+        var notWithMembers = teamMember.NotWith;
+        foreach (string notWithMember in notWithMembers)
+        {
+            var member = TeamMembers.First(member => member.Name == notWithMember);
+            if (group.Contains(member)) continue;
+            group.Add(member);
+        }
+
+        return group;
+    }
 }
