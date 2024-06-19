@@ -21,9 +21,9 @@ class Program
 
         List<Team> teams =
         [
-            new Team() { Name = "Team1" },
-            new Team() { Name = "Team2" },
-            new Team() { Name = "Team3" }
+            new Team("Team1"),
+            new Team("Team2"),
+            new Team("Team3")
         ];
 
         var index = 0;
