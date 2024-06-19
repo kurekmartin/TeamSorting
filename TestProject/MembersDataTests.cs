@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using FluentAssertions;
+﻿using FluentAssertions;
 using TeamSorting.Model;
 using TeamSorting.ViewModel;
 
@@ -24,7 +23,7 @@ public class MembersDataTests
     }
 
     [Test]
-    public void SolutionMembersCombination_InValid()
+    public void SolutionMembersCombination_Invalid()
     {
         var data = new MembersData()
         {
