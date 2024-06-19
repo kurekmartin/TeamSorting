@@ -6,7 +6,7 @@ public class TeamsCollection
 {
     public List<Team> Teams = [];
 
-    private Dictionary<DisciplineInfo, double>? MaxScores
+    private Dictionary<DisciplineInfo, double> MaxScores
     {
         get
         {
@@ -17,7 +17,7 @@ public class TeamsCollection
         }
     }
 
-    private Dictionary<DisciplineInfo, double>? MinScores
+    private Dictionary<DisciplineInfo, double> MinScores
     {
         get
         {
@@ -35,7 +35,6 @@ public class TeamsCollection
             var dict = new Dictionary<Team, Dictionary<DisciplineInfo, double>>();
             var maxScores = MaxScores;
             var minScores = MinScores;
-            if (maxScores == null || minScores == null) return dict;
 
             var disciplines = maxScores.Select(pair => pair.Key).ToList();
 
