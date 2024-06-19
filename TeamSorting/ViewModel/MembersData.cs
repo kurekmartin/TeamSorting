@@ -99,4 +99,40 @@ public class MembersData
             }
         }
     }
+
+    public List<string> InvalidMembersCombinationList()
+    {
+        List<string> notValidMembers = [];
+        foreach (var teamMember in TeamMembers)
+        {
+            List<TeamMember> group = [teamMember];
+            var i = 0;
+            bool newMembersAdded;
+            do
+            {
+                newMembersAdded = false;
+                var newMembers = group[i..];
+                var withMembers = newMembers.SelectMany(member => member.With).Distinct();
+                foreach (string withMember in withMembers)
+                {
+                    var member = TeamMembers.First(member => member.Name == withMember);
+                    if (group.Contains(member)) continue;
+                    newMembersAdded = true;
+                    group.Add(member);
+                    i++;
+                }
+            } while (newMembersAdded);
+
+            var membersNames = group.Select(member => member.Name).Distinct().ToList();
+            var notWithMembers = group.SelectMany(member => member.NotWith).Distinct().ToList();
+            bool intersectExists = membersNames.Intersect(notWithMembers).Any();
+            if (intersectExists)
+            {
+                notValidMembers.AddRange(membersNames);
+            }
+            
+        }
+
+        return notValidMembers.Distinct().ToList();
+    }
 }
