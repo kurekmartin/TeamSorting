@@ -36,6 +36,21 @@ public class DisciplineInfo
 
     public readonly List<TeamMember> TeamMembers = [];
 
+    public List<TeamMember> GetSortedTeamMembers()
+    {
+        TeamMembers.Sort(CompareMembersByScore);
+        return TeamMembers;
+    }
+    private int CompareMembersByScore(TeamMember member1, TeamMember member2)
+    {
+        double score1 = member1.Disciplines.First(record => record.DisciplineInfo == this).DoubleValue;
+        double score2 = member2.Disciplines.First(record => record.DisciplineInfo == this).DoubleValue;
+
+        if (score1 > score2) return 1;
+        if (score1 < score2) return -1;
+        return 0;
+    }
+
     private IEnumerable<double> GetDisciplineValues()
     {
         return TeamMembers.Select(member =>
