@@ -128,6 +128,29 @@ public class Data
         return (((value - range.min) / (range.max - range.min)) * (max - min)) + min;
     }
 
+    public IEnumerable<DisciplineRecord> GetSortedRecordsByDiscipline(DisciplineInfo discipline)
+    {
+        var records = GetDisciplineRecordsByDiscipline(discipline).ToList();
+        if (discipline.SortType == DisciplineSortType.Asc)
+        {
+            return records.OrderBy(record => record.DoubleValue);
+        }
+
+        return records.OrderByDescending(record => record.DoubleValue);
+    }
+
+    public Dictionary<DisciplineInfo, List<DisciplineRecord>> GetSortedDisciplines()
+    {
+        var sortedDisciplines = new Dictionary<DisciplineInfo, List<DisciplineRecord>>();
+        foreach (var discipline in Disciplines)
+        {
+            var sortedRecords = GetSortedRecordsByDiscipline(discipline).ToList();
+            sortedDisciplines.Add(discipline, sortedRecords);
+        }
+
+        return sortedDisciplines;
+    }
+
     public List<Member> InvalidMembersCombination()
     {
         List<Member> invalidMembers = [];
@@ -229,6 +252,37 @@ public class Data
     public bool RemoveMemberFromTeam(Member member, Team team)
     {
         return team.Members.Remove(member);
+    }
+
+    public double GetTeamTotalValueByDiscipline(Team team, DisciplineInfo discipline)
+    {
+        var records = DisciplineRecords.Where(record =>
+            record.DisciplineInfo == discipline
+            && team.Members.Contains(record.Member));
+        return records.Sum(record => record.DoubleValue);
+    }
+
+    public Dictionary<Team, double> GetSortedTeamsByValueByDiscipline(DisciplineInfo discipline)
+    {
+        var dict = new Dictionary<Team, double>();
+        foreach (var team in Teams)
+        {
+            double value = GetTeamTotalValueByDiscipline(team, discipline);
+            dict.Add(team,value);
+        }
+
+        return dict.OrderBy(pair => pair.Value).ToDictionary();
+    }
+
+    public List<Team> CreateTeams(int count)
+    {
+        Teams.Clear();
+        for (var i = 0; i < count; i++)
+        {
+            AddTeam(new Team($"Team{i + 1}"));
+        }
+
+        return Teams;
     }
 
     #endregion
