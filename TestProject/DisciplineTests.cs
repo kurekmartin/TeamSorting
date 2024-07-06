@@ -1,373 +1,395 @@
 ﻿using FluentAssertions;
-using TeamSorting.Model;
+using TeamSorting.Model.New;
+using TeamSorting.ViewModel.New;
 
 namespace TestProject;
 
 public class DisciplineTests
 {
     [Test]
+    public void AddDiscipline()
+    {
+        var data = new Data();
+        var discipline1 = new DisciplineInfo() { Name = "Discipline1" };
+        var discipline2 = new DisciplineInfo() { Name = "Discipline2" };
+
+        data.AddDiscipline(discipline1);
+        data.AddDiscipline(discipline2);
+
+        data.Disciplines.Count.Should().Be(2);
+        data.Disciplines.Should().Contain(discipline1);
+        data.Disciplines.Should().Contain(discipline2);
+    }
+
+    [Test]
+    public void AddDuplicateDiscipline()
+    {
+        var data = new Data();
+        var discipline1 = new DisciplineInfo() { Name = "Discipline1" };
+        var discipline2 = new DisciplineInfo() { Name = "Discipline1" };
+
+        data.AddDiscipline(discipline1);
+        data.AddDiscipline(discipline2);
+
+        data.Disciplines.Count.Should().Be(1);
+        data.Disciplines.Should().Contain(discipline1);
+    }
+
+    [Test]
+    public void RemoveDiscipline()
+    {
+        var data = new Data();
+        var discipline1 = new DisciplineInfo() { Name = "Discipline1" };
+        var discipline2 = new DisciplineInfo() { Name = "Discipline2" };
+
+        data.AddDiscipline(discipline1);
+        data.AddDiscipline(discipline2);
+
+        data.Disciplines.Count.Should().Be(2);
+        data.Disciplines.Should().Contain(discipline1);
+        data.Disciplines.Should().Contain(discipline2);
+
+        data.RemoveDiscipline(discipline2);
+
+        data.Disciplines.Count.Should().Be(1);
+        data.Disciplines.Should().Contain(discipline1);
+    }
+
+    [Test]
     public void Discipline_MemberAdded_ValueRange_Number()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { Name = "Discipline1", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
         var disciplineInfoDesc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+            { Name = "Discipline2", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfoAsc);
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
-        var member4 = new TeamMember(name: "Jmeno4", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        var member4 = new Member(name: "Jmeno4");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
+        data.AddMember(member4);
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "5"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "3"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "50"));
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "5");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "3");
+        data.AddDisciplineRecord(member4, disciplineInfoAsc, "50");
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "5"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "3"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "50"));
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "5");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "3");
+        data.AddDisciplineRecord(member4, disciplineInfoDesc, "50");
 
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
-        disciplineInfoAsc.TeamMembers.Add(member4);
-
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
-        disciplineInfoDesc.TeamMembers.Add(member4);
-
-        disciplineInfoAsc.MaxValue.Should().Be(50);
-        disciplineInfoAsc.MinValue.Should().Be(3);
-        disciplineInfoDesc.MaxValue.Should().Be(50);
-        disciplineInfoDesc.MinValue.Should().Be(3);
+        var disciplineAscRange = data.GetDisciplineRange(disciplineInfoAsc);
+        disciplineAscRange.max.Should().Be(50);
+        disciplineAscRange.min.Should().Be(3);
+        var disciplineDescRange = data.GetDisciplineRange(disciplineInfoDesc);
+        disciplineDescRange.max.Should().Be(50);
+        disciplineDescRange.min.Should().Be(3);
     }
 
     [Test]
     public void Discipline_MemberRemoved_ValueRange_Number()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { Name = "Discipline1", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
         var disciplineInfoDesc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+            { Name = "Discipline2", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfoAsc);
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
-        var member4 = new TeamMember(name: "Jmeno4", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        var member4 = new Member(name: "Jmeno4");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
+        data.AddMember(member4);
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "5"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "3"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "50"));
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "5");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "3");
+        data.AddDisciplineRecord(member4, disciplineInfoAsc, "50");
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "5"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "3"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "50"));
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "5");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "3");
+        data.AddDisciplineRecord(member4, disciplineInfoDesc, "50");
 
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
-        disciplineInfoAsc.TeamMembers.Add(member4);
-        disciplineInfoAsc.TeamMembers.Remove(member4);
-        disciplineInfoAsc.TeamMembers.Remove(member3);
+        data.RemoveMember(member4);
+        data.RemoveMember(member3);
 
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
-        disciplineInfoDesc.TeamMembers.Add(member4);
-        disciplineInfoDesc.TeamMembers.Remove(member4);
-        disciplineInfoDesc.TeamMembers.Remove(member3);
-
-        disciplineInfoAsc.MaxValue.Should().Be(10);
-        disciplineInfoAsc.MinValue.Should().Be(5);
-        disciplineInfoDesc.MaxValue.Should().Be(10);
-        disciplineInfoDesc.MinValue.Should().Be(5);
+        var disciplineAscRange = data.GetDisciplineRange(disciplineInfoAsc);
+        disciplineAscRange.max.Should().Be(10);
+        disciplineAscRange.min.Should().Be(5);
+        var disciplineDescRange = data.GetDisciplineRange(disciplineInfoDesc);
+        disciplineDescRange.max.Should().Be(10);
+        disciplineDescRange.min.Should().Be(5);
     }
 
     [Test]
     public void Discipline_MemberAdded_ValueRange_Time()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
+            { Name = "Discipline1", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
         var disciplineInfoDesc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+            { Name = "Discipline2", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+        data.AddDiscipline(disciplineInfoAsc);
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
-        var member4 = new TeamMember(name: "Jmeno4", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        var member4 = new Member(name: "Jmeno4");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
+        data.AddMember(member4);
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:00:10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:15:00"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:01:00"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:00:05"));
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "00:00:10");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "00:15:00");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "00:01:00");
+        data.AddDisciplineRecord(member4, disciplineInfoAsc, "00:00:05");
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:00:10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:15:00"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:01:00"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:00:05"));
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "00:00:10");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "00:15:00");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "00:01:00");
+        data.AddDisciplineRecord(member4, disciplineInfoDesc, "00:00:05");
 
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
-        disciplineInfoAsc.TeamMembers.Add(member4);
-
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
-        disciplineInfoDesc.TeamMembers.Add(member4);
-
-        disciplineInfoAsc.MaxValue.Should().Be(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds);
-        disciplineInfoAsc.MinValue.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds);
-        disciplineInfoDesc.MaxValue.Should()
-            .Be(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds);
-        disciplineInfoDesc.MinValue.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds);
+        var disciplineAscRange = data.GetDisciplineRange(disciplineInfoAsc);
+        disciplineAscRange.max.Should().Be(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds);
+        disciplineAscRange.min.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds);
+        var disciplineDescRange = data.GetDisciplineRange(disciplineInfoDesc);
+        disciplineDescRange.max.Should().Be(new TimeSpan(hours: 0, minutes: 15, seconds: 0).TotalSeconds);
+        disciplineDescRange.min.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 5).TotalSeconds);
     }
 
     [Test]
     public void Discipline_MemberRemoved_ValueRange_Time()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
+            { Name = "Discipline1", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
         var disciplineInfoDesc = new DisciplineInfo()
-            { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+            { Name = "Discipline2", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+        data.AddDiscipline(disciplineInfoAsc);
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
-        var member4 = new TeamMember(name: "Jmeno4", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        var member4 = new Member(name: "Jmeno4");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
+        data.AddMember(member4);
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:00:10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:15:00"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:01:00"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoAsc, "00:00:05"));
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "00:00:10");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "00:15:00");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "00:01:00");
+        data.AddDisciplineRecord(member4, disciplineInfoAsc, "00:00:05");
 
-        member1.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:00:10"));
-        member2.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:15:00"));
-        member3.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:01:00"));
-        member4.Disciplines.Add(new DisciplineRecord(disciplineInfoDesc, "00:00:05"));
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "00:00:10");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "00:15:00");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "00:01:00");
+        data.AddDisciplineRecord(member4, disciplineInfoDesc, "00:00:05");
 
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
-        disciplineInfoAsc.TeamMembers.Add(member4);
-        disciplineInfoAsc.TeamMembers.Remove(member4);
-        disciplineInfoAsc.TeamMembers.Remove(member2);
+        data.RemoveMember(member4);
+        data.RemoveMember(member2);
 
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
-        disciplineInfoDesc.TeamMembers.Add(member4);
-        disciplineInfoDesc.TeamMembers.Remove(member4);
-        disciplineInfoDesc.TeamMembers.Remove(member2);
-
-        disciplineInfoAsc.MaxValue.Should().Be(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds);
-        disciplineInfoAsc.MinValue.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds);
-        disciplineInfoDesc.MaxValue.Should()
-            .Be(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds);
-        disciplineInfoDesc.MinValue.Should()
-            .Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds);
+        var disciplineAscRange = data.GetDisciplineRange(disciplineInfoAsc);
+        disciplineAscRange.max.Should().Be(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds);
+        disciplineAscRange.min.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds);
+        var disciplineDescRange = data.GetDisciplineRange(disciplineInfoDesc);
+        disciplineDescRange.max.Should().Be(new TimeSpan(hours: 0, minutes: 1, seconds: 0).TotalSeconds);
+        disciplineDescRange.min.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 10).TotalSeconds);
     }
 
     [Test]
     public void DisciplineInfoAsc_Score_Number()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfoAsc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineAscRecord1 = new DisciplineRecord(disciplineInfoAsc, "10");
-        var disciplineAscRecord2 = new DisciplineRecord(disciplineInfoAsc, "0");
-        var disciplineAscRecord3 = new DisciplineRecord(disciplineInfoAsc, "50");
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "0");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "50");
 
-        member1.Disciplines.Add(disciplineAscRecord1);
-        member2.Disciplines.Add(disciplineAscRecord2);
-        member3.Disciplines.Add(disciplineAscRecord3);
-
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
-
-        disciplineAscRecord1.Score.Should().Be(20);
-        disciplineAscRecord2.Score.Should().Be(0);
-        disciplineAscRecord3.Score.Should().Be(100);
+        data.GetMemberDisciplineScore(member1, disciplineInfoAsc).Should().Be(20);
+        data.GetMemberDisciplineScore(member2, disciplineInfoAsc).Should().Be(0);
+        data.GetMemberDisciplineScore(member3, disciplineInfoAsc).Should().Be(100);
     }
 
     [Test]
     public void DisciplineInfoDesc_Score_Number()
     {
+        var data = new Data();
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineDescRecord1 = new DisciplineRecord(disciplineInfoDesc, "10");
-        var disciplineDescRecord2 = new DisciplineRecord(disciplineInfoDesc, "0");
-        var disciplineDescRecord3 = new DisciplineRecord(disciplineInfoDesc, "50");
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "0");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "50");
 
-        member1.Disciplines.Add(disciplineDescRecord1);
-        member2.Disciplines.Add(disciplineDescRecord2);
-        member3.Disciplines.Add(disciplineDescRecord3);
-
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
-
-        disciplineDescRecord1.Score.Should().Be(80);
-        disciplineDescRecord2.Score.Should().Be(100);
-        disciplineDescRecord3.Score.Should().Be(0);
+        data.GetMemberDisciplineScore(member1, disciplineInfoDesc).Should().Be(80);
+        data.GetMemberDisciplineScore(member2, disciplineInfoDesc).Should().Be(100);
+        data.GetMemberDisciplineScore(member3, disciplineInfoDesc).Should().Be(0);
     }
 
     [Test]
     public void DisciplineInfoAsc_Score_Time()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
+        data.AddDiscipline(disciplineInfoAsc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineAscRecord1 = new DisciplineRecord(disciplineInfoAsc, "00:01:00");
-        var disciplineAscRecord2 = new DisciplineRecord(disciplineInfoAsc, "00:00:00");
-        var disciplineAscRecord3 = new DisciplineRecord(disciplineInfoAsc, "00:05:00");
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "00:01:00");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "00:00:00");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "00:05:00");
 
-        member1.Disciplines.Add(disciplineAscRecord1);
-        member2.Disciplines.Add(disciplineAscRecord2);
-        member3.Disciplines.Add(disciplineAscRecord3);
-
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
-
-        disciplineAscRecord1.Score.Should().Be(20);
-        disciplineAscRecord2.Score.Should().Be(0);
-        disciplineAscRecord3.Score.Should().Be(100);
+        data.GetMemberDisciplineScore(member1, disciplineInfoAsc).Should().Be(20);
+        data.GetMemberDisciplineScore(member2, disciplineInfoAsc).Should().Be(0);
+        data.GetMemberDisciplineScore(member3, disciplineInfoAsc).Should().Be(100);
     }
 
     [Test]
     public void DisciplineInfoDesc_Score_Time()
     {
+        var data = new Data();
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineDescRecord1 = new DisciplineRecord(disciplineInfoDesc, "00:01:00");
-        var disciplineDescRecord2 = new DisciplineRecord(disciplineInfoDesc, "00:00:00");
-        var disciplineDescRecord3 = new DisciplineRecord(disciplineInfoDesc, "00:05:00");
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "00:01:00");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "00:00:00");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "00:05:00");
 
-        member1.Disciplines.Add(disciplineDescRecord1);
-        member2.Disciplines.Add(disciplineDescRecord2);
-        member3.Disciplines.Add(disciplineDescRecord3);
-
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
-
-        disciplineDescRecord1.Score.Should().Be(80);
-        disciplineDescRecord2.Score.Should().Be(100);
-        disciplineDescRecord3.Score.Should().Be(0);
+        data.GetMemberDisciplineScore(member1, disciplineInfoDesc).Should().Be(80);
+        data.GetMemberDisciplineScore(member2, disciplineInfoDesc).Should().Be(100);
+        data.GetMemberDisciplineScore(member3, disciplineInfoDesc).Should().Be(0);
     }
 
     [Test]
     public void DisciplineInfoAsc_Score_SortTypeChanged()
     {
+        var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfoAsc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineAscRecord1 = new DisciplineRecord(disciplineInfoAsc, "10");
-        var disciplineAscRecord2 = new DisciplineRecord(disciplineInfoAsc, "0");
-        var disciplineAscRecord3 = new DisciplineRecord(disciplineInfoAsc, "50");
-
-        member1.Disciplines.Add(disciplineAscRecord1);
-        member2.Disciplines.Add(disciplineAscRecord2);
-        member3.Disciplines.Add(disciplineAscRecord3);
-
-        disciplineInfoAsc.TeamMembers.Add(member1);
-        disciplineInfoAsc.TeamMembers.Add(member2);
-        disciplineInfoAsc.TeamMembers.Add(member3);
+        data.AddDisciplineRecord(member1, disciplineInfoAsc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoAsc, "0");
+        data.AddDisciplineRecord(member3, disciplineInfoAsc, "50");
 
         disciplineInfoAsc.SortType = DisciplineSortType.Desc;
 
-        disciplineAscRecord1.Score.Should().Be(80);
-        disciplineAscRecord2.Score.Should().Be(100);
-        disciplineAscRecord3.Score.Should().Be(0);
+        data.GetMemberDisciplineScore(member1, disciplineInfoAsc).Should().Be(80);
+        data.GetMemberDisciplineScore(member2, disciplineInfoAsc).Should().Be(100);
+        data.GetMemberDisciplineScore(member3, disciplineInfoAsc).Should().Be(0);
     }
 
     [Test]
     public void DisciplineInfoDesc_Score_SortTypeChanged()
     {
+        var data = new Data();
         var disciplineInfoDesc = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfoDesc);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineDescRecord1 = new DisciplineRecord(disciplineInfoDesc, "10");
-        var disciplineDescRecord2 = new DisciplineRecord(disciplineInfoDesc, "0");
-        var disciplineDescRecord3 = new DisciplineRecord(disciplineInfoDesc, "50");
-
-        member1.Disciplines.Add(disciplineDescRecord1);
-        member2.Disciplines.Add(disciplineDescRecord2);
-        member3.Disciplines.Add(disciplineDescRecord3);
-
-        disciplineInfoDesc.TeamMembers.Add(member1);
-        disciplineInfoDesc.TeamMembers.Add(member2);
-        disciplineInfoDesc.TeamMembers.Add(member3);
+        data.AddDisciplineRecord(member1, disciplineInfoDesc, "10");
+        data.AddDisciplineRecord(member2, disciplineInfoDesc, "0");
+        data.AddDisciplineRecord(member3, disciplineInfoDesc, "50");
 
         disciplineInfoDesc.SortType = DisciplineSortType.Asc;
 
-        disciplineDescRecord1.Score.Should().Be(20);
-        disciplineDescRecord2.Score.Should().Be(0);
-        disciplineDescRecord3.Score.Should().Be(100);
+        data.GetMemberDisciplineScore(member1, disciplineInfoDesc).Should().Be(20);
+        data.GetMemberDisciplineScore(member2, disciplineInfoDesc).Should().Be(0);
+        data.GetMemberDisciplineScore(member3, disciplineInfoDesc).Should().Be(100);
     }
-    
+
     [Test]
     public void DisciplineRecordChanged_Score_Number()
     {
+        var data = new Data();
         var disciplineInfo = new DisciplineInfo()
             { Name = "Discipline", SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+        data.AddDiscipline(disciplineInfo);
 
-        var member1 = new TeamMember(name: "Jmeno1", age: 10);
-        var member2 = new TeamMember(name: "Jmeno2", age: 10);
-        var member3 = new TeamMember(name: "Jmeno3", age: 10);
+        var member1 = new Member(name: "Jmeno1");
+        var member2 = new Member(name: "Jmeno2");
+        var member3 = new Member(name: "Jmeno3");
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
 
-        var disciplineRecord1 = new DisciplineRecord(disciplineInfo, "10");
-        var disciplineRecord2 = new DisciplineRecord(disciplineInfo, "0");
-        var disciplineRecord3 = new DisciplineRecord(disciplineInfo, "100");
+        data.AddDisciplineRecord(member1, disciplineInfo, "10");
+        data.AddDisciplineRecord(member2, disciplineInfo, "0");
+        data.AddDisciplineRecord(member3, disciplineInfo, "100");
 
-        member1.Disciplines.Add(disciplineRecord1);
-        member2.Disciplines.Add(disciplineRecord2);
-        member3.Disciplines.Add(disciplineRecord3);
+        data.GetMemberDisciplineScore(member1, disciplineInfo).Should().Be(10);
+        data.GetMemberDisciplineScore(member2, disciplineInfo).Should().Be(0);
+        data.GetMemberDisciplineScore(member3, disciplineInfo).Should().Be(100);
 
-        disciplineInfo.TeamMembers.Add(member1);
-        disciplineInfo.TeamMembers.Add(member2);
-        disciplineInfo.TeamMembers.Add(member3);
+        var record = data.GetMemberDisciplineRecord(member3, disciplineInfo);
+        Assert.That(record, Is.Not.Null);
+        record.RawValue = "50";
 
-        disciplineRecord1.Score.Should().Be(10);
-        disciplineRecord2.Score.Should().Be(0);
-        disciplineRecord3.Score.Should().Be(100);
-        
-        disciplineRecord3.RawValue = "50";
-
-        disciplineRecord1.Score.Should().Be(20);
-        disciplineRecord2.Score.Should().Be(0);
-        disciplineRecord3.Score.Should().Be(100);
+        data.GetMemberDisciplineScore(member1, disciplineInfo).Should().Be(20);
+        data.GetMemberDisciplineScore(member2, disciplineInfo).Should().Be(0);
+        data.GetMemberDisciplineScore(member3, disciplineInfo).Should().Be(100);
     }
 }

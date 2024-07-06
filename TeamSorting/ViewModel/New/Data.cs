@@ -1,5 +1,6 @@
-﻿using TeamSorting.Model.New;
-using Team = TeamSorting.Model.Team;
+﻿using System.Globalization;
+using CsvHelper;
+using TeamSorting.Model.New;
 
 namespace TeamSorting.ViewModel.New;
 
@@ -23,17 +24,32 @@ public class Data
         return true;
     }
 
-    public void RemoveDiscipline(DisciplineInfo discipline)
+    public bool RemoveDiscipline(DisciplineInfo discipline)
     {
-        Disciplines.Remove(discipline);
-        DisciplineRecords.RemoveAll(record => record.DisciplineInfo == discipline);
+        bool result = Disciplines.Remove(discipline);
+        if (result)
+        {
+            DisciplineRecords.RemoveAll(record => record.DisciplineInfo == discipline);
+        }
+
+        return result;
     }
 
-    private (double min, double max) GetDisciplineRange(DisciplineInfo discipline)
+    public DisciplineInfo? GetDisciplineByName(string name)
     {
-        var records = DisciplineRecords.Where(record =>
-            record.DisciplineInfo == discipline);
+        return Disciplines.FirstOrDefault(discipline => discipline.Name == name);
+    }
+
+    public (double min, double max) GetDisciplineRange(DisciplineInfo discipline)
+    {
+        var records = GetDisciplineRecordsByDiscipline(discipline);
         var values = records.Select(record => record.DoubleValue).ToList();
+
+        if (values.Count == 0)
+        {
+            return (0, 0);
+        }
+
         return (values.Min(), values.Max());
     }
 
@@ -52,10 +68,38 @@ public class Data
         return true;
     }
 
-    public void RemoveMember(Member member)
+    public bool RemoveMember(Member member)
     {
-        Members.Remove(member);
-        DisciplineRecords.RemoveAll(record => record.Member == member);
+        bool result = Members.Remove(member);
+        if (result)
+        {
+            DisciplineRecords.RemoveAll(record => record.Member == member);
+            Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
+        }
+
+        return result;
+    }
+
+    public Member? GetMemberByName(string name)
+    {
+        return Members.FirstOrDefault(member => member.Name == name);
+    }
+
+    public IEnumerable<Member> GetMembersByName(IEnumerable<string> names)
+    {
+        return Members.Where(member => names.Contains(member.Name));
+    }
+
+    public DisciplineRecord? GetMemberDisciplineRecord(Member member, DisciplineInfo discipline)
+    {
+        return DisciplineRecords.FirstOrDefault(record =>
+            record.Member == member
+            && record.DisciplineInfo == discipline);
+    }
+
+    public IEnumerable<DisciplineRecord> GetMemberRecords(Member member)
+    {
+        return DisciplineRecords.Where(record => record.Member == member);
     }
 
     public object? GetMemberDisciplineValue(Member member, DisciplineInfo discipline)
@@ -84,6 +128,42 @@ public class Data
         return (((value - range.min) / (range.max - range.min)) * (max - min)) + min;
     }
 
+    public List<Member> InvalidMembersCombination()
+    {
+        List<Member> invalidMembers = [];
+        List<Member> membersToCheck = [..Members];
+        while (membersToCheck.Count > 0)
+        {
+            List<Member> group = [membersToCheck.First()];
+            membersToCheck.Remove(group.First());
+            var i = 0;
+            bool newMembersAdded;
+            do
+            {
+                newMembersAdded = false;
+                var newMembers = group[i..];
+                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
+                foreach (var withMember in withMembers)
+                {
+                    if (group.Contains(withMember)) continue;
+                    newMembersAdded = true;
+                    group.Add(withMember);
+                    membersToCheck.Remove(withMember);
+                    i++;
+                }
+            } while (newMembersAdded);
+
+            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith)).Distinct().ToList();
+            bool intersectExists = group.Intersect(notWithMembers).Any();
+            if (intersectExists)
+            {
+                invalidMembers.AddRange(group);
+            }
+        }
+
+        return invalidMembers;
+    }
+
     #endregion
 
     #region DisciplineRecord
@@ -100,9 +180,19 @@ public class Data
         return true;
     }
 
-    public void RemoveDisciplineRecord(DisciplineRecord record)
+    public bool AddDisciplineRecord(Member member, DisciplineInfo discipline, string value)
     {
-        DisciplineRecords.Remove(record);
+        return AddDisciplineRecord(new DisciplineRecord(member, discipline, value));
+    }
+
+    public bool RemoveDisciplineRecord(DisciplineRecord record)
+    {
+        return DisciplineRecords.Remove(record);
+    }
+
+    public IEnumerable<DisciplineRecord> GetDisciplineRecordsByDiscipline(DisciplineInfo discipline)
+    {
+        return DisciplineRecords.Where(record => record.DisciplineInfo == discipline);
     }
 
     #endregion
@@ -120,19 +210,94 @@ public class Data
         return true;
     }
 
-    public void RemoveTeam(Team team)
+    public bool RemoveTeam(Team team)
     {
-        Teams.Remove(team);
+        return Teams.Remove(team);
     }
 
-    public void AddMemberToTeam(Member member, Team team)
+    public bool AddMemberToTeam(Member member, Team team)
     {
-        //TODO
+        if (!Members.Contains(member))
+        {
+            return false;
+        }
+
+        team.Members.Add(member);
+        return true;
     }
 
-    public void RemoveMemberFromTeam(Member member, Team team)
+    public bool RemoveMemberFromTeam(Member member, Team team)
     {
-        //TODO
+        return team.Members.Remove(member);
+    }
+
+    #endregion
+
+    #region Loading
+
+    public async Task LoadFromFile(StreamReader inputFile)
+    {
+        var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
+
+        await csv.ReadAsync();
+        csv.ReadHeader();
+        await csv.ReadAsync();
+
+        LoadDisciplinesInfo(csv);
+        LoadMembersData(csv);
+    }
+
+    private void LoadDisciplinesInfo(CsvReader csv)
+    {
+        var disciplines = csv.HeaderRecord.Except([
+            nameof(Member.Name),
+            nameof(Member.With),
+            nameof(Member.NotWith)
+        ]).Select(d => new DisciplineInfo() { Name = d }).ToList();
+
+        ReadDisciplineDataTypes(disciplines, csv);
+        csv.Read();
+        ReadDisciplineSortTypes(disciplines, csv);
+
+        foreach (var discipline in disciplines)
+        {
+            AddDiscipline(discipline);
+        }
+    }
+
+    private static void ReadDisciplineDataTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
+    {
+        foreach (var discipline in disciplines)
+        {
+            discipline.DataType = Enum.Parse<DisciplineDataType>(csv[discipline.Name]);
+        }
+    }
+
+    private static void ReadDisciplineSortTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
+    {
+        foreach (var discipline in disciplines)
+        {
+            discipline.SortType = Enum.Parse<DisciplineSortType>(csv[discipline.Name]);
+        }
+    }
+
+    private void LoadMembersData(CsvReader csv)
+    {
+        while (csv.Read())
+        {
+            var member = new Member(name: csv[nameof(Member.Name)])
+            {
+                With = csv[nameof(Member.With)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
+                NotWith = csv[nameof(Member.NotWith)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
+            };
+            AddMember(member);
+
+            foreach (var disciplineInfo in Disciplines)
+            {
+                var record = new DisciplineRecord(member, disciplineInfo, csv[disciplineInfo.Name]);
+                AddDisciplineRecord(record);
+            }
+        }
     }
 
     #endregion
