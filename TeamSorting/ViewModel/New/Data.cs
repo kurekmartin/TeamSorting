@@ -187,6 +187,47 @@ public class Data
         return invalidMembers;
     }
 
+    public IEnumerable<Member> GetWithMembers(Member currentMember)
+    {
+        List<Member> group = [currentMember];
+        var i = 0;
+        bool newMembersAdded;
+        do
+        {
+            newMembersAdded = false;
+            var newMembers = group[i..];
+            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
+            foreach (var withMember in withMembers)
+            {
+                if (group.Contains(withMember)) continue;
+                newMembersAdded = true;
+                group.Add(withMember);
+                i++;
+            }
+        } while (newMembersAdded);
+
+        group.Remove(currentMember);
+        return group;
+    }
+
+    public IEnumerable<Member> GetNotWithMembers(Member currentMember)
+    {
+        List<Member> group = [];
+        var notWithMembers = GetMembersByName(currentMember.NotWith);
+        foreach (var notWithMember in notWithMembers)
+        {
+            var allNotWithMembers = GetWithMembers(notWithMember).ToList();
+            allNotWithMembers.Add(notWithMember);
+
+            foreach (var member in allNotWithMembers.Where(member => !group.Contains(member)))
+            {
+                group.Add(member);
+            }
+        }
+
+        return group;
+    }
+
     #endregion
 
     #region DisciplineRecord
