@@ -268,7 +268,7 @@ public class Data
         foreach (var team in Teams)
         {
             double value = GetTeamTotalValueByDiscipline(team, discipline);
-            dict.Add(team,value);
+            dict.Add(team, value);
         }
 
         return dict.OrderBy(pair => pair.Value).ToDictionary();
@@ -307,7 +307,7 @@ public class Data
             nameof(Member.Name),
             nameof(Member.With),
             nameof(Member.NotWith)
-        ]).Select(d => new DisciplineInfo() { Name = d }).ToList();
+        ]).Select(d => new DisciplineInfo(d)).ToList();
 
         ReadDisciplineDataTypes(disciplines, csv);
         csv.Read();

@@ -18,8 +18,8 @@ public class TeamSortingTests
         data.AddMember(member2);
         data.AddMember(member3);
 
-        var discipline = new DisciplineInfo()
-            { Name = "Discipline1", DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Asc };
+        var discipline = new DisciplineInfo("Discipline1")
+            { DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Asc };
         data.AddDiscipline(discipline);
 
         data.AddDisciplineRecord(member1, discipline, "0");

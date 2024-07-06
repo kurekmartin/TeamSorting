@@ -10,8 +10,8 @@ public class DisciplineRecordTests
     public void RemoveDiscipline_RemoveRecords()
     {
         var data = new Data();
-        var discipline1 = new DisciplineInfo() { Name = "Discipline1", DataType = DisciplineDataType.Number };
-        var discipline2 = new DisciplineInfo() { Name = "Discipline2", DataType = DisciplineDataType.Number };
+        var discipline1 = new DisciplineInfo("Discipline1") { DataType = DisciplineDataType.Number };
+        var discipline2 = new DisciplineInfo("Discipline2") { DataType = DisciplineDataType.Number };
         data.AddDiscipline(discipline1);
         data.AddDiscipline(discipline2);
 
@@ -37,8 +37,8 @@ public class DisciplineRecordTests
     public void RemoveMember_RemoveRecords()
     {
         var data = new Data();
-        var discipline1 = new DisciplineInfo() { Name = "Discipline1", DataType = DisciplineDataType.Number };
-        var discipline2 = new DisciplineInfo() { Name = "Discipline2", DataType = DisciplineDataType.Number };
+        var discipline1 = new DisciplineInfo("Discipline1") { DataType = DisciplineDataType.Number };
+        var discipline2 = new DisciplineInfo("Discipline2") { DataType = DisciplineDataType.Number };
         data.AddDiscipline(discipline1);
         data.AddDiscipline(discipline2);
 

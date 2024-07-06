@@ -1,5 +1,4 @@
 using FluentAssertions;
-using TeamSorting;
 using TeamSorting.Model.New;
 using TeamSorting.ViewModel.New;
 
@@ -46,12 +45,12 @@ public class FileLoadingTests
         var data = new Data();
         await data.LoadFromFile(file);
 
-        var age = new DisciplineInfo()
-            { Name = "Age", DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Asc };
-        var discipline1 = new DisciplineInfo()
-            { Name = "Discipline1", DataType = DisciplineDataType.Time, SortType = DisciplineSortType.Asc };
-        var discipline2 = new DisciplineInfo()
-            { Name = "Discipline2", DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Desc };
+        var age = new DisciplineInfo("Age")
+            { DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Asc };
+        var discipline1 = new DisciplineInfo("Discipline1")
+            { DataType = DisciplineDataType.Time, SortType = DisciplineSortType.Asc };
+        var discipline2 = new DisciplineInfo("Discipline2")
+            { DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Desc };
         
         data.Disciplines.Should().ContainEquivalentOf(age);
         data.Disciplines.Should().ContainEquivalentOf(discipline1);
