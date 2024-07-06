@@ -13,6 +13,7 @@ public static class TeamSorting
 
         while (sortedMembers.Count < membersCount)
         {
+            //TODO prevent infinite loop
             foreach (var sortedDiscipline in sortedDisciplines)
             {
                 var records = sortedDiscipline.Value.ExceptBy(sortedMembers, record => record.Member).ToList();
@@ -25,10 +26,15 @@ public static class TeamSorting
                 foreach (var team in sortedTeams)
                 {
                     var member = records.Last().Member;
-                    //TODO get and add with members as group
-                    data.AddMemberToTeam(member, team.Key);
-                    sortedMembers.Add(member);
-                    records.RemoveAt(records.Count - 1);
+                    var newMembers = data.GetWithMembers(member).ToList();
+                    newMembers.Add(member);
+                    foreach (var newMember in newMembers)
+                    {
+                        data.AddMemberToTeam(newMember, team.Key);
+                    }
+
+                    sortedMembers.AddRange(newMembers);
+                    records.RemoveAll(record => newMembers.Any(m => m.Name == record.Member.Name));
                 }
             }
         }
