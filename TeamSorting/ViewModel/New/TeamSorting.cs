@@ -11,9 +11,16 @@ public static class TeamSorting
         var sortedMembers = new List<Member>();
         var sortedDisciplines = data.GetSortedDisciplines();
 
+        int lastSortedMembersCount = -1;
         while (sortedMembers.Count < membersCount)
         {
-            //TODO prevent infinite loop
+            if (lastSortedMembersCount == sortedMembers.Count)
+            {
+                throw new Exception("Detected infinite loop");
+            }
+
+            lastSortedMembersCount = sortedMembers.Count;
+
             foreach (var sortedDiscipline in sortedDisciplines)
             {
                 var records = sortedDiscipline.Value.ExceptBy(sortedMembers, record => record.Member).ToList();
