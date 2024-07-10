@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeamSorting", "TeamSorting\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject", "TestProject\TestProject.csproj", "{DFE1DD69-6781-41D8-8692-DFDF0AEADD74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AvaloniaApplication1", "AvaloniaApplication1\AvaloniaApplication1.csproj", "{AB1E7838-915D-44DB-A365-030F2CE5A72C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{DFE1DD69-6781-41D8-8692-DFDF0AEADD74}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DFE1DD69-6781-41D8-8692-DFDF0AEADD74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFE1DD69-6781-41D8-8692-DFDF0AEADD74}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB1E7838-915D-44DB-A365-030F2CE5A72C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB1E7838-915D-44DB-A365-030F2CE5A72C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB1E7838-915D-44DB-A365-030F2CE5A72C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB1E7838-915D-44DB-A365-030F2CE5A72C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,19 +1,49 @@
-﻿namespace TeamSorting.ViewModel;
+﻿using TeamSorting.Model.New;
 
-public class TeamSorting
+namespace TeamSorting.ViewModel.New;
+
+public static class TeamSorting
 {
-    public readonly MembersData MembersData = new();
-    public readonly TeamsCollection TeamsCollection = new();
-
-    public void SortMembersIntoTeams()
+    public static void SortMembersIntoTeams(Data data)
     {
-        int teamCount = TeamsCollection.Teams.Count;
-        foreach (var disciplineInfo in MembersData.DisciplinesInfo)
+        //TODO exclude without members
+        int membersCount = data.Members.Count;
+        var sortedMembers = new List<Member>();
+        var sortedDisciplines = data.GetSortedDisciplines();
+
+        int lastSortedMembersCount = -1;
+        while (sortedMembers.Count < membersCount)
         {
-            var sortedTeamMembers = disciplineInfo.GetSortedTeamMembers();
-            var minTeam = TeamsCollection.Teams.MinBy(team => team.Score[disciplineInfo]);
-            minTeam?.Members.Add(sortedTeamMembers.First());
-            //TODO
+            if (lastSortedMembersCount == sortedMembers.Count)
+            {
+                throw new Exception("Detected infinite loop");
+            }
+
+            lastSortedMembersCount = sortedMembers.Count;
+
+            foreach (var sortedDiscipline in sortedDisciplines)
+            {
+                var records = sortedDiscipline.Value.ExceptBy(sortedMembers, record => record.Member).ToList();
+                if (records.Count == 0)
+                {
+                    continue;
+                }
+
+                var sortedTeams = data.GetSortedTeamsByValueByDiscipline(sortedDiscipline.Key);
+                foreach (var team in sortedTeams)
+                {
+                    var member = records.Last().Member;
+                    var newMembers = data.GetWithMembers(member).ToList();
+                    newMembers.Add(member);
+                    foreach (var newMember in newMembers)
+                    {
+                        data.AddMemberToTeam(newMember, team.Key);
+                    }
+
+                    sortedMembers.AddRange(newMembers);
+                    records.RemoveAll(record => newMembers.Any(m => m.Name == record.Member.Name));
+                }
+            }
         }
     }
 }
