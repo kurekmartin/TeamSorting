@@ -1,4 +1,4 @@
-﻿namespace TeamSorting.Model.New;
+﻿namespace TeamSorting.Models;
 
 public class Team(string name)
 {

@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using TeamSorting.Model.New;
-using TeamSorting.ViewModel.New;
+using TeamSorting.Models;
+using TeamSorting.ViewModels;
 
 namespace TestProject;
 
@@ -31,7 +31,7 @@ public class TeamSortingTests
 
         data.CreateTeams(3);
 
-        TeamSorting.ViewModel.New.TeamSorting.SortMembersIntoTeams(data);
+        TeamSorting.ViewModels.TeamSorting.SortMembersIntoTeams(data);
 
         data.Teams.Count.Should().Be(3);
         data.Teams.Should().AllSatisfy(team => team.Members.Count.Should().BeInRange(1, 2));

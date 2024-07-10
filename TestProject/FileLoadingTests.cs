@@ -1,6 +1,6 @@
 using FluentAssertions;
-using TeamSorting.Model.New;
-using TeamSorting.ViewModel.New;
+using TeamSorting.Models;
+using TeamSorting.ViewModels;
 
 namespace TestProject;
 

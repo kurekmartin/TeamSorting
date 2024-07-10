@@ -1,6 +1,6 @@
-﻿using TeamSorting.Model.New;
+﻿using TeamSorting.Models;
 
-namespace TeamSorting.ViewModel.New;
+namespace TeamSorting.ViewModels;
 
 public static class TeamSorting
 {

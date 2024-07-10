@@ -1,4 +1,4 @@
-﻿namespace TeamSorting.Model.New;
+﻿namespace TeamSorting.Models;
 
 public class DisciplineInfo(string name)
 {

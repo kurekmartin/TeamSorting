@@ -1,13 +1,15 @@
-﻿using System.Globalization;
+﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using CsvHelper;
-using TeamSorting.Model.New;
+using DynamicData;
+using TeamSorting.Models;
 
-namespace TeamSorting.ViewModel.New;
+namespace TeamSorting.ViewModels;
 
 public class Data
 {
     public readonly List<DisciplineInfo> Disciplines = [];
-    public readonly List<Member> Members = [];
+    public ObservableCollection<Member> Members { get; } = [];
     public readonly List<DisciplineRecord> DisciplineRecords = [];
     public readonly List<Team> Teams = [];
 
@@ -239,6 +241,8 @@ public class Data
         {
             return false;
         }
+
+        record.Member.DisciplineRecords.Add(record);
 
         DisciplineRecords.Add(record);
         return true;

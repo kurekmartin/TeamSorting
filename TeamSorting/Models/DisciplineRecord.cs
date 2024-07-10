@@ -1,4 +1,4 @@
-﻿namespace TeamSorting.Model.New;
+﻿namespace TeamSorting.Models;
 
 public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue)
 {
