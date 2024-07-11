@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Globalization;
 using CsvHelper;
-using DynamicData;
 using TeamSorting.Models;
 
 namespace TeamSorting.ViewModels;
@@ -92,9 +91,9 @@ public class Data
         return Members.Where(member => names.Contains(member.Name));
     }
 
-    public DisciplineRecord? GetMemberDisciplineRecord(Member member, DisciplineInfo discipline)
+    public DisciplineRecord GetMemberDisciplineRecord(Member member, DisciplineInfo discipline)
     {
-        return DisciplineRecords.FirstOrDefault(record =>
+        return DisciplineRecords.First(record =>
             record.Member == member
             && record.DisciplineInfo == discipline);
     }

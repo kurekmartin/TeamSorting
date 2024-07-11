@@ -2,6 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TeamSorting"
+        xmlns:converters="clr-namespace:TeamSorting.Converters"
         xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TeamSorting.Views.MainWindow"
@@ -14,18 +16,21 @@
              to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
         <viewModel:MainWindowViewModel />
     </Design.DataContext>
+    <Window.Resources>
+        <converters:StringListConverter x:Key="StringListConverter" />
+    </Window.Resources>
     <StackPanel Orientation="Vertical">
         <Button Click="LoadData_OnClick">Load Data</Button>
 
-        <DataGrid ItemsSource="{Binding Data.Members}"
+        <DataGrid ItemsSource="{Binding GridData}"
                   CanUserSortColumns="False"
                   x:Name="DataGrid">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Name" Binding="{Binding Member.Name}" />
                 <DataGridTemplateColumn Header="With">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding With}">
+                            <ItemsControl ItemsSource="{Binding Member.With}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
@@ -44,7 +49,7 @@
                 <DataGridTemplateColumn Header="NotWith">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding NotWith}">
+                            <ItemsControl ItemsSource="{Binding Member.NotWith}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <StackPanel Orientation="Horizontal" />
