@@ -31,7 +31,6 @@ public partial class MainWindow : Window
         await using var stream = await file[0].OpenReadAsync();
         using var streamReader = new StreamReader(stream);
         await context.Data.LoadFromFile(streamReader);
-        context.LoadGridData();
         AddDisciplinesToDataGrid();
     }
 
@@ -39,19 +38,17 @@ public partial class MainWindow : Window
     {
         var context = (MainWindowViewModel)DataContext!;
 
-        var i = 0;
         foreach (var discipline in context.Data.Disciplines)
         {
-            var column = new DataGridTextColumn()
+            var column = new DataGridTextColumn
             {
                 Header = discipline.Name,
-                Binding = new Binding()
+                Binding = new Binding
                 {
-                    Path = $"{nameof(MemberWithDisciplines.Records)}[{i}].{nameof(DisciplineRecord.RawValue)}"
+                    Path = $"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.RawValue)}"
                 }
             };
             DataGrid.Columns.Add(column);
-            i++;
         }
     }
 }

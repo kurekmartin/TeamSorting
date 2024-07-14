@@ -25,10 +25,10 @@ public class DisciplineRecordTests
         data.AddDisciplineRecord(member2, discipline1, "1");
         data.AddDisciplineRecord(member2, discipline2, "2");
 
-        data.DisciplineRecords.Count.Should().Be(4);
+        data.GetAllRecords().Count().Should().Be(4);
 
         data.RemoveDiscipline(discipline2);
-        data.DisciplineRecords.Count.Should().Be(2);
+        data.GetAllRecords().Count().Should().Be(2);
         data.GetDisciplineRecordsByDiscipline(discipline1).Count().Should().Be(2);
         data.GetDisciplineRecordsByDiscipline(discipline2).Count().Should().Be(0);
     }
@@ -52,11 +52,9 @@ public class DisciplineRecordTests
         data.AddDisciplineRecord(member2, discipline1, "1");
         data.AddDisciplineRecord(member2, discipline2, "2");
 
-        data.DisciplineRecords.Count.Should().Be(4);
+        data.GetAllRecords().Count().Should().Be(4);
 
         data.RemoveMember(member2);
-        data.DisciplineRecords.Count.Should().Be(2);
-        data.GetMemberRecords(member1).Count().Should().Be(2);
-        data.GetMemberRecords(member2).Count().Should().Be(0);
+        data.GetAllRecords().Count().Should().Be(2);
     }
 }

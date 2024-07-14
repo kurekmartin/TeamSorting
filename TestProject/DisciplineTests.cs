@@ -384,7 +384,7 @@ public class DisciplineTests
         data.GetMemberDisciplineScore(member2, disciplineInfo).Should().Be(0);
         data.GetMemberDisciplineScore(member3, disciplineInfo).Should().Be(100);
 
-        var record = data.GetMemberDisciplineRecord(member3, disciplineInfo);
+        var record = member3.GetRecord(disciplineInfo);
         Assert.That(record, Is.Not.Null);
         record.RawValue = "50";
 

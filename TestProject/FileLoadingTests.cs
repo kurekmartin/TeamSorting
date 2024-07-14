@@ -20,7 +20,7 @@ public class FileLoadingTests
 
         data.Members.Count.Should().Be(3);
         data.Disciplines.Count.Should().Be(3);
-        data.DisciplineRecords.Count.Should().Be(9);
+        data.GetAllRecords().Count().Should().Be(9);
     }
 
     [Test]
@@ -35,7 +35,7 @@ public class FileLoadingTests
             new Member(name: "Jmeno1") { With = [], NotWith = [] },
             new Member(name: "Jmeno2") { With = [], NotWith = ["Jmeno1", "Jmeno2"] },
             new Member(name: "Jmeno3") { With = ["Jmeno1"], NotWith = [] }
-        ]);
+        ],o=>o.Excluding(member => member.Records));
     }
 
     [Test]
@@ -52,9 +52,9 @@ public class FileLoadingTests
         var discipline2 = new DisciplineInfo("Discipline2")
             { DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Desc };
         
-        data.Disciplines.Should().ContainEquivalentOf(age);
-        data.Disciplines.Should().ContainEquivalentOf(discipline1);
-        data.Disciplines.Should().ContainEquivalentOf(discipline2);
+        data.Disciplines.Should().ContainEquivalentOf(age,o=>o.Excluding(discipline => discipline.Id));
+        data.Disciplines.Should().ContainEquivalentOf(discipline1,o=>o.Excluding(discipline => discipline.Id));
+        data.Disciplines.Should().ContainEquivalentOf(discipline2,o=>o.Excluding(discipline => discipline.Id));
     }
 
     [Test]
@@ -66,22 +66,22 @@ public class FileLoadingTests
     
         var member = data.GetMemberByName("Jmeno1");
         Assert.That(member,Is.Not.Null);
-        var disciplineRecords = data.GetMemberRecords(member).ToList();
+        var disciplineRecords = member.GetRecordList();
         
         Assert.That(disciplineRecords, Is.Not.Null);
 
         disciplineRecords.Count.Should().Be(3);
         var age = data.GetDisciplineByName("Age");
         Assert.That(age,Is.Not.Null);
-        data.GetMemberDisciplineValue(member, age).Should().Be(10);
+        member.GetRecord(age).Value.Should().Be(10);
         
         var discipline1 = data.GetDisciplineByName("Discipline1");
         Assert.That(discipline1,Is.Not.Null);
-        data.GetMemberDisciplineValue(member, discipline1).Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 30));
+        member.GetRecord(discipline1).Value.Should().Be(new TimeSpan(hours: 0, minutes: 0, seconds: 30));
         
         var discipline2 = data.GetDisciplineByName("Discipline2");
         Assert.That(discipline2,Is.Not.Null);
-        data.GetMemberDisciplineValue(member, discipline2).Should().Be(10);
+        member.GetRecord(discipline2).Value.Should().Be(10);
     }
     
     [Test]
@@ -94,13 +94,13 @@ public class FileLoadingTests
         var member = data.GetMemberByName("Jmeno3");
         Assert.That(member,Is.Not.Null);
 
-        data.GetMemberRecords(member).Count().Should().Be(3);
+        member.GetRecordList().Count().Should().Be(3);
         var discipline1 = data.GetDisciplineByName("Discipline1");
         Assert.That(discipline1,Is.Not.Null);
-        data.GetMemberDisciplineValue(member, discipline1).Should().Be(new TimeSpan(0));
+        member.GetRecord(discipline1).Value.Should().Be(new TimeSpan(0));
         
         var discipline2 = data.GetDisciplineByName("Discipline2");
         Assert.That(discipline2,Is.Not.Null);
-        data.GetMemberDisciplineValue(member, discipline2).Should().Be(0);
+        member.GetRecord(discipline2).Value.Should().Be(0);
     }
 }

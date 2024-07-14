@@ -8,8 +8,9 @@ namespace TeamSorting.ViewModels;
 public class Data
 {
     public readonly List<DisciplineInfo> Disciplines = [];
+
     public ObservableCollection<Member> Members { get; } = [];
-    public readonly List<DisciplineRecord> DisciplineRecords = [];
+
     public readonly List<Team> Teams = [];
 
     #region Discipline
@@ -21,6 +22,11 @@ public class Data
             return false;
         }
 
+        foreach (var member in Members)
+        {
+            AddDisciplineRecord(member, discipline, "");
+        }
+
         Disciplines.Add(discipline);
         return true;
     }
@@ -28,9 +34,10 @@ public class Data
     public bool RemoveDiscipline(DisciplineInfo discipline)
     {
         bool result = Disciplines.Remove(discipline);
-        if (result)
+        if (!result) return result;
+        foreach (var member in Members)
         {
-            DisciplineRecords.RemoveAll(record => record.DisciplineInfo == discipline);
+            member.RemoveDisciplineRecord(discipline.Id);
         }
 
         return result;
@@ -65,6 +72,11 @@ public class Data
             return false;
         }
 
+        foreach (var discipline in Disciplines)
+        {
+            AddDisciplineRecord(member, discipline, "");
+        }
+
         Members.Add(member);
         return true;
     }
@@ -74,7 +86,6 @@ public class Data
         bool result = Members.Remove(member);
         if (result)
         {
-            DisciplineRecords.RemoveAll(record => record.Member == member);
             Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
         }
 
@@ -91,41 +102,12 @@ public class Data
         return Members.Where(member => names.Contains(member.Name));
     }
 
-    public DisciplineRecord GetMemberDisciplineRecord(Member member, DisciplineInfo discipline)
-    {
-        return DisciplineRecords.First(record =>
-            record.Member == member
-            && record.DisciplineInfo == discipline);
-    }
-
-    public IEnumerable<DisciplineRecord> GetMemberRecords(Member member)
-    {
-        return DisciplineRecords.Where(record => record.Member == member);
-    }
-
-    public object? GetMemberDisciplineValue(Member member, DisciplineInfo discipline)
-    {
-        var record = DisciplineRecords.FirstOrDefault(record =>
-            record.Member == member
-            && record.DisciplineInfo == discipline);
-        return record?.Value;
-    }
-
-    private double? GetMemberDisciplineDoubleValue(Member member, DisciplineInfo discipline)
-    {
-        var record = DisciplineRecords.FirstOrDefault(record =>
-            record.Member == member
-            && record.DisciplineInfo == discipline);
-        return record?.DoubleValue;
-    }
-
     public double GetMemberDisciplineScore(Member member, DisciplineInfo discipline)
     {
         var range = GetDisciplineRange(discipline);
         int min = discipline.SortType == DisciplineSortType.Asc ? 0 : 100;
         int max = discipline.SortType == DisciplineSortType.Asc ? 100 : 0;
-        double value = GetMemberDisciplineDoubleValue(member, discipline)
-                       ?? (discipline.SortType == DisciplineSortType.Asc ? range.min : range.max);
+        double value = member.GetRecord(discipline).DoubleValue;
         return (((value - range.min) / (range.max - range.min)) * (max - min)) + min;
     }
 
@@ -233,33 +215,22 @@ public class Data
 
     #region DisciplineRecord
 
-    public bool AddDisciplineRecord(DisciplineRecord record)
+    public IEnumerable<DisciplineRecord> GetAllRecords()
     {
-        if (!Members.Contains(record.Member) ||
-            !Disciplines.Contains(record.DisciplineInfo))
-        {
-            return false;
-        }
-
-        record.Member.DisciplineRecords.Add(record);
-
-        DisciplineRecords.Add(record);
-        return true;
+        return Members.SelectMany(member => member.Records.Values);
     }
 
     public bool AddDisciplineRecord(Member member, DisciplineInfo discipline, string value)
     {
-        return AddDisciplineRecord(new DisciplineRecord(member, discipline, value));
+        if (!Members.Contains(member) || !Disciplines.Contains(discipline)) return false;
+        member.AddDisciplineRecord(discipline, value);
+        return true;
     }
 
-    public bool RemoveDisciplineRecord(DisciplineRecord record)
-    {
-        return DisciplineRecords.Remove(record);
-    }
 
     public IEnumerable<DisciplineRecord> GetDisciplineRecordsByDiscipline(DisciplineInfo discipline)
     {
-        return DisciplineRecords.Where(record => record.DisciplineInfo == discipline);
+        return GetAllRecords().Where(record => record.DisciplineInfo == discipline);
     }
 
     #endregion
@@ -298,20 +269,12 @@ public class Data
         return team.Members.Remove(member);
     }
 
-    public double GetTeamTotalValueByDiscipline(Team team, DisciplineInfo discipline)
-    {
-        var records = DisciplineRecords.Where(record =>
-            record.DisciplineInfo == discipline
-            && team.Members.Contains(record.Member));
-        return records.Sum(record => record.DoubleValue);
-    }
-
     public Dictionary<Team, double> GetSortedTeamsByValueByDiscipline(DisciplineInfo discipline)
     {
         var dict = new Dictionary<Team, double>();
         foreach (var team in Teams)
         {
-            double value = GetTeamTotalValueByDiscipline(team, discipline);
+            double value = team.GetTotalValueByDiscipline(discipline);
             dict.Add(team, value);
         }
 
@@ -392,8 +355,7 @@ public class Data
 
             foreach (var disciplineInfo in Disciplines)
             {
-                var record = new DisciplineRecord(member, disciplineInfo, csv[disciplineInfo.Name]);
-                AddDisciplineRecord(record);
+                AddDisciplineRecord(member, disciplineInfo, csv[disciplineInfo.Name]);
             }
         }
     }

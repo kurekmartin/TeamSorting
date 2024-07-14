@@ -2,8 +2,8 @@
 
 public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue)
 {
-    public Member Member { get; set; } = member;
-    public DisciplineInfo DisciplineInfo { get; set; } = disciplineInfo;
+    public Member Member { get; } = member;
+    public DisciplineInfo DisciplineInfo { get; } = disciplineInfo;
     public string RawValue { get; set; } = rawValue;
 
     public object Value
@@ -22,7 +22,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             };
         }
     }
-    
+
     public double DoubleValue =>
         DisciplineInfo.DataType switch
         {
