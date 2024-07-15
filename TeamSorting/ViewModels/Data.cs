@@ -7,7 +7,7 @@ namespace TeamSorting.ViewModels;
 
 public class Data
 {
-    public readonly List<DisciplineInfo> Disciplines = [];
+    public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
 
     public ObservableCollection<Member> Members { get; } = [];
 

@@ -1,5 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.ReactiveUI;
+using Projektanker.Icons.Avalonia;
+using Projektanker.Icons.Avalonia.MaterialDesign;
 using Serilog;
 
 namespace TeamSorting;
@@ -16,16 +18,20 @@ sealed class Program
             .MinimumLevel.Debug()
             .WriteTo.Console()
             .CreateLogger();
-        
+
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-        => AppBuilder.Configure<App>()
+    {
+        IconProvider.Current.Register<MaterialDesignIconProvider>();
+
+        return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
             .UseReactiveUI();
+    }
 }
