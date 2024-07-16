@@ -2,89 +2,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:TeamSorting"
-        xmlns:converters="clr-namespace:TeamSorting.Converters"
         xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TeamSorting.Views.MainWindow"
         x:DataType="viewModel:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1">
-
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <viewModel:MainWindowViewModel />
-    </Design.DataContext>
-    <Window.Resources>
-        <converters:StringListConverter x:Key="StringListConverter" />
-        <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
-    </Window.Resources>
-
-    <DockPanel
-                VerticalAlignment="Stretch"
-                HorizontalAlignment="Stretch">
-        <Button Click="LoadData_OnClick"
-                DockPanel.Dock="Top">Load Data</Button>
-
-        <DataGrid ItemsSource="{Binding Data.Members}"
-                  CanUserSortColumns="False"
-                  AutoGenerateColumns="False"
-                  CanUserResizeColumns="True"
-                  GridLinesVisibility="Horizontal"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Top"
-                  DockPanel.Dock="Top"
-                  FrozenColumnCount="1"
-                  x:Name="DataGrid">
-            <DataGrid.Styles>
-                <Style Selector="DataGridColumnHeader">
-                    <Setter Property="Padding" Value="12,0"></Setter>
-                </Style>
-            </DataGrid.Styles>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTemplateColumn Header="With">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding With}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}"
-                                                   VerticalAlignment="Center"
-                                                   Padding="3" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="NotWith">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding NotWith}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}"
-                                                   VerticalAlignment="Center"
-                                                   Padding="3" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-            </DataGrid.Columns>
-        </DataGrid>
-    </DockPanel>
+        Title="AvaloniaApplication1"
+        Content="{Binding ContentViewModel}">
 </Window>

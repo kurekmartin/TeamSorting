@@ -1,14 +1,23 @@
-﻿using System.Collections.ObjectModel;
-using TeamSorting.Models;
+﻿using ReactiveUI;
 
 namespace TeamSorting.ViewModels;
 
-public class MainWindowViewModel : ViewModelBase
+public class MainWindowViewModel(Data data, TeamsViewModel teamsViewModel, InputViewModel inputViewModel) : ViewModelBase
 {
-    public Data Data { get; } = new();
+    private ViewModelBase _contentViewModel = new InputViewModel(data);
+    public ViewModelBase ContentViewModel
+    {
+        get => _contentViewModel;
+        private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
+    }
 
-    //TODO add discipline
-    //TODO remove discipline
-    //TODO add member
-    //TODO remove member
+    public void SwitchToTeamsView()
+    {
+        ContentViewModel = teamsViewModel;
+    }
+
+    public void SwitchToInputView()
+    {
+        ContentViewModel = inputViewModel;
+    }
 }
