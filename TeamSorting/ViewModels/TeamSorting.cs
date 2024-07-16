@@ -42,6 +42,10 @@ public static class TeamSorting
 
                     sortedMembers.AddRange(newMembers);
                     records.RemoveAll(record => newMembers.Any(m => m.Name == record.Member.Name));
+                    if (records.Count==0)
+                    {
+                        break;
+                    }
                 }
             }
         }
