@@ -27,6 +27,7 @@
                   CanUserSortColumns="False"
                   AutoGenerateColumns="False"
                   CanUserResizeColumns="True"
+                  GridLinesVisibility="Horizontal"
                   x:Name="DataGrid">
             <DataGrid.Styles>
                 <Style Selector="DataGridColumnHeader">
@@ -41,7 +42,7 @@
                             <ItemsControl ItemsSource="{Binding With}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
+                                        <WrapPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
@@ -61,7 +62,7 @@
                             <ItemsControl ItemsSource="{Binding NotWith}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Horizontal" />
+                                        <WrapPanel Orientation="Horizontal" />
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                                 <ItemsControl.ItemTemplate>
