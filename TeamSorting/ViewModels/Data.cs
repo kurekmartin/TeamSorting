@@ -11,7 +11,7 @@ public class Data
 
     public ObservableCollection<Member> Members { get; } = [];
 
-    public readonly List<Team> Teams = [];
+    public ObservableCollection<Team> Teams { get; } = [];
 
     #region Discipline
 
@@ -281,7 +281,7 @@ public class Data
         return dict.OrderBy(pair => pair.Value).ToDictionary();
     }
 
-    public List<Team> CreateTeams(int count)
+    public ObservableCollection<Team> CreateTeams(int count)
     {
         Teams.Clear();
         for (var i = 0; i < count; i++)

@@ -1,9 +1,11 @@
-﻿namespace TeamSorting.Models;
+﻿using System.Collections.ObjectModel;
+
+namespace TeamSorting.Models;
 
 public class Team(string name)
 {
     public string Name { get; set; } = name;
-    public List<Member> Members { get; } = [];
+    public ObservableCollection<Member> Members { get; } = [];
 
     public double GetTotalValueByDiscipline(DisciplineInfo discipline)
     {
