@@ -18,16 +18,24 @@
     </Design.DataContext>
     <Window.Resources>
         <converters:StringListConverter x:Key="StringListConverter" />
-        <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double> 
+        <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
     </Window.Resources>
-    
-    <StackPanel Orientation="Vertical">
-        <Button Click="LoadData_OnClick">Load Data</Button>
+
+    <DockPanel
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch">
+        <Button Click="LoadData_OnClick"
+                DockPanel.Dock="Top">Load Data</Button>
+
         <DataGrid ItemsSource="{Binding Data.Members}"
                   CanUserSortColumns="False"
                   AutoGenerateColumns="False"
                   CanUserResizeColumns="True"
                   GridLinesVisibility="Horizontal"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Top"
+                  DockPanel.Dock="Top"
+                  FrozenColumnCount="1"
                   x:Name="DataGrid">
             <DataGrid.Styles>
                 <Style Selector="DataGridColumnHeader">
@@ -35,7 +43,7 @@
                 </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
                 <DataGridTemplateColumn Header="With">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -81,6 +89,6 @@
 
         <StackPanel x:Name="InputGrid" Orientation="Horizontal">
         </StackPanel>
-    </StackPanel>
+    </DockPanel>
 
 </Window>

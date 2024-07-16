@@ -46,14 +46,26 @@ public partial class MainWindow : Window
 
         foreach (var discipline in context.Data.Disciplines)
         {
+            if (DataGridContainsDisciplineColumn(DataGrid, discipline))
+            {
+                continue;
+            }
+
             var column = new DataGridTextColumn
             {
+                Tag = discipline.Id,
                 Header = CreateDisciplineColumnHeader(discipline),
                 Binding = new Binding($"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.RawValue)}"),
                 IsReadOnly = false
             };
             DataGrid.Columns.Add(column);
         }
+    }
+
+    private bool DataGridContainsDisciplineColumn(DataGrid dataGrid, DisciplineInfo discipline)
+    {
+        var column = dataGrid.Columns.FirstOrDefault(column => column.Tag is Guid id && id == discipline.Id);
+        return column is not null;
     }
 
     private static object CreateDisciplineColumnHeader(DisciplineInfo discipline)
@@ -98,7 +110,7 @@ public partial class MainWindow : Window
         {
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            Padding = new Thickness(0,0,10,0),
+            Padding = new Thickness(0, 0, 10, 0),
             [DockPanel.DockProperty] = Dock.Left
         };
         var textBinding = new Binding
