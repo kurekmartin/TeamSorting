@@ -86,9 +86,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-
-        <StackPanel x:Name="InputGrid" Orientation="Horizontal">
-        </StackPanel>
     </DockPanel>
-
 </Window>
