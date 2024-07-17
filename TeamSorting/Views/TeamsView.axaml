@@ -17,7 +17,26 @@
                 VerticalAlignment="Top">
             Back
         </Button>
-        <ItemsControl ItemsSource="{Binding Data.Teams}">
+        <StackPanel Orientation="Vertical"
+                    DockPanel.Dock="Top">
+            <TextBlock Text="Differences:"
+                       FontWeight="Bold" />
+            <ItemsControl ItemsSource="{ReflectionBinding Data.DisciplineDelta}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="0,0,0,2">
+                            <TextBlock Text="{ReflectionBinding Key.Name}"
+                                       FontWeight="Bold"
+                                       Margin="0,0,5,0" />
+                            <TextBlock Text="{ReflectionBinding Value}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+        <ItemsControl ItemsSource="{Binding Data.Teams}"
+                      DockPanel.Dock="Top">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
@@ -25,17 +44,55 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock FontWeight="Bold" Text="{Binding Name}"></TextBlock>
+                    <StackPanel Orientation="Vertical"
+                                Margin="0,0,5,0">
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center" />
+                            <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DockPanel Margin="0,0,0,2">
+                                            <TextBlock Text="{ReflectionBinding Key.Name}"
+                                                       FontWeight="Bold"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="0,0,5,0" />
+                                            <TextBlock Text="{ReflectionBinding Value}"
+                                                       HorizontalAlignment="Right" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                         <ItemsControl ItemsSource="{Binding Members}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Name}"></TextBlock>
+                                    <Border CornerRadius="5"
+                                            Padding="5"
+                                            Margin="0,0,0,3"
+                                            BorderThickness="1"
+                                            BorderBrush="Gray">
+                                        <StackPanel>
+                                            <TextBlock Text="{Binding Name}"
+                                                       FontWeight="Bold"
+                                                       Margin="0,0,0,5" />
+                                            <ItemsControl ItemsSource="{ReflectionBinding Records.Values}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <DockPanel Margin="0,0,0,2">
+                                                            <TextBlock Text="{ReflectionBinding DisciplineInfo.Name}"
+                                                                       FontWeight="Bold"
+                                                                       HorizontalAlignment="Left"
+                                                                       Margin="0,0,5,0" />
+                                                            <TextBlock Text="{ReflectionBinding DoubleValue}"
+                                                                       HorizontalAlignment="Right" />
+                                                        </DockPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

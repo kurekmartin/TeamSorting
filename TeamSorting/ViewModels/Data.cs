@@ -13,6 +13,24 @@ public class Data
 
     public ObservableCollection<Team> Teams { get; } = [];
 
+    public Dictionary<DisciplineInfo, double> DisciplineDelta
+    {
+        get
+        {
+            var dict = new Dictionary<DisciplineInfo, double>();
+            //var teamScores = Teams.ToDictionary(t => t, t => t.TotalScores);
+            foreach (var discipline in Disciplines)
+            {
+                var teamScores = Teams.Select(t => t.GetTotalValueByDiscipline(discipline)).ToList();
+                double min = teamScores.Min();
+                double max = teamScores.Max();
+                dict.Add(discipline, double.Abs(min - max));
+            }
+
+            return dict;
+        }
+    }
+
     #region Discipline
 
     public bool AddDiscipline(DisciplineInfo discipline)
