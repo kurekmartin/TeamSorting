@@ -7,6 +7,7 @@ public class Team(string name)
 {
     public string Name { get; set; } = name;
     public ObservableCollection<Member> Members { get; } = [];
+    public bool IsValid => IsValidCheck(Members);
 
     public Dictionary<DisciplineInfo, double> TotalScores
     {
@@ -22,5 +23,17 @@ public class Team(string name)
     {
         var records = Members.Select(member => member.GetRecord(discipline));
         return records.Sum(record => record.DoubleValue);
+    }
+
+    private static bool IsValidCheck(IEnumerable<Member> members)
+    {
+        var memberList = members.ToList();
+        var memberNames = memberList.Select(member => member.Name).ToList(); 
+        var with = memberList.SelectMany(member => member.With).ToList();
+        var notWith = memberList.SelectMany(member => member.NotWith);
+
+        return memberNames.Intersect(with).SequenceEqual(with)
+               && !memberNames.Intersect(notWith).Any();
+
     }
 }

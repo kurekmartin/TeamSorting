@@ -50,6 +50,10 @@
                             <TextBlock Text="{Binding Name}"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center" />
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="IsValid: "/>
+                                <TextBlock Text="{Binding IsValid}"/>
+                            </StackPanel>
                             <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
