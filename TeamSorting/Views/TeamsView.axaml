@@ -77,6 +77,26 @@
                                             <TextBlock Text="{Binding Name}"
                                                        FontWeight="Bold"
                                                        Margin="0,0,0,5" />
+                                            <TextBlock Text="With"
+                                                       FontWeight="Bold"/>
+                                            <ItemsControl ItemsSource="{Binding With}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}"
+                                                                   Margin="5,0,0,0"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                            <TextBlock Text="Not With"
+                                                       FontWeight="Bold"/>
+                                            <ItemsControl ItemsSource="{Binding NotWith}">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding}"
+                                                                   Margin="5,0,0,0"/>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                             <ItemsControl ItemsSource="{ReflectionBinding Records.Values}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
