@@ -6,7 +6,7 @@ namespace TeamSorting.Models;
 public class Team(string name)
 {
     public string Name { get; set; } = name;
-    public ObservableCollection<Member> Members { get; } = [];
+    public ObservableCollection<Member> Members { get; init; } = [];
     public bool IsValid => IsValidCheck(Members);
 
     public Dictionary<DisciplineInfo, double> TotalScores
@@ -25,7 +25,7 @@ public class Team(string name)
         return records.Sum(record => record.DoubleValue);
     }
 
-    private static bool IsValidCheck(IEnumerable<Member> members)
+    public static bool IsValidCheck(IEnumerable<Member> members)
     {
         var memberList = members.ToList();
         var memberNames = memberList.Select(member => member.Name).ToList(); 
