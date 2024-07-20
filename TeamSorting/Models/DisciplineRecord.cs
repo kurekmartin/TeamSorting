@@ -1,4 +1,6 @@
-﻿namespace TeamSorting.Models;
+﻿using System.Globalization;
+
+namespace TeamSorting.Models;
 
 public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue)
 {
@@ -17,7 +19,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
                     : TimeSpan.Parse(RawValue),
                 DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
                     ? 0d
-                    : double.Parse(RawValue),
+                    : double.Parse(RawValue,CultureInfo.InvariantCulture),
                 _ => throw new FormatException()
             };
         }

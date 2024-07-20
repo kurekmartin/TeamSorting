@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Collections.ObjectModel;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
 using Avalonia.Interactivity;
@@ -6,6 +7,7 @@ using Avalonia.Layout;
 using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
 using TeamSorting.Models;
+using TeamSorting.Sorting;
 using TeamSorting.ViewModels;
 
 namespace TeamSorting.Views;
@@ -23,6 +25,7 @@ public partial class InputView : UserControl
         {
             AddDisciplinesToDataGrid();
         }
+
         base.OnInitialized();
     }
 
@@ -140,8 +143,10 @@ public partial class InputView : UserControl
     {
         var context = (InputViewModel)DataContext!;
         var numberOfTeams = (int)(NumberOfTeams.Value ?? 1);
-        context.Data.CreateTeams(numberOfTeams);
-        ViewModels.TeamSorting.SortMembersIntoTeams(context.Data);
+        context.Data.Teams = new ObservableCollection<Team>(
+            EvolutionSorter.Sort(context.Data.Members.ToList(), numberOfTeams));
+        //context.Data.CreateTeams(numberOfTeams);
+        //ViewModels.TeamSorting.SortMembersIntoTeams(context.Data);
 
         var window = TopLevel.GetTopLevel(this);
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })

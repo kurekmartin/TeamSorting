@@ -11,7 +11,7 @@ public class Data
 
     public ObservableCollection<Member> Members { get; } = [];
 
-    public ObservableCollection<Team> Teams { get; } = [];
+    public ObservableCollection<Team> Teams { get; set; } = [];
 
     public Dictionary<DisciplineInfo, double> DisciplineDelta
     {

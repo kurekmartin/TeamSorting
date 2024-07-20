@@ -1,4 +1,6 @@
-﻿namespace TeamSorting.ViewModels;
+﻿using TeamSorting.Sorting;
+
+namespace TeamSorting.ViewModels;
 
 public class InputViewModel(Data data) : ViewModelBase
 {
