@@ -144,7 +144,7 @@ public partial class InputView : UserControl
         var context = (InputViewModel)DataContext!;
         var numberOfTeams = (int)(NumberOfTeams.Value ?? 1);
         context.Data.Teams = new ObservableCollection<Team>(
-            EvolutionSorter.Sort(context.Data.Members.ToList(), numberOfTeams));
+            context.Sorter.Sort(context.Data.Members.ToList(), numberOfTeams));
         //context.Data.CreateTeams(numberOfTeams);
         //ViewModels.TeamSorting.SortMembersIntoTeams(context.Data);
 

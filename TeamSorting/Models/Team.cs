@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using Avalonia.Collections;
 
 namespace TeamSorting.Models;
 

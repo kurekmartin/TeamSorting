@@ -2,11 +2,8 @@
 
 namespace TeamSorting.ViewModels;
 
-public class InputViewModel(Data data) : ViewModelBase
+public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
 {
-    public InputViewModel() : this(new Data())
-    {
-    }
-
+    public ISorter Sorter { get; } = sorter;
     public Data Data { get; } = data;
 }

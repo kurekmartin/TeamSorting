@@ -10,6 +10,6 @@ public static class ServiceCollectionExtensions {
         collection.AddTransient<MainWindowViewModel>();
         collection.AddSingleton<InputViewModel>();
         collection.AddSingleton<TeamsViewModel>();
-        // collection.AddSingleton<ISorter,EvolutionSorter>();
+        collection.AddSingleton<ISorter,EvolutionSorter>();
     }
 }

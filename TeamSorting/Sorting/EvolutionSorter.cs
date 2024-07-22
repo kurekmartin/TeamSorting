@@ -5,16 +5,16 @@ using TeamSorting.Models;
 
 namespace TeamSorting.Sorting;
 
-public static class EvolutionSorter
+public class EvolutionSorter : ISorter
 {
-    private static readonly Random Random = new();
+    private readonly Random _random = new();
     private const int GenerationSize = 100;
     private const int MaxGenerations = 200;
     private const float CrossSelection = 0.5f;
     private const float ChanceOfMutation = 0.2f;
     private const float PreserveBestResults = 0.1f;
 
-    public static List<Team> Sort(List<Member> members, int numberOfTeams)
+    public List<Team> Sort(List<Member> members, int numberOfTeams)
     {
         var teamSizes = GetSizeOfTeams(members.Count, numberOfTeams);
         var currentGeneration = new List<List<Member>>(GenerationSize);
@@ -49,7 +49,7 @@ public static class EvolutionSorter
 
         var finalGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
             .OrderBy(solution => solution.Value).ToDictionary();
-        
+
         return ListToTeams(finalGeneration.First().Key, teamSizes);
     }
 
@@ -133,13 +133,13 @@ public static class EvolutionSorter
             .ToDictionary(g => g.Key, g => g.Sum(record => record.DoubleValue));
     }
 
-    private static List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren)
+    private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren)
     {
         List<List<Member>> children = new(numberOfChildren);
         while (children.Count < numberOfChildren)
         {
-            var parent1 = members[Random.Next(members.Count)];
-            var parent2 = members[Random.Next(members.Count)];
+            var parent1 = members[_random.Next(members.Count)];
+            var parent2 = members[_random.Next(members.Count)];
             var newChildren = CrossMembers(parent1, parent2);
             children.AddRange(newChildren);
         }
@@ -165,7 +165,6 @@ public static class EvolutionSorter
         List<Member> parent2Rest = [..parent2[endIndex..], ..parent2[..endIndex]];
         parent2Rest = parent2Rest.Except(parent1Section).ToList();
 
-        int firstSectionSize = startIndex - 1;
         int endSectionSize = parent1.Count - endIndex + 1;
         List<Member> child1 =
         [
@@ -191,7 +190,7 @@ public static class EvolutionSorter
         throw new NotImplementedException();
     }
 
-    private static void MutateSolution(List<List<Member>> members)
+    private void MutateSolution(List<List<Member>> members)
     {
         foreach (var memberList in members)
         {
@@ -199,12 +198,12 @@ public static class EvolutionSorter
         }
     }
 
-    private static void MutateMembers(List<Member> members)
+    private void MutateMembers(List<Member> members)
     {
         for (var i = 0; i < members.Count; i++)
         {
-            if (Random.NextDouble() > ChanceOfMutation) continue;
-            int index = Random.Next(members.Count);
+            if (_random.NextDouble() > ChanceOfMutation) continue;
+            int index = _random.Next(members.Count);
             members.Swap(i, index);
         }
     }
