@@ -14,7 +14,7 @@ public class Team(string name)
         {
             return Members.SelectMany(member => member.Records.Values)
                 .GroupBy(record => record.DisciplineInfo)
-                .ToDictionary(g => g.Key, g => g.Sum(record => record.DoubleValue));
+                .ToDictionary(g => g.Key, g => Math.Round(g.Sum(record => record.DoubleValue), 2));
         }
     }
 
@@ -27,12 +27,11 @@ public class Team(string name)
     public static bool IsValidCheck(IEnumerable<Member> members)
     {
         var memberList = members.ToList();
-        var memberNames = memberList.Select(member => member.Name).ToList(); 
+        var memberNames = memberList.Select(member => member.Name).ToList();
         var with = memberList.SelectMany(member => member.With).ToList();
         var notWith = memberList.SelectMany(member => member.NotWith);
 
         return memberNames.Intersect(with).SequenceEqual(with)
                && !memberNames.Intersect(notWith).Any();
-
     }
 }
