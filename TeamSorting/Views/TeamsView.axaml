@@ -5,7 +5,14 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TeamSorting.Views.TeamsView"
              x:DataType="viewModel:TeamsViewModel"
-             xmlns:viewModel="clr-namespace:TeamSorting.ViewModels">
+             xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
+             xmlns:converters="clr-namespace:TeamSorting.Converters"
+             xmlns:i="https://github.com/projektanker/icons.avalonia">
+
+    <UserControl.Resources>
+        <converters:TeamValidityConverter x:Key="TeamValidityConverter" />
+    </UserControl.Resources>
+
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <Button Click="Back_OnClick"
@@ -47,12 +54,17 @@
                     <DockPanel Margin="0,0,5,0">
                         <StackPanel Orientation="Vertical"
                                     DockPanel.Dock="Top">
-                            <TextBlock Text="{Binding Name}"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center" />
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="IsValid: " />
-                                <TextBlock Text="{Binding IsValid}" />
+                            <StackPanel Orientation="Horizontal"
+                                        HorizontalAlignment="Center">
+                                <TextBlock Text="{Binding Name}"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Margin="0,0,5,0"/>
+                                <i:Icon Value="{Binding IsValid, Converter={StaticResource TeamValidityConverter}}"
+                                        ToolTip.Tip="{Binding IsValid, StringFormat='Team is valid: {0}'}"
+                                        FontSize="20"
+                                        VerticalAlignment="Center"/>
                             </StackPanel>
                             <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
                                 <ItemsControl.ItemTemplate>
