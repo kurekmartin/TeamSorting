@@ -44,9 +44,9 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Vertical"
-                                Margin="0,0,5,0">
-                        <StackPanel Orientation="Vertical">
+                    <DockPanel Margin="0,0,5,0">
+                        <StackPanel Orientation="Vertical"
+                                    DockPanel.Dock="Top">
                             <TextBlock Text="{Binding Name}"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center" />
@@ -69,7 +69,8 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
-                        <ItemsControl ItemsSource="{Binding Members}">
+                        <ListBox ItemsSource="{Binding Members}"
+                                 DockPanel.Dock="Top">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border CornerRadius="5"
@@ -106,10 +107,11 @@
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <DockPanel Margin="0,0,0,2">
-                                                            <TextBlock Text="{ReflectionBinding DisciplineInfo.Name}"
-                                                                       FontWeight="Bold"
-                                                                       HorizontalAlignment="Left"
-                                                                       Margin="0,0,5,0" />
+                                                            <TextBlock
+                                                                Text="{ReflectionBinding DisciplineInfo.Name}"
+                                                                FontWeight="Bold"
+                                                                HorizontalAlignment="Left"
+                                                                Margin="0,0,5,0" />
                                                             <TextBlock Text="{ReflectionBinding DoubleValue}"
                                                                        HorizontalAlignment="Right" />
                                                         </DockPanel>
@@ -120,8 +122,8 @@
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
+                        </ListBox>
+                    </DockPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
