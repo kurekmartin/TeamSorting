@@ -7,6 +7,6 @@
         x:Class="TeamSorting.Views.MainWindow"
         x:DataType="viewModel:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="AvaloniaApplication1"
+        Title="TeamSorting"
         Content="{Binding ContentViewModel}">
 </Window>
