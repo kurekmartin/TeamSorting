@@ -6,6 +6,11 @@
              x:Class="TeamSorting.Views.TeamsView"
              x:DataType="viewModel:TeamsViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <viewModel:TeamsViewModel />
+    </Design.DataContext>
     <DockPanel>
         <Button Click="Back_OnClick"
                 DockPanel.Dock="Top"
