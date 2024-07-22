@@ -26,12 +26,17 @@ public class Team(string name)
 
     public static bool IsValidCheck(IEnumerable<Member> members)
     {
+        var invalidMembers = GetInvalidMembers(members);
+        return invalidMembers.invalidWith.Count == 0 && invalidMembers.invalidNotWith.Count == 0;
+    }
+
+    public static (List<string> invalidWith, List<string> invalidNotWith) GetInvalidMembers(IEnumerable<Member> members)
+    {
         var memberList = members.ToList();
         var memberNames = memberList.Select(member => member.Name).ToList();
         var with = memberList.SelectMany(member => member.With).ToList();
         var notWith = memberList.SelectMany(member => member.NotWith);
 
-        return memberNames.Intersect(with).SequenceEqual(with)
-               && !memberNames.Intersect(notWith).Any();
+        return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith).ToList());
     }
 }
