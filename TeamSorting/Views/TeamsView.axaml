@@ -7,11 +7,16 @@
              x:DataType="viewModel:TeamsViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels">
     <DockPanel>
-        <Button Click="Back_OnClick"
-                DockPanel.Dock="Top"
-                VerticalAlignment="Top">
-            Back
-        </Button>
+        <DockPanel DockPanel.Dock="Top">
+            <Button Click="Back_OnClick"
+                    VerticalAlignment="Top">
+                Back
+            </Button>
+            <Button Click="ExportTeamsToCsv_OnClick"
+                    HorizontalAlignment="Right">
+                Export teams to CSV
+            </Button>
+        </DockPanel>
         <StackPanel Orientation="Vertical"
                     DockPanel.Dock="Top">
             <TextBlock Text="Differences:"
@@ -46,8 +51,8 @@
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center" />
                             <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="IsValid: "/>
-                                <TextBlock Text="{Binding IsValid}"/>
+                                <TextBlock Text="IsValid: " />
+                                <TextBlock Text="{Binding IsValid}" />
                             </StackPanel>
                             <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
                                 <ItemsControl.ItemTemplate>
@@ -77,22 +82,22 @@
                                                        FontWeight="Bold"
                                                        Margin="0,0,0,5" />
                                             <TextBlock Text="With"
-                                                       FontWeight="Bold"/>
+                                                       FontWeight="Bold" />
                                             <ItemsControl ItemsSource="{Binding With}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding}"
-                                                                   Margin="5,0,0,0"/>
+                                                                   Margin="5,0,0,0" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
                                             <TextBlock Text="Not With"
-                                                       FontWeight="Bold"/>
+                                                       FontWeight="Bold" />
                                             <ItemsControl ItemsSource="{Binding NotWith}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
                                                         <TextBlock Text="{Binding}"
-                                                                   Margin="5,0,0,0"/>
+                                                                   Margin="5,0,0,0" />
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

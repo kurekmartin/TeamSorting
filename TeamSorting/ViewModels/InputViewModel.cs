@@ -6,4 +6,5 @@ public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
 {
     public ISorter Sorter { get; } = sorter;
     public Data Data { get; } = data;
+    public int NumberOfTeams { get; set; } = 2;
 }

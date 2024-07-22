@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Dynamic;
 using System.Globalization;
 using CsvHelper;
 using TeamSorting.Models;
@@ -312,7 +313,7 @@ public class Data
 
     #endregion
 
-    #region Loading
+    #region CSV
 
     public async Task LoadFromFile(StreamReader inputFile)
     {
@@ -376,6 +377,29 @@ public class Data
                 AddDisciplineRecord(member, disciplineInfo, csv[disciplineInfo.Name]);
             }
         }
+    }
+
+    public void WriteTeamsToCsv(string path)
+    {
+        var records = new List<dynamic>();
+
+        int maxMembers = Teams.MaxBy(team => team.Members.Count)!.Members.Count;
+        for (var i = 0; i < maxMembers; i++)
+        {
+            var record = new ExpandoObject() as IDictionary<string, object>;
+            foreach (var team in Teams)
+            {
+                if (i >= team.Members.Count) continue;
+                var member = team.Members[i];
+                record.Add(team.Name, member.Name);
+            }
+
+            records.Add(record);
+        }
+
+        using var writer = new StreamWriter(path);
+        using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+        csv.WriteRecords(records);
     }
 
     #endregion

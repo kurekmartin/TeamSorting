@@ -6,11 +6,6 @@
              x:Class="TeamSorting.Views.InputView"
              x:DataType="viewModel:InputViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels">
-    <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-        <viewModel:InputViewModel />
-    </Design.DataContext>
     <UserControl.Resources>
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
     </UserControl.Resources>
@@ -27,7 +22,12 @@
             </Button>
             <StackPanel Orientation="Vertical"
                         HorizontalAlignment="Right">
-                <NumericUpDown x:Name="NumberOfTeams" Value="3" />
+                <NumericUpDown x:Name="NumberOfTeams" 
+                               Value="{Binding NumberOfTeams}"
+                               FormatString="0"
+                               Minimum="1"
+                               Maximum="10"
+                               />
                 <Button Click="SortToTeams_OnClick">Sort to teams</Button>
             </StackPanel>
         </DockPanel>
