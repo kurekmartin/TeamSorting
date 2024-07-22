@@ -88,6 +88,7 @@ public class EvolutionSorter : ISorter
 
     private static double SolutionScore(List<Member> members, List<int> teamSizes)
     {
+        int numberOfTeams = teamSizes.Count;
         double score = 0;
         Dictionary<DisciplineInfo, List<double>> teamsDisciplineScores = [];
         var startIndex = 0;
@@ -96,7 +97,7 @@ public class EvolutionSorter : ISorter
             var team = members.Skip(startIndex).Take(teamSize).ToList();
             if (!Team.IsValidCheck(team))
             {
-                score = double.MaxValue;
+                score = double.MaxValue / numberOfTeams;
                 return score;
             }
 
