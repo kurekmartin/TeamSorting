@@ -7,6 +7,18 @@
         x:Class="TeamSorting.Views.MainWindow"
         x:DataType="viewModel:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="TeamSorting"
-        Content="{Binding ContentViewModel}">
+        Title="TeamSorting">
+    <Grid RowDefinitions="*,Auto">
+        <TransitioningContentControl Grid.Row="0"
+                                     Content="{Binding ContentViewModel}"
+                                     DockPanel.Dock="Top" />
+        <StackPanel Grid.Row="1"
+                    Background="LightGray"
+                    Height="25"
+                    VerticalAlignment="Bottom">
+            <TextBlock Text="{Binding Version}"
+                       Margin="3"
+                       HorizontalAlignment="Right" />
+        </StackPanel>
+    </Grid>
 </Window>
