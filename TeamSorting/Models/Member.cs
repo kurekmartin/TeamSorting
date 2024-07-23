@@ -104,4 +104,15 @@ public class Member(string name)
     {
         Records.Remove(recordId);
     }
+
+    public void MoveToTeam(Team team)
+    {
+        if (Team == team)
+        {
+            return;
+        }
+
+        Team?.RemoveMember(this);
+        team.AddMember(this);
+    }
 }

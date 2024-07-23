@@ -1,6 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
+using Avalonia.VisualTree;
+using TeamSorting.Models;
 using TeamSorting.ViewModels;
 
 namespace TeamSorting.Views;
@@ -43,7 +46,21 @@ public partial class TeamsView : UserControl
         {
             return;
         }
-        
+
         context.Data.WriteTeamsToCsv(file.Path.LocalPath);
+    }
+
+    private void MemberTeamMenu_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var context = (TeamsViewModel)DataContext!;
+        if (sender is not MenuItem menuItem) return;
+        var memberCard = menuItem.FindLogicalAncestorOfType<Border>();
+        if (memberCard is { Name: "Member", DataContext: Member })
+        {
+            var member = (Member)memberCard.DataContext;
+            var team = context.Data.Teams.First(team =>
+                string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
+            member.MoveToTeam(team);
+        }
     }
 }
