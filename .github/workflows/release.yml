@@ -24,3 +24,29 @@ jobs:
       run: dotnet publish "TeamSorting\TeamSorting.csproj" -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true -o "bin/win-x64/"
     - name: Build linux
       run: dotnet publish "TeamSorting\TeamSorting.csproj" -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true -o "bin/linux-x64/"
+    - name: Release
+      uses: actions/create-release@v1
+      id: create_release
+      with:
+        draft: false
+        prerelease: false
+        release_name: ${{ github.ref }}
+        tag_name: ${{ github.ref }}
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+    - name: upload win artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/TeamSorting/TeamSorting/bin/win-x64/TeamSorting.exe
+        asset_name: TeamSorting-win-x64.exe
+    - name: upload linux artifact
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./bin/TeamSorting/TeamSorting/bin/linux-x64/TeamSorting
+        asset_name: TeamSorting-linux-x64
