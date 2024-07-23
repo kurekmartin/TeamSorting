@@ -8,7 +8,8 @@ public class MemberCombinationValidityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return value is false ? Brushes.Tomato : Brushes.Transparent;
+        var color = value is false ? Brushes.Tomato.Color : Brushes.Transparent.Color;
+        return new SolidColorBrush(color);
     }
 
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

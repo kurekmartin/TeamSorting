@@ -1,12 +1,16 @@
-﻿using Avalonia.Collections;
+﻿using System.Collections.Specialized;
+using Avalonia.Collections;
+using ReactiveUI;
 
 namespace TeamSorting.Models;
 
-public class Member(string name)
+public class Member(string name) : ReactiveObject
 {
     public string Name { get; set; } = name;
-    public Dictionary<string, bool> With { get; } = [];
-    public Dictionary<string, bool> NotWith { get; } = [];
+    public List<string> With { get; } = [];
+    public Dictionary<string, bool> WithValidation => ValidateWith();
+    public List<string> NotWith { get; } = [];
+    public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
     private Team? _team;
@@ -18,22 +22,31 @@ public class Member(string name)
         {
             if (_team == value) return;
             _team = value;
-            Validate();
+            if (_team is null) return;
+            _team.Members.CollectionChanged += MembersOnCollectionChanged;
+            this.RaisePropertyChanged(nameof(WithValidation));
+            this.RaisePropertyChanged(nameof(NotWithValidation));
         }
+    }
+
+    private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        this.RaisePropertyChanged(nameof(WithValidation));
+        this.RaisePropertyChanged(nameof(NotWithValidation));
     }
 
     public bool IsValid
     {
         get
         {
-            return With.Values.All(val => val == true)
-                   && NotWith.Values.All(val => val == true);
+            return WithValidation.Values.All(val => val)
+                   && NotWithValidation.Values.All(val => val);
         }
     }
 
     public void AddWithMember(string member)
     {
-        With.Add(member, false);
+        With.Add(member);
     }
 
     public void AddWithMembers(IEnumerable<string> members)
@@ -46,7 +59,7 @@ public class Member(string name)
 
     public void AddNotWithMember(string member)
     {
-        NotWith.Add(member, false);
+        NotWith.Add(member);
     }
 
     public void AddNotWithMembers(IEnumerable<string> members)
@@ -57,26 +70,28 @@ public class Member(string name)
         }
     }
 
-    public void Validate()
+    private Dictionary<string, bool> ValidateWith()
     {
-        ValidateWith();
-        ValidateNotWith();
+        Dictionary<string, bool> dict = [];
+        foreach (string withMember in With)
+        {
+            bool value = Team?.Members.Any(member => member.Name == withMember) ?? false;
+            dict.Add(withMember, value);
+        }
+
+        return dict;
     }
 
-    private void ValidateWith()
+    private Dictionary<string, bool> ValidateNotWith()
     {
-        foreach (string withMember in With.Keys)
+        Dictionary<string, bool> dict = [];
+        foreach (string notWithMember in NotWith)
         {
-            With[withMember] = Team?.Members.Any(member => member.Name == withMember) ?? false;
+            bool value = Team?.Members.All(member => member.Name != notWithMember) ?? false;
+            dict.Add(notWithMember, value);
         }
-    }
 
-    private void ValidateNotWith()
-    {
-        foreach (string notWithMember in NotWith.Keys)
-        {
-            NotWith[notWithMember] = Team?.Members.All(member => member.Name != notWithMember) ?? false;
-        }
+        return dict;
     }
 
     public DisciplineRecord GetRecord(DisciplineInfo discipline)

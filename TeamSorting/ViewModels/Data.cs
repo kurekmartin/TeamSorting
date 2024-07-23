@@ -1,18 +1,34 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Dynamic;
 using System.Globalization;
 using CsvHelper;
+using ReactiveUI;
 using TeamSorting.Models;
 
 namespace TeamSorting.ViewModels;
 
-public class Data
+public class Data : ReactiveObject
 {
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
 
     public ObservableCollection<Member> Members { get; } = [];
 
-    public ObservableCollection<Team> Teams { get; set; } = [];
+    private ObservableCollection<Team> _teams = [];
+
+    public ObservableCollection<Team> Teams
+    {
+        get => _teams;
+        set
+        {
+            _teams = value;
+            foreach (var team in _teams)
+            {
+                team.WhenAnyValue(t => t.TotalScores)
+                    .Subscribe(x => this.RaisePropertyChanged(nameof(DisciplineDelta)));
+            }
+        }
+    }
 
     public Dictionary<DisciplineInfo, double> DisciplineDelta
     {
@@ -167,7 +183,7 @@ public class Data
             {
                 newMembersAdded = false;
                 var newMembers = group[i..];
-                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Keys)).Distinct();
+                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
                 foreach (var withMember in withMembers)
                 {
                     if (group.Contains(withMember)) continue;
@@ -178,7 +194,7 @@ public class Data
                 }
             } while (newMembersAdded);
 
-            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith.Keys)).Distinct().ToList();
+            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith)).Distinct().ToList();
             bool intersectExists = group.Intersect(notWithMembers).Any();
             if (intersectExists)
             {
@@ -198,7 +214,7 @@ public class Data
         {
             newMembersAdded = false;
             var newMembers = group[i..];
-            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Keys)).Distinct();
+            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
             foreach (var withMember in withMembers)
             {
                 if (group.Contains(withMember)) continue;
@@ -215,7 +231,7 @@ public class Data
     public IEnumerable<Member> GetNotWithMembers(Member currentMember)
     {
         List<Member> group = [];
-        var notWithMembers = GetMembersByName(currentMember.NotWith.Keys);
+        var notWithMembers = GetMembersByName(currentMember.NotWith);
         foreach (var notWithMember in notWithMembers)
         {
             var allNotWithMembers = GetWithMembers(notWithMember).ToList();

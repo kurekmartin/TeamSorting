@@ -1,10 +1,24 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using ReactiveUI;
 
 namespace TeamSorting.Models;
 
-public class Team(string name)
+public class Team : ReactiveObject
 {
-    public string Name { get; set; } = name;
+    public Team(string name)
+    {
+        Name = name;
+        Members.CollectionChanged += MembersOnCollectionChanged;
+    }
+
+    private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        this.RaisePropertyChanged(nameof(IsValid));
+        this.RaisePropertyChanged(nameof(TotalScores));
+    }
+
+    public string Name { get; set; }
     public ObservableCollection<Member> Members { get; } = [];
 
     public bool IsValid
@@ -24,23 +38,15 @@ public class Team(string name)
     {
         member.Team = this;
         Members.Add(member);
-        ValidateTeamMembers();
     }
-
-    private void ValidateTeamMembers()
-    {
-        foreach (var member in Members)
-        {
-            member.Validate();
-        }
-    }
+    
 
     public void RemoveMember(Member member)
     {
         member.Team = null;
         Members.Remove(member);
     }
-
+    
     public Dictionary<DisciplineInfo, double> TotalScores
     {
         get
@@ -67,8 +73,8 @@ public class Team(string name)
     {
         var memberList = members.ToList();
         var memberNames = memberList.Select(member => member.Name).ToList();
-        var with = memberList.SelectMany(member => member.With.Keys).ToList();
-        var notWith = memberList.SelectMany(member => member.NotWith.Keys);
+        var with = memberList.SelectMany(member => member.With).ToList();
+        var notWith = memberList.SelectMany(member => member.NotWith);
 
         return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith).ToList());
     }

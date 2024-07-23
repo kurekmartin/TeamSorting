@@ -68,6 +68,14 @@
                                         FontSize="20"
                                         VerticalAlignment="Center" />
                             </StackPanel>
+                            <DockPanel>
+                                <TextBlock Text="Members"
+                                           FontWeight="Bold"
+                                           DockPanel.Dock="Left"/>
+                                <TextBlock Text="{Binding Members.Count}"
+                                           DockPanel.Dock="Right"
+                                           HorizontalAlignment="Right"/>
+                            </DockPanel>
                             <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
@@ -83,77 +91,80 @@
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
                         </StackPanel>
-                        <ListBox ItemsSource="{Binding Members}"
-                                 DockPanel.Dock="Top">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border CornerRadius="5"
-                                            Padding="5"
-                                            Margin="0,0,0,3"
-                                            BorderThickness="1"
-                                            BorderBrush="Gray"
-                                            Background="LightGray"
-                                            Name="Member">
-                                        <Border.ContextMenu>
-                                            <ContextMenu
-                                                ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Data.Teams}">
-                                                <ContextMenu.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <MenuItem Header="{Binding Name}"
-                                                                  Click="MemberTeamMenu_OnClick" />
-                                                    </DataTemplate>
-                                                </ContextMenu.ItemTemplate>
-                                            </ContextMenu>
-                                        </Border.ContextMenu>
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Name}"
-                                                       FontWeight="Bold"
-                                                       Margin="0,0,0,5" />
-                                            <TextBlock Text="With"
-                                                       FontWeight="Bold" />
-                                            <ItemsControl ItemsSource="{Binding With}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding Key}"
-                                                                   Margin="5,0,0,0"
-                                                                   Background="{Binding Value,
+                        <ScrollViewer>
+                            <ItemsControl ItemsSource="{Binding Members}"
+                                          DockPanel.Dock="Top">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border CornerRadius="5"
+                                                Padding="5"
+                                                Margin="0,0,0,3"
+                                                BorderThickness="1"
+                                                BorderBrush="Gray"
+                                                Background="LightGray"
+                                                Name="Member">
+                                            <Border.ContextMenu>
+                                                <ContextMenu
+                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Data.Teams}">
+                                                    <ContextMenu.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <MenuItem Header="{Binding Name}"
+                                                                      Click="MemberTeamMenu_OnClick" />
+                                                        </DataTemplate>
+                                                    </ContextMenu.ItemTemplate>
+                                                </ContextMenu>
+                                            </Border.ContextMenu>
+                                            <StackPanel>
+                                                <TextBlock Text="{Binding Name}"
+                                                           FontWeight="Bold"
+                                                           Margin="0,0,0,5" />
+                                                <TextBlock Text="With"
+                                                           FontWeight="Bold" />
+                                                <ItemsControl ItemsSource="{Binding WithValidation}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Key}"
+                                                                       HorizontalAlignment="Left"
+                                                                       Margin="5,0,0,0"
+                                                                       Background="{Binding Value,
                                                                         Converter={StaticResource MemberCombinationValidityConverter}}" />
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                            <TextBlock Text="Not With"
-                                                       FontWeight="Bold" />
-                                            <ItemsControl ItemsSource="{Binding NotWith}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <TextBlock Text="{Binding Key}"
-                                                                   Margin="5,0,0,0"
-                                                                   Background="{Binding Value,
-                                                                        Converter={StaticResource MemberCombinationValidityConverter}}" />
-
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                            <ItemsControl ItemsSource="{ReflectionBinding Records.Values}">
-                                                <ItemsControl.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <DockPanel Margin="0,0,0,2">
-                                                            <TextBlock
-                                                                Text="{ReflectionBinding DisciplineInfo.Name}"
-                                                                FontWeight="Bold"
-                                                                HorizontalAlignment="Left"
-                                                                Margin="0,0,5,0" />
-                                                            <TextBlock Text="{ReflectionBinding DoubleValue}"
-                                                                       HorizontalAlignment="Right" />
-                                                        </DockPanel>
-                                                    </DataTemplate>
-                                                </ItemsControl.ItemTemplate>
-                                            </ItemsControl>
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ListBox>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <TextBlock Text="Not With"
+                                                           FontWeight="Bold" />
+                                                <ItemsControl ItemsSource="{Binding NotWithValidation}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Key}"
+                                                                       HorizontalAlignment="Left"
+                                                                       Margin="5,0,0,0"
+                                                                       Background="{Binding Value,
+                                                                                Converter={StaticResource MemberCombinationValidityConverter}}" />
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <ItemsControl ItemsSource="{ReflectionBinding Records.Values}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <DockPanel Margin="0,0,0,2">
+                                                                <TextBlock
+                                                                    Text="{ReflectionBinding DisciplineInfo.Name}"
+                                                                    FontWeight="Bold"
+                                                                    HorizontalAlignment="Left"
+                                                                    Margin="0,0,5,0" />
+                                                                <TextBlock Text="{ReflectionBinding DoubleValue}"
+                                                                           HorizontalAlignment="Right" />
+                                                            </DockPanel>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                            </StackPanel>
+                                        </Border>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
                     </DockPanel>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

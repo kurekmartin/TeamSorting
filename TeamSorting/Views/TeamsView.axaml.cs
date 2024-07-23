@@ -2,7 +2,6 @@
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
-using Avalonia.VisualTree;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
 
@@ -62,5 +61,6 @@ public partial class TeamsView : UserControl
                 string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
             member.MoveToTeam(team);
         }
+        
     }
 }

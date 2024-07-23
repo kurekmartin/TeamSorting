@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using Serilog;
+﻿using Serilog;
 using TeamSorting.Extensions;
 using TeamSorting.Models;
 
