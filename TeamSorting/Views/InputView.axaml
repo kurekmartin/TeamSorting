@@ -53,7 +53,7 @@
                 <DataGridTemplateColumn Header="With">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding With}">
+                            <ItemsControl ItemsSource="{Binding With.Keys}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />
@@ -73,7 +73,7 @@
                 <DataGridTemplateColumn Header="NotWith">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding NotWith}">
+                            <ItemsControl ItemsSource="{Binding NotWith.Keys}">
                                 <ItemsControl.ItemsPanel>
                                     <ItemsPanelTemplate>
                                         <WrapPanel Orientation="Horizontal" />

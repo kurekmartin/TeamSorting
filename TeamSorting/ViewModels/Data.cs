@@ -167,7 +167,7 @@ public class Data
             {
                 newMembersAdded = false;
                 var newMembers = group[i..];
-                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
+                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Keys)).Distinct();
                 foreach (var withMember in withMembers)
                 {
                     if (group.Contains(withMember)) continue;
@@ -178,7 +178,7 @@ public class Data
                 }
             } while (newMembersAdded);
 
-            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith)).Distinct().ToList();
+            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith.Keys)).Distinct().ToList();
             bool intersectExists = group.Intersect(notWithMembers).Any();
             if (intersectExists)
             {
@@ -198,7 +198,7 @@ public class Data
         {
             newMembersAdded = false;
             var newMembers = group[i..];
-            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
+            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Keys)).Distinct();
             foreach (var withMember in withMembers)
             {
                 if (group.Contains(withMember)) continue;
@@ -215,7 +215,7 @@ public class Data
     public IEnumerable<Member> GetNotWithMembers(Member currentMember)
     {
         List<Member> group = [];
-        var notWithMembers = GetMembersByName(currentMember.NotWith);
+        var notWithMembers = GetMembersByName(currentMember.NotWith.Keys);
         foreach (var notWithMember in notWithMembers)
         {
             var allNotWithMembers = GetWithMembers(notWithMember).ToList();
@@ -365,11 +365,11 @@ public class Data
     {
         while (csv.Read())
         {
-            var member = new Member(name: csv[nameof(Member.Name)])
-            {
-                With = csv[nameof(Member.With)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
-                NotWith = csv[nameof(Member.NotWith)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList(),
-            };
+            var withMembers = csv[nameof(Member.With)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+            var notWithMembers = csv[nameof(Member.NotWith)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
+            var member = new Member(name: csv[nameof(Member.Name)]);
+            member.AddWithMembers(withMembers);
+            member.AddNotWithMembers(notWithMembers);
             AddMember(member);
 
             foreach (var disciplineInfo in Disciplines)

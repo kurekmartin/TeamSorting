@@ -95,7 +95,7 @@ public class EvolutionSorter : ISorter
         foreach (int teamSize in teamSizes)
         {
             var team = members.Skip(startIndex).Take(teamSize).ToList();
-            if (!Team.IsValidCheck(team))
+            if (!Team.ValidateMemberList(team))
             {
                 score = double.MaxValue / numberOfTeams;
                 return score;
@@ -215,11 +215,9 @@ public class EvolutionSorter : ISorter
         var startIndex = 0;
         foreach (int teamSize in teamSizes)
         {
-            teams.Add(
-                new Team($"Team{teams.Count + 1}")
-                {
-                    Members = new ObservableCollection<Member>(members.Skip(startIndex).Take(teamSize))
-                });
+            var team = new Team($"Team{teams.Count + 1}");
+            team.AddMembers(members.Skip(startIndex).Take(teamSize));
+            teams.Add(team);
             startIndex += teamSize;
         }
 

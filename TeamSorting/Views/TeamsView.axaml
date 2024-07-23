@@ -7,10 +7,12 @@
              x:DataType="viewModel:TeamsViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
              xmlns:converters="clr-namespace:TeamSorting.Converters"
-             xmlns:i="https://github.com/projektanker/icons.avalonia">
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime">
 
     <UserControl.Resources>
         <converters:TeamValidityConverter x:Key="TeamValidityConverter" />
+        <converters:MemberCombinationValidityConverter x:Key="MemberCombinationValidityConverter" />
     </UserControl.Resources>
 
     <DockPanel>
@@ -60,11 +62,11 @@
                                            FontWeight="Bold"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Margin="0,0,5,0"/>
+                                           Margin="0,0,5,0" />
                                 <i:Icon Value="{Binding IsValid, Converter={StaticResource TeamValidityConverter}}"
                                         ToolTip.Tip="{Binding IsValid, StringFormat='Team is valid: {0}'}"
                                         FontSize="20"
-                                        VerticalAlignment="Center"/>
+                                        VerticalAlignment="Center" />
                             </StackPanel>
                             <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
                                 <ItemsControl.ItemTemplate>
@@ -100,8 +102,10 @@
                                             <ItemsControl ItemsSource="{Binding With}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding}"
-                                                                   Margin="5,0,0,0" />
+                                                        <TextBlock Text="{Binding Key}"
+                                                                   Margin="5,0,0,0"
+                                                                   Background="{Binding Value,
+                                                                        Converter={StaticResource MemberCombinationValidityConverter}}"/>
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>
@@ -110,8 +114,11 @@
                                             <ItemsControl ItemsSource="{Binding NotWith}">
                                                 <ItemsControl.ItemTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding}"
-                                                                   Margin="5,0,0,0" />
+                                                        <TextBlock Text="{Binding Key}"
+                                                                   Margin="5,0,0,0"
+                                                                   Background="{Binding Value,
+                                                                        Converter={StaticResource MemberCombinationValidityConverter}}" />
+
                                                     </DataTemplate>
                                                 </ItemsControl.ItemTemplate>
                                             </ItemsControl>

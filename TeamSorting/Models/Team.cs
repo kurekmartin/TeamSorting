@@ -5,8 +5,41 @@ namespace TeamSorting.Models;
 public class Team(string name)
 {
     public string Name { get; set; } = name;
-    public ObservableCollection<Member> Members { get; init; } = [];
-    public bool IsValid => IsValidCheck(Members);
+    public ObservableCollection<Member> Members { get; } = [];
+
+    public bool IsValid
+    {
+        get { return Members.All(member => member.IsValid); }
+    }
+
+    public void AddMembers(IEnumerable<Member> members)
+    {
+        foreach (var member in members)
+        {
+            AddMember(member);
+        }
+    }
+
+    public void AddMember(Member member)
+    {
+        member.Team = this;
+        Members.Add(member);
+        ValidateTeamMembers();
+    }
+
+    private void ValidateTeamMembers()
+    {
+        foreach (var member in Members)
+        {
+            member.Validate();
+        }
+    }
+
+    public void RemoveMember(Member member)
+    {
+        member.Team = null;
+        Members.Remove(member);
+    }
 
     public Dictionary<DisciplineInfo, double> TotalScores
     {
@@ -24,7 +57,7 @@ public class Team(string name)
         return records.Sum(record => record.DoubleValue);
     }
 
-    public static bool IsValidCheck(IEnumerable<Member> members)
+    public static bool ValidateMemberList(IEnumerable<Member> members)
     {
         var invalidMembers = GetInvalidMembers(members);
         return invalidMembers.invalidWith.Count == 0 && invalidMembers.invalidNotWith.Count == 0;
@@ -34,8 +67,8 @@ public class Team(string name)
     {
         var memberList = members.ToList();
         var memberNames = memberList.Select(member => member.Name).ToList();
-        var with = memberList.SelectMany(member => member.With).ToList();
-        var notWith = memberList.SelectMany(member => member.NotWith);
+        var with = memberList.SelectMany(member => member.With.Keys).ToList();
+        var notWith = memberList.SelectMany(member => member.NotWith.Keys);
 
         return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith).ToList());
     }

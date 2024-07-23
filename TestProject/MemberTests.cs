@@ -75,8 +75,10 @@ public class MemberTests
     {
         var data = new Data();
 
-        var member1 = new Member("Name1") { With = ["Name2"] };
-        var member2 = new Member("Name2") { With = ["Name1", "Name3"] };
+        var member1 = new Member("Name1");
+        member1.AddWithMembers(["Name2"]);
+        var member2 = new Member("Name2");
+        member2.AddWithMembers(["Name1", "Name3"]);
         var member3 = new Member("Name3");
         var member4 = new Member("Name4");
 
@@ -93,10 +95,13 @@ public class MemberTests
     {
         var data = new Data();
 
-        var member1 = new Member("Name1") { NotWith = ["Name2", "Name3"] };
-        var member2 = new Member("Name2") { With = ["Name4"] };
+        var member1 = new Member("Name1");
+        member1.AddNotWithMembers(["Name2", "Name3"]);
+        var member2 = new Member("Name2");
+        member2.AddWithMembers(["Name4"]);
         var member3 = new Member("Name3");
-        var member4 = new Member("Name4") { With = ["Name5"] };
+        var member4 = new Member("Name4");
+        member4.AddWithMembers(["Name5"]);
         var member5 = new Member("Name5");
         var member6 = new Member("Name6");
 
@@ -115,10 +120,19 @@ public class MemberTests
     {
         var data = new Data();
 
-        data.AddMember(new Member("Name1") { With = ["Name2"] });
-        data.AddMember(new Member("Name2") { With = ["Name1"] });
-        data.AddMember(new Member("Name3"));
-        data.AddMember(new Member("Name4") { With = ["Name1"], NotWith = ["Name3"] });
+        var member1 = new Member("Name1");
+        member1.AddWithMembers(["Name2"]);
+        var member2 = new Member("Name2");
+        member2.AddWithMembers(["Name1"]);
+        var member3 = new Member("Name3");
+        var member4 = new Member("Name4");
+        member4.AddWithMembers(["Name1"]);
+        member4.AddNotWithMembers(["Name3"]);
+        
+        data.AddMember(member1);
+        data.AddMember(member2);
+        data.AddMember(member3);
+        data.AddMember(member4);
 
         data.InvalidMembersCombination().Should().BeEmpty();
     }
@@ -128,10 +142,14 @@ public class MemberTests
     {
         var data = new Data();
 
-        var member1 = new Member("Name1") { With = ["Name2"] };
-        var member2 = new Member("Name2") { With = ["Name1"] };
+        var member1 = new Member("Name1");
+        member1.AddWithMembers(["Name2"]);
+        var member2 = new Member("Name2");
+        member2.AddWithMembers(["Name1"]);
         var member3 = new Member("Name3");
-        var member4 = new Member("Name4") { With = ["Name1"], NotWith = ["Name2"] };
+        var member4 = new Member("Name4");
+        member4.AddWithMembers(["Name1"]);
+        member4.AddNotWithMembers(["Name2"]);
 
         data.AddMember(member1);
         data.AddMember(member2);
