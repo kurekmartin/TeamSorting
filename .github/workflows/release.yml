@@ -26,12 +26,10 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 8.0.x
-    - name: Restore Project
-      run: dotnet restore ${{ env.PROJECT_PATH }}
     - name: Build win
-      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --no-restore
+      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
     - name: Build linux
-      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --no-restore
+      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true
     - name: Release
       uses: actions/create-release@v1
       id: create_release
