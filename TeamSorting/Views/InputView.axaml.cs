@@ -7,7 +7,6 @@ using Avalonia.Layout;
 using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
 using TeamSorting.Models;
-using TeamSorting.Sorting;
 using TeamSorting.ViewModels;
 
 namespace TeamSorting.Views;
