@@ -10,9 +10,9 @@ on:
 
 env:
   PROJECT_PATH: TeamSorting/TeamSorting.csproj
-  WIN_PATH: TeamSorting/TeamSorting/bin/Release/net8.0/win-x64/publish/TeamSorting.exe
+  WIN_PATH: /home/runner/work/TeamSorting/TeamSorting/TeamSorting/bin/Release/net8.0/win-x64/publish/TeamSorting.exe
   WIN_FILE: TeamSorting-win-x64.exe
-  LINUX_PATH: TeamSorting/TeamSorting/bin/Release/net8.0/linux-x64/publish/
+  LINUX_PATH: /home/runner/work/TeamSorting/TeamSorting/TeamSorting/bin/Release/net8.0/linux-x64/publish/TeamSorting
   LINUX_FILE: TeamSorting-linux-x64
 
 jobs:
