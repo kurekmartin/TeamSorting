@@ -327,6 +327,14 @@ public class Data : ReactiveObject
         return Teams;
     }
 
+    public void SortTeamsByDiscipline(DisciplineInfo disciplineInfo, DisciplineSortType sortType)
+    {
+        foreach (var team in Teams)
+        {
+            team.SortMembersByDiscipline(disciplineInfo, sortType);
+        }
+    }
+
     #endregion
 
     #region CSV

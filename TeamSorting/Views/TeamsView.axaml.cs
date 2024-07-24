@@ -61,6 +61,25 @@ public partial class TeamsView : UserControl
                 string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
             member.MoveToTeam(team);
         }
-        
+    }
+
+    private void AscButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: KeyValuePair<DisciplineInfo, double> disciplinePair })
+        {
+            var discipline = disciplinePair.Key;
+            var context = (TeamsViewModel)DataContext!;
+            context.Data.SortTeamsByDiscipline(discipline, DisciplineSortType.Asc);
+        }
+    }
+
+    private void DescButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: KeyValuePair<DisciplineInfo, double> disciplinePair })
+        {
+            var discipline = disciplinePair.Key;
+            var context = (TeamsViewModel)DataContext!;
+            context.Data.SortTeamsByDiscipline(discipline, DisciplineSortType.Desc);
+        }
     }
 }

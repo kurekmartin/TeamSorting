@@ -19,7 +19,32 @@ public class Team : ReactiveObject
     }
 
     public string Name { get; set; }
-    public ObservableCollection<Member> Members { get; } = [];
+
+    private ObservableCollection<Member> _members = [];
+
+    public ObservableCollection<Member> Members
+    {
+        get => _members;
+        private set
+        {
+            _members = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
+    public void SortMembersByDiscipline(DisciplineInfo disciplineInfo, DisciplineSortType sortType)
+    {
+        if (sortType == DisciplineSortType.Asc)
+        {
+            Members = new ObservableCollection<Member>(Members.OrderBy(member =>
+                member.Records.First(record => record.Key == disciplineInfo.Id)
+                    .Value.DoubleValue));
+        }
+
+        Members = new ObservableCollection<Member>(Members.OrderByDescending(member =>
+            member.Records.First(record => record.Key == disciplineInfo.Id)
+                .Value.DoubleValue));
+    }
 
     public bool IsValid
     {
@@ -39,14 +64,14 @@ public class Team : ReactiveObject
         member.Team = this;
         Members.Add(member);
     }
-    
+
 
     public void RemoveMember(Member member)
     {
         member.Team = null;
         Members.Remove(member);
     }
-    
+
     public Dictionary<DisciplineInfo, double> TotalScores
     {
         get
