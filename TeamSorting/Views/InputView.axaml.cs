@@ -2,8 +2,10 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
 using TeamSorting.Models;
@@ -60,7 +62,7 @@ public partial class InputView : UserControl
 
         foreach (var discipline in context.Data.Disciplines)
         {
-            if (DataGridContainsDisciplineColumn(DataGrid, discipline))
+            if (DataGridContainsDisciplineColumn(MemberGrid, discipline))
             {
                 continue;
             }
@@ -72,7 +74,7 @@ public partial class InputView : UserControl
                 Binding = new Binding($"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.RawValue)}"),
                 IsReadOnly = false
             };
-            DataGrid.Columns.Add(column);
+            MemberGrid.Columns.Add(column);
         }
     }
 
@@ -151,6 +153,41 @@ public partial class InputView : UserControl
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })
         {
             mainWindowViewModel.SwitchToTeamsView();
+        }
+    }
+
+    private void NewMemberTextBox_OnClick(object? sender, RoutedEventArgs e)
+    {
+        AddMember();
+    }
+
+    private void NewMemberTextBox_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            AddMember();
+        }
+    }
+
+    private void AddMember()
+    {
+        var context = (InputViewModel)DataContext!;
+        var member = new Member(context.NewMemberName);
+        context.Data.AddMember(member);
+        context.NewMemberName = string.Empty;
+        MemberGrid.ScrollIntoView(member, MemberGrid.Columns.First());
+    }
+
+    private void RemoveMemberButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button button)
+        {
+            var gridRow = button.FindLogicalAncestorOfType<DataGridRow>();
+            if (gridRow?.DataContext is Member member)
+            {
+                var context = (InputViewModel)DataContext!;
+                context.Data.RemoveMember(member);
+            }
         }
     }
 }

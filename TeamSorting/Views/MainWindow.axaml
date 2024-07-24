@@ -7,7 +7,8 @@
         x:Class="TeamSorting.Views.MainWindow"
         x:DataType="viewModel:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
-        Title="TeamSorting">
+        Title="TeamSorting"
+        Focusable="True">
     <Grid RowDefinitions="*,Auto">
         <TransitioningContentControl Grid.Row="0"
                                      Content="{Binding ContentViewModel}"
