@@ -60,9 +60,9 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline1")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Number };
         var disciplineInfoDesc = new DisciplineInfo("Discipline2")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfoAsc);
         data.AddDiscipline(disciplineInfoDesc);
 
@@ -98,9 +98,9 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline1")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Number };
         var disciplineInfoDesc = new DisciplineInfo("Discipline2")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfoAsc);
         data.AddDiscipline(disciplineInfoDesc);
 
@@ -139,9 +139,9 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline1")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Time };
         var disciplineInfoDesc = new DisciplineInfo("Discipline2")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Time };
         data.AddDiscipline(disciplineInfoAsc);
         data.AddDiscipline(disciplineInfoDesc);
 
@@ -177,9 +177,9 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline1")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Time };
         var disciplineInfoDesc = new DisciplineInfo("Discipline2")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Time };
         data.AddDiscipline(disciplineInfoAsc);
         data.AddDiscipline(disciplineInfoDesc);
 
@@ -218,7 +218,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfoAsc);
 
         var member1 = new Member(name: "Jmeno1");
@@ -242,7 +242,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoDesc = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfoDesc);
 
         var member1 = new Member(name: "Jmeno1");
@@ -266,7 +266,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Time };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Time };
         data.AddDiscipline(disciplineInfoAsc);
 
         var member1 = new Member(name: "Jmeno1");
@@ -290,7 +290,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoDesc = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Time };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Time };
         data.AddDiscipline(disciplineInfoDesc);
 
         var member1 = new Member(name: "Jmeno1");
@@ -314,7 +314,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoAsc = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfoAsc);
 
         var member1 = new Member(name: "Jmeno1");
@@ -328,7 +328,7 @@ public class DisciplineTests
         data.AddDisciplineRecord(member2, disciplineInfoAsc, "0");
         data.AddDisciplineRecord(member3, disciplineInfoAsc, "50");
 
-        disciplineInfoAsc.SortType = DisciplineSortType.Desc;
+        disciplineInfoAsc.SortOrder = SortOrder.Desc;
 
         data.GetMemberDisciplineScore(member1, disciplineInfoAsc).Should().Be(80);
         data.GetMemberDisciplineScore(member2, disciplineInfoAsc).Should().Be(100);
@@ -340,7 +340,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfoDesc = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Desc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Desc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfoDesc);
 
         var member1 = new Member(name: "Jmeno1");
@@ -354,7 +354,7 @@ public class DisciplineTests
         data.AddDisciplineRecord(member2, disciplineInfoDesc, "0");
         data.AddDisciplineRecord(member3, disciplineInfoDesc, "50");
 
-        disciplineInfoDesc.SortType = DisciplineSortType.Asc;
+        disciplineInfoDesc.SortOrder = SortOrder.Asc;
 
         data.GetMemberDisciplineScore(member1, disciplineInfoDesc).Should().Be(20);
         data.GetMemberDisciplineScore(member2, disciplineInfoDesc).Should().Be(0);
@@ -366,7 +366,7 @@ public class DisciplineTests
     {
         var data = new Data();
         var disciplineInfo = new DisciplineInfo("Discipline")
-            { SortType = DisciplineSortType.Asc, DataType = DisciplineDataType.Number };
+            { SortOrder = SortOrder.Asc, DataType = DisciplineDataType.Number };
         data.AddDiscipline(disciplineInfo);
 
         var member1 = new Member(name: "Jmeno1");

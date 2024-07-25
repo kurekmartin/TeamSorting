@@ -69,7 +69,7 @@ public partial class TeamsView : UserControl
         {
             var discipline = disciplinePair.Key;
             var context = (TeamsViewModel)DataContext!;
-            context.Data.SortTeamsByDiscipline(discipline, DisciplineSortType.Asc);
+            context.Data.SortTeamsByCriteria(discipline, SortOrder.Asc);
         }
     }
 
@@ -79,7 +79,19 @@ public partial class TeamsView : UserControl
         {
             var discipline = disciplinePair.Key;
             var context = (TeamsViewModel)DataContext!;
-            context.Data.SortTeamsByDiscipline(discipline, DisciplineSortType.Desc);
+            context.Data.SortTeamsByCriteria(discipline, SortOrder.Desc);
         }
+    }
+
+    private void AscNameButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var context = (TeamsViewModel)DataContext!;
+        context.Data.SortTeamsByCriteria(null, SortOrder.Asc);
+    }
+
+    private void DescNameButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var context = (TeamsViewModel)DataContext!;
+        context.Data.SortTeamsByCriteria(null, SortOrder.Desc);
     }
 }

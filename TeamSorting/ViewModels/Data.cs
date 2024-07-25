@@ -140,8 +140,8 @@ public class Data : ReactiveObject
     public double GetMemberDisciplineScore(Member member, DisciplineInfo discipline)
     {
         var range = GetDisciplineRange(discipline);
-        int min = discipline.SortType == DisciplineSortType.Asc ? 0 : 100;
-        int max = discipline.SortType == DisciplineSortType.Asc ? 100 : 0;
+        int min = discipline.SortOrder == SortOrder.Asc ? 0 : 100;
+        int max = discipline.SortOrder == SortOrder.Asc ? 100 : 0;
         double value = member.GetRecord(discipline).DoubleValue;
         return (((value - range.min) / (range.max - range.min)) * (max - min)) + min;
     }
@@ -149,7 +149,7 @@ public class Data : ReactiveObject
     public IEnumerable<DisciplineRecord> GetSortedRecordsByDiscipline(DisciplineInfo discipline)
     {
         var records = GetDisciplineRecordsByDiscipline(discipline).ToList();
-        if (discipline.SortType == DisciplineSortType.Asc)
+        if (discipline.SortOrder == SortOrder.Asc)
         {
             return records.OrderBy(record => record.DoubleValue);
         }
@@ -327,11 +327,11 @@ public class Data : ReactiveObject
         return Teams;
     }
 
-    public void SortTeamsByDiscipline(DisciplineInfo disciplineInfo, DisciplineSortType sortType)
+    public void SortTeamsByCriteria(DisciplineInfo? disciplineInfo, SortOrder sortOrder)
     {
         foreach (var team in Teams)
         {
-            team.SortMembersByDiscipline(disciplineInfo, sortType);
+            team.SortCriteria = new MemberSortCriteria(disciplineInfo, sortOrder);
         }
     }
 
@@ -381,7 +381,7 @@ public class Data : ReactiveObject
     {
         foreach (var discipline in disciplines)
         {
-            discipline.SortType = Enum.Parse<DisciplineSortType>(csv[discipline.Name]);
+            discipline.SortOrder = Enum.Parse<SortOrder>(csv[discipline.Name]);
         }
     }
 

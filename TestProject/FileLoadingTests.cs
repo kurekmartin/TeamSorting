@@ -47,11 +47,11 @@ public class FileLoadingTests
         await data.LoadFromFile(file);
 
         var age = new DisciplineInfo("Age")
-            { DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Asc };
+            { DataType = DisciplineDataType.Number, SortOrder = SortOrder.Asc };
         var discipline1 = new DisciplineInfo("Discipline1")
-            { DataType = DisciplineDataType.Time, SortType = DisciplineSortType.Asc };
+            { DataType = DisciplineDataType.Time, SortOrder = SortOrder.Asc };
         var discipline2 = new DisciplineInfo("Discipline2")
-            { DataType = DisciplineDataType.Number, SortType = DisciplineSortType.Desc };
+            { DataType = DisciplineDataType.Number, SortOrder = SortOrder.Desc };
         
         data.Disciplines.Should().ContainEquivalentOf(age,o=>o.Excluding(discipline => discipline.Id));
         data.Disciplines.Should().ContainEquivalentOf(discipline1,o=>o.Excluding(discipline => discipline.Id));

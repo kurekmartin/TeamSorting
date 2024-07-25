@@ -14,37 +14,65 @@ public class Team : ReactiveObject
 
     private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        this.RaisePropertyChanged(nameof(IsValid));
-        this.RaisePropertyChanged(nameof(TotalScores));
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Replace:
+            case NotifyCollectionChangedAction.Reset:
+                this.RaisePropertyChanged(nameof(IsValid));
+                this.RaisePropertyChanged(nameof(TotalScores));
+                this.RaisePropertyChanged(nameof(SortedMembers));
+                break;
+        }
     }
 
     public string Name { get; set; }
+    public ObservableCollection<Member> Members { get; } = [];
 
-    private ObservableCollection<Member> _members = [];
+    private MemberSortCriteria _memberSortCriteria = new(null, SortOrder.Asc);
 
-    public ObservableCollection<Member> Members
+    public MemberSortCriteria SortCriteria
     {
-        get => _members;
-        private set
+        private get => _memberSortCriteria;
+        set
         {
-            _members = value;
-            this.RaisePropertyChanged();
+            this.RaiseAndSetIfChanged(ref _memberSortCriteria, value);
+            this.RaisePropertyChanged(nameof(SortedMembers));
         }
     }
 
-    public void SortMembersByDiscipline(DisciplineInfo disciplineInfo, DisciplineSortType sortType)
+    public IEnumerable<Member> SortedMembers
     {
-        if (sortType == DisciplineSortType.Asc)
+        get
         {
-            Members = new ObservableCollection<Member>(Members.OrderBy(member =>
-                member.Records.First(record => record.Key == disciplineInfo.Id)
-                    .Value.DoubleValue));
-        }
+            if (SortCriteria.SortOrder == SortOrder.Asc)
+            {
+                if (SortCriteria.Discipline is null)
+                {
+                    return Members.OrderBy(member => member.Name);
+                }
 
-        Members = new ObservableCollection<Member>(Members.OrderByDescending(member =>
-            member.Records.First(record => record.Key == disciplineInfo.Id)
-                .Value.DoubleValue));
+                return Members.OrderBy(member =>
+                    member.Records
+                        .First(record =>
+                            record.Key == SortCriteria.Discipline.Id)
+                        .Value.DoubleValue);
+            }
+
+            if (SortCriteria.Discipline is null)
+            {
+                return Members.OrderByDescending(member => member.Name);
+            }
+
+            return Members.OrderByDescending(member =>
+                member.Records
+                    .First(record =>
+                        record.Key == SortCriteria.Discipline.Id)
+                    .Value.DoubleValue);
+        }
     }
+
 
     public bool IsValid
     {

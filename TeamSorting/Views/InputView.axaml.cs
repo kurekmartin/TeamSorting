@@ -101,7 +101,7 @@ public partial class InputView : UserControl
         var iconSortBinding = new Binding
         {
             Source = discipline,
-            Path = nameof(DisciplineInfo.SortType),
+            Path = nameof(DisciplineInfo.SortOrder),
             Converter = new Converters.DisciplineSortToIconConverter()
         };
         iconSort.Bind(Icon.ValueProperty, iconSortBinding);

@@ -28,6 +28,14 @@
         </DockPanel>
         <StackPanel Orientation="Vertical"
                     DockPanel.Dock="Top">
+            <StackPanel Orientation="Horizontal"
+                        Margin="0,0,0,2">
+                <Button Click="AscNameButton_OnClick">Asc</Button>
+                <Button Click="DescNameButton_OnClick">Desc</Button>
+                <TextBlock Text="Sort by member Name"
+                           FontWeight="Bold"
+                           Margin="0,0,5,0" />
+            </StackPanel>
             <TextBlock Text="Differences:"
                        FontWeight="Bold" />
             <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}">
@@ -94,7 +102,7 @@
                             </ItemsControl>
                         </StackPanel>
                         <ScrollViewer>
-                            <ItemsControl ItemsSource="{Binding Members}"
+                            <ItemsControl ItemsSource="{Binding SortedMembers}"
                                           DockPanel.Dock="Top">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>

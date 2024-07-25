@@ -4,6 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        WindowStartupLocation="CenterScreen"
         x:Class="TeamSorting.Views.MainWindow"
         x:DataType="viewModel:MainWindowViewModel"
         Icon="/Assets/avalonia-logo.ico"
