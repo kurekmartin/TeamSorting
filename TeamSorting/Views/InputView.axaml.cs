@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -10,6 +11,7 @@ using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
+using MenuItem = Avalonia.Controls.MenuItem;
 
 namespace TeamSorting.Views;
 
@@ -22,12 +24,26 @@ public partial class InputView : UserControl
 
     protected override void OnInitialized()
     {
-        if (DataContext is not null)
+        if (DataContext is InputViewModel vm)
         {
             AddDisciplinesToDataGrid();
+            vm.Data.Disciplines.CollectionChanged += DisciplinesOnCollectionChanged;
         }
 
         base.OnInitialized();
+    }
+
+    private void DisciplinesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            if (e.OldItems is null || e.OldItems.Count <= 0) return;
+            foreach (DisciplineInfo discipline in e.OldItems)
+            {
+                var column = MemberGrid.Columns.First(column => column.Tag is Guid columnId && columnId == discipline.Id);
+                MemberGrid.Columns.Remove(column);
+            }
+        }
     }
 
     private async void LoadData_OnClick(object? sender, RoutedEventArgs e)
@@ -84,13 +100,25 @@ public partial class InputView : UserControl
         return column is not null;
     }
 
-    private static object CreateDisciplineColumnHeader(DisciplineInfo discipline)
+    private static DockPanel CreateDisciplineColumnHeader(DisciplineInfo discipline)
     {
         var panel = new DockPanel
         {
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            VerticalAlignment = VerticalAlignment.Stretch
+            VerticalAlignment = VerticalAlignment.Stretch,
+            Tag = discipline.Id
         };
+
+        var removeButton = new Button()
+        {
+            HorizontalAlignment = HorizontalAlignment.Left,
+            [DockPanel.DockProperty] = Dock.Left,
+            [Attached.IconProperty] = "mdi-close",
+            Margin = new Thickness(0, 0, 5, 0),
+            [ToolTip.TipProperty] = "Remove discipline"
+        };
+        removeButton.Click += RemoveButtonOnClick;
+        panel.Children.Add(removeButton);
 
         var iconSort = new Icon
         {
@@ -138,6 +166,22 @@ public partial class InputView : UserControl
         panel.Children.Add(text);
 
         return panel;
+    }
+
+    private static void RemoveButtonOnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button button)
+        {
+            var panel = button.FindLogicalAncestorOfType<DockPanel>();
+            if (panel is { DataContext: InputViewModel context, Tag: Guid disciplineId })
+            {
+                var discipline = context.Data.GetDisciplineById(disciplineId);
+                if (discipline is not null)
+                {
+                    context.Data.RemoveDiscipline(discipline);
+                }
+            }
+        }
     }
 
     private void SortToTeams_OnClick(object? sender, RoutedEventArgs e)

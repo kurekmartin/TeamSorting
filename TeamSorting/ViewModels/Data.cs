@@ -82,6 +82,11 @@ public class Data : ReactiveObject
     {
         return Disciplines.FirstOrDefault(discipline => discipline.Name == name);
     }
+    
+    public DisciplineInfo? GetDisciplineById(Guid id)
+    {
+        return Disciplines.FirstOrDefault(discipline => discipline.Id == id);
+    }
 
     public (double min, double max) GetDisciplineRange(DisciplineInfo discipline)
     {
