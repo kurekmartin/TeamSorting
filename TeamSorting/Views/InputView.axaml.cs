@@ -215,6 +215,7 @@ public partial class InputView : UserControl
             SortOrder = disciplineSortOrder
         };
         context.Data.AddDiscipline(discipline);
+        //TODO error handling when discipline with same name exists 
         context.NewDisciplineName = string.Empty;
         AddDisciplinesToDataGrid();
         if (context.Data.Members.Count > 0)
