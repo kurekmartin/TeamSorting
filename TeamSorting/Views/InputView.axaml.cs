@@ -190,4 +190,31 @@ public partial class InputView : UserControl
             }
         }
     }
+
+    private void AddDisciplineTextBox_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            AddDiscipline();
+        }
+    }
+
+    private void AddDisciplineButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        AddDiscipline();
+    }
+
+    private void AddDiscipline()
+    {
+        var context = (InputViewModel)DataContext!;
+        var discipline = new DisciplineInfo(context.NewDisciplineName);
+        context.Data.AddDiscipline(discipline);
+        context.NewDisciplineName = string.Empty;
+        AddDisciplinesToDataGrid();
+        if (context.Data.Members.Count > 0)
+        {
+            //TODO scroll even if members are empty
+            MemberGrid.ScrollIntoView(null, MemberGrid.Columns.Last());
+        }
+    }
 }

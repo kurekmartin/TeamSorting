@@ -16,4 +16,12 @@ public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
         get => _newMemberName;
         set => this.RaiseAndSetIfChanged(ref _newMemberName, value);
     }
+    
+    private string _newDisciplineName = string.Empty;
+
+    public string NewDisciplineName
+    {
+        get => _newDisciplineName;
+        set => this.RaiseAndSetIfChanged(ref _newDisciplineName, value);
+    }
 }

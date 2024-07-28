@@ -16,11 +16,27 @@
         <DockPanel Grid.Row="0"
                    HorizontalAlignment="Stretch"
                    DockPanel.Dock="Top">
-            <Button Click="LoadData_OnClick"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top">
-                Load Data
-            </Button>
+            <DockPanel>
+                <Button DockPanel.Dock="Top"
+                        Click="LoadData_OnClick"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top">
+                    Load Data
+                </Button>
+                <DockPanel HorizontalAlignment="Left"
+                           VerticalAlignment="Bottom"
+                           DockPanel.Dock="Bottom">
+                    <TextBox Text="{Binding NewDisciplineName}"
+                             Watermark="New discipline name"
+                             Width="200"
+                             KeyDown="AddDisciplineTextBox_OnKeyDown"
+                             DockPanel.Dock="Left" />
+                    <Button VerticalAlignment="Center"
+                            Click="AddDisciplineButton_OnClick">
+                        Add Discipline
+                    </Button>
+                </DockPanel>
+            </DockPanel>
             <StackPanel Orientation="Vertical"
                         HorizontalAlignment="Right">
                 <NumericUpDown x:Name="NumberOfTeams"
@@ -42,7 +58,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   DockPanel.Dock="Top"
-                  FrozenColumnCount="1"
+                  FrozenColumnCount="2"
                   VerticalScrollBarVisibility="Auto"
                   HorizontalScrollBarVisibility="Auto"
                   x:Name="MemberGrid">
