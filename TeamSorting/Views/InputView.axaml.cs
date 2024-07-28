@@ -276,4 +276,51 @@ public partial class InputView : UserControl
             comboBox.SelectedIndex = 0;
         }
     }
+
+    private void RemoveWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: string removeName } button)
+        {
+            var parent = button.FindLogicalAncestorOfType<ItemsControl>();
+            if (parent?.DataContext is Member member)
+            {
+                member.RemoveWithMember(removeName);
+            }
+        }
+    }
+    private void RemoveNotWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Button { DataContext: string removeName } button)
+        {
+            var parent = button.FindLogicalAncestorOfType<ItemsControl>();
+            if (parent?.DataContext is Member member)
+            {
+                member.RemoveNotWithMember(removeName);
+            }
+        }
+    }
+
+    private void AddNotWithMemberMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem { DataContext: string notWithMemberName } menuItem)
+        {
+            var row = menuItem.FindLogicalAncestorOfType<DataGridRow>();
+            if (row?.DataContext is Member member)
+            {
+                member.AddNotWithMember(notWithMemberName);
+            }
+        }
+    }
+
+    private void AddWithMemberMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is MenuItem { DataContext: string withMemberName } menuItem)
+        {
+            var row = menuItem.FindLogicalAncestorOfType<DataGridRow>();
+            if (row?.DataContext is Member member)
+            {
+                member.AddWithMember(withMemberName);
+            }
+        }
+    }
 }

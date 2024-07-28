@@ -13,6 +13,7 @@ public class Data : ReactiveObject
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
 
     public ObservableCollection<Member> Members { get; } = [];
+    public List<string> SortedMemberNames => Members.OrderBy(m => m.Name).Select(member => member.Name).ToList();
 
     private ObservableCollection<Team> _teams = [];
 
@@ -82,7 +83,7 @@ public class Data : ReactiveObject
     {
         return Disciplines.FirstOrDefault(discipline => discipline.Name == name);
     }
-    
+
     public DisciplineInfo? GetDisciplineById(Guid id)
     {
         return Disciplines.FirstOrDefault(discipline => discipline.Id == id);
@@ -118,6 +119,7 @@ public class Data : ReactiveObject
         }
 
         Members.Add(member);
+        this.RaisePropertyChanged(nameof(SortedMemberNames));
         return true;
     }
 
@@ -129,6 +131,7 @@ public class Data : ReactiveObject
             Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
         }
 
+        this.RaisePropertyChanged(nameof(SortedMemberNames));
         return result;
     }
 

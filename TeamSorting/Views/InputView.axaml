@@ -5,10 +5,16 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="TeamSorting.Views.InputView"
              x:DataType="viewModel:InputViewModel"
-             xmlns:viewModel="clr-namespace:TeamSorting.ViewModels">
+             xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
+             xmlns:i="https://github.com/projektanker/icons.avalonia">
     <UserControl.Resources>
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
     </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="MenuFlyoutPresenter.MemberSelectorFlyout">
+            <Setter Property="MaxHeight" Value="300" />
+        </Style>
+    </UserControl.Styles>
 
     <Grid RowDefinitions="Auto,*,40"
           VerticalAlignment="Stretch"
@@ -33,10 +39,10 @@
                              DockPanel.Dock="Left" />
                     <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
                               x:Name="DisciplineTypeComboBox"
-                              Loaded="ComboBox_OnLoaded"/>
+                              Loaded="ComboBox_OnLoaded" />
                     <ComboBox ItemsSource="{Binding SortOrder}"
                               x:Name="DisciplineSortOrderComboBox"
-                              Loaded="ComboBox_OnLoaded"/>
+                              Loaded="ComboBox_OnLoaded" />
                     <Button VerticalAlignment="Center"
                             Click="AddDisciplineButton_OnClick">
                         Add Discipline
@@ -88,40 +94,92 @@
                 <DataGridTemplateColumn Header="With">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding With}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}"
-                                                   VerticalAlignment="Center"
-                                                   Padding="3" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <StackPanel>
+                                <Button i:Attached.Icon="mdi-plus">
+                                    <Button.Flyout>
+                                        <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
+                                            ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
+                                            <MenuFlyout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <MenuItem Header="{Binding}"
+                                                              Click="AddWithMemberMenuItem_OnClick"/>
+                                                </DataTemplate>
+                                            </MenuFlyout.ItemTemplate>
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <ItemsControl ItemsSource="{Binding With}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="2"
+                                                    BorderThickness="1"
+                                                    BorderBrush="Black"
+                                                    CornerRadius="5"
+                                                    Margin="3">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button i:Attached.Icon="mdi-close"
+                                                            Padding="2"
+                                                            Margin="0,0,3,0"
+                                                            Click="RemoveWithMemberButton_OnClick" />
+                                                    <TextBlock Text="{Binding}"
+                                                               VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="NotWith">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <ItemsControl ItemsSource="{Binding NotWith}">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <WrapPanel Orientation="Horizontal" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding}"
-                                                   VerticalAlignment="Center"
-                                                   Padding="3" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
+                            <StackPanel>
+                                <Button i:Attached.Icon="mdi-plus">
+                                    <Button.Flyout>
+                                        <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
+                                            ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
+                                            <MenuFlyout.ItemTemplate>
+                                                <DataTemplate>
+                                                    <MenuItem Header="{Binding}"
+                                                              Click="AddNotWithMemberMenuItem_OnClick"/>
+                                                </DataTemplate>
+                                            </MenuFlyout.ItemTemplate>
+                                        </MenuFlyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <ItemsControl ItemsSource="{Binding NotWith}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal" />
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Padding="2"
+                                                    BorderThickness="1"
+                                                    BorderBrush="Black"
+                                                    CornerRadius="5"
+                                                    Margin="3">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button i:Attached.Icon="mdi-close"
+                                                            Padding="2"
+                                                            Margin="0,0,3,0"
+                                                            Click="RemoveNotWithMemberButton_OnClick" />
+                                                    <TextBlock Text="{Binding}"
+                                                               VerticalAlignment="Center" />
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

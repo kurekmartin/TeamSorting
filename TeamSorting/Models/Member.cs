@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Avalonia.Collections;
 using ReactiveUI;
 
@@ -7,9 +8,9 @@ namespace TeamSorting.Models;
 public class Member(string name) : ReactiveObject
 {
     public string Name { get; set; } = name;
-    public List<string> With { get; } = [];
+    public ObservableCollection<string> With { get; } = [];
     public Dictionary<string, bool> WithValidation => ValidateWith();
-    public List<string> NotWith { get; } = [];
+    public ObservableCollection<string> NotWith { get; } = [];
     public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
@@ -46,6 +47,11 @@ public class Member(string name) : ReactiveObject
 
     public void AddWithMember(string member)
     {
+        if (With.Contains(member))
+        {
+            return;
+        }
+
         With.Add(member);
     }
 
@@ -57,8 +63,18 @@ public class Member(string name) : ReactiveObject
         }
     }
 
+    public void RemoveWithMember(string member)
+    {
+        With.Remove(member);
+    }
+
     public void AddNotWithMember(string member)
     {
+        if (NotWith.Contains(member))
+        {
+            return;
+        }
+
         NotWith.Add(member);
     }
 
@@ -68,6 +84,11 @@ public class Member(string name) : ReactiveObject
         {
             AddNotWithMember(member);
         }
+    }
+
+    public void RemoveNotWithMember(string member)
+    {
+        NotWith.Remove(member);
     }
 
     private Dictionary<string, bool> ValidateWith()
