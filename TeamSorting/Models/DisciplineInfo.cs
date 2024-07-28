@@ -10,8 +10,8 @@ public class DisciplineInfo(string name)
 
 public enum DisciplineDataType
 {
-    Time,
-    Number
+    Number,
+    Time
 }
 
 public enum SortOrder

@@ -31,6 +31,12 @@
                              Width="200"
                              KeyDown="AddDisciplineTextBox_OnKeyDown"
                              DockPanel.Dock="Left" />
+                    <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
+                              x:Name="DisciplineTypeComboBox"
+                              Loaded="ComboBox_OnLoaded"/>
+                    <ComboBox ItemsSource="{Binding SortOrder}"
+                              x:Name="DisciplineSortOrderComboBox"
+                              Loaded="ComboBox_OnLoaded"/>
                     <Button VerticalAlignment="Center"
                             Click="AddDisciplineButton_OnClick">
                         Add Discipline

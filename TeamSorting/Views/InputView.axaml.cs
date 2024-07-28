@@ -207,7 +207,13 @@ public partial class InputView : UserControl
     private void AddDiscipline()
     {
         var context = (InputViewModel)DataContext!;
-        var discipline = new DisciplineInfo(context.NewDisciplineName);
+        var disciplineType = (DisciplineDataType)(DisciplineTypeComboBox.SelectedItem ?? DisciplineDataType.Number);
+        var disciplineSortOrder = (SortOrder)(DisciplineSortOrderComboBox.SelectionBoxItem ?? SortOrder.Asc);
+        var discipline = new DisciplineInfo(context.NewDisciplineName)
+        {
+            DataType = disciplineType,
+            SortOrder = disciplineSortOrder
+        };
         context.Data.AddDiscipline(discipline);
         context.NewDisciplineName = string.Empty;
         AddDisciplinesToDataGrid();
@@ -215,6 +221,14 @@ public partial class InputView : UserControl
         {
             //TODO scroll even if members are empty
             MemberGrid.ScrollIntoView(null, MemberGrid.Columns.Last());
+        }
+    }
+
+    private void ComboBox_OnLoaded(object? sender, RoutedEventArgs e)
+    {
+        if (sender is ComboBox comboBox)
+        {
+            comboBox.SelectedIndex = 0;
         }
     }
 }

@@ -24,4 +24,7 @@ public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
         get => _newDisciplineName;
         set => this.RaiseAndSetIfChanged(ref _newDisciplineName, value);
     }
+
+    public static Array DisciplineDataTypes => Enum.GetValues(typeof(DisciplineDataType));
+    public static Array SortOrder => Enum.GetValues(typeof(SortOrder));
 }
