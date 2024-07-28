@@ -24,12 +24,12 @@ jobs:
       with:
         dotnet-version: 8.0.x
     - name: Build win
-      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r win-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --output bin/TeamSorting-win-x64.exe
+      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r win-x64 --self-contained true /p:AssemblyName=TeamSorting-win-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --output bin/win-x64
     - name: Build linux
-      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r linux-x64 --self-contained true /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --output bin/TeamSorting-linux-x64
+      run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r linux-x64 --self-contained true /p:AssemblyName=TeamSorting-linux-x64 /p:PublishSingleFile=true /p:IncludeNativeLibrariesForSelfExtract=true --output bin/linux-x64
     - name: Release
       uses: ncipollo/release-action@v1
       with:
-        artifacts: "bin/TeamSorting-win-x64.exe,bin/TeamSorting-linux-x64"
+        artifacts: "bin/win-x64/TeamSorting-win-x64.exe,bin/linux-x64/TeamSorting-linux-x64"
         bodyFile: "CHANGELOG.md"
         draft: true
