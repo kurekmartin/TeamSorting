@@ -1,7 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:TeamSorting.Controls"
-        xmlns:converters="clr-namespace:TeamSorting.Converters"
         xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
         xmlns:models="clr-namespace:TeamSorting.Models">
     <Design.PreviewWith>
@@ -11,18 +10,28 @@
     <Style Selector="ItemsControl.MemberList:empty">
         <Setter Property="IsVisible" Value="False" />
     </Style>
+    <Style Selector="Expander#Card.Invalid ToggleButton > Border">
+        <Setter Property="Background" Value="Tomato" />
+    </Style>
+    <Style Selector="TextBlock#NotWithMemberValue.Invalid">
+        <Setter Property="Background" Value="Tomato" />
+    </Style>
+    <Style Selector="TextBlock#WithMemberValue.Invalid">
+        <Setter Property="Background" Value="Tomato" />
+    </Style>
+
 
     <Style Selector="controls|MemberCard">
-        <Style.Resources>
-            <converters:MemberCombinationValidityConverter x:Key="MemberCombinationValidityConverter" />
-        </Style.Resources>
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander ExpandDirection="Down"
+                <Expander Name="Card"
+                          ExpandDirection="Down"
                           IsExpanded="{TemplateBinding ShowDetail}"
                           HorizontalAlignment="Stretch"
-                          CornerRadius="5">
+                          CornerRadius="5"
+                          Classes.Invalid="{Binding !Member.IsValid, 
+                                        RelativeSource={RelativeSource TemplatedParent}}">
                     <Expander.Header>
                         <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
                                    FontWeight="Bold" />
@@ -40,11 +49,11 @@
                                         <x:Type TypeName="generic:KeyValuePair"
                                                 x:TypeArguments="x:String,x:Boolean" />
                                     </DataTemplate.DataType>
-                                    <TextBlock Text="{Binding Key}"
+                                    <TextBlock Name="WithMemberValue"
+                                               Text="{Binding Key}"
                                                HorizontalAlignment="Left"
                                                Margin="5,0,0,0"
-                                               Background="{Binding Value,
-                                                            Converter={StaticResource MemberCombinationValidityConverter}}" />
+                                               Classes.Invalid="{Binding !Value}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -61,15 +70,15 @@
                                         <x:Type TypeName="generic:KeyValuePair"
                                                 x:TypeArguments="x:String,x:Boolean" />
                                     </DataTemplate.DataType>
-                                    <TextBlock Text="{Binding Key}"
+                                    <TextBlock Name="NotWithMemberValue"
+                                               Text="{Binding Key}"
                                                HorizontalAlignment="Left"
                                                Margin="5,0,0,0"
-                                               Background="{Binding Value,
-                                                        Converter={StaticResource MemberCombinationValidityConverter}}" />
+                                               Classes.Invalid="{Binding !Value}" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}"/>
+                        <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}" />
                         <ItemsControl
                             ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemTemplate>

@@ -8,12 +8,10 @@
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
              xmlns:converters="clr-namespace:TeamSorting.Converters"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:views="clr-namespace:TeamSorting.Views"
              xmlns:controls="clr-namespace:TeamSorting.Controls">
 
     <UserControl.Resources>
         <converters:TeamValidityConverter x:Key="TeamValidityConverter" />
-        <converters:MemberCombinationValidityConverter x:Key="MemberCombinationValidityConverter" />
     </UserControl.Resources>
 
     <DockPanel>

@@ -27,6 +27,7 @@ public class Member(string name) : ReactiveObject
             _team.Members.CollectionChanged += MembersOnCollectionChanged;
             this.RaisePropertyChanged(nameof(WithValidation));
             this.RaisePropertyChanged(nameof(NotWithValidation));
+            this.RaisePropertyChanged(nameof(IsValid));
         }
     }
 
@@ -34,6 +35,7 @@ public class Member(string name) : ReactiveObject
     {
         this.RaisePropertyChanged(nameof(WithValidation));
         this.RaisePropertyChanged(nameof(NotWithValidation));
+        this.RaisePropertyChanged(nameof(IsValid));
     }
 
     public bool IsValid
