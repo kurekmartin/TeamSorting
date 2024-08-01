@@ -8,6 +8,10 @@
         <controls:MemberCard />
     </Design.PreviewWith>
 
+    <Style Selector="ItemsControl.MemberList:empty">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
     <Style Selector="controls|MemberCard">
         <Style.Resources>
             <converters:MemberCombinationValidityConverter x:Key="MemberCombinationValidityConverter" />
@@ -24,15 +28,18 @@
                         Name="Member">
                     <StackPanel>
                         <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
-                                   FontWeight="Bold"
-                                   Margin="0,0,0,5" />
-                        <TextBlock Text="With"
                                    FontWeight="Bold" />
-                        <ItemsControl ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                        <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
+                        <TextBlock Text="With"
+                                   FontWeight="Bold"
+                                   IsVisible="{Binding #MemberWithList.IsVisible}" />
+                        <ItemsControl Classes="MemberList"
+                                      Name="MemberWithList"
+                                      ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
-                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean"/>
+                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean" />
                                     </DataTemplate.DataType>
                                     <TextBlock Text="{Binding Key}"
                                                HorizontalAlignment="Left"
@@ -42,13 +49,17 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                        <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}"/>
                         <TextBlock Text="Not With"
-                                   FontWeight="Bold" />
-                        <ItemsControl ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                                   FontWeight="Bold"
+                                   IsVisible="{Binding #MemberNotWithList.IsVisible}"/>
+                        <ItemsControl Classes="MemberList"
+                                      Name="MemberNotWithList"
+                                      ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
-                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean"/>
+                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean" />
                                     </DataTemplate.DataType>
                                     <TextBlock Text="{Binding Key}"
                                                HorizontalAlignment="Left"
@@ -58,11 +69,13 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <ItemsControl ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
+                        <Separator />
+                        <ItemsControl
+                            ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
-                                        <x:Type TypeName="models:DisciplineRecord"/>
+                                        <x:Type TypeName="models:DisciplineRecord" />
                                     </DataTemplate.DataType>
                                     <DockPanel Margin="0,0,0,2">
                                         <TextBlock
