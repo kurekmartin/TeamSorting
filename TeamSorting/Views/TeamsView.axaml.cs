@@ -2,6 +2,7 @@
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
+using Avalonia.VisualTree;
 using TeamSorting.Controls;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
@@ -93,5 +94,23 @@ public partial class TeamsView : UserControl
     {
         var context = (TeamsViewModel)DataContext!;
         context.Data.SortTeamsByCriteria(null, SortOrder.Desc);
+    }
+
+    private void ShowMemberDetailsButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var cards = this.GetVisualDescendants().OfType<MemberCard>();
+        foreach (var card in cards)
+        {
+            card.ShowDetail = true;
+        }
+    }
+
+    private void HideMemberDetailsButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var cards = this.GetVisualDescendants().OfType<MemberCard>();
+        foreach (var card in cards)
+        {
+            card.ShowDetail = false;
+        }
     }
 }
