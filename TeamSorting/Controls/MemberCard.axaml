@@ -1,0 +1,84 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:TeamSorting.Controls"
+        xmlns:converters="clr-namespace:TeamSorting.Converters"
+        xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
+        xmlns:models="clr-namespace:TeamSorting.Models">
+    <Design.PreviewWith>
+        <controls:MemberCard />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MemberCard">
+        <Style.Resources>
+            <converters:MemberCombinationValidityConverter x:Key="MemberCombinationValidityConverter" />
+        </Style.Resources>
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border CornerRadius="5"
+                        Padding="5"
+                        Margin="0,0,0,3"
+                        BorderThickness="1"
+                        BorderBrush="Gray"
+                        Background="LightGray"
+                        Name="Member">
+                    <StackPanel>
+                        <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,5" />
+                        <TextBlock Text="With"
+                                   FontWeight="Bold" />
+                        <ItemsControl ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.DataType>
+                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean"/>
+                                    </DataTemplate.DataType>
+                                    <TextBlock Text="{Binding Key}"
+                                               HorizontalAlignment="Left"
+                                               Margin="5,0,0,0"
+                                               Background="{Binding Value,
+                                                            Converter={StaticResource MemberCombinationValidityConverter}}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <TextBlock Text="Not With"
+                                   FontWeight="Bold" />
+                        <ItemsControl ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.DataType>
+                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean"/>
+                                    </DataTemplate.DataType>
+                                    <TextBlock Text="{Binding Key}"
+                                               HorizontalAlignment="Left"
+                                               Margin="5,0,0,0"
+                                               Background="{Binding Value,
+                                                        Converter={StaticResource MemberCombinationValidityConverter}}" />
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.DataType>
+                                        <x:Type TypeName="models:DisciplineRecord"/>
+                                    </DataTemplate.DataType>
+                                    <DockPanel Margin="0,0,0,2">
+                                        <TextBlock
+                                            Text="{Binding DisciplineInfo.Name}"
+                                            FontWeight="Bold"
+                                            HorizontalAlignment="Left"
+                                            Margin="0,0,5,0" />
+                                        <TextBlock Text="{Binding DoubleValue}"
+                                                   HorizontalAlignment="Right" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

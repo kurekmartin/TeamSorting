@@ -2,6 +2,7 @@
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
+using TeamSorting.Controls;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
 
@@ -53,10 +54,9 @@ public partial class TeamsView : UserControl
     {
         var context = (TeamsViewModel)DataContext!;
         if (sender is not MenuItem menuItem) return;
-        var memberCard = menuItem.FindLogicalAncestorOfType<Border>();
-        if (memberCard is { Name: "Member", DataContext: Member })
+        var memberCard = menuItem.FindLogicalAncestorOfType<MemberCard>();
+        if (memberCard is { DataContext: Member member} )
         {
-            var member = (Member)memberCard.DataContext;
             var team = context.Data.Teams.First(team =>
                 string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
             member.MoveToTeam(team);
