@@ -6,14 +6,20 @@
              x:Class="TeamSorting.Views.TeamsView"
              x:DataType="viewModel:TeamsViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
-             xmlns:converters="clr-namespace:TeamSorting.Converters"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:controls="clr-namespace:TeamSorting.Controls">
 
-    <UserControl.Resources>
-        <converters:TeamValidityConverter x:Key="TeamValidityConverter" />
-    </UserControl.Resources>
-
+    <UserControl.Styles>
+        <Style Selector="i|Icon#TeamValidityIcon.Valid">
+            <Setter Property="Value" Value="mdi-check-circle" />
+            <Setter Property="Foreground" Value="Green" />
+        </Style>
+        <Style Selector="i|Icon#TeamValidityIcon">
+            <Setter Property="Value" Value="mdi-close-circle" />
+            <Setter Property="Foreground" Value="Red" />
+        </Style>
+    </UserControl.Styles>
+    
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <Button Click="Back_OnClick"
@@ -75,15 +81,27 @@
                                     DockPanel.Dock="Top">
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Center">
+                                <i:Icon Name="TeamValidityIcon"
+                                        Classes.Valid="{Binding IsValid}"
+                                        ToolTip.Tip="{Binding IsValid, StringFormat='Team is valid: {0}'}"
+                                        FontSize="19"
+                                        VerticalAlignment="Center" />
                                 <TextBlock Text="{Binding Name}"
                                            FontWeight="Bold"
                                            HorizontalAlignment="Center"
                                            VerticalAlignment="Center"
-                                           Margin="0,0,5,0" />
-                                <i:Icon Value="{Binding IsValid, Converter={StaticResource TeamValidityConverter}}"
-                                        ToolTip.Tip="{Binding IsValid, StringFormat='Team is valid: {0}'}"
-                                        FontSize="20"
-                                        VerticalAlignment="Center" />
+                                           Margin="5,0" />
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <i:Icon Value="mdi-account-group"
+                                            FontSize="16"
+                                            VerticalAlignment="Bottom"
+                                            Margin="0,0,2,0" />
+                                    <TextBlock Text="{Binding Members.Count}"
+                                               DockPanel.Dock="Right"
+                                               HorizontalAlignment="Right"
+                                               VerticalAlignment="Bottom" />
+                                </StackPanel>
                             </StackPanel>
                             <DockPanel>
                                 <TextBlock Text="Members"
