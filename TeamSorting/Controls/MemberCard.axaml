@@ -19,17 +19,15 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Border CornerRadius="5"
-                        Padding="5"
-                        Margin="0,0,0,3"
-                        BorderThickness="1"
-                        BorderBrush="Gray"
-                        Background="LightGray"
-                        Name="Member">
-                    <StackPanel>
+                <Expander ExpandDirection="Down"
+                          IsExpanded="{TemplateBinding ShowDetail}"
+                          HorizontalAlignment="Stretch"
+                          CornerRadius="5">
+                    <Expander.Header>
                         <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
                                    FontWeight="Bold" />
-                        <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
+                    </Expander.Header>
+                    <StackPanel>
                         <TextBlock Text="With"
                                    FontWeight="Bold"
                                    IsVisible="{Binding #MemberWithList.IsVisible}" />
@@ -39,7 +37,8 @@
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
-                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean" />
+                                        <x:Type TypeName="generic:KeyValuePair"
+                                                x:TypeArguments="x:String,x:Boolean" />
                                     </DataTemplate.DataType>
                                     <TextBlock Text="{Binding Key}"
                                                HorizontalAlignment="Left"
@@ -49,17 +48,18 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}"/>
+                        <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
                         <TextBlock Text="Not With"
                                    FontWeight="Bold"
-                                   IsVisible="{Binding #MemberNotWithList.IsVisible}"/>
+                                   IsVisible="{Binding #MemberNotWithList.IsVisible}" />
                         <ItemsControl Classes="MemberList"
                                       Name="MemberNotWithList"
                                       ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
-                                        <x:Type TypeName="generic:KeyValuePair" x:TypeArguments="x:String,x:Boolean" />
+                                        <x:Type TypeName="generic:KeyValuePair"
+                                                x:TypeArguments="x:String,x:Boolean" />
                                     </DataTemplate.DataType>
                                     <TextBlock Text="{Binding Key}"
                                                HorizontalAlignment="Left"
@@ -69,7 +69,7 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Separator />
+                        <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}"/>
                         <ItemsControl
                             ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsControl.ItemTemplate>
@@ -90,7 +90,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-                </Border>
+                </Expander>
             </ControlTemplate>
         </Setter>
     </Style>

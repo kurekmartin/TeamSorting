@@ -107,7 +107,8 @@
                                           DockPanel.Dock="Top">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <controls:MemberCard Member="{Binding .}">
+                                        <controls:MemberCard Member="{Binding .}"
+                                                             Margin="3">
                                             <controls:MemberCard.ContextMenu>
                                                 <ContextMenu
                                                     ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Data.Teams}">

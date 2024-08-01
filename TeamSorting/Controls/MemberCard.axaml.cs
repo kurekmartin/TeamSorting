@@ -15,12 +15,28 @@ public class MemberCard : TemplatedControl
             (o, v) => o.Member = v,
             new Member(string.Empty),
             BindingMode.TwoWay);
-    
+
     private Member _member = null!;
 
     public Member Member
     {
         get => _member;
         set => SetAndRaise(MemberProperty, ref _member, value);
+    }
+
+    public static readonly DirectProperty<MemberCard, bool> ShowDetailProperty =
+        AvaloniaProperty.RegisterDirect<MemberCard, bool>(
+            nameof(ShowDetail),
+            o => o.ShowDetail,
+            (o, v) => o.ShowDetail = v,
+            true,
+            BindingMode.TwoWay);
+
+    private bool _showDetail = true;
+
+    public bool ShowDetail
+    {
+        get => _showDetail;
+        set => SetAndRaise(ShowDetailProperty, ref _showDetail, value);
     }
 }
