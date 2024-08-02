@@ -45,7 +45,8 @@
                         Background="Transparent" />
                 <TextBlock Text="Show member details"
                            FontWeight="Bold"
-                           Margin="0,0,5,0" />
+                           Margin="0,0,5,0"
+                           VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Margin="0,0,0,2">
@@ -64,7 +65,8 @@
                 </controls:IconRadioButton>
                 <TextBlock Text="Sort by member Name"
                            FontWeight="Bold"
-                           Margin="0,0,5,0" />
+                           Margin="0,0,5,0"
+                           VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="Differences:"
                        FontWeight="Bold" />
@@ -80,18 +82,15 @@
                             <controls:IconRadioButton GroupName="SortGroup"
                                                       Icon="mdi-sort-ascending"
                                                       Size="25"
-                                                      IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged">
-                                Asc
-                            </controls:IconRadioButton>
+                                                      IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged" />
                             <controls:IconRadioButton GroupName="SortGroup"
                                                       Icon="mdi-sort-descending"
                                                       Size="25"
-                                                      IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged">
-                                Desc
-                            </controls:IconRadioButton>
+                                                      IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged" />
                             <TextBlock Text="{Binding Key.Name}"
                                        FontWeight="Bold"
-                                       Margin="0,0,5,0" />
+                                       Margin="0,0,5,0"
+                                       VerticalAlignment="Center" />
                             <TextBlock Text="{Binding Value}" />
                         </StackPanel>
                     </DataTemplate>
