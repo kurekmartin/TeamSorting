@@ -27,7 +27,7 @@ public partial class TeamsView : UserControl
 
     private async void ExportTeamsToCsv_OnClick(object? sender, RoutedEventArgs e)
     {
-        var context = (TeamsViewModel)DataContext!;
+        if (DataContext is not TeamsViewModel context) return;
         var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
         if (storageProvider is null)
         {
@@ -53,10 +53,10 @@ public partial class TeamsView : UserControl
 
     private void MemberTeamMenu_OnClick(object? sender, RoutedEventArgs e)
     {
-        var context = (TeamsViewModel)DataContext!;
+        if (DataContext is not TeamsViewModel context) return;
         if (sender is not MenuItem menuItem) return;
         var memberCard = menuItem.FindLogicalAncestorOfType<MemberCard>();
-        if (memberCard is { DataContext: Member member} )
+        if (memberCard is { DataContext: Member member })
         {
             var team = context.Data.Teams.First(team =>
                 string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
@@ -64,36 +64,44 @@ public partial class TeamsView : UserControl
         }
     }
 
-    private void AscButton_OnClick(object? sender, RoutedEventArgs e)
+    private void AscDisciplineRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
         if (sender is Button { DataContext: KeyValuePair<DisciplineInfo, double> disciplinePair })
         {
             var discipline = disciplinePair.Key;
-            var context = (TeamsViewModel)DataContext!;
-            context.Data.SortTeamsByCriteria(discipline, SortOrder.Asc);
+            if (DataContext is TeamsViewModel context)
+            {
+                context.Data.SortTeamsByCriteria(discipline, SortOrder.Asc);
+            }
         }
     }
 
-    private void DescButton_OnClick(object? sender, RoutedEventArgs e)
+    private void DescDisciplineRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
         if (sender is Button { DataContext: KeyValuePair<DisciplineInfo, double> disciplinePair })
         {
             var discipline = disciplinePair.Key;
-            var context = (TeamsViewModel)DataContext!;
-            context.Data.SortTeamsByCriteria(discipline, SortOrder.Desc);
+            if (DataContext is TeamsViewModel context)
+            {
+                context.Data.SortTeamsByCriteria(discipline, SortOrder.Desc);
+            }
         }
     }
 
-    private void AscNameButton_OnClick(object? sender, RoutedEventArgs e)
+    private void AscNameRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        var context = (TeamsViewModel)DataContext!;
-        context.Data.SortTeamsByCriteria(null, SortOrder.Asc);
+        if (DataContext is TeamsViewModel context)
+        {
+            context.Data.SortTeamsByCriteria(null, SortOrder.Asc);
+        }
     }
 
-    private void DescNameButton_OnClick(object? sender, RoutedEventArgs e)
+    private void DescNameRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        var context = (TeamsViewModel)DataContext!;
-        context.Data.SortTeamsByCriteria(null, SortOrder.Desc);
+        if (DataContext is TeamsViewModel context)
+        {
+            context.Data.SortTeamsByCriteria(null, SortOrder.Desc);
+        }
     }
 
     private void ShowMemberDetailsButton_OnClick(object? sender, RoutedEventArgs e)
@@ -112,5 +120,10 @@ public partial class TeamsView : UserControl
         {
             card.ShowDetail = false;
         }
+    }
+
+    private void ToggleButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        throw new NotImplementedException();
     }
 }

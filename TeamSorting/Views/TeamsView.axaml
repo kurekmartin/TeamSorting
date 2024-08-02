@@ -21,7 +21,7 @@
             <Setter Property="Foreground" Value="Red" />
         </Style>
     </UserControl.Styles>
-    
+
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <Button Click="Back_OnClick"
@@ -45,8 +45,19 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Margin="0,0,0,2">
-                <Button Click="AscNameButton_OnClick">Asc</Button>
-                <Button Click="DescNameButton_OnClick">Desc</Button>
+                <controls:IconRadioButton GroupName="SortGroup"
+                                            Icon="mdi-sort-ascending"
+                                            Size="25"
+                                            IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged">
+                    Asc
+                </controls:IconRadioButton>
+                <controls:IconRadioButton GroupName="SortGroup"
+                                            Icon="mdi-sort-descending"
+                                            Size="25"
+                                            IsCheckedChanged="DescNameRadioButton_OnIsCheckedChanged"
+                                            IsChecked="True">
+                    Desc
+                </controls:IconRadioButton>
                 <TextBlock Text="Sort by member Name"
                            FontWeight="Bold"
                            Margin="0,0,5,0" />
@@ -62,8 +73,18 @@
                         </DataTemplate.DataType>
                         <StackPanel Orientation="Horizontal"
                                     Margin="0,0,0,2">
-                            <Button Click="AscButton_OnClick">Asc</Button>
-                            <Button Click="DescButton_OnClick">Desc</Button>
+                            <controls:IconRadioButton GroupName="SortGroup"
+                                                        Icon="mdi-sort-ascending"
+                                                        Size="25"
+                                                        IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged">
+                                Asc
+                            </controls:IconRadioButton>
+                            <controls:IconRadioButton GroupName="SortGroup"
+                                                        Icon="mdi-sort-descending"
+                                                        Size="25"
+                                                        IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged">
+                                Desc
+                            </controls:IconRadioButton>
                             <TextBlock Text="{Binding Key.Name}"
                                        FontWeight="Bold"
                                        Margin="0,0,5,0" />

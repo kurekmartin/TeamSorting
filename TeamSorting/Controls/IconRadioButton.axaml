@@ -1,0 +1,28 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:controls="using:TeamSorting.Controls">
+    <Design.PreviewWith>
+        <controls:IconRadioButton />
+    </Design.PreviewWith>
+
+    <Style Selector="Border.Checked">
+        <Setter Property="Background" Value="LightGray" />
+    </Style>
+
+    <Style Selector="controls|IconRadioButton">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Classes.Checked="{TemplateBinding IsChecked}"
+                        Background="Transparent"
+                        CornerRadius="3"
+                        Width="{TemplateBinding Size}"
+                        Height="{TemplateBinding Size}">
+                    <i:Icon Value="{TemplateBinding Icon}"
+                            FontSize="20"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
