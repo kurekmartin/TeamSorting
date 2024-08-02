@@ -121,9 +121,4 @@ public partial class TeamsView : UserControl
             card.ShowDetail = false;
         }
     }
-
-    private void ToggleButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        throw new NotImplementedException();
-    }
 }

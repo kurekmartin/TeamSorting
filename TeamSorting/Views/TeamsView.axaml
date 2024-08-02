@@ -37,25 +37,29 @@
                     DockPanel.Dock="Top">
             <StackPanel Orientation="Horizontal"
                         Margin="0,0,0,2">
-                <Button Click="ShowMemberDetailsButton_OnClick">Show</Button>
-                <Button Click="HideMemberDetailsButton_OnClick">Hide</Button>
-                <TextBlock Text="Member details"
+                <Button i:Attached.Icon="mdi-eye"
+                        Click="ShowMemberDetailsButton_OnClick"
+                        Background="Transparent" />
+                <Button i:Attached.Icon="mdi-eye-off"
+                        Click="HideMemberDetailsButton_OnClick"
+                        Background="Transparent" />
+                <TextBlock Text="Show member details"
                            FontWeight="Bold"
                            Margin="0,0,5,0" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"
                         Margin="0,0,0,2">
                 <controls:IconRadioButton GroupName="SortGroup"
-                                            Icon="mdi-sort-ascending"
-                                            Size="25"
-                                            IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged">
+                                          Icon="mdi-sort-ascending"
+                                          Size="25"
+                                          IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged">
                     Asc
                 </controls:IconRadioButton>
                 <controls:IconRadioButton GroupName="SortGroup"
-                                            Icon="mdi-sort-descending"
-                                            Size="25"
-                                            IsCheckedChanged="DescNameRadioButton_OnIsCheckedChanged"
-                                            IsChecked="True">
+                                          Icon="mdi-sort-descending"
+                                          Size="25"
+                                          IsCheckedChanged="DescNameRadioButton_OnIsCheckedChanged"
+                                          IsChecked="True">
                     Desc
                 </controls:IconRadioButton>
                 <TextBlock Text="Sort by member Name"
@@ -74,15 +78,15 @@
                         <StackPanel Orientation="Horizontal"
                                     Margin="0,0,0,2">
                             <controls:IconRadioButton GroupName="SortGroup"
-                                                        Icon="mdi-sort-ascending"
-                                                        Size="25"
-                                                        IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged">
+                                                      Icon="mdi-sort-ascending"
+                                                      Size="25"
+                                                      IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged">
                                 Asc
                             </controls:IconRadioButton>
                             <controls:IconRadioButton GroupName="SortGroup"
-                                                        Icon="mdi-sort-descending"
-                                                        Size="25"
-                                                        IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged">
+                                                      Icon="mdi-sort-descending"
+                                                      Size="25"
+                                                      IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged">
                                 Desc
                             </controls:IconRadioButton>
                             <TextBlock Text="{Binding Key.Name}"
