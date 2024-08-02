@@ -7,7 +7,9 @@
              x:DataType="viewModel:TeamsViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:controls="clr-namespace:TeamSorting.Controls">
+             xmlns:controls="clr-namespace:TeamSorting.Controls"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
+             xmlns:models="clr-namespace:TeamSorting.Models">
 
     <UserControl.Styles>
         <Style Selector="i|Icon#TeamValidityIcon.Valid">
@@ -54,14 +56,18 @@
             <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
+                        <DataTemplate.DataType>
+                            <x:Type TypeName="generic:KeyValuePair"
+                                    x:TypeArguments="models:DisciplineInfo,x:Double" />
+                        </DataTemplate.DataType>
                         <StackPanel Orientation="Horizontal"
                                     Margin="0,0,0,2">
                             <Button Click="AscButton_OnClick">Asc</Button>
                             <Button Click="DescButton_OnClick">Desc</Button>
-                            <TextBlock Text="{ReflectionBinding Key.Name}"
+                            <TextBlock Text="{Binding Key.Name}"
                                        FontWeight="Bold"
                                        Margin="0,0,5,0" />
-                            <TextBlock Text="{ReflectionBinding Value}" />
+                            <TextBlock Text="{Binding Value}" />
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
@@ -103,23 +109,19 @@
                                                VerticalAlignment="Bottom" />
                                 </StackPanel>
                             </StackPanel>
-                            <DockPanel>
-                                <TextBlock Text="Members"
-                                           FontWeight="Bold"
-                                           DockPanel.Dock="Left" />
-                                <TextBlock Text="{Binding Members.Count}"
-                                           DockPanel.Dock="Right"
-                                           HorizontalAlignment="Right" />
-                            </DockPanel>
-                            <ItemsControl ItemsSource="{ReflectionBinding TotalScores}">
+                            <ItemsControl ItemsSource="{Binding TotalScores}">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
+                                        <DataTemplate.DataType>
+                                            <x:Type TypeName="generic:KeyValuePair"
+                                                    x:TypeArguments="models:DisciplineInfo,x:Double" />
+                                        </DataTemplate.DataType>
                                         <DockPanel Margin="0,0,0,2">
-                                            <TextBlock Text="{ReflectionBinding Key.Name}"
+                                            <TextBlock Text="{Binding Key.Name}"
                                                        FontWeight="Bold"
                                                        HorizontalAlignment="Left"
                                                        Margin="0,0,5,0" />
-                                            <TextBlock Text="{ReflectionBinding Value}"
+                                            <TextBlock Text="{Binding Value}"
                                                        HorizontalAlignment="Right" />
                                         </DockPanel>
                                     </DataTemplate>
