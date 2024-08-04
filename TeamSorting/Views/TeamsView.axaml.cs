@@ -16,11 +16,18 @@ public partial class TeamsView : UserControl
         InitializeComponent();
     }
 
-    private void Back_OnClick(object? sender, RoutedEventArgs e)
+    private async void Back_OnClick(object? sender, RoutedEventArgs e)
     {
         var window = TopLevel.GetTopLevel(this);
-        if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })
+        if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
         {
+            var dialog = new WarningDialog("By going back all teams will be deleted.\nDo you want to continue?");
+            var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
+            if (result == WarningDialogResult.Cancel)
+            {
+                return;
+            }
+
             mainWindowViewModel.SwitchToInputView();
         }
     }

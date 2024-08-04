@@ -1,0 +1,43 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TeamSorting.Views.WarningDialog"
+        Title="WarningDialog"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="SystemChrome"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        SystemDecorations="BorderOnly"
+        CanResize="False">
+
+    <DockPanel Margin="30">
+        <TextBlock Name="Message"
+                   Text="Warning text"
+                   VerticalAlignment="Stretch"
+                   TextWrapping="Wrap"
+                   MaxWidth="300"
+                   Margin="0,0,0,20"
+                   DockPanel.Dock="Top" />
+        <DockPanel DockPanel.Dock="Bottom"
+                   VerticalAlignment="Bottom">
+            <Button Name="Cancel"
+                    Margin="0,0,10,0"
+                    i:Attached.Icon="mdi-cancel"
+                    Click="Cancel_OnClick"
+                    HorizontalAlignment="Left"
+                    DockPanel.Dock="Left">
+                Cancel
+            </Button>
+            <Button Name="Continue"
+                    Margin="10,0,0,0"
+                    Click="Continue_OnClick"
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Right">
+                Continue
+            </Button>
+        </DockPanel>
+    </DockPanel>
+</Window>
