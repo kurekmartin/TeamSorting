@@ -34,7 +34,8 @@
             </Button>
         </DockPanel>
         <StackPanel Orientation="Vertical"
-                    DockPanel.Dock="Top">
+                    DockPanel.Dock="Left"
+                    Margin="5,0">
             <StackPanel Orientation="Horizontal"
                         Margin="0,0,0,2">
                 <Button i:Attached.Icon="mdi-eye"
@@ -52,47 +53,57 @@
                         Margin="0,0,0,2">
                 <controls:IconRadioButton GroupName="SortGroup"
                                           Icon="mdi-sort-ascending"
-                                          Size="25"
+                                          Size="27"
+                                          Margin="0,0,5,0"
                                           IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged">
                     Asc
                 </controls:IconRadioButton>
                 <controls:IconRadioButton GroupName="SortGroup"
                                           Icon="mdi-sort-descending"
-                                          Size="25"
+                                          Size="27"
+                                          Margin="0,0,5,0"
                                           IsCheckedChanged="DescNameRadioButton_OnIsCheckedChanged"
                                           IsChecked="True">
                     Desc
                 </controls:IconRadioButton>
-                <TextBlock Text="Sort by member Name"
+                <TextBlock Text="Sort by member name"
                            FontWeight="Bold"
                            Margin="0,0,5,0"
                            VerticalAlignment="Center" />
             </StackPanel>
             <TextBlock Text="Differences:"
                        FontWeight="Bold" />
-            <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}">
+            <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}"
+                          HorizontalAlignment="Left">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <DataTemplate.DataType>
                             <x:Type TypeName="generic:KeyValuePair"
                                     x:TypeArguments="models:DisciplineInfo,x:Double" />
                         </DataTemplate.DataType>
-                        <StackPanel Orientation="Horizontal"
-                                    Margin="0,0,0,2">
-                            <controls:IconRadioButton GroupName="SortGroup"
+                        <DockPanel Margin="0,0,0,2">
+                            <controls:IconRadioButton DockPanel.Dock="Left"
+                                                      GroupName="SortGroup"
                                                       Icon="mdi-sort-ascending"
-                                                      Size="25"
+                                                      Size="27"
+                                                      Margin="0,0,5,0"
                                                       IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged" />
-                            <controls:IconRadioButton GroupName="SortGroup"
+                            <controls:IconRadioButton DockPanel.Dock="Left"
+                                                      GroupName="SortGroup"
                                                       Icon="mdi-sort-descending"
-                                                      Size="25"
+                                                      Size="27"
+                                                      Margin="0,0,5,0"
                                                       IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged" />
-                            <TextBlock Text="{Binding Key.Name}"
+                            <TextBlock DockPanel.Dock="Left"
+                                       Text="{Binding Key.Name}"
                                        FontWeight="Bold"
                                        Margin="0,0,5,0"
                                        VerticalAlignment="Center" />
-                            <TextBlock Text="{Binding Value}" />
-                        </StackPanel>
+                            <TextBlock DockPanel.Dock="Right"
+                                       Text="{Binding Value}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right" />
+                        </DockPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
@@ -110,7 +121,8 @@
                         <StackPanel Orientation="Vertical"
                                     DockPanel.Dock="Top">
                             <StackPanel Orientation="Horizontal"
-                                        HorizontalAlignment="Center">
+                                        HorizontalAlignment="Center"
+                                        Margin="5,0">
                                 <i:Icon Name="TeamValidityIcon"
                                         Classes.Valid="{Binding IsValid}"
                                         ToolTip.Tip="{Binding IsValid, StringFormat='Team is valid: {0}'}"
@@ -133,7 +145,8 @@
                                                VerticalAlignment="Bottom" />
                                 </StackPanel>
                             </StackPanel>
-                            <ItemsControl ItemsSource="{Binding TotalScores}">
+                            <ItemsControl ItemsSource="{Binding TotalScores}"
+                                          Margin="15,0,15,5">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <DataTemplate.DataType>
