@@ -1,10 +1,9 @@
 ﻿### New
-- UI for adding new member
-- UI for removing member
-- UI for adding new discipline
-- UI for removing discipline
-- UI for editing with/not with lists
-- sorting resulting teams by disciplines/member names (defaults to member names)
+- add warning before deleting teams when going back to input screen
+
+### Changed
+- redesigned screen for displaying teams
+- team member cards details are now collapsable  
 
 ### Fix
-- none
+- prevent starting sorting algorithm more than once
