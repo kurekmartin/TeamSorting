@@ -21,7 +21,10 @@ public partial class TeamsView : UserControl
         var window = TopLevel.GetTopLevel(this);
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
         {
-            var dialog = new WarningDialog("By going back all teams will be deleted.\nDo you want to continue?");
+            var dialog = new WarningDialog(Lang.Resources.TeamsView_Back_WarningDialog)
+            {
+                Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
+            };
             var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
             if (result == WarningDialogResult.Cancel)
             {
