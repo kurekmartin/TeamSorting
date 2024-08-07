@@ -50,12 +50,16 @@
                 </DockPanel>
             </DockPanel>
             <StackPanel Orientation="Vertical"
-                        HorizontalAlignment="Right">
+                        HorizontalAlignment="Right"
+                        Spacing="5">
                 <NumericUpDown x:Name="NumberOfTeams"
                                Value="{Binding NumberOfTeams}"
                                FormatString="0"
                                Minimum="1"
                                Maximum="10" />
+                <TextBox MaxLength="10"
+                         Watermark="Seed"
+                         Text="{Binding Data.Seed}" />
                 <Button Click="SortToTeams_OnClick">Sort to teams</Button>
             </StackPanel>
         </DockPanel>
@@ -98,11 +102,11 @@
                                 <Button i:Attached.Icon="mdi-plus">
                                     <Button.Flyout>
                                         <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
-                                            ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
+                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
                                             <MenuFlyout.ItemTemplate>
                                                 <DataTemplate>
                                                     <MenuItem Header="{Binding}"
-                                                              Click="AddWithMemberMenuItem_OnClick"/>
+                                                              Click="AddWithMemberMenuItem_OnClick" />
                                                 </DataTemplate>
                                             </MenuFlyout.ItemTemplate>
                                         </MenuFlyout>
@@ -144,11 +148,11 @@
                                 <Button i:Attached.Icon="mdi-plus">
                                     <Button.Flyout>
                                         <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
-                                            ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
+                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
                                             <MenuFlyout.ItemTemplate>
                                                 <DataTemplate>
                                                     <MenuItem Header="{Binding}"
-                                                              Click="AddNotWithMemberMenuItem_OnClick"/>
+                                                              Click="AddNotWithMemberMenuItem_OnClick" />
                                                 </DataTemplate>
                                             </MenuFlyout.ItemTemplate>
                                         </MenuFlyout>

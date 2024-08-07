@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using TeamSorting.Services;
 using TeamSorting.Sorting;
 using TeamSorting.ViewModels;
 

@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Dynamic;
 using System.Globalization;
 using CsvHelper;
@@ -11,7 +10,6 @@ namespace TeamSorting.ViewModels;
 public class Data : ReactiveObject
 {
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
-
     public ObservableCollection<Member> Members { get; } = [];
     public List<string> SortedMemberNames => Members.OrderBy(m => m.Name).Select(member => member.Name).ToList();
 
@@ -48,6 +46,8 @@ public class Data : ReactiveObject
             return dict;
         }
     }
+
+    public string Seed { get; set; } = string.Empty;
 
     #region Discipline
 

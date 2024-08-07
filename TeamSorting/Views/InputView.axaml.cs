@@ -40,7 +40,8 @@ public partial class InputView : UserControl
             if (e.OldItems is null || e.OldItems.Count <= 0) return;
             foreach (DisciplineInfo discipline in e.OldItems)
             {
-                var column = MemberGrid.Columns.First(column => column.Tag is Guid columnId && columnId == discipline.Id);
+                var column =
+                    MemberGrid.Columns.First(column => column.Tag is Guid columnId && columnId == discipline.Id);
                 MemberGrid.Columns.Remove(column);
             }
         }
@@ -187,20 +188,21 @@ public partial class InputView : UserControl
     private void SortToTeams_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not InputViewModel context || sender is not Button button) return;
-        
+
         button.IsEnabled = false;
         Cursor = new Cursor(StandardCursorType.Wait);
-        
+
         var numberOfTeams = (int)(NumberOfTeams.Value ?? 1);
-        context.Data.Teams = new ObservableCollection<Team>(
-            context.Sorter.Sort(context.Data.Members.ToList(), numberOfTeams));
+        var sortResult = context.Sorter.Sort(context.Data.Members.ToList(), numberOfTeams, context.Data.Seed);
+        context.Data.Teams = new ObservableCollection<Team>(sortResult.teams);
+        context.Data.Seed = sortResult.seed ?? string.Empty;
 
         var window = TopLevel.GetTopLevel(this);
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })
         {
             mainWindowViewModel.SwitchToTeamsView();
         }
-        
+
         button.IsEnabled = true;
         Cursor = Cursor.Default;
     }
@@ -293,6 +295,7 @@ public partial class InputView : UserControl
             }
         }
     }
+
     private void RemoveNotWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
     {
         if (sender is Button { DataContext: string removeName } button)

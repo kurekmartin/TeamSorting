@@ -2,15 +2,14 @@
 
 public static class ListExtensions
 {
-    private static readonly Random Rng = new Random();
-
-    public static void Shuffle<T>(this IList<T> list)
+    public static void Shuffle<T>(this IList<T> list, Random? rng = null)
     {
+        rng ??= new Random();
         int n = list.Count;
         while (n > 1)
         {
             n--;
-            int k = Rng.Next(n + 1);
+            int k = rng.Next(n + 1);
             (list[k], list[n]) = (list[n], list[k]);
         }
     }

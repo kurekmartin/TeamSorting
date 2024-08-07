@@ -1,25 +1,31 @@
 ﻿using Serilog;
 using TeamSorting.Extensions;
 using TeamSorting.Models;
+using TeamSorting.Services;
 
 namespace TeamSorting.Sorting;
 
 public class EvolutionSorter : ISorter
 {
-    private readonly Random _random = new();
     private const int GenerationSize = 100;
     private const int MaxGenerations = 200;
     private const float CrossSelection = 0.5f;
     private const float ChanceOfMutation = 0.2f;
     private const float PreserveBestResults = 0.1f;
 
-    public List<Team> Sort(List<Member> members, int numberOfTeams)
+    public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, string? seed = null)
     {
+        if (string.IsNullOrWhiteSpace(seed))
+        {
+            seed = SeedGenerator.CreateSeed(10);
+        }
+
+        var random = new Random(seed.GetHashCode());
         var teamSizes = GetSizeOfTeams(members.Count, numberOfTeams);
         var currentGeneration = new List<List<Member>>(GenerationSize);
         for (var i = 0; i < GenerationSize; i++)
         {
-            currentGeneration.Add(CreateRandomCombination(members));
+            currentGeneration.Add(CreateRandomCombination(members, random));
         }
 
         var generationNumber = 0;
@@ -35,8 +41,8 @@ public class EvolutionSorter : ISorter
             var numberOfChildren =
                 (int)Math.Round(GenerationSize * (1 - PreserveBestResults), MidpointRounding.ToNegativeInfinity);
             var newGeneration = CrossSolution(sortedGeneration.Keys.Take(crossSelection).ToList(),
-                numberOfChildren);
-            MutateSolution(newGeneration);
+                numberOfChildren, random);
+            MutateSolution(newGeneration, random);
 
             newGeneration.AddRange(
                 sortedGeneration.Take((int)Math.Round(GenerationSize * PreserveBestResults,
@@ -49,7 +55,7 @@ public class EvolutionSorter : ISorter
         var finalGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
             .OrderBy(solution => solution.Value).ToDictionary();
 
-        return ListToTeams(finalGeneration.First().Key, teamSizes);
+        return (ListToTeams(finalGeneration.First().Key, teamSizes), seed);
     }
 
     private static void LogGenerationStats(Dictionary<List<Member>, double> generationScores, int generationNumber)
@@ -78,10 +84,10 @@ public class EvolutionSorter : ISorter
         return sizeList;
     }
 
-    private static List<Member> CreateRandomCombination(List<Member> members)
+    private static List<Member> CreateRandomCombination(List<Member> members, Random random)
     {
         var newList = new List<Member>(members);
-        newList.Shuffle();
+        newList.Shuffle(random);
         return newList;
     }
 
@@ -133,13 +139,13 @@ public class EvolutionSorter : ISorter
             .ToDictionary(g => g.Key, g => g.Sum(record => record.DoubleValue));
     }
 
-    private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren)
+    private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren, Random random)
     {
         List<List<Member>> children = new(numberOfChildren);
         while (children.Count < numberOfChildren)
         {
-            var parent1 = members[_random.Next(members.Count)];
-            var parent2 = members[_random.Next(members.Count)];
+            var parent1 = members[random.Next(members.Count)];
+            var parent2 = members[random.Next(members.Count)];
             var newChildren = CrossMembers(parent1, parent2);
             children.AddRange(newChildren);
         }
@@ -179,31 +185,23 @@ public class EvolutionSorter : ISorter
             ..parent2Rest[..endSectionSize]
         ];
 
-        // Log.Information("Parent1: {0} - parent2: {1} - child1: {2} - child2: {3}",
-        //     parent1.Count, parent2.Count, child1.Count, child2.Count);
-
         return [child1, child2];
     }
 
-    private static List<Member> CreateChild(List<Member> parent, List<Member> newSection, int startIndex, int endIndex)
-    {
-        throw new NotImplementedException();
-    }
-
-    private void MutateSolution(List<List<Member>> members)
+    private void MutateSolution(List<List<Member>> members, Random random)
     {
         foreach (var memberList in members)
         {
-            MutateMembers(memberList);
+            MutateMembers(memberList, random);
         }
     }
 
-    private void MutateMembers(List<Member> members)
+    private void MutateMembers(List<Member> members, Random random)
     {
         for (var i = 0; i < members.Count; i++)
         {
-            if (_random.NextDouble() > ChanceOfMutation) continue;
-            int index = _random.Next(members.Count);
+            if (random.NextDouble() > ChanceOfMutation) continue;
+            int index = random.Next(members.Count);
             members.Swap(i, index);
         }
     }

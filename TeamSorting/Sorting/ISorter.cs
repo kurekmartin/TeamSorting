@@ -4,5 +4,5 @@ namespace TeamSorting.Sorting;
 
 public interface ISorter
 {
-    public List<Team> Sort(List<Member> members, int numberOfTeams);
+    public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, string? seed = null);
 }

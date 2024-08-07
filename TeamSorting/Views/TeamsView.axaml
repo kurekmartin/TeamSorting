@@ -33,11 +33,11 @@
                 Export teams to CSV
             </Button>
         </DockPanel>
-        <StackPanel Orientation="Vertical"
-                    DockPanel.Dock="Left"
-                    Margin="5,0">
+        <DockPanel DockPanel.Dock="Left"
+                   Margin="5,0">
             <StackPanel Orientation="Horizontal"
-                        Margin="0,0,0,2">
+                        Margin="0,0,0,2"
+                        DockPanel.Dock="Top">
                 <Button i:Attached.Icon="mdi-eye"
                         Click="ShowMemberDetailsButton_OnClick"
                         Background="Transparent" />
@@ -50,7 +50,8 @@
                            VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Orientation="Horizontal"
-                        Margin="0,0,0,2">
+                        Margin="0,0,0,2"
+                        DockPanel.Dock="Top">
                 <controls:IconRadioButton GroupName="SortGroup"
                                           Icon="mdi-sort-ascending"
                                           Size="27"
@@ -71,43 +72,53 @@
                            Margin="0,0,5,0"
                            VerticalAlignment="Center" />
             </StackPanel>
-            <TextBlock Text="Differences:"
-                       FontWeight="Bold" />
-            <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}"
-                          HorizontalAlignment="Left">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <DataTemplate.DataType>
-                            <x:Type TypeName="generic:KeyValuePair"
-                                    x:TypeArguments="models:DisciplineInfo,x:Double" />
-                        </DataTemplate.DataType>
-                        <DockPanel Margin="0,0,0,2">
-                            <controls:IconRadioButton DockPanel.Dock="Left"
-                                                      GroupName="SortGroup"
-                                                      Icon="mdi-sort-ascending"
-                                                      Size="27"
-                                                      Margin="0,0,5,0"
-                                                      IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged" />
-                            <controls:IconRadioButton DockPanel.Dock="Left"
-                                                      GroupName="SortGroup"
-                                                      Icon="mdi-sort-descending"
-                                                      Size="27"
-                                                      Margin="0,0,5,0"
-                                                      IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged" />
-                            <TextBlock DockPanel.Dock="Left"
-                                       Text="{Binding Key.Name}"
-                                       FontWeight="Bold"
-                                       Margin="0,0,5,0"
-                                       VerticalAlignment="Center" />
-                            <TextBlock DockPanel.Dock="Right"
-                                       Text="{Binding Value}"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Right" />
-                        </DockPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </StackPanel>
+            <StackPanel Orientation="Vertical"
+                        DockPanel.Dock="Top">
+                <TextBlock Text="Differences:"
+                           FontWeight="Bold" />
+                <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}"
+                              HorizontalAlignment="Left">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <DataTemplate.DataType>
+                                <x:Type TypeName="generic:KeyValuePair"
+                                        x:TypeArguments="models:DisciplineInfo,x:Double" />
+                            </DataTemplate.DataType>
+                            <DockPanel Margin="0,0,0,2">
+                                <controls:IconRadioButton DockPanel.Dock="Left"
+                                                          GroupName="SortGroup"
+                                                          Icon="mdi-sort-ascending"
+                                                          Size="27"
+                                                          Margin="0,0,5,0"
+                                                          IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged" />
+                                <controls:IconRadioButton DockPanel.Dock="Left"
+                                                          GroupName="SortGroup"
+                                                          Icon="mdi-sort-descending"
+                                                          Size="27"
+                                                          Margin="0,0,5,0"
+                                                          IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged" />
+                                <TextBlock DockPanel.Dock="Left"
+                                           Text="{Binding Key.Name}"
+                                           FontWeight="Bold"
+                                           Margin="0,0,5,0"
+                                           VerticalAlignment="Center" />
+                                <TextBlock DockPanel.Dock="Right"
+                                           Text="{Binding Value}"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Right" />
+                            </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom"
+                        Orientation="Vertical"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom">
+                <TextBlock Text="Seed" FontWeight="Bold" />
+                <SelectableTextBlock Text="{Binding Data.Seed}" />
+            </StackPanel>
+        </DockPanel>
         <ItemsControl ItemsSource="{Binding Data.Teams}"
                       DockPanel.Dock="Top">
             <ItemsControl.ItemsPanel>
