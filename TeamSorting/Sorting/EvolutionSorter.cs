@@ -1,10 +1,12 @@
-﻿using Serilog;
+﻿using System.ComponentModel;
+using Serilog;
 using TeamSorting.Extensions;
 using TeamSorting.Models;
-using TeamSorting.Services;
+using TeamSorting.Utils;
 
 namespace TeamSorting.Sorting;
 
+[Localizable(false)]
 public class EvolutionSorter : ISorter
 {
     private const int GenerationSize = 100;
@@ -212,7 +214,7 @@ public class EvolutionSorter : ISorter
         var startIndex = 0;
         foreach (int teamSize in teamSizes)
         {
-            var team = new Team($"Team{teams.Count + 1}");
+            var team = new Team(string.Format(Lang.Resources.Data_TeamName_Template, teams.Count + 1));
             team.AddMembers(members.Skip(startIndex).Take(teamSize));
             teams.Add(team);
             startIndex += teamSize;

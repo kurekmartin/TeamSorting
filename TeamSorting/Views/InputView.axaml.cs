@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data;
@@ -47,6 +48,7 @@ public partial class InputView : UserControl
         }
     }
 
+    [Localizable(false)]
     private async void LoadData_OnClick(object? sender, RoutedEventArgs e)
     {
         var context = (InputViewModel)DataContext!;
@@ -58,7 +60,7 @@ public partial class InputView : UserControl
 
         var file = await storageProvider.OpenFilePickerAsync(new FilePickerOpenOptions
         {
-            Title = "Choose file to load",
+            Title = Lang.Resources.InputView_LoadData_FileDialog,
             AllowMultiple = false,
             FileTypeFilter = new[]
             {
@@ -73,6 +75,7 @@ public partial class InputView : UserControl
         AddDisciplinesToDataGrid();
     }
 
+    [Localizable(false)]
     private void AddDisciplinesToDataGrid()
     {
         var context = (InputViewModel)DataContext!;
@@ -116,7 +119,7 @@ public partial class InputView : UserControl
             [DockPanel.DockProperty] = Dock.Left,
             [Attached.IconProperty] = "mdi-close",
             Margin = new Thickness(0, 0, 5, 0),
-            [ToolTip.TipProperty] = "Remove discipline"
+            [ToolTip.TipProperty] = Lang.Resources.InputView_RemoveDiscipline_Button
         };
         removeButton.Click += RemoveButtonOnClick;
         panel.Children.Add(removeButton);

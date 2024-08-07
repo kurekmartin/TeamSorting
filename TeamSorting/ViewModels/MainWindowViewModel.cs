@@ -1,4 +1,5 @@
-﻿using ReactiveUI;
+﻿using System.ComponentModel;
+using ReactiveUI;
 
 namespace TeamSorting.ViewModels;
 
@@ -12,6 +13,7 @@ public class MainWindowViewModel(TeamsViewModel teamsViewModel, InputViewModel i
         private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
     }
 
+    [Localizable(false)]
     public string Version =>
         $"v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "?.?.?"}";
 

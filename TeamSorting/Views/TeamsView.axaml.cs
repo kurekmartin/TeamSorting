@@ -51,7 +51,7 @@ public partial class TeamsView : UserControl
 
         var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
         {
-            Title = "Export Teams to CSV",
+            Title = Lang.Resources.TeamsView_ExportTeamsToCsv_FileDialogTitle,
             FileTypeChoices = new[]
             {
                 new FilePickerFileType("csv") { Patterns = ["*.csv"] }

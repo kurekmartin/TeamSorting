@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="InputView_LoadData_FileDialog" xml:space="preserve">
+        <value>Load from file</value>
+    </data>
+    <data name="InputView_RemoveDiscipline_Button" xml:space="preserve">
+        <value>Remove discipline</value>
+    </data>
+    <data name="TeamsView_Back_WarningDialog" xml:space="preserve">
+        <value>By going back all teams will be deleted.
+Do you want to continue?</value>
+    </data>
+    <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
+        <value>Export Teams to CSV</value>
+    </data>
+    <data name="InputView_NewDiscipline_Watermark" xml:space="preserve">
+        <value>New discipline name</value>
+    </data>
+    <data name="InputView_AddDiscipline_Button" xml:space="preserve">
+        <value>Add Discipline</value>
+    </data>
+    <data name="InputView_Seed_Watermark" xml:space="preserve">
+        <value>Seed</value>
+    </data>
+    <data name="InputView_RemoveMember_Button_Tooltip" xml:space="preserve">
+        <value>Remove Member</value>
+    </data>
+    <data name="InputView_DataGrid_ColumnHeader_Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="InputView_DataGrid_ColumnHeader_With" xml:space="preserve">
+        <value>With</value>
+    </data>
+    <data name="InputView_DataGrid_ColumnHeader_NotWith" xml:space="preserve">
+        <value>Not with</value>
+    </data>
+    <data name="InputView_NewMember_TextBox_Watermark" xml:space="preserve">
+        <value>Member name</value>
+    </data>
+    <data name="InputView_NewMember_Button" xml:space="preserve">
+        <value>Add member</value>
+    </data>
+    <data name="InputView_LoadData_Button" xml:space="preserve">
+        <value>Load data</value>
+    </data>
+    <data name="InputView_SortToTeams_Button" xml:space="preserve">
+        <value>Sort to teams</value>
+    </data>
+    <data name="TeamsView_Back_Button" xml:space="preserve">
+        <value>Back</value>
+    </data>
+    <data name="TeamsView_ExportToCSV_Button" xml:space="preserve">
+        <value>Export teams to CSV</value>
+    </data>
+    <data name="TeamsView_ShowMemberDetails_Label" xml:space="preserve">
+        <value>Show member details</value>
+    </data>
+    <data name="TeamsView_SortByMemberName_Label" xml:space="preserve">
+        <value>Sort by name</value>
+    </data>
+    <data name="TeamsView_Differences_Label" xml:space="preserve">
+        <value>Team differences:</value>
+    </data>
+    <data name="TeamsView_Seed_Label" xml:space="preserve">
+        <value>Seed</value>
+    </data>
+    <data name="TeamsView_TeamIsValid_ToolTip" xml:space="preserve">
+        <value>Team is valid: {0}</value>
+    </data>
+    <data name="Data_TeamName_Template" xml:space="preserve">
+        <value>Team{0}</value>
+    </data>
+    <data name="WarningDialog_Cancel_Button" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="WarningDialog_Continue_Button" xml:space="preserve">
+        <value>Continue</value>
+    </data>
+</root>

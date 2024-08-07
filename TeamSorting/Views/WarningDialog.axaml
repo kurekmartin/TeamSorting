@@ -3,6 +3,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:lang="clr-namespace:TeamSorting.Lang"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TeamSorting.Views.WarningDialog"
         Title="WarningDialog"
@@ -28,16 +29,14 @@
                     i:Attached.Icon="mdi-cancel"
                     Click="Cancel_OnClick"
                     HorizontalAlignment="Left"
-                    DockPanel.Dock="Left">
-                Cancel
-            </Button>
+                    DockPanel.Dock="Left"
+                    Content="{x:Static lang:Resources.WarningDialog_Cancel_Button}"/>
             <Button Name="Continue"
                     Margin="10,0,0,0"
                     Click="Continue_OnClick"
                     HorizontalAlignment="Right"
-                    DockPanel.Dock="Right">
-                Continue
-            </Button>
+                    DockPanel.Dock="Right"
+                    Content="{x:Static lang:Resources.WarningDialog_Continue_Button}"/>
         </DockPanel>
     </DockPanel>
 </Window>

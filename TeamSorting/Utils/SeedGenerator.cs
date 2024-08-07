@@ -1,6 +1,6 @@
-﻿namespace TeamSorting.Services;
+﻿namespace TeamSorting.Utils;
 
-public class SeedGenerator
+public static class SeedGenerator
 {
     private static readonly Random Random = new();
 

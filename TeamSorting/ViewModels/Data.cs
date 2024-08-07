@@ -329,7 +329,7 @@ public class Data : ReactiveObject
         Teams.Clear();
         for (var i = 0; i < count; i++)
         {
-            AddTeam(new Team($"Team{i + 1}"));
+            AddTeam(new Team(string.Format(Lang.Resources.Data_TeamName_Template, i + 1)));
         }
 
         return Teams;

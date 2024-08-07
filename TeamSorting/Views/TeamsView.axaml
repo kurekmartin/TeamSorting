@@ -9,7 +9,8 @@
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:controls="clr-namespace:TeamSorting.Controls"
              xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
-             xmlns:models="clr-namespace:TeamSorting.Models">
+             xmlns:models="clr-namespace:TeamSorting.Models"
+             xmlns:lang="clr-namespace:TeamSorting.Lang">
 
     <UserControl.Styles>
         <Style Selector="i|Icon#TeamValidityIcon.Valid">
@@ -25,13 +26,11 @@
     <DockPanel>
         <DockPanel DockPanel.Dock="Top">
             <Button Click="Back_OnClick"
-                    VerticalAlignment="Top">
-                Back
-            </Button>
+                    VerticalAlignment="Top"
+                    Content="{x:Static lang:Resources.TeamsView_Back_Button}" />
             <Button Click="ExportTeamsToCsv_OnClick"
-                    HorizontalAlignment="Right">
-                Export teams to CSV
-            </Button>
+                    HorizontalAlignment="Right"
+                    Content="{x:Static lang:Resources.TeamsView_ExportToCSV_Button}" />
         </DockPanel>
         <DockPanel DockPanel.Dock="Left"
                    Margin="5,0">
@@ -44,7 +43,7 @@
                 <Button i:Attached.Icon="mdi-eye-off"
                         Click="HideMemberDetailsButton_OnClick"
                         Background="Transparent" />
-                <TextBlock Text="Show member details"
+                <TextBlock Text="{x:Static lang:Resources.TeamsView_ShowMemberDetails_Label}"
                            FontWeight="Bold"
                            Margin="0,0,5,0"
                            VerticalAlignment="Center" />
@@ -56,25 +55,21 @@
                                           Icon="mdi-sort-ascending"
                                           Size="27"
                                           Margin="0,0,5,0"
-                                          IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged">
-                    Asc
-                </controls:IconRadioButton>
+                                          IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged" />
                 <controls:IconRadioButton GroupName="SortGroup"
                                           Icon="mdi-sort-descending"
                                           Size="27"
                                           Margin="0,0,5,0"
                                           IsCheckedChanged="DescNameRadioButton_OnIsCheckedChanged"
-                                          IsChecked="True">
-                    Desc
-                </controls:IconRadioButton>
-                <TextBlock Text="Sort by member name"
+                                          IsChecked="True" />
+                <TextBlock Text="{x:Static lang:Resources.TeamsView_SortByMemberName_Label}"
                            FontWeight="Bold"
                            Margin="0,0,5,0"
                            VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Orientation="Vertical"
                         DockPanel.Dock="Top">
-                <TextBlock Text="Differences:"
+                <TextBlock Text="{x:Static lang:Resources.TeamsView_Differences_Label}"
                            FontWeight="Bold" />
                 <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}"
                               HorizontalAlignment="Left">
@@ -115,7 +110,8 @@
                         Orientation="Vertical"
                         HorizontalAlignment="Left"
                         VerticalAlignment="Bottom">
-                <TextBlock Text="Seed" FontWeight="Bold" />
+                <TextBlock Text="{x:Static lang:Resources.TeamsView_Seed_Label}"
+                           FontWeight="Bold" />
                 <SelectableTextBlock Text="{Binding Data.Seed}" />
             </StackPanel>
         </DockPanel>
@@ -136,7 +132,7 @@
                                         Margin="5,0">
                                 <i:Icon Name="TeamValidityIcon"
                                         Classes.Valid="{Binding IsValid}"
-                                        ToolTip.Tip="{Binding IsValid, StringFormat='Team is valid: {0}'}"
+                                        ToolTip.Tip="{Binding IsValid, StringFormat={x:Static lang:Resources.TeamsView_TeamIsValid_ToolTip}}"
                                         FontSize="19"
                                         VerticalAlignment="Center" />
                                 <TextBlock Text="{Binding Name}"
@@ -204,6 +200,4 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
     </DockPanel>
-
-
 </UserControl>

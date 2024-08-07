@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
 using TeamSorting.ViewModels;
@@ -6,6 +7,7 @@ namespace TeamSorting;
 
 public class ViewLocator : IDataTemplate
 {
+    [Localizable(false)]
     public Control? Build(object? data)
     {
         if (data is null)

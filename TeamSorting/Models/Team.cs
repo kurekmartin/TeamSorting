@@ -1,12 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using ReactiveUI;
 
 namespace TeamSorting.Models;
 
 public class Team : ReactiveObject
 {
-    public Team(string name)
+    public Team([Localizable(false)] string name)
     {
         Name = name;
         Members.CollectionChanged += MembersOnCollectionChanged;

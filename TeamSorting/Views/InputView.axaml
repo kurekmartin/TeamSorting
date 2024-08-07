@@ -6,7 +6,8 @@
              x:Class="TeamSorting.Views.InputView"
              x:DataType="viewModel:InputViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
-             xmlns:i="https://github.com/projektanker/icons.avalonia">
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:lang="clr-namespace:TeamSorting.Lang">
     <UserControl.Resources>
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
     </UserControl.Resources>
@@ -26,14 +27,13 @@
                 <Button DockPanel.Dock="Top"
                         Click="LoadData_OnClick"
                         HorizontalAlignment="Left"
-                        VerticalAlignment="Top">
-                    Load Data
-                </Button>
+                        VerticalAlignment="Top"
+                        Content="{x:Static lang:Resources.InputView_LoadData_Button}" />
                 <DockPanel HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
                            DockPanel.Dock="Bottom">
                     <TextBox Text="{Binding NewDisciplineName}"
-                             Watermark="New discipline name"
+                             Watermark="{x:Static lang:Resources.InputView_NewDiscipline_Watermark}"
                              Width="200"
                              KeyDown="AddDisciplineTextBox_OnKeyDown"
                              DockPanel.Dock="Left" />
@@ -44,8 +44,8 @@
                               x:Name="DisciplineSortOrderComboBox"
                               Loaded="ComboBox_OnLoaded" />
                     <Button VerticalAlignment="Center"
-                            Click="AddDisciplineButton_OnClick">
-                        Add Discipline
+                            Click="AddDisciplineButton_OnClick"
+                            Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}">
                     </Button>
                 </DockPanel>
             </DockPanel>
@@ -58,9 +58,10 @@
                                Minimum="1"
                                Maximum="10" />
                 <TextBox MaxLength="10"
-                         Watermark="Seed"
+                         Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
                          Text="{Binding Data.Seed}" />
-                <Button Click="SortToTeams_OnClick">Sort to teams</Button>
+                <Button Click="SortToTeams_OnClick"
+                        Content="{x:Static lang:Resources.InputView_SortToTeams_Button}"/>
             </StackPanel>
         </DockPanel>
 
@@ -88,14 +89,14 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Click="RemoveMemberButton_OnClick"
-                                    ToolTip.Tip="Remove Member">
-                                X
-                            </Button>
+                                    ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"
+                                    i:Attached.Icon="mdi-close" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
-                <DataGridTemplateColumn Header="With">
+                <DataGridTextColumn Header="{x:Static lang:Resources.InputView_DataGrid_ColumnHeader_Name}"
+                                    Binding="{Binding Name}" />
+                <DataGridTemplateColumn Header="{x:Static lang:Resources.InputView_DataGrid_ColumnHeader_With}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -141,7 +142,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="NotWith">
+                <DataGridTemplateColumn Header="{x:Static lang:Resources.InputView_DataGrid_ColumnHeader_NotWith}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
@@ -192,15 +193,14 @@
         <DockPanel Grid.Row="2"
                    VerticalAlignment="Center">
             <TextBox Text="{Binding NewMemberName}"
-                     Watermark="New member name"
+                     Watermark="{x:Static lang:Resources.InputView_NewMember_TextBox_Watermark}"
                      IsVisible="True"
                      Width="200"
                      KeyDown="NewMemberTextBox_OnKeyDown"
                      DockPanel.Dock="Left" />
             <Button VerticalAlignment="Center"
-                    Click="NewMemberTextBox_OnClick">
-                Add Member
-            </Button>
+                    Click="NewMemberTextBox_OnClick"
+                    Content="{x:Static lang:Resources.InputView_NewMember_Button}" />
         </DockPanel>
     </Grid>
 </UserControl>
