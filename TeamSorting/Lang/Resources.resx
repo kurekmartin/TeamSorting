@@ -94,4 +94,22 @@ Do you want to continue?</value>
     <data name="WarningDialog_Continue_Button" xml:space="preserve">
         <value>Continue</value>
     </data>
+    <data name="Enum_DisciplineDataType_Number" xml:space="preserve">
+        <value>Number</value>
+    </data>
+    <data name="Enum_DisciplineDataType_Time" xml:space="preserve">
+        <value>Time</value>
+    </data>
+    <data name="Enum_SortOrder_Asc" xml:space="preserve">
+        <value>Asc</value>
+    </data>
+    <data name="Enum_SortOrder_Desc" xml:space="preserve">
+        <value>Desc</value>
+    </data>
+    <data name="Bool_True" xml:space="preserve">
+        <value>True</value>
+    </data>
+    <data name="Bool_False" xml:space="preserve">
+        <value>False</value>
+    </data>
 </root>

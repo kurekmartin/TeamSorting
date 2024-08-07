@@ -10,6 +10,7 @@ using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
+using TeamSorting.Enums;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
 using MenuItem = Avalonia.Controls.MenuItem;

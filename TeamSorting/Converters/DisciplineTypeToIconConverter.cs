@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using System.Globalization;
 using Avalonia.Data.Converters;
+using TeamSorting.Enums;
 using TeamSorting.Models;
 
 namespace TeamSorting.Converters;
 
 public class DisciplineTypeToIconConverter:IValueConverter
 {
+    //TODO change for style setter
     [Localizable(false)]
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

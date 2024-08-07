@@ -21,7 +21,7 @@ namespace TeamSorting.Lang {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources_cs_CZ {
+    public class Resources_cs_CZ {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -35,7 +35,7 @@ namespace TeamSorting.Lang {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("TeamSorting.Lang.Resources.cs-CZ", typeof(Resources_cs_CZ).Assembly);
@@ -50,7 +50,7 @@ namespace TeamSorting.Lang {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -60,18 +60,72 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ne.
+        /// </summary>
+        public static string Bool_False {
+            get {
+                return ResourceManager.GetString("Bool_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ano.
+        /// </summary>
+        public static string Bool_True {
+            get {
+                return ResourceManager.GetString("Bool_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tým{0}.
         /// </summary>
-        internal static string Data_TeamName_Template {
+        public static string Data_TeamName_Template {
             get {
                 return ResourceManager.GetString("Data_TeamName_Template", resourceCulture);
             }
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Číslo.
+        /// </summary>
+        public static string Enum_DisciplineDataType_Number {
+            get {
+                return ResourceManager.GetString("Enum_DisciplineDataType_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Čas.
+        /// </summary>
+        public static string Enum_DisciplineDataType_Time {
+            get {
+                return ResourceManager.GetString("Enum_DisciplineDataType_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vzestupně.
+        /// </summary>
+        public static string Enum_SortOrder_Asc {
+            get {
+                return ResourceManager.GetString("Enum_SortOrder_Asc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sestupně.
+        /// </summary>
+        public static string Enum_SortOrder_Desc {
+            get {
+                return ResourceManager.GetString("Enum_SortOrder_Desc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Přidat disciplínu.
         /// </summary>
-        internal static string InputView_AddDiscipline_Button {
+        public static string InputView_AddDiscipline_Button {
             get {
                 return ResourceManager.GetString("InputView_AddDiscipline_Button", resourceCulture);
             }
@@ -80,7 +134,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Jméno.
         /// </summary>
-        internal static string InputView_DataGrid_ColumnHeader_Name {
+        public static string InputView_DataGrid_ColumnHeader_Name {
             get {
                 return ResourceManager.GetString("InputView_DataGrid_ColumnHeader_Name", resourceCulture);
             }
@@ -89,7 +143,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Nesmí být s.
         /// </summary>
-        internal static string InputView_DataGrid_ColumnHeader_NotWith {
+        public static string InputView_DataGrid_ColumnHeader_NotWith {
             get {
                 return ResourceManager.GetString("InputView_DataGrid_ColumnHeader_NotWith", resourceCulture);
             }
@@ -98,7 +152,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Musí být s.
         /// </summary>
-        internal static string InputView_DataGrid_ColumnHeader_With {
+        public static string InputView_DataGrid_ColumnHeader_With {
             get {
                 return ResourceManager.GetString("InputView_DataGrid_ColumnHeader_With", resourceCulture);
             }
@@ -107,7 +161,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Načíst data.
         /// </summary>
-        internal static string InputView_LoadData_Button {
+        public static string InputView_LoadData_Button {
             get {
                 return ResourceManager.GetString("InputView_LoadData_Button", resourceCulture);
             }
@@ -116,7 +170,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Načíst ze souboru.
         /// </summary>
-        internal static string InputView_LoadData_FileDialog {
+        public static string InputView_LoadData_FileDialog {
             get {
                 return ResourceManager.GetString("InputView_LoadData_FileDialog", resourceCulture);
             }
@@ -125,7 +179,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Název disciplíny.
         /// </summary>
-        internal static string InputView_NewDiscipline_Watermark {
+        public static string InputView_NewDiscipline_Watermark {
             get {
                 return ResourceManager.GetString("InputView_NewDiscipline_Watermark", resourceCulture);
             }
@@ -134,7 +188,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Přidat člena.
         /// </summary>
-        internal static string InputView_NewMember_Button {
+        public static string InputView_NewMember_Button {
             get {
                 return ResourceManager.GetString("InputView_NewMember_Button", resourceCulture);
             }
@@ -143,7 +197,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Jméno.
         /// </summary>
-        internal static string InputView_NewMember_TextBox_Watermark {
+        public static string InputView_NewMember_TextBox_Watermark {
             get {
                 return ResourceManager.GetString("InputView_NewMember_TextBox_Watermark", resourceCulture);
             }
@@ -152,7 +206,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Odstranit disciplínu.
         /// </summary>
-        internal static string InputView_RemoveDiscipline_Button {
+        public static string InputView_RemoveDiscipline_Button {
             get {
                 return ResourceManager.GetString("InputView_RemoveDiscipline_Button", resourceCulture);
             }
@@ -161,7 +215,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Odstranit člena.
         /// </summary>
-        internal static string InputView_RemoveMember_Button_Tooltip {
+        public static string InputView_RemoveMember_Button_Tooltip {
             get {
                 return ResourceManager.GetString("InputView_RemoveMember_Button_Tooltip", resourceCulture);
             }
@@ -170,7 +224,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Semínko.
         /// </summary>
-        internal static string InputView_Seed_Watermark {
+        public static string InputView_Seed_Watermark {
             get {
                 return ResourceManager.GetString("InputView_Seed_Watermark", resourceCulture);
             }
@@ -179,7 +233,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Rozdělit do týmů.
         /// </summary>
-        internal static string InputView_SortToTeams_Button {
+        public static string InputView_SortToTeams_Button {
             get {
                 return ResourceManager.GetString("InputView_SortToTeams_Button", resourceCulture);
             }
@@ -188,7 +242,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Zpět.
         /// </summary>
-        internal static string TeamsView_Back_Button {
+        public static string TeamsView_Back_Button {
             get {
                 return ResourceManager.GetString("TeamsView_Back_Button", resourceCulture);
             }
@@ -198,7 +252,7 @@ namespace TeamSorting.Lang {
         ///   Looks up a localized string similar to Vrácením zpět budou všechny týmy smazány.
         ///Chcete pokračovat?.
         /// </summary>
-        internal static string TeamsView_Back_WarningDialog {
+        public static string TeamsView_Back_WarningDialog {
             get {
                 return ResourceManager.GetString("TeamsView_Back_WarningDialog", resourceCulture);
             }
@@ -207,7 +261,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Rozdíly mezi týmy:.
         /// </summary>
-        internal static string TeamsView_Differences_Label {
+        public static string TeamsView_Differences_Label {
             get {
                 return ResourceManager.GetString("TeamsView_Differences_Label", resourceCulture);
             }
@@ -216,7 +270,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Exportovat týmy do CSV.
         /// </summary>
-        internal static string TeamsView_ExportTeamsToCsv_FileDialogTitle {
+        public static string TeamsView_ExportTeamsToCsv_FileDialogTitle {
             get {
                 return ResourceManager.GetString("TeamsView_ExportTeamsToCsv_FileDialogTitle", resourceCulture);
             }
@@ -225,7 +279,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Exportovat týmy do CSV.
         /// </summary>
-        internal static string TeamsView_ExportToCSV_Button {
+        public static string TeamsView_ExportToCSV_Button {
             get {
                 return ResourceManager.GetString("TeamsView_ExportToCSV_Button", resourceCulture);
             }
@@ -234,7 +288,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Semínko.
         /// </summary>
-        internal static string TeamsView_Seed_Label {
+        public static string TeamsView_Seed_Label {
             get {
                 return ResourceManager.GetString("TeamsView_Seed_Label", resourceCulture);
             }
@@ -243,7 +297,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Zobrazit detaily členů.
         /// </summary>
-        internal static string TeamsView_ShowMemberDetails_Label {
+        public static string TeamsView_ShowMemberDetails_Label {
             get {
                 return ResourceManager.GetString("TeamsView_ShowMemberDetails_Label", resourceCulture);
             }
@@ -252,7 +306,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Seřadit podle jména.
         /// </summary>
-        internal static string TeamsView_SortByMemberName_Label {
+        public static string TeamsView_SortByMemberName_Label {
             get {
                 return ResourceManager.GetString("TeamsView_SortByMemberName_Label", resourceCulture);
             }
@@ -261,7 +315,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Tým je platný: {0}.
         /// </summary>
-        internal static string TeamsView_TeamIsValid_ToolTip {
+        public static string TeamsView_TeamIsValid_ToolTip {
             get {
                 return ResourceManager.GetString("TeamsView_TeamIsValid_ToolTip", resourceCulture);
             }
@@ -270,7 +324,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Zrušit.
         /// </summary>
-        internal static string WarningDialog_Cancel_Button {
+        public static string WarningDialog_Cancel_Button {
             get {
                 return ResourceManager.GetString("WarningDialog_Cancel_Button", resourceCulture);
             }
@@ -279,7 +333,7 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Pokračovat.
         /// </summary>
-        internal static string WarningDialog_Continue_Button {
+        public static string WarningDialog_Continue_Button {
             get {
                 return ResourceManager.GetString("WarningDialog_Continue_Button", resourceCulture);
             }

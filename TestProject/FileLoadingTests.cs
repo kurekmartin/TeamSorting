@@ -1,4 +1,5 @@
 using FluentAssertions;
+using TeamSorting.Enums;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
 

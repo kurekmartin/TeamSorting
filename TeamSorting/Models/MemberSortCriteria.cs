@@ -1,4 +1,6 @@
-﻿namespace TeamSorting.Models;
+﻿using TeamSorting.Enums;
+
+namespace TeamSorting.Models;
 
 public struct MemberSortCriteria(DisciplineInfo? disciplineInfo, SortOrder sortOrder)
 {

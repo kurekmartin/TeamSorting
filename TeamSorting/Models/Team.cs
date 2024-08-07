@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using ReactiveUI;
+using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 

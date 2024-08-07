@@ -1,4 +1,5 @@
 ﻿using ReactiveUI;
+using TeamSorting.Enums;
 using TeamSorting.Models;
 using TeamSorting.Sorting;
 

@@ -4,6 +4,7 @@ using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using TeamSorting.Controls;
+using TeamSorting.Enums;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
 

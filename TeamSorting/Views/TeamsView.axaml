@@ -10,8 +10,11 @@
              xmlns:controls="clr-namespace:TeamSorting.Controls"
              xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
              xmlns:models="clr-namespace:TeamSorting.Models"
-             xmlns:lang="clr-namespace:TeamSorting.Lang">
-
+             xmlns:lang="clr-namespace:TeamSorting.Lang"
+             xmlns:converter="clr-namespace:TeamSorting.Converters">
+    <UserControl.Resources>
+        <converter:BoolDisplayNameConverter x:Key="BoolDisplayNameConverter" />
+    </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="i|Icon#TeamValidityIcon.Valid">
             <Setter Property="Value" Value="mdi-check-circle" />
@@ -132,7 +135,9 @@
                                         Margin="5,0">
                                 <i:Icon Name="TeamValidityIcon"
                                         Classes.Valid="{Binding IsValid}"
-                                        ToolTip.Tip="{Binding IsValid, StringFormat={x:Static lang:Resources.TeamsView_TeamIsValid_ToolTip}}"
+                                        ToolTip.Tip="{Binding IsValid, 
+                                                StringFormat={x:Static lang:Resources.TeamsView_TeamIsValid_ToolTip},
+                                                Converter={StaticResource BoolDisplayNameConverter}}"
                                         FontSize="19"
                                         VerticalAlignment="Center" />
                                 <TextBlock Text="{Binding Name}"

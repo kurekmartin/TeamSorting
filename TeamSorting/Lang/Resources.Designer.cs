@@ -60,11 +60,65 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to False.
+        /// </summary>
+        public static string Bool_False {
+            get {
+                return ResourceManager.GetString("Bool_False", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to True.
+        /// </summary>
+        public static string Bool_True {
+            get {
+                return ResourceManager.GetString("Bool_True", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team{0}.
         /// </summary>
         public static string Data_TeamName_Template {
             get {
                 return ResourceManager.GetString("Data_TeamName_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number.
+        /// </summary>
+        public static string Enum_DisciplineDataType_Number {
+            get {
+                return ResourceManager.GetString("Enum_DisciplineDataType_Number", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Time.
+        /// </summary>
+        public static string Enum_DisciplineDataType_Time {
+            get {
+                return ResourceManager.GetString("Enum_DisciplineDataType_Time", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Asc.
+        /// </summary>
+        public static string Enum_SortOrder_Asc {
+            get {
+                return ResourceManager.GetString("Enum_SortOrder_Asc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Desc.
+        /// </summary>
+        public static string Enum_SortOrder_Desc {
+            get {
+                return ResourceManager.GetString("Enum_SortOrder_Desc", resourceCulture);
             }
         }
         

@@ -94,4 +94,22 @@ Chcete pokračovat?</value>
     <data name="WarningDialog_Continue_Button" xml:space="preserve">
         <value>Pokračovat</value>
     </data>
+    <data name="Enum_DisciplineDataType_Number" xml:space="preserve">
+        <value>Číslo</value>
+    </data>
+    <data name="Enum_DisciplineDataType_Time" xml:space="preserve">
+        <value>Čas</value>
+    </data>
+    <data name="Enum_SortOrder_Asc" xml:space="preserve">
+        <value>Vzestupně</value>
+    </data>
+    <data name="Enum_SortOrder_Desc" xml:space="preserve">
+        <value>Sestupně</value>
+    </data>
+    <data name="Bool_False" xml:space="preserve">
+        <value>Ne</value>
+    </data>
+    <data name="Bool_True" xml:space="preserve">
+        <value>Ano</value>
+    </data>
 </root>

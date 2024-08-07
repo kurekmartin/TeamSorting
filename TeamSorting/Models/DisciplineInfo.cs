@@ -1,4 +1,6 @@
-﻿namespace TeamSorting.Models;
+﻿using TeamSorting.Enums;
+
+namespace TeamSorting.Models;
 
 public class DisciplineInfo(string name)
 {
@@ -8,14 +10,5 @@ public class DisciplineInfo(string name)
     public SortOrder SortOrder { get; set; }
 }
 
-public enum DisciplineDataType
-{
-    Number,
-    Time
-}
 
-public enum SortOrder
-{
-    Asc,
-    Desc
-}
+

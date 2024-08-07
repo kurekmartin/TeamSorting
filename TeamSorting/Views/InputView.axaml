@@ -7,10 +7,13 @@
              x:DataType="viewModel:InputViewModel"
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
-             xmlns:lang="clr-namespace:TeamSorting.Lang">
+             xmlns:lang="clr-namespace:TeamSorting.Lang"
+             xmlns:converter="clr-namespace:TeamSorting.Converters">
     <UserControl.Resources>
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
+        <converter:EnumDisplayNameConvertor x:Key="EnumDisplayNameConvertor" />
     </UserControl.Resources>
+
     <UserControl.Styles>
         <Style Selector="MenuFlyoutPresenter.MemberSelectorFlyout">
             <Setter Property="MaxHeight" Value="300" />
@@ -39,10 +42,22 @@
                              DockPanel.Dock="Left" />
                     <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
                               x:Name="DisciplineTypeComboBox"
-                              Loaded="ComboBox_OnLoaded" />
+                              Loaded="ComboBox_OnLoaded">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <ComboBox ItemsSource="{Binding SortOrder}"
                               x:Name="DisciplineSortOrderComboBox"
-                              Loaded="ComboBox_OnLoaded" />
+                              Loaded="ComboBox_OnLoaded">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}"/>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                     <Button VerticalAlignment="Center"
                             Click="AddDisciplineButton_OnClick"
                             Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}">
@@ -61,7 +76,7 @@
                          Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
                          Text="{Binding Data.Seed}" />
                 <Button Click="SortToTeams_OnClick"
-                        Content="{x:Static lang:Resources.InputView_SortToTeams_Button}"/>
+                        Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
             </StackPanel>
         </DockPanel>
 

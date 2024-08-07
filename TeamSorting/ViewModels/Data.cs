@@ -3,6 +3,7 @@ using System.Dynamic;
 using System.Globalization;
 using CsvHelper;
 using ReactiveUI;
+using TeamSorting.Enums;
 using TeamSorting.Models;
 
 namespace TeamSorting.ViewModels;
