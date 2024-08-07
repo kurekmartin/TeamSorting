@@ -24,7 +24,7 @@ public class Data : ReactiveObject
             foreach (var team in _teams)
             {
                 team.WhenAnyValue(t => t.TotalScores)
-                    .Subscribe(x => this.RaisePropertyChanged(nameof(DisciplineDelta)));
+                    .Subscribe(_ => this.RaisePropertyChanged(nameof(DisciplineDelta)));
             }
         }
     }

@@ -1,6 +1,4 @@
-﻿using DynamicData.Binding;
-
-namespace TeamSorting.Models;
+﻿namespace TeamSorting.Models;
 
 public struct MemberSortCriteria(DisciplineInfo? disciplineInfo, SortOrder sortOrder)
 {
