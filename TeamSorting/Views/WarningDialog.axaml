@@ -9,7 +9,7 @@
         Title="WarningDialog"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="SystemChrome"
-        WindowStartupLocation="Manual"
+        WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
         SystemDecorations="BorderOnly"
         CanResize="False">
