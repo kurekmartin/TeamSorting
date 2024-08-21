@@ -17,7 +17,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             {
                 DisciplineDataType.Time => string.IsNullOrWhiteSpace(RawValue)
                     ? TimeSpan.Zero
-                    : TimeSpan.Parse(RawValue),
+                    : TimeSpan.Parse(RawValue, CultureInfo.InvariantCulture),
                 DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
                     ? 0d
                     : double.Parse(RawValue,CultureInfo.InvariantCulture),
