@@ -108,8 +108,8 @@ public class EvolutionSorter : ISorter
                 return score;
             }
 
-            var teamScoreSums = SumScoreByDiscipline(team);
-            foreach (var discipline in teamScoreSums)
+            var teamScoreAverages = AverageScoreByDiscipline(team);
+            foreach (var discipline in teamScoreAverages)
             {
                 if (!teamsDisciplineScores.TryGetValue(discipline.Key, out var listOfValues))
                 {
@@ -134,11 +134,11 @@ public class EvolutionSorter : ISorter
         return score;
     }
 
-    private static Dictionary<DisciplineInfo, double> SumScoreByDiscipline(List<Member> members)
+    private static Dictionary<DisciplineInfo, double> AverageScoreByDiscipline(List<Member> members)
     {
         return members.SelectMany(member => member.Records.Values)
             .GroupBy(record => record.DisciplineInfo)
-            .ToDictionary(g => g.Key, g => g.Sum(record => record.DoubleValue));
+            .ToDictionary(g => g.Key, g => g.Sum(record => record.DoubleValue) / members.Count);
     }
 
     private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren, Random random)

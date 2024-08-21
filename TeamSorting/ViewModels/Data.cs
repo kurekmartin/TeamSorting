@@ -37,7 +37,7 @@ public class Data : ReactiveObject
             var dict = new Dictionary<DisciplineInfo, double>();
             foreach (var discipline in Disciplines)
             {
-                var teamScores = Teams.Select(t => t.GetTotalValueByDiscipline(discipline)).ToList();
+                var teamScores = Teams.Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
                 double min = teamScores.Min();
                 double max = teamScores.Max();
                 double diff = double.Abs(min - max);
@@ -318,7 +318,7 @@ public class Data : ReactiveObject
         var dict = new Dictionary<Team, double>();
         foreach (var team in Teams)
         {
-            double value = team.GetTotalValueByDiscipline(discipline);
+            double value = team.GetAverageValueByDiscipline(discipline);
             dict.Add(team, value);
         }
 
@@ -419,10 +419,14 @@ public class Data : ReactiveObject
         int maxMembers = Teams.MaxBy(team => team.Members.Count)!.Members.Count;
         for (var i = 0; i < maxMembers; i++)
         {
-            var record = new ExpandoObject() as IDictionary<string, object>;
+            IDictionary<string, object> record = new ExpandoObject()!;
             foreach (var team in Teams)
             {
-                if (i >= team.Members.Count) continue;
+                if (i >= team.Members.Count)
+                {
+                    record.Add(team.Name, string.Empty);
+                    continue;
+                }
                 var member = team.Members[i];
                 record.Add(team.Name, member.Name);
             }

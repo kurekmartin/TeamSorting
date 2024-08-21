@@ -108,14 +108,14 @@ public class Team : ReactiveObject
         {
             return Members.SelectMany(member => member.Records.Values)
                 .GroupBy(record => record.DisciplineInfo)
-                .ToDictionary(g => g.Key, g => Math.Round(g.Sum(record => record.DoubleValue), 2));
+                .ToDictionary(g => g.Key, g => Math.Round(g.Sum(record => record.DoubleValue) / Members.Count, 2));
         }
     }
 
-    public double GetTotalValueByDiscipline(DisciplineInfo discipline)
+    public double GetAverageValueByDiscipline(DisciplineInfo discipline)
     {
         var records = Members.Select(member => member.GetRecord(discipline));
-        return records.Sum(record => record.DoubleValue);
+        return records.Sum(record => record.DoubleValue) / Members.Count;
     }
 
     public static bool ValidateMemberList(IEnumerable<Member> members)
