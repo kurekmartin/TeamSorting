@@ -2,7 +2,7 @@
 - none
 
 ### Changed
-- none
+- team scores calculation changed to average values instead of sum of all member scores
 
 ### Fix
-- another attempt at fixing the centering of confirmation dialog for deleting teams
+- add horizontal scrolling for team view 
