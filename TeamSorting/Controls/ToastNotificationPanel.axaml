@@ -1,0 +1,44 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:TeamSorting.Controls"
+        xmlns:avalonia="https://github.com/projektanker/icons.avalonia">
+    <Design.PreviewWith>
+        <controls:ToastNotificationPanel />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|ToastNotificationPanel">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Spacing="5"
+                            Margin="5">
+                    <Border Background="White"
+                            HorizontalAlignment="Right"
+                            CornerRadius="10"
+                            BorderThickness="1"
+                            BoxShadow="0 0 7 0 Gray">
+                        <Panel>
+                            <Button avalonia:Attached.Icon="mdi-close"
+                                    Padding="0"
+                                    Margin="5"
+                                    Background="Transparent"
+                                    Foreground="SlateGray"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top"/>
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="20"
+                                       MaxWidth="200"
+                                       TextWrapping="Wrap">
+                                Test text message aaaaa bbbb xxxx
+                            </TextBlock>
+                        </Panel>
+                    </Border>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
