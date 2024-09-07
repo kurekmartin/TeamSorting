@@ -112,4 +112,27 @@ Chcete pokračovat?</value>
     <data name="Bool_True" xml:space="preserve">
         <value>Ano</value>
     </data>
+    <data name="Data_LoadFromFile_Error" xml:space="preserve">
+        <value>Chyba čtení dat ze souboru</value>
+    </data>
+    <data name="Data_LoadFromFile_Success" xml:space="preserve">
+        <value>Data ze souboru úspěšně načtena</value>
+    </data>
+    <data name="Data_ValidateCsvHeader_MissingColumns_Error" xml:space="preserve">
+        <value>Hlavička neobsahuje následující sloupce:</value>
+    </data>
+    <data name="Data_ValidateCsvHeader_DuplicateColumns_Error" xml:space="preserve">
+        <value>Hlavička obsahuje duplicitní sloupce:</value>
+    </data>
+    <data name="Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error" xml:space="preserve">
+        <value>Neznámý datový typ '{0}' disciplíny '{1}'
+Platné hodnoty: {2}</value>
+    </data>
+    <data name="Data_ReadDisciplineDataTypes_ReadingError" xml:space="preserve">
+        <value>Chyba čtení datového typu disciplíny {0}</value>
+    </data>
+    <data name="Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error" xml:space="preserve">
+        <value>Neznámé řazení '{0}' disciplíny '{1}'
+Platné hodnoty: {2}</value>
+    </data>
 </root>

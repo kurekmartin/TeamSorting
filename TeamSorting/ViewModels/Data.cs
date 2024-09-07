@@ -1,9 +1,11 @@
 ﻿using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Globalization;
+using Avalonia.Controls.Notifications;
 using CsvHelper;
 using ReactiveUI;
 using TeamSorting.Enums;
+using TeamSorting.Lang;
 using TeamSorting.Models;
 
 namespace TeamSorting.ViewModels;
@@ -330,7 +332,7 @@ public class Data : ReactiveObject
         Teams.Clear();
         for (var i = 0; i < count; i++)
         {
-            AddTeam(new Team(string.Format(Lang.Resources.Data_TeamName_Template, i + 1)));
+            AddTeam(new Team(string.Format(Resources.Data_TeamName_Template, i + 1)));
         }
 
         return Teams;
@@ -348,19 +350,88 @@ public class Data : ReactiveObject
 
     #region CSV
 
-    public async Task LoadFromFile(StreamReader inputFile)
+    public async Task<ReturnMessage> LoadFromFile(StreamReader inputFile)
     {
         var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
 
-        await csv.ReadAsync();
-        csv.ReadHeader();
-        await csv.ReadAsync();
+        await csv.ReadAsync(); //Read first line
+        csv.ReadHeader(); //load header
+        var returnMessage = ValidateCsvHeader(csv);
+        if (returnMessage is not null)
+        {
+            return returnMessage;
+        }
 
-        LoadDisciplinesInfo(csv);
-        LoadMembersData(csv);
+        await csv.ReadAsync(); //read next line
+
+        returnMessage = LoadDisciplinesInfo(csv);
+        if (returnMessage?.NotificationType == NotificationType.Error)
+        {
+            ClearData();
+            returnMessage.Message = $"{Resources.Data_LoadFromFile_Error}\n{returnMessage.Message}";
+            return returnMessage;
+        }
+
+        try
+        {
+            LoadMembersData(csv);
+        }
+        catch (Exception e)
+        {
+            ClearData();
+            return new ReturnMessage(NotificationType.Error,
+                $"{Resources.Data_LoadFromFile_Error}\n{e.Message}");
+        }
+
+        return returnMessage ?? new ReturnMessage(NotificationType.Success, Resources.Data_LoadFromFile_Success);
     }
 
-    private void LoadDisciplinesInfo(CsvReader csv)
+    private static ReturnMessage? ValidateCsvHeader(CsvReader csv)
+    {
+        List<string> missingFields = [];
+        if (!csv.HeaderRecord.Contains(nameof(Member.Name)))
+        {
+            missingFields.Add(nameof(Member.Name));
+        }
+
+        if (!csv.HeaderRecord.Contains(nameof(Member.With)))
+        {
+            missingFields.Add(nameof(Member.With));
+        }
+
+        if (!csv.HeaderRecord.Contains(nameof(Member.NotWith)))
+        {
+            missingFields.Add(nameof(Member.NotWith));
+        }
+
+        if (missingFields.Count > 0)
+        {
+            return new ReturnMessage(NotificationType.Error,
+                Resources.Data_ValidateCsvHeader_MissingColumns_Error + string.Join('\n', missingFields));
+        }
+
+        var duplicateColumns = csv.HeaderRecord.GroupBy(x => x)
+            .Where(g => g.Count() > 1)
+            .Select(g => g.Key)
+            .ToList();
+
+        if (duplicateColumns.Count > 0)
+        {
+            return new ReturnMessage(NotificationType.Error,
+                Resources.Data_ValidateCsvHeader_DuplicateColumns_Error + string.Join('\n', duplicateColumns));
+        }
+
+        return null;
+    }
+
+    private void ClearData()
+    {
+        Members.Clear();
+        Disciplines.Clear();
+        Teams.Clear();
+    }
+
+    private ReturnMessage? LoadDisciplinesInfo(CsvReader csv)
     {
         var disciplines = csv.HeaderRecord.Except([
             nameof(Member.Name),
@@ -368,30 +439,75 @@ public class Data : ReactiveObject
             nameof(Member.NotWith)
         ]).Select(d => new DisciplineInfo(d)).ToList();
 
-        ReadDisciplineDataTypes(disciplines, csv);
+        var returnMessage = ReadDisciplineDataTypes(disciplines, csv);
+        if (returnMessage?.NotificationType == NotificationType.Error)
+        {
+            return returnMessage;
+        }
+
         csv.Read();
-        ReadDisciplineSortTypes(disciplines, csv);
+        returnMessage = ReadDisciplineSortTypes(disciplines, csv);
+        if (returnMessage?.NotificationType == NotificationType.Error)
+        {
+            return returnMessage;
+        }
 
         foreach (var discipline in disciplines)
         {
             AddDiscipline(discipline);
         }
+
+        return null;
     }
 
-    private static void ReadDisciplineDataTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
+    private static ReturnMessage? ReadDisciplineDataTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
     {
         foreach (var discipline in disciplines)
         {
-            discipline.DataType = Enum.Parse<DisciplineDataType>(csv[discipline.Name]);
+            string? value = csv[discipline.Name];
+            try
+            {
+                discipline.DataType = Enum.Parse<DisciplineDataType>(value);
+            }
+            catch (ArgumentException)
+            {
+                return new ReturnMessage(NotificationType.Error,
+                    string.Format(Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error, value,
+                        discipline.Name, string.Join(", ", Enum.GetValues<DisciplineDataType>())));
+            }
+            catch (Exception ex)
+            {
+                return new ReturnMessage(NotificationType.Error,
+                    string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
+            }
         }
+
+        return null;
     }
 
-    private static void ReadDisciplineSortTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
+    private static ReturnMessage? ReadDisciplineSortTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
     {
         foreach (var discipline in disciplines)
         {
-            discipline.SortOrder = Enum.Parse<SortOrder>(csv[discipline.Name]);
+            string value = csv[discipline.Name];
+            try
+            {
+                discipline.SortOrder = Enum.Parse<SortOrder>(csv[discipline.Name]);
+            }
+            catch (ArgumentException)
+            {
+                return new ReturnMessage(NotificationType.Error,
+                    string.Format(Resources.Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error, value,
+                        discipline.Name, string.Join(", ", Enum.GetValues<SortOrder>())));
+            }
+            catch (Exception ex)
+            {
+                return new ReturnMessage(NotificationType.Error,
+                    string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
+            }
         }
+
+        return null;
     }
 
     private void LoadMembersData(CsvReader csv)
@@ -427,6 +543,7 @@ public class Data : ReactiveObject
                     record.Add(team.Name, string.Empty);
                     continue;
                 }
+
                 var member = team.Members[i];
                 record.Add(team.Name, member.Name);
             }

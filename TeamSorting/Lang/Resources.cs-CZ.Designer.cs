@@ -78,11 +78,76 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chyba čtení dat ze souboru.
+        /// </summary>
+        public static string Data_LoadFromFile_Error {
+            get {
+                return ResourceManager.GetString("Data_LoadFromFile_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data ze souboru úspěšně načtena.
+        /// </summary>
+        public static string Data_LoadFromFile_Success {
+            get {
+                return ResourceManager.GetString("Data_LoadFromFile_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chyba čtení datového typu disciplíny {0}.
+        /// </summary>
+        public static string Data_ReadDisciplineDataTypes_ReadingError {
+            get {
+                return ResourceManager.GetString("Data_ReadDisciplineDataTypes_ReadingError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neznámý datový typ &apos;{0}&apos; disciplíny &apos;{1}&apos;
+        ///Platné hodnoty: {2}.
+        /// </summary>
+        public static string Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error {
+            get {
+                return ResourceManager.GetString("Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Neznámé řazení &apos;{0}&apos; disciplíny &apos;{1}&apos;
+        ///Platné hodnoty: {2}.
+        /// </summary>
+        public static string Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error {
+            get {
+                return ResourceManager.GetString("Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tým{0}.
         /// </summary>
         public static string Data_TeamName_Template {
             get {
                 return ResourceManager.GetString("Data_TeamName_Template", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hlavička obsahuje duplicitní sloupce:.
+        /// </summary>
+        public static string Data_ValidateCsvHeader_DuplicateColumns_Error {
+            get {
+                return ResourceManager.GetString("Data_ValidateCsvHeader_DuplicateColumns_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hlavička neobsahuje následující sloupce:.
+        /// </summary>
+        public static string Data_ValidateCsvHeader_MissingColumns_Error {
+            get {
+                return ResourceManager.GetString("Data_ValidateCsvHeader_MissingColumns_Error", resourceCulture);
             }
         }
         

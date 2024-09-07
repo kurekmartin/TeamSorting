@@ -3,6 +3,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -19,6 +20,8 @@ namespace TeamSorting.Views;
 
 public partial class InputView : UserControl
 {
+    private WindowNotificationManager? _notificationManager;
+
     public InputView()
     {
         InitializeComponent();
@@ -31,6 +34,13 @@ public partial class InputView : UserControl
             AddDisciplinesToDataGrid();
             vm.Data.Disciplines.CollectionChanged += DisciplinesOnCollectionChanged;
         }
+
+        _notificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this))
+        {
+            Position = NotificationPosition.BottomRight,
+            Margin = new Thickness(0, 0, 0, 20),
+            MaxItems = 3
+        };
 
         base.OnInitialized();
     }
@@ -72,7 +82,9 @@ public partial class InputView : UserControl
         if (file.Count <= 0) return;
         await using var stream = await file[0].OpenReadAsync();
         using var streamReader = new StreamReader(stream);
-        await context.Data.LoadFromFile(streamReader);
+        var returnMessage = await context.Data.LoadFromFile(streamReader);
+        _notificationManager?.Show(returnMessage.Message, returnMessage.NotificationType, TimeSpan.Zero);
+
         AddDisciplinesToDataGrid();
     }
 

@@ -112,4 +112,31 @@ Do you want to continue?</value>
     <data name="Bool_False" xml:space="preserve">
         <value>False</value>
     </data>
+    <data name="Data_LoadFromFile_Error" xml:space="preserve">
+        <value>Error reading data from file
+</value>
+    </data>
+    <data name="Data_LoadFromFile_Success" xml:space="preserve">
+        <value>Successfully loaded data from file</value>
+    </data>
+    <data name="Data_ValidateCsvHeader_MissingColumns_Error" xml:space="preserve">
+        <value>Header doesn't contain columns:
+</value>
+    </data>
+    <data name="Data_ValidateCsvHeader_DuplicateColumns_Error" xml:space="preserve">
+        <value>Header contains duplicate columns:
+</value>
+    </data>
+    <data name="Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error" xml:space="preserve">
+        <value>Unknown data type '{0}' for discipline '{1}'
+Valid values: {2}</value>
+    </data>
+    <data name="Data_ReadDisciplineDataTypes_ReadingError" xml:space="preserve">
+        <value>Error reading data type for discipline {0}
+{1}</value>
+    </data>
+    <data name="Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error" xml:space="preserve">
+        <value>Unknown sort order '{0}' for discipline '{1}'
+Valid values: {2}</value>
+    </data>
 </root>
