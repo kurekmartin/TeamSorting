@@ -128,9 +128,9 @@ public class Team : ReactiveObject
     {
         var memberList = members.ToList();
         var memberNames = memberList.Select(member => member.Name).ToList();
-        var with = memberList.SelectMany(member => member.With).ToList();
+        var with = memberList.SelectMany(member => member.With.Select(m => m.Name)).ToList();
         var notWith = memberList.SelectMany(member => member.NotWith);
 
-        return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith).ToList());
+        return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m=>m.Name)).ToList());
     }
 }

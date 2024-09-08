@@ -135,4 +135,13 @@ Platné hodnoty: {2}</value>
         <value>Neznámé řazení '{0}' disciplíny '{1}'
 Platné hodnoty: {2}</value>
     </data>
+    <data name="Data_LoadMembersData_DuplicateMemberNames_Error" xml:space="preserve">
+        <value>Nalezeni členové s duplicitními jmény: {0}</value>
+    </data>
+    <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">
+        <value>Nalezen duplicitní člen v podmínkách kombinací členů</value>
+    </data>
+    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Warning" xml:space="preserve">
+        <value>Nalezen neznámý člen v podmínkách kombinací členů</value>
+    </data>
 </root>

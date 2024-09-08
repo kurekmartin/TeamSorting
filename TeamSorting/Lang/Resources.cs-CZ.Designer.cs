@@ -96,6 +96,33 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nalezeni členové s duplicitními jmény: {0}.
+        /// </summary>
+        public static string Data_LoadMembersData_DuplicateMemberNames_Error {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_DuplicateMemberNames_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nalezen duplicitní člen v podmínkách kombinací členů.
+        /// </summary>
+        public static string Data_LoadMembersData_DuplicateMembersInConstarins_Warning {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_DuplicateMembersInConstarins_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nalezen neznámý člen v podmínkách kombinací členů.
+        /// </summary>
+        public static string Data_LoadMembersData_UnknownMemberInConstarins_Warning {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chyba čtení datového typu disciplíny {0}.
         /// </summary>
         public static string Data_ReadDisciplineDataTypes_ReadingError {

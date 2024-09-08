@@ -78,8 +78,7 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error reading data from file
-        ///.
+        ///   Looks up a localized string similar to Error reading data from file.
         /// </summary>
         public static string Data_LoadFromFile_Error {
             get {
@@ -93,6 +92,33 @@ namespace TeamSorting.Lang {
         public static string Data_LoadFromFile_Success {
             get {
                 return ResourceManager.GetString("Data_LoadFromFile_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found members with duplicate names: {0}.
+        /// </summary>
+        public static string Data_LoadMembersData_DuplicateMemberNames_Error {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_DuplicateMemberNames_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found duplicate members in combination constrains.
+        /// </summary>
+        public static string Data_LoadMembersData_DuplicateMembersInConstarins_Warning {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_DuplicateMembersInConstarins_Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found unknown members in combination constrains.
+        /// </summary>
+        public static string Data_LoadMembersData_UnknownMemberInConstarins_Warning {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Warning", resourceCulture);
             }
         }
         

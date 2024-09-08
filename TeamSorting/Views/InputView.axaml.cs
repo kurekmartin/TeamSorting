@@ -82,8 +82,11 @@ public partial class InputView : UserControl
         if (file.Count <= 0) return;
         await using var stream = await file[0].OpenReadAsync();
         using var streamReader = new StreamReader(stream);
-        var returnMessage = await context.Data.LoadFromFile(streamReader);
-        _notificationManager?.Show(returnMessage.Message, returnMessage.NotificationType, TimeSpan.Zero);
+        var returnMessageList = context.Data.LoadFromFile(streamReader);
+        foreach (var message in returnMessageList)
+        {
+            _notificationManager?.Show(message.Message, message.NotificationType, TimeSpan.Zero);
+        }
 
         AddDisciplinesToDataGrid();
     }
@@ -302,7 +305,7 @@ public partial class InputView : UserControl
 
     private void RemoveWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is Button { DataContext: string removeName } button)
+        if (sender is Button { DataContext: Member removeName } button)
         {
             var parent = button.FindLogicalAncestorOfType<ItemsControl>();
             if (parent?.DataContext is Member member)
@@ -314,7 +317,7 @@ public partial class InputView : UserControl
 
     private void RemoveNotWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is Button { DataContext: string removeName } button)
+        if (sender is Button { DataContext: Member removeName } button)
         {
             var parent = button.FindLogicalAncestorOfType<ItemsControl>();
             if (parent?.DataContext is Member member)
@@ -326,24 +329,24 @@ public partial class InputView : UserControl
 
     private void AddNotWithMemberMenuItem_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is MenuItem { DataContext: string notWithMemberName } menuItem)
+        if (sender is MenuItem { DataContext: Member notWithMember } menuItem)
         {
             var row = menuItem.FindLogicalAncestorOfType<DataGridRow>();
             if (row?.DataContext is Member member)
             {
-                member.AddNotWithMember(notWithMemberName);
+                member.AddNotWithMember(notWithMember);
             }
         }
     }
 
     private void AddWithMemberMenuItem_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is MenuItem { DataContext: string withMemberName } menuItem)
+        if (sender is MenuItem { DataContext: Member withMember } menuItem)
         {
             var row = menuItem.FindLogicalAncestorOfType<DataGridRow>();
             if (row?.DataContext is Member member)
             {
-                member.AddWithMember(withMemberName);
+                member.AddWithMember(withMember);
             }
         }
     }

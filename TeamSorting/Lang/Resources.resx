@@ -113,8 +113,7 @@ Do you want to continue?</value>
         <value>False</value>
     </data>
     <data name="Data_LoadFromFile_Error" xml:space="preserve">
-        <value>Error reading data from file
-</value>
+        <value>Error reading data from file</value>
     </data>
     <data name="Data_LoadFromFile_Success" xml:space="preserve">
         <value>Successfully loaded data from file</value>
@@ -138,5 +137,14 @@ Valid values: {2}</value>
     <data name="Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error" xml:space="preserve">
         <value>Unknown sort order '{0}' for discipline '{1}'
 Valid values: {2}</value>
+    </data>
+    <data name="Data_LoadMembersData_DuplicateMemberNames_Error" xml:space="preserve">
+        <value>Found members with duplicate names: {0}</value>
+    </data>
+    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Warning" xml:space="preserve">
+        <value>Found unknown members in combination constrains</value>
+    </data>
+    <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">
+        <value>Found duplicate members in combination constrains</value>
     </data>
 </root>

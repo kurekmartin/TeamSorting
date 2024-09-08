@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Data;
 using System.Dynamic;
 using System.Globalization;
 using Avalonia.Controls.Notifications;
@@ -14,7 +15,7 @@ public class Data : ReactiveObject
 {
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
     public ObservableCollection<Member> Members { get; } = [];
-    public List<string> SortedMemberNames => Members.OrderBy(m => m.Name).Select(member => member.Name).ToList();
+    public List<Member> SortedMembers => Members.OrderBy(m => m.Name).ToList();
 
     private ObservableCollection<Team> _teams = [];
 
@@ -122,7 +123,7 @@ public class Data : ReactiveObject
         }
 
         Members.Add(member);
-        this.RaisePropertyChanged(nameof(SortedMemberNames));
+        this.RaisePropertyChanged(nameof(SortedMembers));
         return true;
     }
 
@@ -134,8 +135,56 @@ public class Data : ReactiveObject
             Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
         }
 
-        this.RaisePropertyChanged(nameof(SortedMemberNames));
+        this.RaisePropertyChanged(nameof(SortedMembers));
         return result;
+    }
+
+    public bool AddWithMember(Member member, string withMemberName)
+    {
+        var withMember = Members.FirstOrDefault(m => m.Name == withMemberName);
+        if (withMember is null)
+        {
+            return false;
+        }
+
+        member.AddWithMember(withMember);
+        return true;
+    }
+
+    public List<(string Name, bool Added)> AddWithMembers(Member member, List<string> withMemberNames)
+    {
+        List<(string Name, bool Added)> results = [];
+        foreach (string withMemberName in withMemberNames)
+        {
+            bool result = AddWithMember(member, withMemberName);
+            results.Add((withMemberName, result));
+        }
+
+        return results;
+    }
+
+    public bool AddNotWithMember(Member member, string notWithMemberName)
+    {
+        var notWithMember = Members.FirstOrDefault(m => m.Name == notWithMemberName);
+        if (notWithMember is null)
+        {
+            return false;
+        }
+
+        member.AddNotWithMember(notWithMember);
+        return true;
+    }
+
+    public List<(string Name, bool Added)> AddNotWithMembers(Member member, List<string> notWithMemberNames)
+    {
+        List<(string Name, bool Added)> results = [];
+        foreach (string notWithMemberName in notWithMemberNames)
+        {
+            bool result = AddNotWithMember(member, notWithMemberName);
+            results.Add((notWithMemberName, result));
+        }
+
+        return results;
     }
 
     public Member? GetMemberByName(string name)
@@ -194,7 +243,8 @@ public class Data : ReactiveObject
             {
                 newMembersAdded = false;
                 var newMembers = group[i..];
-                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
+                var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Select(m => m.Name)))
+                    .Distinct();
                 foreach (var withMember in withMembers)
                 {
                     if (group.Contains(withMember)) continue;
@@ -205,7 +255,8 @@ public class Data : ReactiveObject
                 }
             } while (newMembersAdded);
 
-            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith)).Distinct().ToList();
+            var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith.Select(m => m.Name)))
+                .Distinct().ToList();
             bool intersectExists = group.Intersect(notWithMembers).Any();
             if (intersectExists)
             {
@@ -225,7 +276,8 @@ public class Data : ReactiveObject
         {
             newMembersAdded = false;
             var newMembers = group[i..];
-            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With)).Distinct();
+            var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Select(m => m.Name)))
+                .Distinct();
             foreach (var withMember in withMembers)
             {
                 if (group.Contains(withMember)) continue;
@@ -242,7 +294,7 @@ public class Data : ReactiveObject
     public IEnumerable<Member> GetNotWithMembers(Member currentMember)
     {
         List<Member> group = [];
-        var notWithMembers = GetMembersByName(currentMember.NotWith);
+        var notWithMembers = GetMembersByName(currentMember.NotWith.Select(m => m.Name));
         foreach (var notWithMember in notWithMembers)
         {
             var allNotWithMembers = GetWithMembers(notWithMember).ToList();
@@ -350,40 +402,64 @@ public class Data : ReactiveObject
 
     #region CSV
 
-    public async Task<ReturnMessage> LoadFromFile(StreamReader inputFile)
+    public List<ReturnMessage> LoadFromFile(StreamReader inputFile)
     {
-        var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
+        List<ReturnMessage> returnMessages = [];
+        ClearData();
+        using var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
 
-        await csv.ReadAsync(); //Read first line
-        csv.ReadHeader(); //load header
-        var returnMessage = ValidateCsvHeader(csv);
-        if (returnMessage is not null)
+        using var dataReader = new CsvDataReader(csv);
+        var dataTable = new DataTable();
+        dataTable.Load(dataReader);
+
+        //TODO check required columns
+        //TODO check minimum rows (2)
+
+        var csvHeaderResult = ValidateCsvHeader(csv);
+        if (csvHeaderResult?.NotificationType == NotificationType.Error)
         {
-            return returnMessage;
+            return [csvHeaderResult];
         }
 
-        await csv.ReadAsync(); //read next line
-
-        returnMessage = LoadDisciplinesInfo(csv);
-        if (returnMessage?.NotificationType == NotificationType.Error)
+        var loadDisciplinesResult = LoadDisciplinesInfo(dataTable);
+        if (loadDisciplinesResult?.NotificationType == NotificationType.Error)
         {
             ClearData();
-            returnMessage.Message = $"{Resources.Data_LoadFromFile_Error}\n{returnMessage.Message}";
-            return returnMessage;
+            loadDisciplinesResult.Message = $"{Resources.Data_LoadFromFile_Error}\n{loadDisciplinesResult.Message}";
+            return [loadDisciplinesResult];
         }
 
+        var dataRows = dataTable.AsEnumerable();
+
+        List<ReturnMessage> loadMembersResult = [];
         try
         {
-            LoadMembersData(csv);
+            loadMembersResult = LoadMembersData(dataRows.Skip(2).ToList());
         }
         catch (Exception e)
         {
             ClearData();
-            return new ReturnMessage(NotificationType.Error,
-                $"{Resources.Data_LoadFromFile_Error}\n{e.Message}");
+            return
+            [
+                new ReturnMessage(NotificationType.Error,
+                    $"{Resources.Data_LoadFromFile_Error}\n{e.Message}")
+            ];
         }
 
-        return returnMessage ?? new ReturnMessage(NotificationType.Success, Resources.Data_LoadFromFile_Success);
+        if (loadMembersResult.Any(message => message.NotificationType == NotificationType.Error))
+        {
+            ClearData();
+            var message = loadMembersResult.First(msg => msg.NotificationType == NotificationType.Error);
+            message.Message = $"{Resources.Data_LoadFromFile_Error}\n{message.Message}";
+            return [message];
+        }
+
+        if (returnMessages.Count == 0)
+        {
+            return [new ReturnMessage(NotificationType.Success, Resources.Data_LoadFromFile_Success)];
+        }
+
+        return returnMessages;
     }
 
     private static ReturnMessage? ValidateCsvHeader(CsvReader csv)
@@ -431,30 +507,59 @@ public class Data : ReactiveObject
         Teams.Clear();
     }
 
-    private ReturnMessage? LoadDisciplinesInfo(CsvReader csv)
+    private ReturnMessage? LoadDisciplinesInfo(DataTable dataTable)
     {
-        var disciplines = csv.HeaderRecord.Except([
-            nameof(Member.Name),
-            nameof(Member.With),
-            nameof(Member.NotWith)
-        ]).Select(d => new DisciplineInfo(d)).ToList();
-
-        var returnMessage = ReadDisciplineDataTypes(disciplines, csv);
-        if (returnMessage?.NotificationType == NotificationType.Error)
+        foreach (DataColumn column in dataTable.Columns)
         {
-            return returnMessage;
-        }
+            if (!IsDisciplineColumn(column))
+            {
+                continue;
+            }
 
-        csv.Read();
-        returnMessage = ReadDisciplineSortTypes(disciplines, csv);
-        if (returnMessage?.NotificationType == NotificationType.Error)
-        {
-            return returnMessage;
-        }
+            var discipline = new DisciplineInfo(column.ColumnName);
+            var dataTypeResult = ReadDisciplineDataType(discipline, dataTable);
+            if (dataTypeResult?.NotificationType == NotificationType.Error)
+            {
+                return dataTypeResult;
+            }
 
-        foreach (var discipline in disciplines)
-        {
+            var sortTypeResult = ReadDisciplineSortType(discipline, dataTable);
+            if (sortTypeResult?.NotificationType == NotificationType.Error)
+            {
+                return sortTypeResult;
+            }
+
             AddDiscipline(discipline);
+        }
+
+        return null;
+    }
+
+    private readonly HashSet<string> _staticColumnNames =
+        [nameof(Member.Name), nameof(Member.With), nameof(Member.NotWith)];
+
+    private bool IsDisciplineColumn(DataColumn column)
+    {
+        return !_staticColumnNames.Contains(column.ColumnName);
+    }
+
+    private static ReturnMessage? ReadDisciplineDataType(DisciplineInfo discipline, DataTable dataTable)
+    {
+        string value = dataTable.Rows[0][discipline.Name].ToString() ?? string.Empty;
+        try
+        {
+            discipline.DataType = Enum.Parse<DisciplineDataType>(value);
+        }
+        catch (ArgumentException)
+        {
+            return new ReturnMessage(NotificationType.Error,
+                string.Format(Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error, value,
+                    discipline.Name, string.Join(", ", Enum.GetValues<DisciplineDataType>())));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnMessage(NotificationType.Error,
+                string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
         }
 
         return null;
@@ -485,6 +590,28 @@ public class Data : ReactiveObject
         return null;
     }
 
+    private static ReturnMessage? ReadDisciplineSortType(DisciplineInfo discipline, DataTable dataTable)
+    {
+        string value = dataTable.Rows[1][discipline.Name].ToString() ?? string.Empty;
+        try
+        {
+            discipline.SortOrder = Enum.Parse<SortOrder>(value);
+        }
+        catch (ArgumentException)
+        {
+            return new ReturnMessage(NotificationType.Error,
+                string.Format(Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error, value,
+                    discipline.Name, string.Join(", ", Enum.GetValues<DisciplineDataType>())));
+        }
+        catch (Exception ex)
+        {
+            return new ReturnMessage(NotificationType.Error,
+                string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
+        }
+
+        return null;
+    }
+
     private static ReturnMessage? ReadDisciplineSortTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
     {
         foreach (var discipline in disciplines)
@@ -510,22 +637,81 @@ public class Data : ReactiveObject
         return null;
     }
 
-    private void LoadMembersData(CsvReader csv)
+    private List<ReturnMessage> LoadMembersData(IList<DataRow> dataRows)
     {
-        while (csv.Read())
+        List<ReturnMessage> returnMessages = [];
+
+        var addMemberResult = dataRows
+            .Select(row => row[nameof(Member.Name)].ToString())
+            .Where(s => !string.IsNullOrWhiteSpace(s))
+            .Cast<string>()
+            .Select(s => new { Name = s, Duplicate = !AddMember(new Member(s)) });
+
+        var duplicateNames = addMemberResult
+            .Where(m => m.Duplicate)
+            .Select(arg => arg.Name)
+            .ToHashSet();
+        if (duplicateNames.Count > 0)
         {
-            var withMembers = csv[nameof(Member.With)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
-            var notWithMembers = csv[nameof(Member.NotWith)].Split(',', StringSplitOptions.RemoveEmptyEntries).ToList();
-            var member = new Member(name: csv[nameof(Member.Name)]);
-            member.AddWithMembers(withMembers);
-            member.AddNotWithMembers(notWithMembers);
-            AddMember(member);
+            return
+            [
+                new ReturnMessage(NotificationType.Error,
+                    string.Format(Resources.Data_LoadMembersData_DuplicateMemberNames_Error,
+                        string.Join(", ", duplicateNames)))
+            ];
+        }
+
+        var unknownMembersFound = false;
+        var withDuplicatesFound = false;
+        var notWithDuplicatesFound = false;
+        foreach (var dataRow in dataRows)
+        {
+            string memberName = dataRow[nameof(Member.Name)].ToString() ?? string.Empty;
+            if (string.IsNullOrWhiteSpace(memberName))
+            {
+                continue;
+            }
+
+            var member = Members.FirstOrDefault(member => member.Name == memberName);
+            if (member is null)
+            {
+                unknownMembersFound = true;
+                continue; //TODO add info to list of warnings in Member class
+            }
+
+            var withMembers = dataRow[nameof(Member.With)].ToString()?
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .ToList() ?? [];
+            var notWithMembers = dataRow[nameof(Member.NotWith)].ToString()
+                ?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .ToList() ?? [];
+
+            var withResult = AddWithMembers(member, withMembers); //TODO add info to list of warnings in Member class
+            var notWithResult = AddNotWithMembers(member, notWithMembers); //TODO add info to list of warnings in Member class
+
+            withDuplicatesFound = withResult.Any(tuple => !tuple.Added);
+            notWithDuplicatesFound = notWithResult.Any(tuple => !tuple.Added);
 
             foreach (var disciplineInfo in Disciplines)
             {
-                AddDisciplineRecord(member, disciplineInfo, csv[disciplineInfo.Name]);
+                AddDisciplineRecord(member, disciplineInfo,
+                    dataRow[disciplineInfo.Name].ToString() ?? string.Empty);
             }
         }
+
+        if (unknownMembersFound)
+        {
+            returnMessages.Add(new ReturnMessage(NotificationType.Warning,
+                Resources.Data_LoadMembersData_UnknownMemberInConstarins_Warning));
+        }
+
+        if (withDuplicatesFound || notWithDuplicatesFound)
+        {
+            returnMessages.Add(new ReturnMessage(NotificationType.Warning,
+                Resources.Data_LoadMembersData_DuplicateMembersInConstarins_Warning));
+        }
+
+        return returnMessages;
     }
 
     public void WriteTeamsToCsv(string path)

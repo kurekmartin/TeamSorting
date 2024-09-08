@@ -8,7 +8,8 @@
              xmlns:viewModel="clr-namespace:TeamSorting.ViewModels"
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:lang="clr-namespace:TeamSorting.Lang"
-             xmlns:converter="clr-namespace:TeamSorting.Converters">
+             xmlns:converter="clr-namespace:TeamSorting.Converters"
+             xmlns:models="clr-namespace:TeamSorting.Models">
     <UserControl.Resources>
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
         <converter:EnumDisplayNameConvertor x:Key="EnumDisplayNameConvertor" />
@@ -118,10 +119,13 @@
                                 <Button i:Attached.Icon="mdi-plus">
                                     <Button.Flyout>
                                         <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
-                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
+                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}">
                                             <MenuFlyout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <MenuItem Header="{Binding}"
+                                                    <DataTemplate.DataType>
+                                                        <x:Type TypeName="models:Member"></x:Type>
+                                                    </DataTemplate.DataType>
+                                                    <MenuItem Header="{Binding Name}"
                                                               Click="AddWithMemberMenuItem_OnClick" />
                                                 </DataTemplate>
                                             </MenuFlyout.ItemTemplate>
@@ -146,7 +150,7 @@
                                                             Padding="2"
                                                             Margin="0,0,3,0"
                                                             Click="RemoveWithMemberButton_OnClick" />
-                                                    <TextBlock Text="{Binding}"
+                                                    <TextBlock Text="{Binding Name}"
                                                                VerticalAlignment="Center" />
                                                 </StackPanel>
                                             </Border>
@@ -164,10 +168,13 @@
                                 <Button i:Attached.Icon="mdi-plus">
                                     <Button.Flyout>
                                         <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
-                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMemberNames}">
+                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}">
                                             <MenuFlyout.ItemTemplate>
                                                 <DataTemplate>
-                                                    <MenuItem Header="{Binding}"
+                                                    <DataTemplate.DataType>
+                                                        <x:Type TypeName="models:Member"></x:Type>
+                                                    </DataTemplate.DataType>
+                                                    <MenuItem Header="{Binding Name}"
                                                               Click="AddNotWithMemberMenuItem_OnClick" />
                                                 </DataTemplate>
                                             </MenuFlyout.ItemTemplate>
@@ -192,7 +199,7 @@
                                                             Padding="2"
                                                             Margin="0,0,3,0"
                                                             Click="RemoveNotWithMemberButton_OnClick" />
-                                                    <TextBlock Text="{Binding}"
+                                                    <TextBlock Text="{Binding Name}"
                                                                VerticalAlignment="Center" />
                                                 </StackPanel>
                                             </Border>

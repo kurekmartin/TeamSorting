@@ -8,9 +8,11 @@ namespace TeamSorting.Models;
 public class Member(string name) : ReactiveObject
 {
     public string Name { get; set; } = name;
-    public ObservableCollection<string> With { get; } = [];
+    public ObservableCollection<Member> With { get; } = [];
+    //TODO add list of warnings during loading
     public Dictionary<string, bool> WithValidation => ValidateWith();
-    public ObservableCollection<string> NotWith { get; } = [];
+    public ObservableCollection<Member> NotWith { get; } = [];
+    //TODO add list of warnings during loading
     public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
@@ -47,7 +49,7 @@ public class Member(string name) : ReactiveObject
         }
     }
 
-    public void AddWithMember(string member)
+    public void AddWithMember(Member member)
     {
         if (With.Contains(member))
         {
@@ -57,20 +59,20 @@ public class Member(string name) : ReactiveObject
         With.Add(member);
     }
 
-    public void AddWithMembers(IEnumerable<string> members)
+    public void AddWithMembers(IEnumerable<Member> members)
     {
-        foreach (string member in members)
+        foreach (var member in members)
         {
             AddWithMember(member);
         }
     }
 
-    public void RemoveWithMember(string member)
+    public void RemoveWithMember(Member member)
     {
         With.Remove(member);
     }
 
-    public void AddNotWithMember(string member)
+    public void AddNotWithMember(Member member)
     {
         if (NotWith.Contains(member))
         {
@@ -80,15 +82,15 @@ public class Member(string name) : ReactiveObject
         NotWith.Add(member);
     }
 
-    public void AddNotWithMembers(IEnumerable<string> members)
+    public void AddNotWithMembers(IEnumerable<Member> members)
     {
-        foreach (string member in members)
+        foreach (Member member in members)
         {
             AddNotWithMember(member);
         }
     }
 
-    public void RemoveNotWithMember(string member)
+    public void RemoveNotWithMember(Member member)
     {
         NotWith.Remove(member);
     }
@@ -96,7 +98,7 @@ public class Member(string name) : ReactiveObject
     private Dictionary<string, bool> ValidateWith()
     {
         Dictionary<string, bool> dict = [];
-        foreach (string withMember in With)
+        foreach (string withMember in With.Select(m => m.Name))
         {
             bool value = Team?.Members.Any(member => member.Name == withMember) ?? false;
             dict.Add(withMember, value);
@@ -108,7 +110,7 @@ public class Member(string name) : ReactiveObject
     private Dictionary<string, bool> ValidateNotWith()
     {
         Dictionary<string, bool> dict = [];
-        foreach (string notWithMember in NotWith)
+        foreach (string notWithMember in NotWith.Select(m => m.Name))
         {
             bool value = Team?.Members.All(member => member.Name != notWithMember) ?? false;
             dict.Add(notWithMember, value);
