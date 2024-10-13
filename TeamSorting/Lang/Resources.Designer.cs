@@ -96,7 +96,16 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Found members with duplicate names: {0}.
+        ///   Looks up a localized string similar to Error reading value of discipline record: {0}.
+        /// </summary>
+        public static string Data_LoadMembersData_DisciplineRecord_UnknownError {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_DisciplineRecord_UnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Member with name {0} already exists..
         /// </summary>
         public static string Data_LoadMembersData_DuplicateMemberNames_Error {
             get {
@@ -114,11 +123,20 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Found unknown members in combination constrains.
+        ///   Looks up a localized string similar to Found unknown members in combination constrains: {0}.
         /// </summary>
-        public static string Data_LoadMembersData_UnknownMemberInConstarins_Warning {
+        public static string Data_LoadMembersData_UnknownMemberInConstarins_Error {
             get {
-                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Warning", resourceCulture);
+                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wrong format of discipline record value.
+        /// </summary>
+        public static string Data_LoadMembersData_WrongDisciplineRecordFormat_Error {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_WrongDisciplineRecordFormat_Error", resourceCulture);
             }
         }
         

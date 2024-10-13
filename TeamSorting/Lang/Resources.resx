@@ -139,12 +139,18 @@ Valid values: {2}</value>
 Valid values: {2}</value>
     </data>
     <data name="Data_LoadMembersData_DuplicateMemberNames_Error" xml:space="preserve">
-        <value>Found members with duplicate names: {0}</value>
+        <value>Member with name {0} already exists.</value>
     </data>
-    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Warning" xml:space="preserve">
-        <value>Found unknown members in combination constrains</value>
+    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Error" xml:space="preserve">
+        <value>Found unknown members in combination constrains: {0}</value>
     </data>
     <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">
         <value>Found duplicate members in combination constrains</value>
+    </data>
+    <data name="Data_LoadMembersData_WrongDisciplineRecordFormat_Error" xml:space="preserve">
+        <value>Wrong format of discipline record value</value>
+    </data>
+    <data name="Data_LoadMembersData_DisciplineRecord_UnknownError" xml:space="preserve">
+        <value>Error reading value of discipline record: {0}</value>
     </data>
 </root>

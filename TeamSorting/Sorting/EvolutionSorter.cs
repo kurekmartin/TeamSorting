@@ -158,7 +158,7 @@ public class EvolutionSorter : ISorter
     private static List<List<Member>> CrossMembers(List<Member> parent1, List<Member> parent2)
     {
         int startIndex = parent1.Count / 3;
-        int endIndex = (startIndex * 2) + 1;
+        int endIndex = startIndex * 2 + 1;
         if (parent1.Count % 3 == 0)
         {
             endIndex--;

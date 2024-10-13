@@ -96,7 +96,16 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nalezeni členové s duplicitními jmény: {0}.
+        ///   Looks up a localized string similar to Chyba čtení hodnoty záznamu disciplíny.
+        /// </summary>
+        public static string Data_LoadMembersData_DisciplineRecord_UnknownError {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_DisciplineRecord_UnknownError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Člen se jménem {0} již existuje..
         /// </summary>
         public static string Data_LoadMembersData_DuplicateMemberNames_Error {
             get {
@@ -114,11 +123,20 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nalezen neznámý člen v podmínkách kombinací členů.
+        ///   Looks up a localized string similar to Nalezeni neznámí členové v podmínkách kombinací členů: {0}.
         /// </summary>
-        public static string Data_LoadMembersData_UnknownMemberInConstarins_Warning {
+        public static string Data_LoadMembersData_UnknownMemberInConstarins_Error {
             get {
-                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Warning", resourceCulture);
+                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chybný formát hodnoty záznamu disciplíny.
+        /// </summary>
+        public static string Data_LoadMembersData_WrongDisciplineRecordFormat_Error {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_WrongDisciplineRecordFormat_Error", resourceCulture);
             }
         }
         

@@ -129,7 +129,7 @@ public class Member(string name) : ReactiveObject
         return Records.Values.ToList();
     }
 
-    public void AddDisciplineRecord(DisciplineInfo discipline, string value)
+    public DisciplineRecord AddDisciplineRecord(DisciplineInfo discipline, string value)
     {
         if (Records.TryGetValue(discipline.Id, out var record))
         {
@@ -138,6 +138,7 @@ public class Member(string name) : ReactiveObject
 
         record = new DisciplineRecord(this, discipline, value);
         Records.Add(discipline.Id, record);
+        return record;
     }
 
     public void RemoveDisciplineRecord(Guid recordId)

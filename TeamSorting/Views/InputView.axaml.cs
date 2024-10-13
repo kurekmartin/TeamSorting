@@ -82,10 +82,11 @@ public partial class InputView : UserControl
         if (file.Count <= 0) return;
         await using var stream = await file[0].OpenReadAsync();
         using var streamReader = new StreamReader(stream);
-        var returnMessageList = context.Data.LoadFromFile(streamReader);
-        foreach (var message in returnMessageList)
+        var loadDataErrors = context.Data.LoadFromFile(streamReader);
+        if (loadDataErrors.Count != 0)
         {
-            _notificationManager?.Show(message.Message, message.NotificationType, TimeSpan.Zero);
+            var orderedErrors = loadDataErrors.OrderBy(error => error.Row).ThenBy(error => error.Column);
+            //TODO show errors
         }
 
         AddDisciplinesToDataGrid();

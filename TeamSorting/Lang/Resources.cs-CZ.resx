@@ -136,12 +136,18 @@ Platné hodnoty: {2}</value>
 Platné hodnoty: {2}</value>
     </data>
     <data name="Data_LoadMembersData_DuplicateMemberNames_Error" xml:space="preserve">
-        <value>Nalezeni členové s duplicitními jmény: {0}</value>
+        <value>Člen se jménem {0} již existuje.</value>
     </data>
     <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">
         <value>Nalezen duplicitní člen v podmínkách kombinací členů</value>
     </data>
-    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Warning" xml:space="preserve">
-        <value>Nalezen neznámý člen v podmínkách kombinací členů</value>
+    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Error" xml:space="preserve">
+        <value>Nalezeni neznámí členové v podmínkách kombinací členů: {0}</value>
+    </data>
+    <data name="Data_LoadMembersData_WrongDisciplineRecordFormat_Error" xml:space="preserve">
+        <value>Chybný formát hodnoty záznamu disciplíny</value>
+    </data>
+    <data name="Data_LoadMembersData_DisciplineRecord_UnknownError" xml:space="preserve">
+        <value>Chyba čtení hodnoty záznamu disciplíny</value>
     </data>
 </root>

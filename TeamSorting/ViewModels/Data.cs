@@ -6,8 +6,10 @@ using Avalonia.Controls.Notifications;
 using CsvHelper;
 using ReactiveUI;
 using TeamSorting.Enums;
+using TeamSorting.Extensions;
 using TeamSorting.Lang;
 using TeamSorting.Models;
+using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
@@ -203,7 +205,7 @@ public class Data : ReactiveObject
         int min = discipline.SortOrder == SortOrder.Asc ? 0 : 100;
         int max = discipline.SortOrder == SortOrder.Asc ? 100 : 0;
         double value = member.GetRecord(discipline).DoubleValue;
-        return (((value - range.min) / (range.max - range.min)) * (max - min)) + min;
+        return (value - range.min) / (range.max - range.min) * (max - min) + min;
     }
 
     public IEnumerable<DisciplineRecord> GetSortedRecordsByDiscipline(DisciplineInfo discipline)
@@ -318,11 +320,11 @@ public class Data : ReactiveObject
         return Members.SelectMany(member => member.Records.Values);
     }
 
-    public bool AddDisciplineRecord(Member member, DisciplineInfo discipline, string value)
+    public DisciplineRecord? AddDisciplineRecord(Member member, DisciplineInfo discipline, string value)
     {
-        if (!Members.Contains(member) || !Disciplines.Contains(discipline)) return false;
-        member.AddDisciplineRecord(discipline, value);
-        return true;
+        if (!Members.Contains(member) || !Disciplines.Contains(discipline)) return null;
+        var record = member.AddDisciplineRecord(discipline, value);
+        return record;
     }
 
 
@@ -402,9 +404,9 @@ public class Data : ReactiveObject
 
     #region CSV
 
-    public List<ReturnMessage> LoadFromFile(StreamReader inputFile)
+    public List<CsvError> LoadFromFile(StreamReader inputFile)
     {
-        List<ReturnMessage> returnMessages = [];
+        List<CsvError> csvErrors = [];
         ClearData();
         using var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
 
@@ -412,92 +414,36 @@ public class Data : ReactiveObject
         var dataTable = new DataTable();
         dataTable.Load(dataReader);
 
-        //TODO check required columns
         //TODO check minimum rows (2)
 
-        var csvHeaderResult = ValidateCsvHeader(csv);
-        if (csvHeaderResult?.NotificationType == NotificationType.Error)
+        var headerErrors = CsvUtil.CheckHeader(csv);
+        if (headerErrors.Count != 0)
         {
-            return [csvHeaderResult];
+            csvErrors.AddRange(headerErrors);
+            return csvErrors;
         }
 
-        var loadDisciplinesResult = LoadDisciplinesInfo(dataTable);
-        if (loadDisciplinesResult?.NotificationType == NotificationType.Error)
-        {
-            ClearData();
-            loadDisciplinesResult.Message = $"{Resources.Data_LoadFromFile_Error}\n{loadDisciplinesResult.Message}";
-            return [loadDisciplinesResult];
-        }
+        var loadDisciplinesErrors = LoadDisciplinesInfo(dataTable);
+        //disciplines with wrong data types or sort types are not added
+        csvErrors.AddRange(loadDisciplinesErrors);
 
         var dataRows = dataTable.AsEnumerable();
 
-        List<ReturnMessage> loadMembersResult = [];
         try
         {
-            loadMembersResult = LoadMembersData(dataRows.Skip(2).ToList());
+            csvErrors.AddRange(LoadMembersData(dataRows.Skip(2).ToList()));
         }
         catch (Exception e)
         {
-            ClearData();
-            return
-            [
-                new ReturnMessage(NotificationType.Error,
-                    $"{Resources.Data_LoadFromFile_Error}\n{e.Message}")
-            ];
+            csvErrors.Add(new CsvError(Resources.Data_LoadFromFile_Error + ": " + e.Message));
         }
 
-        if (loadMembersResult.Any(message => message.NotificationType == NotificationType.Error))
+        if (csvErrors.Count != 0)
         {
             ClearData();
-            var message = loadMembersResult.First(msg => msg.NotificationType == NotificationType.Error);
-            message.Message = $"{Resources.Data_LoadFromFile_Error}\n{message.Message}";
-            return [message];
         }
 
-        if (returnMessages.Count == 0)
-        {
-            return [new ReturnMessage(NotificationType.Success, Resources.Data_LoadFromFile_Success)];
-        }
-
-        return returnMessages;
-    }
-
-    private static ReturnMessage? ValidateCsvHeader(CsvReader csv)
-    {
-        List<string> missingFields = [];
-        if (!csv.HeaderRecord.Contains(nameof(Member.Name)))
-        {
-            missingFields.Add(nameof(Member.Name));
-        }
-
-        if (!csv.HeaderRecord.Contains(nameof(Member.With)))
-        {
-            missingFields.Add(nameof(Member.With));
-        }
-
-        if (!csv.HeaderRecord.Contains(nameof(Member.NotWith)))
-        {
-            missingFields.Add(nameof(Member.NotWith));
-        }
-
-        if (missingFields.Count > 0)
-        {
-            return new ReturnMessage(NotificationType.Error,
-                Resources.Data_ValidateCsvHeader_MissingColumns_Error + string.Join('\n', missingFields));
-        }
-
-        var duplicateColumns = csv.HeaderRecord.GroupBy(x => x)
-            .Where(g => g.Count() > 1)
-            .Select(g => g.Key)
-            .ToList();
-
-        if (duplicateColumns.Count > 0)
-        {
-            return new ReturnMessage(NotificationType.Error,
-                Resources.Data_ValidateCsvHeader_DuplicateColumns_Error + string.Join('\n', duplicateColumns));
-        }
-
-        return null;
+        return csvErrors;
     }
 
     private void ClearData()
@@ -507,211 +453,154 @@ public class Data : ReactiveObject
         Teams.Clear();
     }
 
-    private ReturnMessage? LoadDisciplinesInfo(DataTable dataTable)
+    /// <summary>
+    /// Warning: Disciplines with wrong <see cref="DisciplineDataType"/> or <see cref="SortOrder"/> are not added.
+    /// </summary>
+    /// <param name="dataTable"></param>
+    /// <returns></returns>
+    private List<CsvError> LoadDisciplinesInfo(DataTable dataTable)
     {
+        List<CsvError> errors = [];
         foreach (DataColumn column in dataTable.Columns)
         {
-            if (!IsDisciplineColumn(column))
+            if (!CsvUtil.IsDisciplineColumn(column))
             {
                 continue;
             }
 
             var discipline = new DisciplineInfo(column.ColumnName);
-            var dataTypeResult = ReadDisciplineDataType(discipline, dataTable);
-            if (dataTypeResult?.NotificationType == NotificationType.Error)
+            var dataTypeError = CsvUtil.ReadDisciplineDataType(discipline, dataTable);
+            if (dataTypeError is not null)
             {
-                return dataTypeResult;
+                errors.Add(dataTypeError);
             }
 
-            var sortTypeResult = ReadDisciplineSortType(discipline, dataTable);
-            if (sortTypeResult?.NotificationType == NotificationType.Error)
+            var sortTypeError = CsvUtil.ReadDisciplineSortType(discipline, dataTable);
+            if (sortTypeError is not null)
             {
-                return sortTypeResult;
+                errors.Add(sortTypeError);
             }
 
-            AddDiscipline(discipline);
+            if (dataTypeError is null && sortTypeError is null)
+            {
+                AddDiscipline(discipline);
+            }
         }
 
-        return null;
+        return errors;
     }
 
-    private readonly HashSet<string> _staticColumnNames =
-        [nameof(Member.Name), nameof(Member.With), nameof(Member.NotWith)];
-
-    private bool IsDisciplineColumn(DataColumn column)
+    private List<CsvError> LoadMembersData(IList<DataRow> dataRows)
     {
-        return !_staticColumnNames.Contains(column.ColumnName);
-    }
+        List<CsvError> errors = [];
 
-    private static ReturnMessage? ReadDisciplineDataType(DisciplineInfo discipline, DataTable dataTable)
-    {
-        string value = dataTable.Rows[0][discipline.Name].ToString() ?? string.Empty;
-        try
-        {
-            discipline.DataType = Enum.Parse<DisciplineDataType>(value);
-        }
-        catch (ArgumentException)
-        {
-            return new ReturnMessage(NotificationType.Error,
-                string.Format(Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error, value,
-                    discipline.Name, string.Join(", ", Enum.GetValues<DisciplineDataType>())));
-        }
-        catch (Exception ex)
-        {
-            return new ReturnMessage(NotificationType.Error,
-                string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
-        }
-
-        return null;
-    }
-
-    private static ReturnMessage? ReadDisciplineDataTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
-    {
-        foreach (var discipline in disciplines)
-        {
-            string? value = csv[discipline.Name];
-            try
-            {
-                discipline.DataType = Enum.Parse<DisciplineDataType>(value);
-            }
-            catch (ArgumentException)
-            {
-                return new ReturnMessage(NotificationType.Error,
-                    string.Format(Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error, value,
-                        discipline.Name, string.Join(", ", Enum.GetValues<DisciplineDataType>())));
-            }
-            catch (Exception ex)
-            {
-                return new ReturnMessage(NotificationType.Error,
-                    string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
-            }
-        }
-
-        return null;
-    }
-
-    private static ReturnMessage? ReadDisciplineSortType(DisciplineInfo discipline, DataTable dataTable)
-    {
-        string value = dataTable.Rows[1][discipline.Name].ToString() ?? string.Empty;
-        try
-        {
-            discipline.SortOrder = Enum.Parse<SortOrder>(value);
-        }
-        catch (ArgumentException)
-        {
-            return new ReturnMessage(NotificationType.Error,
-                string.Format(Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error, value,
-                    discipline.Name, string.Join(", ", Enum.GetValues<DisciplineDataType>())));
-        }
-        catch (Exception ex)
-        {
-            return new ReturnMessage(NotificationType.Error,
-                string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
-        }
-
-        return null;
-    }
-
-    private static ReturnMessage? ReadDisciplineSortTypes(IEnumerable<DisciplineInfo> disciplines, CsvReader csv)
-    {
-        foreach (var discipline in disciplines)
-        {
-            string value = csv[discipline.Name];
-            try
-            {
-                discipline.SortOrder = Enum.Parse<SortOrder>(csv[discipline.Name]);
-            }
-            catch (ArgumentException)
-            {
-                return new ReturnMessage(NotificationType.Error,
-                    string.Format(Resources.Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error, value,
-                        discipline.Name, string.Join(", ", Enum.GetValues<SortOrder>())));
-            }
-            catch (Exception ex)
-            {
-                return new ReturnMessage(NotificationType.Error,
-                    string.Format(Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message));
-            }
-        }
-
-        return null;
-    }
-
-    private List<ReturnMessage> LoadMembersData(IList<DataRow> dataRows)
-    {
-        List<ReturnMessage> returnMessages = [];
-
-        var addMemberResult = dataRows
+        //add all members for later constrains (with/not with) check 
+        _ = dataRows
             .Select(row => row[nameof(Member.Name)].ToString())
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Cast<string>()
-            .Select(s => new { Name = s, Duplicate = !AddMember(new Member(s)) });
+            .Select(s => AddMember(new Member(s)));
 
-        var duplicateNames = addMemberResult
-            .Where(m => m.Duplicate)
-            .Select(arg => arg.Name)
-            .ToHashSet();
-        if (duplicateNames.Count > 0)
-        {
-            return
-            [
-                new ReturnMessage(NotificationType.Error,
-                    string.Format(Resources.Data_LoadMembersData_DuplicateMemberNames_Error,
-                        string.Join(", ", duplicateNames)))
-            ];
-        }
+        List<Member> processedMembers = [];
 
-        var unknownMembersFound = false;
-        var withDuplicatesFound = false;
-        var notWithDuplicatesFound = false;
-        foreach (var dataRow in dataRows)
+        for (var rowIndex = 0; rowIndex < dataRows.Count; rowIndex++)
         {
+            var dataRow = dataRows[rowIndex];
             string memberName = dataRow[nameof(Member.Name)].ToString() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(memberName))
             {
                 continue;
             }
 
-            var member = Members.FirstOrDefault(member => member.Name == memberName);
+            var member = GetMemberByName(memberName);
             if (member is null)
             {
-                unknownMembersFound = true;
-                continue; //TODO add info to list of warnings in Member class
+                member = new Member(memberName);
+                AddMember(member);
+            }
+
+            //check duplicate names
+            if (processedMembers.Contains(member))
+            {
+                errors.Add(new CsvError(
+                    string.Format(
+                        Resources.Data_LoadMembersData_DuplicateMemberNames_Error,
+                        memberName),
+                    rowNumber: rowIndex + 1,
+                    columnNumber: dataRow.GetColumnIndex(nameof(Member.Name)) + 1
+                ));
+                continue;
             }
 
             var withMembers = dataRow[nameof(Member.With)].ToString()?
-                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Split(',', StringSplitOptions.TrimEntries)
                 .ToList() ?? [];
             var notWithMembers = dataRow[nameof(Member.NotWith)].ToString()
-                ?.Split(',', StringSplitOptions.RemoveEmptyEntries)
+                ?.Split(',', StringSplitOptions.TrimEntries)
                 .ToList() ?? [];
 
-            var withResult = AddWithMembers(member, withMembers); //TODO add info to list of warnings in Member class
-            var notWithResult = AddNotWithMembers(member, notWithMembers); //TODO add info to list of warnings in Member class
+            var unknownWithMembers = AddWithMembers(member, withMembers)
+                .Where(result => !result.Added)
+                .ToList();
+            //TODO add warning if duplicate members are found
+            if (unknownWithMembers.Count != 0)
+            {
+                errors.Add(new CsvError(
+                    string.Format(
+                        Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
+                        string.Join(", ", unknownWithMembers)),
+                    rowNumber: rowIndex + 1,
+                    columnNumber: dataRow.GetColumnIndex(nameof(Member.With)) + 1
+                ));
+            }
 
-            withDuplicatesFound = withResult.Any(tuple => !tuple.Added);
-            notWithDuplicatesFound = notWithResult.Any(tuple => !tuple.Added);
+            var unknownNotWithMembers = AddNotWithMembers(member, notWithMembers)
+                .Where(result => !result.Added)
+                .ToList();
+            //TODO add warning if duplicate members are found
+            if (unknownNotWithMembers.Count != 0)
+            {
+                errors.Add(new CsvError(
+                    string.Format(
+                        Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
+                        string.Join(", ", unknownNotWithMembers)),
+                    rowNumber: rowIndex + 1,
+                    columnNumber: dataRow.GetColumnIndex(nameof(Member.NotWith)) + 1
+                ));
+            }
 
             foreach (var disciplineInfo in Disciplines)
             {
-                AddDisciplineRecord(member, disciplineInfo,
+                var record = AddDisciplineRecord(member, disciplineInfo,
                     dataRow[disciplineInfo.Name].ToString() ?? string.Empty);
+                if (record is null) continue;
+
+                try
+                {
+                    _ = record.Value;
+                }
+                catch (FormatException)
+                {
+                    errors.Add(new CsvError(
+                        Resources.Data_LoadMembersData_WrongDisciplineRecordFormat_Error,
+                        rowNumber: rowIndex + 1,
+                        columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1
+                    ));
+                }
+                catch (Exception e)
+                {
+                    errors.Add(new CsvError(
+                        string.Format(Resources.Data_LoadMembersData_DisciplineRecord_UnknownError, e.Message),
+                        rowNumber: rowIndex + 1,
+                        columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1)
+                    );
+                }
             }
+
+            processedMembers.Add(member);
         }
 
-        if (unknownMembersFound)
-        {
-            returnMessages.Add(new ReturnMessage(NotificationType.Warning,
-                Resources.Data_LoadMembersData_UnknownMemberInConstarins_Warning));
-        }
-
-        if (withDuplicatesFound || notWithDuplicatesFound)
-        {
-            returnMessages.Add(new ReturnMessage(NotificationType.Warning,
-                Resources.Data_LoadMembersData_DuplicateMembersInConstarins_Warning));
-        }
-
-        return returnMessages;
+        return errors;
     }
 
     public void WriteTeamsToCsv(string path)
