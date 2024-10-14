@@ -150,4 +150,10 @@ Platné hodnoty: {2}</value>
     <data name="Data_LoadMembersData_DisciplineRecord_UnknownError" xml:space="preserve">
         <value>Chyba čtení hodnoty záznamu disciplíny</value>
     </data>
+    <data name="CsvErrorDialog_Ok_Button" xml:space="preserve">
+        <value>Ok</value>
+    </data>
+    <data name="CsvErrorDialog_Title" xml:space="preserve">
+        <value>Chyba při načítání dat z CSV</value>
+    </data>
 </root>

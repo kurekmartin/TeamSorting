@@ -1,0 +1,54 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:lang="clr-namespace:TeamSorting.Lang"
+        xmlns:viewModels="clr-namespace:TeamSorting.ViewModels"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="TeamSorting.Views.CsvErrorDialog"
+        x:DataType="viewModels:CsvErrorViewModel"
+        Title="CsvErrorList"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="SystemChrome"
+        WindowStartupLocation="CenterOwner"
+        SizeToContent="WidthAndHeight"
+        SystemDecorations="BorderOnly"
+        CanResize="False">
+
+    <DockPanel Margin="30">
+        <TextBlock Name="Message"
+                   Text="{x:Static lang:Resources.CsvErrorDialog_Title}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Stretch"
+                   TextWrapping="Wrap"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   MaxWidth="300"
+                   Margin="0,0,0,20"
+                   DockPanel.Dock="Top" />
+        <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                      DockPanel.Dock="Top">
+            <ItemsControl ItemsSource="{Binding OrderedErrors}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="5">
+                            <TextBlock Text="{Binding Row}" />
+                            <TextBlock Text="{Binding Column}" />
+                            <TextBlock Text="{Binding Message}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        <DockPanel DockPanel.Dock="Bottom"
+                   VerticalAlignment="Bottom">
+            <Button Name="OkButton"
+                    Margin="10,0,0,0"
+                    Click="OkButton_OnClick"
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Right"
+                    Content="{x:Static lang:Resources.CsvErrorDialog_Ok_Button}" />
+        </DockPanel>
+    </DockPanel>
+</Window>

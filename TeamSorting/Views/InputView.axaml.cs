@@ -85,8 +85,12 @@ public partial class InputView : UserControl
         var loadDataErrors = context.Data.LoadFromFile(streamReader);
         if (loadDataErrors.Count != 0)
         {
-            var orderedErrors = loadDataErrors.OrderBy(error => error.Row).ThenBy(error => error.Column);
-            //TODO show errors
+            var window = TopLevel.GetTopLevel(this);
+            if (window is MainWindow { DataContext: MainWindowViewModel } mainWindow)
+            {
+                var dialog = new CsvErrorDialog { DataContext = new CsvErrorViewModel(loadDataErrors) };
+                await dialog.ShowDialog(mainWindow);
+            }
         }
 
         AddDisciplinesToDataGrid();

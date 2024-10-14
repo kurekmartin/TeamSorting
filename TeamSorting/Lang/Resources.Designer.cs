@@ -78,6 +78,24 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ok.
+        /// </summary>
+        public static string CsvErrorDialog_Ok_Button {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Ok_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error loading data from CSV.
+        /// </summary>
+        public static string CsvErrorDialog_Title {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error reading data from file.
         /// </summary>
         public static string Data_LoadFromFile_Error {

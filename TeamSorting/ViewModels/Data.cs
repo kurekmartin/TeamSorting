@@ -499,7 +499,8 @@ public class Data : ReactiveObject
             .Select(row => row[nameof(Member.Name)].ToString())
             .Where(s => !string.IsNullOrWhiteSpace(s))
             .Cast<string>()
-            .Select(s => AddMember(new Member(s)));
+            .Select(s => AddMember(new Member(s)))
+            .ToList();
 
         List<Member> processedMembers = [];
 
@@ -533,10 +534,10 @@ public class Data : ReactiveObject
             }
 
             var withMembers = dataRow[nameof(Member.With)].ToString()?
-                .Split(',', StringSplitOptions.TrimEntries)
+                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                 .ToList() ?? [];
             var notWithMembers = dataRow[nameof(Member.NotWith)].ToString()
-                ?.Split(',', StringSplitOptions.TrimEntries)
+                ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
                 .ToList() ?? [];
 
             var unknownWithMembers = AddWithMembers(member, withMembers)
@@ -548,7 +549,7 @@ public class Data : ReactiveObject
                 errors.Add(new CsvError(
                     string.Format(
                         Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
-                        string.Join(", ", unknownWithMembers)),
+                        string.Join(", ", unknownWithMembers.Select(tuple => tuple.Name))),
                     rowNumber: rowIndex + 1,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.With)) + 1
                 ));
@@ -563,7 +564,7 @@ public class Data : ReactiveObject
                 errors.Add(new CsvError(
                     string.Format(
                         Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
-                        string.Join(", ", unknownNotWithMembers)),
+                        string.Join(", ", unknownNotWithMembers.Select(tuple => tuple.Name))),
                     rowNumber: rowIndex + 1,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.NotWith)) + 1
                 ));
