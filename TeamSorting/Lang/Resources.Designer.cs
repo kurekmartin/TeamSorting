@@ -78,6 +78,33 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Column.
+        /// </summary>
+        public static string CsvErrorDialog_Grid_ColumnNumber_Header {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Grid_ColumnNumber_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error.
+        /// </summary>
+        public static string CsvErrorDialog_Grid_Error_Header {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Grid_Error_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Row.
+        /// </summary>
+        public static string CsvErrorDialog_Grid_RowNumber_Header {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Grid_RowNumber_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string CsvErrorDialog_Ok_Button {

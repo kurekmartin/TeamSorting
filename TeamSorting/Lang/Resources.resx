@@ -160,4 +160,13 @@ Valid values: {2}</value>
     <data name="Data_LoadMembersData_EmptyMemberName_Error" xml:space="preserve">
         <value>Found empty member name.</value>
     </data>
+    <data name="CsvErrorDialog_Grid_RowNumber_Header" xml:space="preserve">
+        <value>Row</value>
+    </data>
+    <data name="CsvErrorDialog_Grid_ColumnNumber_Header" xml:space="preserve">
+        <value>Column</value>
+    </data>
+    <data name="CsvErrorDialog_Grid_Error_Header" xml:space="preserve">
+        <value>Error</value>
+    </data>
 </root>

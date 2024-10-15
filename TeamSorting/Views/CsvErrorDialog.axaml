@@ -26,21 +26,22 @@
                    MaxWidth="300"
                    Margin="0,0,0,20"
                    DockPanel.Dock="Top" />
-        <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                      DockPanel.Dock="Top">
-            <ItemsControl ItemsSource="{Binding OrderedErrors}">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal"
-                                    Spacing="5">
-                            <TextBlock Text="{Binding Row}" />
-                            <TextBlock Text="{Binding Column}" />
-                            <TextBlock Text="{Binding Message}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+        <DataGrid ItemsSource="{Binding OrderedErrors}"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="False"
+                  DockPanel.Dock="Top"
+                  IsEnabled="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_RowNumber_Header}"
+                                    Binding="{Binding Row}"/>
+                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_ColumnNumber_Header}"
+                                    Binding="{Binding Column}"/>
+                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_Error_Header}"
+                                    Binding="{Binding Message}"/>
+            </DataGrid.Columns>
+        </DataGrid>
         <DockPanel DockPanel.Dock="Bottom"
                    VerticalAlignment="Bottom">
             <Button Name="OkButton"

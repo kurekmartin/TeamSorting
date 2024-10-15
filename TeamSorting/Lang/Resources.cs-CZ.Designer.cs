@@ -78,6 +78,24 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sloupec.
+        /// </summary>
+        public static string CsvErrorDialog_Grid_ColumnNumber_Header {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Grid_ColumnNumber_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Řádek.
+        /// </summary>
+        public static string CsvErrorDialog_Grid_RowNumber_Header {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Grid_RowNumber_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string CsvErrorDialog_Ok_Button {
