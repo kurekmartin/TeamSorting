@@ -156,4 +156,7 @@ Platné hodnoty: {2}</value>
     <data name="Data_LoadMembersData_EmptyMemberName_Error" xml:space="preserve">
         <value>Nalezeno prázné jméno.</value>
     </data>
+    <data name="CsvErrorDialog_Title" xml:space="preserve">
+        <value>Chyba při načítání dat z CSV</value>
+    </data>
 </root>
