@@ -127,10 +127,10 @@ public static class CsvUtil
         catch (ArgumentException)
         {
             return new CsvError(string.Format(
-                    Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error,
+                    Resources.Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error,
                     value,
                     discipline.Name,
-                    string.Join(", ", Enum.GetValues<DisciplineDataType>())),
+                    string.Join(", ", Enum.GetValues<SortOrder>())),
                 rowNumber: 2,
                 columnNumber: column + 1);
         }
