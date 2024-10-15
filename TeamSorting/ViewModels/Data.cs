@@ -531,7 +531,7 @@ public class Data : ReactiveObject
                     string.Format(
                         Resources.Data_LoadMembersData_DuplicateMemberNames_Error,
                         memberName),
-                    rowNumber: rowIndex + 1,
+                    rowNumber: rowIndex + 3,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.Name)) + 1
                 ));
                 continue;
@@ -554,7 +554,7 @@ public class Data : ReactiveObject
                     string.Format(
                         Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
                         string.Join(", ", unknownWithMembers.Select(tuple => tuple.Name))),
-                    rowNumber: rowIndex + 1,
+                    rowNumber: rowIndex + 3,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.With)) + 1
                 ));
             }
@@ -569,7 +569,7 @@ public class Data : ReactiveObject
                     string.Format(
                         Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
                         string.Join(", ", unknownNotWithMembers.Select(tuple => tuple.Name))),
-                    rowNumber: rowIndex + 1,
+                    rowNumber: rowIndex + 3,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.NotWith)) + 1
                 ));
             }
@@ -588,7 +588,7 @@ public class Data : ReactiveObject
                 {
                     errors.Add(new CsvError(
                         Resources.Data_LoadMembersData_WrongDisciplineRecordFormat_Error,
-                        rowNumber: rowIndex + 1,
+                        rowNumber: rowIndex + 3,
                         columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1
                     ));
                 }
@@ -596,7 +596,7 @@ public class Data : ReactiveObject
                 {
                     errors.Add(new CsvError(
                         string.Format(Resources.Data_LoadMembersData_DisciplineRecord_UnknownError, e.Message),
-                        rowNumber: rowIndex + 1,
+                        rowNumber: rowIndex + 3,
                         columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1)
                     );
                 }
