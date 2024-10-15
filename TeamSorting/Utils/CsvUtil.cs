@@ -59,7 +59,7 @@ public static class CsvUtil
         if (missingColumns.Count > 0)
         {
             errors.Add(new CsvError(
-                Resources.Data_ValidateCsvHeader_MissingColumns_Error + string.Join('\n', missingColumns),
+                Resources.Data_ValidateCsvHeader_MissingColumns_Error + string.Join(", ", missingColumns),
                 rowNumber: 1)
             );
         }
@@ -79,7 +79,7 @@ public static class CsvUtil
         {
             errors.Add(
                 new CsvError(
-                    Resources.Data_ValidateCsvHeader_DuplicateColumns_Error + string.Join('\n', duplicateColumns),
+                    Resources.Data_ValidateCsvHeader_DuplicateColumns_Error + string.Join(", ", duplicateColumns),
                     rowNumber: 1)
             );
         }

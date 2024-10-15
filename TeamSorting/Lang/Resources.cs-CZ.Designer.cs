@@ -206,7 +206,7 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hlavička obsahuje duplicitní sloupce:.
+        ///   Looks up a localized string similar to Hlavička obsahuje duplicitní sloupce: .
         /// </summary>
         public static string Data_ValidateCsvHeader_DuplicateColumns_Error {
             get {
@@ -215,7 +215,7 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Hlavička neobsahuje následující sloupce:.
+        ///   Looks up a localized string similar to Hlavička neobsahuje následující sloupce: .
         /// </summary>
         public static string Data_ValidateCsvHeader_MissingColumns_Error {
             get {

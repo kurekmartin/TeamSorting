@@ -119,12 +119,10 @@ Do you want to continue?</value>
         <value>Successfully loaded data from file</value>
     </data>
     <data name="Data_ValidateCsvHeader_MissingColumns_Error" xml:space="preserve">
-        <value>Header doesn't contain columns:
-</value>
+        <value>Header doesn't contain columns: </value>
     </data>
     <data name="Data_ValidateCsvHeader_DuplicateColumns_Error" xml:space="preserve">
-        <value>Header contains duplicate columns:
-</value>
+        <value>Header contains duplicate columns: </value>
     </data>
     <data name="Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error" xml:space="preserve">
         <value>Unknown data type '{0}' for discipline '{1}'

@@ -207,8 +207,7 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Header contains duplicate columns:
-        ///.
+        ///   Looks up a localized string similar to Header contains duplicate columns: .
         /// </summary>
         public static string Data_ValidateCsvHeader_DuplicateColumns_Error {
             get {
@@ -217,8 +216,7 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Header doesn&apos;t contain columns:
-        ///.
+        ///   Looks up a localized string similar to Header doesn&apos;t contain columns: .
         /// </summary>
         public static string Data_ValidateCsvHeader_MissingColumns_Error {
             get {

@@ -119,10 +119,10 @@ Chcete pokračovat?</value>
         <value>Data ze souboru úspěšně načtena</value>
     </data>
     <data name="Data_ValidateCsvHeader_MissingColumns_Error" xml:space="preserve">
-        <value>Hlavička neobsahuje následující sloupce:</value>
+        <value>Hlavička neobsahuje následující sloupce: </value>
     </data>
     <data name="Data_ValidateCsvHeader_DuplicateColumns_Error" xml:space="preserve">
-        <value>Hlavička obsahuje duplicitní sloupce:</value>
+        <value>Hlavička obsahuje duplicitní sloupce: </value>
     </data>
     <data name="Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error" xml:space="preserve">
         <value>Neznámý datový typ '{0}' disciplíny '{1}'
