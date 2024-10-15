@@ -38,7 +38,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
                     : TimeSpan.Parse(RawValue, CultureInfo.InvariantCulture),
                 DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
                     ? 0d
-                    : double.Parse(RawValue, CultureInfo.InvariantCulture),
+                    : decimal.Parse(RawValue, CultureInfo.InvariantCulture),
                 _ => throw new FormatException()
             };
 
@@ -47,11 +47,11 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
         }
     }
 
-    public double DoubleValue =>
+    public decimal DecimalValue =>
         DisciplineInfo.DataType switch
         {
-            DisciplineDataType.Time => ((TimeSpan)Value).TotalSeconds,
-            DisciplineDataType.Number => (double)Value,
+            DisciplineDataType.Time => (decimal)((TimeSpan)Value).TotalSeconds,
+            DisciplineDataType.Number => (decimal)Value,
             _ => throw new FormatException()
         };
 }

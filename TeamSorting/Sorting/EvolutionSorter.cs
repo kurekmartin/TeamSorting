@@ -14,6 +14,7 @@ public class EvolutionSorter : ISorter
     private const float CrossSelection = 0.5f;
     private const float ChanceOfMutation = 0.2f;
     private const float PreserveBestResults = 0.1f;
+    private const int InvalidSolutionPenalty = 100000;
 
     public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, string? seed = null)
     {
@@ -60,13 +61,13 @@ public class EvolutionSorter : ISorter
         return (ListToTeams(finalGeneration.First().Key, teamSizes), seed);
     }
 
-    private static void LogGenerationStats(Dictionary<List<Member>, double> generationScores, int generationNumber)
+    private static void LogGenerationStats(Dictionary<List<Member>, decimal> generationScores, int generationNumber)
     {
         int count = generationScores.Count;
-        double min = generationScores.Values.Min();
-        double max = generationScores.Values.Max();
-        double avg = generationScores.Values.Average();
-        double mean = generationScores.Values.ElementAt(count / 2);
+        decimal min = generationScores.Values.Min();
+        decimal max = generationScores.Values.Max();
+        decimal avg = generationScores.Values.Average();
+        decimal mean = generationScores.Values.ElementAt(count / 2);
         Log.Information(
             "Generation number {num} - count: {count} - min: {min} - max: {max} - avg: {avg} - mean: {mean}",
             generationNumber, count, min, max, avg, mean);
@@ -93,18 +94,19 @@ public class EvolutionSorter : ISorter
         return newList;
     }
 
-    private static double SolutionScore(List<Member> members, List<int> teamSizes)
+    private static decimal SolutionScore(List<Member> members, List<int> teamSizes)
     {
         int numberOfTeams = teamSizes.Count;
-        double score = 0;
-        Dictionary<DisciplineInfo, List<double>> teamsDisciplineScores = [];
+        decimal score = 0;
+        Dictionary<DisciplineInfo, List<decimal>> teamsDisciplineScores = [];
         var startIndex = 0;
         foreach (int teamSize in teamSizes)
         {
             var team = members.Skip(startIndex).Take(teamSize).ToList();
-            if (!Team.ValidateMemberList(team))
+            int invalidMemberCount = Team.InvalidMemberCount(team);
+            if (invalidMemberCount > 0)
             {
-                score = double.MaxValue / numberOfTeams;
+                score = ((decimal)InvalidSolutionPenalty / numberOfTeams) * invalidMemberCount;
                 return score;
             }
 
@@ -126,19 +128,19 @@ public class EvolutionSorter : ISorter
 
         foreach (var disciplineScore in teamsDisciplineScores)
         {
-            double min = disciplineScore.Value.Min();
-            double max = disciplineScore.Value.Max();
-            score += double.Abs(min - max);
+            decimal min = disciplineScore.Value.Min();
+            decimal max = disciplineScore.Value.Max();
+            score += decimal.Abs(min - max);
         }
 
         return score;
     }
 
-    private static Dictionary<DisciplineInfo, double> AverageScoreByDiscipline(List<Member> members)
+    private static Dictionary<DisciplineInfo, decimal> AverageScoreByDiscipline(List<Member> members)
     {
         return members.SelectMany(member => member.Records.Values)
             .GroupBy(record => record.DisciplineInfo)
-            .ToDictionary(g => g.Key, g => g.Sum(record => record.DoubleValue) / members.Count);
+            .ToDictionary(g => g.Key, g => g.Sum(record => record.DecimalValue) / members.Count);
     }
 
     private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren, Random random)

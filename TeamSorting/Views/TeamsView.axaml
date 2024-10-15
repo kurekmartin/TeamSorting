@@ -81,7 +81,7 @@
                         <DataTemplate>
                             <DataTemplate.DataType>
                                 <x:Type TypeName="generic:KeyValuePair"
-                                        x:TypeArguments="models:DisciplineInfo,x:Double" />
+                                        x:TypeArguments="models:DisciplineInfo,x:Decimal" />
                             </DataTemplate.DataType>
                             <DockPanel Margin="0,0,0,2">
                                 <controls:IconRadioButton DockPanel.Dock="Left"
@@ -170,7 +170,7 @@
                                         <DataTemplate>
                                             <DataTemplate.DataType>
                                                 <x:Type TypeName="generic:KeyValuePair"
-                                                        x:TypeArguments="models:DisciplineInfo,x:Double" />
+                                                        x:TypeArguments="models:DisciplineInfo,x:Decimal" />
                                             </DataTemplate.DataType>
                                             <DockPanel Margin="0,0,0,2">
                                                 <TextBlock Text="{Binding Key.Name}"

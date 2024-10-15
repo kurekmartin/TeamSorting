@@ -59,7 +59,7 @@ public class Team : ReactiveObject
                     member.Records
                         .First(record =>
                             record.Key == SortCriteria.Discipline.Id)
-                        .Value.DoubleValue);
+                        .Value.DecimalValue);
             }
 
             if (SortCriteria.Discipline is null)
@@ -71,7 +71,7 @@ public class Team : ReactiveObject
                 member.Records
                     .First(record =>
                         record.Key == SortCriteria.Discipline.Id)
-                    .Value.DoubleValue);
+                    .Value.DecimalValue);
         }
     }
 
@@ -102,26 +102,26 @@ public class Team : ReactiveObject
         Members.Remove(member);
     }
 
-    public Dictionary<DisciplineInfo, double> TotalScores
+    public Dictionary<DisciplineInfo, decimal> TotalScores
     {
         get
         {
             return Members.SelectMany(member => member.Records.Values)
                 .GroupBy(record => record.DisciplineInfo)
-                .ToDictionary(g => g.Key, g => Math.Round(g.Sum(record => record.DoubleValue) / Members.Count, 2));
+                .ToDictionary(g => g.Key, g => Math.Round(g.Sum(record => record.DecimalValue) / Members.Count, 2));
         }
     }
 
-    public double GetAverageValueByDiscipline(DisciplineInfo discipline)
+    public decimal GetAverageValueByDiscipline(DisciplineInfo discipline)
     {
         var records = Members.Select(member => member.GetRecord(discipline));
-        return records.Sum(record => record.DoubleValue) / Members.Count;
+        return records.Sum(record => record.DecimalValue) / Members.Count;
     }
 
-    public static bool ValidateMemberList(IEnumerable<Member> members)
+    public static int InvalidMemberCount(IEnumerable<Member> members)
     {
         var invalidMembers = GetInvalidMembers(members);
-        return invalidMembers.invalidWith.Count == 0 && invalidMembers.invalidNotWith.Count == 0;
+        return invalidMembers.invalidWith.Count + invalidMembers.invalidNotWith.Count;
     }
 
     public static (List<string> invalidWith, List<string> invalidNotWith) GetInvalidMembers(IEnumerable<Member> members)

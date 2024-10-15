@@ -35,17 +35,17 @@ public class Data : ReactiveObject
         }
     }
 
-    public Dictionary<DisciplineInfo, double> DisciplineDelta
+    public Dictionary<DisciplineInfo, decimal> DisciplineDelta
     {
         get
         {
-            var dict = new Dictionary<DisciplineInfo, double>();
+            var dict = new Dictionary<DisciplineInfo, decimal>();
             foreach (var discipline in Disciplines)
             {
                 var teamScores = Teams.Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
-                double min = teamScores.Min();
-                double max = teamScores.Max();
-                double diff = double.Abs(min - max);
+                decimal min = teamScores.Min();
+                decimal max = teamScores.Max();
+                decimal diff = decimal.Abs(min - max);
                 dict.Add(discipline, Math.Round(diff, 2));
             }
 
@@ -95,10 +95,10 @@ public class Data : ReactiveObject
         return Disciplines.FirstOrDefault(discipline => discipline.Id == id);
     }
 
-    public (double min, double max) GetDisciplineRange(DisciplineInfo discipline)
+    public (decimal min, decimal max) GetDisciplineRange(DisciplineInfo discipline)
     {
         var records = GetDisciplineRecordsByDiscipline(discipline);
-        var values = records.Select(record => record.DoubleValue).ToList();
+        var values = records.Select(record => record.DecimalValue).ToList();
 
         if (values.Count == 0)
         {
@@ -199,12 +199,12 @@ public class Data : ReactiveObject
         return Members.Where(member => names.Contains(member.Name));
     }
 
-    public double GetMemberDisciplineScore(Member member, DisciplineInfo discipline)
+    public decimal GetMemberDisciplineScore(Member member, DisciplineInfo discipline)
     {
         var range = GetDisciplineRange(discipline);
         int min = discipline.SortOrder == SortOrder.Asc ? 0 : 100;
         int max = discipline.SortOrder == SortOrder.Asc ? 100 : 0;
-        double value = member.GetRecord(discipline).DoubleValue;
+        decimal value = member.GetRecord(discipline).DecimalValue;
         return (value - range.min) / (range.max - range.min) * (max - min) + min;
     }
 
@@ -213,10 +213,10 @@ public class Data : ReactiveObject
         var records = GetDisciplineRecordsByDiscipline(discipline).ToList();
         if (discipline.SortOrder == SortOrder.Asc)
         {
-            return records.OrderBy(record => record.DoubleValue);
+            return records.OrderBy(record => record.DecimalValue);
         }
 
-        return records.OrderByDescending(record => record.DoubleValue);
+        return records.OrderByDescending(record => record.DecimalValue);
     }
 
     public Dictionary<DisciplineInfo, List<DisciplineRecord>> GetSortedDisciplines()
@@ -369,12 +369,12 @@ public class Data : ReactiveObject
         return team.Members.Remove(member);
     }
 
-    public Dictionary<Team, double> GetSortedTeamsByValueByDiscipline(DisciplineInfo discipline)
+    public Dictionary<Team, decimal> GetSortedTeamsByValueByDiscipline(DisciplineInfo discipline)
     {
-        var dict = new Dictionary<Team, double>();
+        var dict = new Dictionary<Team, decimal>();
         foreach (var team in Teams)
         {
-            double value = team.GetAverageValueByDiscipline(discipline);
+            decimal value = team.GetAverageValueByDiscipline(discipline);
             dict.Add(team, value);
         }
 
