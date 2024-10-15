@@ -141,6 +141,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Found empty member name..
+        /// </summary>
+        public static string Data_LoadMembersData_EmptyMemberName_Error {
+            get {
+                return ResourceManager.GetString("Data_LoadMembersData_EmptyMemberName_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Found unknown members in combination constrains: {0}.
         /// </summary>
         public static string Data_LoadMembersData_UnknownMemberInConstarins_Error {

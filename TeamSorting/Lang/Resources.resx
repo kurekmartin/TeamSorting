@@ -159,4 +159,7 @@ Valid values: {2}</value>
     <data name="CsvErrorDialog_Title" xml:space="preserve">
         <value>Error loading data from CSV</value>
     </data>
+    <data name="Data_LoadMembersData_EmptyMemberName_Error" xml:space="preserve">
+        <value>Found empty member name.</value>
+    </data>
 </root>

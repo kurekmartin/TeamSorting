@@ -497,7 +497,6 @@ public class Data : ReactiveObject
         //add all members for later constrains (with/not with) check 
         _ = dataRows
             .Select(row => row[nameof(Member.Name)].ToString())
-            .Where(s => !string.IsNullOrWhiteSpace(s))
             .Cast<string>()
             .Select(s => AddMember(new Member(s)))
             .ToList();
@@ -510,6 +509,11 @@ public class Data : ReactiveObject
             string memberName = dataRow[nameof(Member.Name)].ToString() ?? string.Empty;
             if (string.IsNullOrWhiteSpace(memberName))
             {
+                errors.Add(new CsvError(
+                    Resources.Data_LoadMembersData_EmptyMemberName_Error,
+                    rowNumber: rowIndex + 3,
+                    columnNumber: dataRow.GetColumnIndex(nameof(Member.Name)) + 1
+                ));
                 continue;
             }
 
