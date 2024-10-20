@@ -29,7 +29,7 @@ public class Data : ReactiveObject
             _teams = value;
             foreach (var team in _teams)
             {
-                team.WhenAnyValue(t => t.TotalScores)
+                team.WhenAnyValue(t => t.AvgScores)
                     .Subscribe(_ => this.RaisePropertyChanged(nameof(DisciplineDelta)));
             }
         }
@@ -392,11 +392,11 @@ public class Data : ReactiveObject
         return Teams;
     }
 
-    public void SortTeamsByCriteria(DisciplineInfo? disciplineInfo, SortOrder sortOrder)
+    public void SortTeamsByCriteria(MemberSortCriteria sortCriteria)
     {
         foreach (var team in Teams)
         {
-            team.SortCriteria = new MemberSortCriteria(disciplineInfo, sortOrder);
+            team.SortCriteria = sortCriteria;
         }
     }
 

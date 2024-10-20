@@ -477,6 +477,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Řazení.
+        /// </summary>
+        public static string TeamsView_Sorting_Label {
+            get {
+                return ResourceManager.GetString("TeamsView_Sorting_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tým je platný: {0}.
         /// </summary>
         public static string TeamsView_TeamIsValid_ToolTip {

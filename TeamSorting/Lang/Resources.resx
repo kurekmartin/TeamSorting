@@ -169,4 +169,7 @@ Valid values: {2}</value>
     <data name="CsvErrorDialog_Grid_Error_Header" xml:space="preserve">
         <value>Error</value>
     </data>
+    <data name="TeamsView_Sorting_Label" xml:space="preserve">
+        <value>Sorting</value>
+    </data>
 </root>

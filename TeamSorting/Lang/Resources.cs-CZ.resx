@@ -168,4 +168,7 @@ Platné hodnoty: {2}</value>
     <data name="CsvErrorDialog_Grid_Error_Header" xml:space="preserve">
         <value>Chyba</value>
     </data>
+    <data name="TeamsView_Sorting_Label" xml:space="preserve">
+        <value>Řazení</value>
+    </data>
 </root>

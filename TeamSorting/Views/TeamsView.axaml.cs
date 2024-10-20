@@ -17,6 +17,21 @@ public partial class TeamsView : UserControl
         InitializeComponent();
     }
 
+    protected override void OnInitialized()
+    {
+        if (DataContext is TeamsViewModel context)
+        {
+            var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
+
+            List<ComboBoxSortCriteria> items = [nameItem];
+            items.AddRange(context.Data.Disciplines.Select(discipline =>
+                new ComboBoxSortCriteria(discipline.Name, discipline)));
+
+            SortCriteriaComboBox.ItemsSource = items.OrderBy(criteria => criteria.DisplayText).ToList();
+            SortCriteriaComboBox.SelectedValue = nameItem;
+        }
+    }
+
     private async void Back_OnClick(object? sender, RoutedEventArgs e)
     {
         var window = TopLevel.GetTopLevel(this);
@@ -80,52 +95,6 @@ public partial class TeamsView : UserControl
         }
     }
 
-    private void AscDisciplineRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is IconRadioButton
-            {
-                IsChecked: true, DataContext: KeyValuePair<DisciplineInfo, decimal> disciplinePair
-            })
-        {
-            var discipline = disciplinePair.Key;
-            if (DataContext is TeamsViewModel context)
-            {
-                context.Data.SortTeamsByCriteria(discipline, SortOrder.Asc);
-            }
-        }
-    }
-
-    private void DescDisciplineRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is IconRadioButton
-            {
-                IsChecked: true, DataContext: KeyValuePair<DisciplineInfo, decimal> disciplinePair
-            })
-        {
-            var discipline = disciplinePair.Key;
-            if (DataContext is TeamsViewModel context)
-            {
-                context.Data.SortTeamsByCriteria(discipline, SortOrder.Desc);
-            }
-        }
-    }
-
-    private void AscNameRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is IconRadioButton { IsChecked: true } && DataContext is TeamsViewModel context)
-        {
-            context.Data.SortTeamsByCriteria(null, SortOrder.Asc);
-        }
-    }
-
-    private void DescNameRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        if (sender is IconRadioButton { IsChecked: true } && DataContext is TeamsViewModel context)
-        {
-            context.Data.SortTeamsByCriteria(null, SortOrder.Desc);
-        }
-    }
-
     private void ShowMemberDetailsButton_OnClick(object? sender, RoutedEventArgs e)
     {
         var cards = this.GetVisualDescendants().OfType<MemberCard>();
@@ -141,6 +110,32 @@ public partial class TeamsView : UserControl
         foreach (var card in cards)
         {
             card.ShowDetail = false;
+        }
+    }
+
+    private void SortCriteriaComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (DataContext is TeamsViewModel context && e.AddedItems.Count > 0 &&
+            e.AddedItems[0] is ComboBoxSortCriteria item)
+        {
+            context.TeamsSortCriteria =
+                new MemberSortCriteria((DisciplineInfo?)item.Value, context.TeamsSortCriteria.SortOrder);
+        }
+    }
+
+    private void ToggleButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        if (sender is IconRadioButton { IsChecked: true } && DataContext is TeamsViewModel context)
+        {
+            if (sender.Equals(SortAscRadioButton))
+            {
+                context.TeamsSortCriteria = new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Asc);
+            }
+            else if (sender.Equals(SortDescRadioButton))
+            {
+                context.TeamsSortCriteria =
+                    new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Desc);
+            }
         }
     }
 }

@@ -52,25 +52,45 @@
                            Margin="0,0,5,0"
                            VerticalAlignment="Center" />
             </StackPanel>
-            <StackPanel Orientation="Horizontal"
+            <StackPanel Orientation="Vertical"
                         Margin="0,0,0,2"
                         DockPanel.Dock="Top">
-                <controls:IconRadioButton GroupName="SortGroup"
-                                          Icon="mdi-sort-ascending"
-                                          Size="27"
-                                          Margin="0,0,5,0"
-                                          IsCheckedChanged="AscNameRadioButton_OnIsCheckedChanged" />
-                <controls:IconRadioButton GroupName="SortGroup"
-                                          Icon="mdi-sort-descending"
-                                          Size="27"
-                                          Margin="0,0,5,0"
-                                          IsCheckedChanged="DescNameRadioButton_OnIsCheckedChanged"
-                                          IsChecked="True" />
-                <TextBlock Text="{x:Static lang:Resources.TeamsView_SortByMemberName_Label}"
+                <TextBlock Text="{x:Static lang:Resources.TeamsView_Sorting_Label}"
                            FontWeight="Bold"
                            Margin="0,0,5,0"
                            VerticalAlignment="Center" />
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,0,0,2"
+                            DockPanel.Dock="Top"
+                            Spacing="5">
+                    <controls:IconRadioButton Name="SortAscRadioButton"
+                                              GroupName="SortOrder"
+                                              Icon="mdi-sort-ascending"
+                                              Size="27"
+                                              IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
+                    <controls:IconRadioButton Name="SortDescRadioButton"
+                                              GroupName="SortOrder"
+                                              Icon="mdi-sort-descending"
+                                              Size="27"
+                                              IsCheckedChanged="ToggleButton_OnIsCheckedChanged"
+                                              IsChecked="True" />
+
+                    <ComboBox x:Name="SortCriteriaComboBox"
+                              SelectionChanged="SortCriteriaComboBox_OnSelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <DataTemplate.DataType>
+                                    <x:Type TypeName="models:ComboBoxSortCriteria" />
+                                </DataTemplate.DataType>
+                                <TextBlock Text="{Binding DisplayText}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
+
             </StackPanel>
+
             <StackPanel Orientation="Vertical"
                         DockPanel.Dock="Top">
                 <TextBlock Text="{x:Static lang:Resources.TeamsView_Differences_Label}"
@@ -84,18 +104,6 @@
                                         x:TypeArguments="models:DisciplineInfo,x:Decimal" />
                             </DataTemplate.DataType>
                             <DockPanel Margin="0,0,0,2">
-                                <controls:IconRadioButton DockPanel.Dock="Left"
-                                                          GroupName="SortGroup"
-                                                          Icon="mdi-sort-ascending"
-                                                          Size="27"
-                                                          Margin="0,0,5,0"
-                                                          IsCheckedChanged="AscDisciplineRadioButton_OnIsCheckedChanged" />
-                                <controls:IconRadioButton DockPanel.Dock="Left"
-                                                          GroupName="SortGroup"
-                                                          Icon="mdi-sort-descending"
-                                                          Size="27"
-                                                          Margin="0,0,5,0"
-                                                          IsCheckedChanged="DescDisciplineRadioButton_OnIsCheckedChanged" />
                                 <TextBlock DockPanel.Dock="Left"
                                            Text="{Binding Key.Name}"
                                            FontWeight="Bold"

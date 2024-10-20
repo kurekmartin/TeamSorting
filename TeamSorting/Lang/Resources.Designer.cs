@@ -478,6 +478,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sorting.
+        /// </summary>
+        public static string TeamsView_Sorting_Label {
+            get {
+                return ResourceManager.GetString("TeamsView_Sorting_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team is valid: {0}.
         /// </summary>
         public static string TeamsView_TeamIsValid_ToolTip {
