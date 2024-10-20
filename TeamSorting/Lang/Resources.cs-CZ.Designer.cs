@@ -87,6 +87,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chyba.
+        /// </summary>
+        public static string CsvErrorDialog_Grid_Error_Header {
+            get {
+                return ResourceManager.GetString("CsvErrorDialog_Grid_Error_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Řádek.
         /// </summary>
         public static string CsvErrorDialog_Grid_RowNumber_Header {
