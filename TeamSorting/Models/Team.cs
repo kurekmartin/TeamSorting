@@ -24,7 +24,7 @@ public class Team : ReactiveObject
             case NotifyCollectionChangedAction.Replace:
             case NotifyCollectionChangedAction.Reset:
                 this.RaisePropertyChanged(nameof(IsValid));
-                this.RaisePropertyChanged(nameof(TotalScores));
+                this.RaisePropertyChanged(nameof(AvgScores));
                 this.RaisePropertyChanged(nameof(SortedMembers));
                 break;
         }
@@ -141,13 +141,15 @@ public class Team : ReactiveObject
         Members.Remove(member);
     }
 
-    public Dictionary<DisciplineInfo, decimal> TotalScores
+    public Dictionary<DisciplineInfo, decimal> AvgScores
     {
         get
         {
             return Members.SelectMany(member => member.Records.Values)
                 .GroupBy(record => record.DisciplineInfo)
-                .ToDictionary(g => g.Key, g => Math.Round(g.Sum(record => record.DecimalValue) / Members.Count, 2));
+                .ToDictionary(g => g.Key,
+                    g =>
+                        Math.Round(g.Sum(record => record.DecimalValue) / Members.Count, 2));
         }
     }
 

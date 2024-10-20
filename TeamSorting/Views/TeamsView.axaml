@@ -164,7 +164,7 @@
                                                    VerticalAlignment="Bottom" />
                                     </StackPanel>
                                 </StackPanel>
-                                <ItemsControl ItemsSource="{Binding TotalScores}"
+                                <ItemsControl ItemsSource="{Binding AvgScores}"
                                               Margin="15,0,15,5">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
