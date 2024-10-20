@@ -36,7 +36,7 @@ public partial class TeamsView : UserControl
             {
                 teamsViewModel.Data.Seed = string.Empty;
             }
-            
+
             mainWindowViewModel.SwitchToInputView();
         }
     }
@@ -82,7 +82,10 @@ public partial class TeamsView : UserControl
 
     private void AscDisciplineRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (sender is Button { DataContext: KeyValuePair<DisciplineInfo, double> disciplinePair })
+        if (sender is IconRadioButton
+            {
+                IsChecked: true, DataContext: KeyValuePair<DisciplineInfo, decimal> disciplinePair
+            })
         {
             var discipline = disciplinePair.Key;
             if (DataContext is TeamsViewModel context)
@@ -94,7 +97,10 @@ public partial class TeamsView : UserControl
 
     private void DescDisciplineRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (sender is Button { DataContext: KeyValuePair<DisciplineInfo, double> disciplinePair })
+        if (sender is IconRadioButton
+            {
+                IsChecked: true, DataContext: KeyValuePair<DisciplineInfo, decimal> disciplinePair
+            })
         {
             var discipline = disciplinePair.Key;
             if (DataContext is TeamsViewModel context)
@@ -106,7 +112,7 @@ public partial class TeamsView : UserControl
 
     private void AscNameRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is TeamsViewModel context)
+        if (sender is IconRadioButton { IsChecked: true } && DataContext is TeamsViewModel context)
         {
             context.Data.SortTeamsByCriteria(null, SortOrder.Asc);
         }
@@ -114,7 +120,7 @@ public partial class TeamsView : UserControl
 
     private void DescNameRadioButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is TeamsViewModel context)
+        if (sender is IconRadioButton { IsChecked: true } && DataContext is TeamsViewModel context)
         {
             context.Data.SortTeamsByCriteria(null, SortOrder.Desc);
         }

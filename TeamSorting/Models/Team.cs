@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using ReactiveUI;
+using Serilog;
 using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
@@ -44,35 +45,73 @@ public class Team : ReactiveObject
         }
     }
 
-    public IEnumerable<Member> SortedMembers
+    public List<Member> SortedMembers
     {
         get
         {
+            List<Member> sortedMembers;
             if (SortCriteria.SortOrder == SortOrder.Asc)
             {
                 if (SortCriteria.Discipline is null)
                 {
-                    return Members.OrderBy(member => member.Name);
+                    sortedMembers = Members.OrderBy(member => member.Name).ToList();
+                    LogMembersOrder(sortedMembers);
+                    return sortedMembers;
                 }
 
-                return Members.OrderBy(member =>
-                    member.Records
-                        .First(record =>
-                            record.Key == SortCriteria.Discipline.Id)
-                        .Value.DecimalValue);
+                sortedMembers = Members.OrderBy(member =>
+                        member.Records
+                            .First(record =>
+                                record.Key == SortCriteria.Discipline.Id)
+                            .Value.DecimalValue)
+                    .ToList();
+                LogMembersOrder(sortedMembers);
+                return sortedMembers;
             }
 
             if (SortCriteria.Discipline is null)
             {
-                return Members.OrderByDescending(member => member.Name);
+                sortedMembers = Members.OrderByDescending(member => member.Name).ToList();
+                LogMembersOrder(sortedMembers);
+                return sortedMembers;
             }
 
-            return Members.OrderByDescending(member =>
-                member.Records
-                    .First(record =>
-                        record.Key == SortCriteria.Discipline.Id)
-                    .Value.DecimalValue);
+            sortedMembers = Members.OrderByDescending(member =>
+                    member.Records
+                        .First(record =>
+                            record.Key == SortCriteria.Discipline.Id)
+                        .Value.DecimalValue)
+                .ToList();
+            LogMembersOrder(sortedMembers);
+            return sortedMembers;
         }
+    }
+
+    private void LogMembersOrder(List<Member> sortedMembers)
+    {
+#if DEBUG
+        if (SortCriteria.Discipline is not null)
+        {
+            Log.Debug($"Sorted members for {Name} by discipline {SortCriteria.Discipline.Name}");
+        }
+        else
+        {
+            Log.Debug($"Sorted members for {Name} by name");
+        }
+
+        foreach (var member in sortedMembers)
+        {
+            if (SortCriteria.Discipline is not null)
+            {
+                var value = member.Records.First(record => record.Key == SortCriteria.Discipline.Id);
+                Log.Debug($"{member.Name}: {value.Value.Value}");
+            }
+            else
+            {
+                Log.Debug($"{member.Name}");
+            }
+        }
+#endif
     }
 
 
@@ -131,6 +170,6 @@ public class Team : ReactiveObject
         var with = memberList.SelectMany(member => member.With.Select(m => m.Name)).ToList();
         var notWith = memberList.SelectMany(member => member.NotWith);
 
-        return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m=>m.Name)).ToList());
+        return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m => m.Name)).ToList());
     }
 }
