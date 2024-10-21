@@ -171,4 +171,7 @@ Platné hodnoty: {2}</value>
     <data name="TeamsView_Sorting_Label" xml:space="preserve">
         <value>Řazení</value>
     </data>
+    <data name="TeamsView_CsvExport_Success" xml:space="preserve">
+        <value>Soubor byl úspěšně uložen.</value>
+    </data>
 </root>

@@ -172,4 +172,11 @@ Valid values: {2}</value>
     <data name="TeamsView_Sorting_Label" xml:space="preserve">
         <value>Sorting</value>
     </data>
+    <data name="TeamsView_CsvExport_Success" xml:space="preserve">
+        <value>File saved successfully.</value>
+    </data>
+    <data name="TeamsView_CsvExport_Error" xml:space="preserve">
+        <value>Error saving file:
+{0}</value>
+    </data>
 </root>

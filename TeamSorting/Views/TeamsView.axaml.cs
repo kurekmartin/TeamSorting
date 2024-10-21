@@ -1,4 +1,6 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
@@ -21,6 +23,12 @@ public partial class TeamsView : UserControl
     {
         if (DataContext is TeamsViewModel context)
         {
+            context.NotificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this))
+            {
+                Position = NotificationPosition.BottomRight,
+                Margin = new Thickness(0,0,0,35)
+            };
+
             var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
 
             List<ComboBoxSortCriteria> items = [nameItem];
@@ -79,7 +87,22 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        context.Data.WriteTeamsToCsv(file.Path.LocalPath);
+        var fileSaved = false;
+        try
+        {
+            context.Data.WriteTeamsToCsv(file.Path.LocalPath);
+            fileSaved = true;
+        }
+        catch (Exception exception)
+        {
+            string message = string.Format(Lang.Resources.TeamsView_CsvExport_Error, exception.Message);
+            context.NotificationManager?.Show(message, NotificationType.Error);
+        }
+
+        if (fileSaved)
+        {
+            context.NotificationManager?.Show(Lang.Resources.TeamsView_CsvExport_Success, NotificationType.Success);
+        }
     }
 
     private void MemberTeamMenu_OnClick(object? sender, RoutedEventArgs e)

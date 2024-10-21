@@ -424,6 +424,25 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error saving file:
+        ///{0}.
+        /// </summary>
+        public static string TeamsView_CsvExport_Error {
+            get {
+                return ResourceManager.GetString("TeamsView_CsvExport_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File saved successfully..
+        /// </summary>
+        public static string TeamsView_CsvExport_Success {
+            get {
+                return ResourceManager.GetString("TeamsView_CsvExport_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team differences:.
         /// </summary>
         public static string TeamsView_Differences_Label {

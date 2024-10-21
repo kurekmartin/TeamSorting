@@ -423,6 +423,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Soubor byl úspěšně uložen..
+        /// </summary>
+        public static string TeamsView_CsvExport_Success {
+            get {
+                return ResourceManager.GetString("TeamsView_CsvExport_Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rozdíly mezi týmy:.
         /// </summary>
         public static string TeamsView_Differences_Label {
