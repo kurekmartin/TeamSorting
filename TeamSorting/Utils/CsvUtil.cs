@@ -11,7 +11,9 @@ namespace TeamSorting.Utils;
 
 public static class CsvUtil
 {
-    private static readonly HashSet<string> RequiredColumnNames =
+    private static readonly HashSet<string> RequiredColumnNames = [nameof(Member.Name)];
+
+    private static readonly HashSet<string> NonDisciplineColumnNames =
         [nameof(Member.Name), nameof(Member.With), nameof(Member.NotWith)];
 
     // public static bool CheckCsvFile(StreamReader inputFile)
@@ -40,7 +42,7 @@ public static class CsvUtil
 
     public static bool IsDisciplineColumn(DataColumn column)
     {
-        return !RequiredColumnNames.Contains(column.ColumnName);
+        return !NonDisciplineColumnNames.Contains(column.ColumnName);
     }
 
     public static List<CsvError> CheckHeader(CsvReader csv)
@@ -144,7 +146,7 @@ public static class CsvUtil
 
         return null;
     }
-    
+
     private static bool CheckDisciplineDataTypesRow(DataTable dataTable)
     {
         foreach (DataColumn column in dataTable.Columns)

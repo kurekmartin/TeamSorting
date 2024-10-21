@@ -537,12 +537,24 @@ public class Data : ReactiveObject
                 continue;
             }
 
-            var withMembers = dataRow[nameof(Member.With)].ToString()?
-                .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .ToList() ?? [];
-            var notWithMembers = dataRow[nameof(Member.NotWith)].ToString()
-                ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                .ToList() ?? [];
+
+            List<string> withMembers = [];
+            int withMembersIndex = dataRow.GetColumnIndex(nameof(Member.With));
+            if (withMembersIndex != -1)
+            {
+                withMembers = dataRow[withMembersIndex].ToString()?
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .ToList() ?? [];
+            }
+
+            List<string> notWithMembers = [];
+            int notWithMembersIndex = dataRow.GetColumnIndex(nameof(Member.NotWith));
+            if (notWithMembersIndex != -1)
+            {
+                notWithMembers = dataRow[nameof(Member.NotWith)].ToString()
+                    ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .ToList() ?? [];
+            }
 
             var unknownWithMembers = AddWithMembers(member, withMembers)
                 .Where(result => !result.Added)
