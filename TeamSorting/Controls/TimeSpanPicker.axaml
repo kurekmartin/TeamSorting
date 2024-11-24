@@ -1,0 +1,60 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:TeamSorting.Controls">
+    <Design.PreviewWith>
+        <controls:TimeSpanPicker />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|TimeSpanPicker NumericUpDown">
+        <Setter Property="FormatString" Value="00" />
+        <Setter Property="Increment" Value="1" />
+        <Setter Property="TextAlignment" Value="Center" />
+        <Setter Property="ShowButtonSpinner" Value="False" />
+        <Setter Property="MinWidth" Value="0" />
+        <Setter Property="Width" Value="50" />
+        <Setter Property="Padding" Value="5" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+    </Style>
+
+    <Style Selector="controls|TimeSpanPicker">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+                    <NumericUpDown x:Name="Hours"
+                                   Watermark="hh"
+                                   ToolTip.Tip="Hours"
+                                   Minimum="0"
+                                   Maximum="99"
+                                   Value="{Binding Hours, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Label VerticalAlignment="Center">:</Label>
+                    <NumericUpDown x:Name="Minutes"
+                                   Watermark="mm"
+                                   ToolTip.Tip="Minutes"
+                                   Minimum="0"
+                                   Maximum="59"
+                                   Value="{Binding Minutes, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Label VerticalAlignment="Center">:</Label>
+                    <NumericUpDown x:Name="Seconds"
+                                   Watermark="ss"
+                                   ToolTip.Tip="Seconds"
+                                   Minimum="0"
+                                   Maximum="59"
+                                   Value="{Binding Seconds, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Label VerticalAlignment="Center">.</Label>
+                    <NumericUpDown x:Name="Milliseconds"
+                                   Watermark="f"
+                                   ToolTip.Tip="Milliseconds"
+                                   Minimum="0"
+                                   Maximum="9"
+                                   FormatString="0"
+                                   Increment="1"
+                                   Value="{Binding Milliseconds, RelativeSource={RelativeSource TemplatedParent}}" />
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
