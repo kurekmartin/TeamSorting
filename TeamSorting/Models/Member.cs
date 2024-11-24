@@ -5,22 +5,55 @@ using ReactiveUI;
 
 namespace TeamSorting.Models;
 
-public class Member(string name) : ReactiveObject
+public class Member : ReactiveObject
 {
-    public string Name { get; set; } = name;
+    public string Name { get; set; }
 
     public ObservableCollection<Member> With { get; } = [];
+    public List<Member> SortedWith => With.OrderBy(member => member.Name).ToList();
 
     //TODO add list of warnings during loading
     public Dictionary<string, bool> WithValidation => ValidateWith();
 
     public ObservableCollection<Member> NotWith { get; } = [];
+    public List<Member> SortedNotWith => NotWith.OrderBy(member => member.Name).ToList();
 
     //TODO add list of warnings during loading
     public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
     private Team? _team;
+
+    public Member(string name)
+    {
+        Name = name;
+        With.CollectionChanged += WithOnCollectionChanged;
+        NotWith.CollectionChanged += NotWithOnCollectionChanged;
+    }
+
+    private void NotWithOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Replace:
+                this.RaisePropertyChanged(nameof(SortedNotWith));
+                break;
+        }
+    }
+
+    private void WithOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Replace:
+                this.RaisePropertyChanged(nameof(SortedWith));
+                break;
+        }
+    }
 
     public Team? Team
     {
@@ -132,7 +165,7 @@ public class Member(string name) : ReactiveObject
     private Dictionary<string, bool> ValidateWith()
     {
         Dictionary<string, bool> dict = [];
-        foreach (string withMember in With.Select(m => m.Name))
+        foreach (string withMember in SortedWith.Select(m => m.Name))
         {
             bool value = Team?.Members.Any(member => member.Name == withMember) ?? false;
             dict.Add(withMember, value);
@@ -144,7 +177,7 @@ public class Member(string name) : ReactiveObject
     private Dictionary<string, bool> ValidateNotWith()
     {
         Dictionary<string, bool> dict = [];
-        foreach (string notWithMember in NotWith.Select(m => m.Name))
+        foreach (string notWithMember in SortedNotWith.Select(m => m.Name))
         {
             bool value = Team?.Members.All(member => member.Name != notWithMember) ?? false;
             dict.Add(notWithMember, value);

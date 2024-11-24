@@ -132,7 +132,7 @@
                                         </MenuFlyout>
                                     </Button.Flyout>
                                 </Button>
-                                <ItemsControl ItemsSource="{Binding With}">
+                                <ItemsControl ItemsSource="{Binding SortedWith}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Horizontal" />
@@ -181,7 +181,7 @@
                                         </MenuFlyout>
                                     </Button.Flyout>
                                 </Button>
-                                <ItemsControl ItemsSource="{Binding NotWith}">
+                                <ItemsControl ItemsSource="{Binding SortedNotWith}">
                                     <ItemsControl.ItemsPanel>
                                         <ItemsPanelTemplate>
                                             <WrapPanel Orientation="Horizontal" />
