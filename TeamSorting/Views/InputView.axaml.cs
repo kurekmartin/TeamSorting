@@ -4,13 +4,16 @@ using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
+using TeamSorting.Controls;
 using TeamSorting.Enums;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
@@ -108,15 +111,55 @@ public partial class InputView : UserControl
                 continue;
             }
 
-            var column = new DataGridTextColumn
-            {
-                Tag = discipline.Id,
-                Header = CreateDisciplineColumnHeader(discipline),
-                Binding = new Binding($"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.RawValue)}"),
-                IsReadOnly = false
-            };
-            MemberGrid.Columns.Add(column);
+            DataGridTemplateColumn customColumn = CreateDisciplineColumn(discipline);
+            
+            MemberGrid.Columns.Add(customColumn);
         }
+    }
+
+    private static DataGridTemplateColumn CreateDisciplineColumn(DisciplineInfo discipline)
+    {
+        var customColumn = new DataGridTemplateColumn
+        {
+            Tag = discipline.Id,
+            Header = CreateDisciplineColumnHeader(discipline),
+            IsReadOnly = false,
+        };
+
+        FuncDataTemplate<Member> template;
+        switch (discipline.DataType)
+        {
+            case DisciplineDataType.Number:
+            {
+                //TODO change visual similar to TimeSpanPicker
+                template = new FuncDataTemplate<Member>((_, _) =>
+                    new NumericUpDown
+                    {
+                        [!NumericUpDown.ValueProperty] =
+                            new Binding($"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.Value)}"),
+                        FormatString = "0.0",
+                        Increment = 1
+                    });
+                customColumn.CellTemplate = template;
+                break;
+            }
+            case DisciplineDataType.Time:
+            {
+                template = new FuncDataTemplate<Member>((_, _) =>
+                    new TimeSpanPicker
+                    {
+                        [!TimeSpanPicker.TimeSpanProperty] =
+                            new Binding($"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.Value)}")
+                    });
+                break;
+            }
+            default:
+                throw new FormatException($"Invalid data type {discipline.DataType}");
+        }
+
+        customColumn.CellTemplate = template;
+
+        return customColumn;
     }
 
     private bool DataGridContainsDisciplineColumn(DataGrid dataGrid, DisciplineInfo discipline)

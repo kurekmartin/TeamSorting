@@ -9,6 +9,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
     public DisciplineInfo DisciplineInfo { get; } = disciplineInfo;
 
     private string _rawValue = rawValue;
+
     public string RawValue
     {
         get => _rawValue;
@@ -35,15 +36,20 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             {
                 DisciplineDataType.Time => string.IsNullOrWhiteSpace(RawValue)
                     ? TimeSpan.Zero
-                    : TimeSpan.Parse(RawValue, CultureInfo.InvariantCulture),
+                    : TimeSpan.Parse(RawValue),
                 DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
                     ? 0d
-                    : decimal.Parse(RawValue, CultureInfo.InvariantCulture),
+                    : decimal.Parse(RawValue),
                 _ => throw new FormatException()
             };
 
             _isValueUpdated = true;
             return _value;
+        }
+        set
+        {
+            RawValue = value.ToString() ?? string.Empty;
+            _value = value;
         }
     }
 
