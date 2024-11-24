@@ -83,6 +83,14 @@ public class Member(string name) : ReactiveObject
         member.RemoveWithMember(this);
     }
 
+    public void ClearWithMembers()
+    {
+        foreach (Member member in With.ToList())
+        {
+            RemoveWithMember(member);
+        }
+    }
+
     public void AddNotWithMember(Member member)
     {
         if (NotWith.Contains(member))
@@ -108,9 +116,17 @@ public class Member(string name) : ReactiveObject
         {
             return;
         }
-        
+
         NotWith.Remove(member);
         member.RemoveNotWithMember(this);
+    }
+
+    public void ClearNotWithMembers()
+    {
+        foreach (Member member in NotWith.ToList())
+        {
+            RemoveNotWithMember(member);
+        }
     }
 
     private Dictionary<string, bool> ValidateWith()

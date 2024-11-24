@@ -135,6 +135,8 @@ public class Data : ReactiveObject
         if (result)
         {
             Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
+            member.ClearWithMembers();
+            member.ClearNotWithMembers();
         }
 
         this.RaisePropertyChanged(nameof(SortedMembers));
