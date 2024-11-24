@@ -8,10 +8,14 @@ namespace TeamSorting.Models;
 public class Member(string name) : ReactiveObject
 {
     public string Name { get; set; } = name;
+
     public ObservableCollection<Member> With { get; } = [];
+
     //TODO add list of warnings during loading
     public Dictionary<string, bool> WithValidation => ValidateWith();
+
     public ObservableCollection<Member> NotWith { get; } = [];
+
     //TODO add list of warnings during loading
     public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
@@ -57,6 +61,7 @@ public class Member(string name) : ReactiveObject
         }
 
         With.Add(member);
+        member.AddWithMember(this);
     }
 
     public void AddWithMembers(IEnumerable<Member> members)
@@ -69,7 +74,13 @@ public class Member(string name) : ReactiveObject
 
     public void RemoveWithMember(Member member)
     {
+        if (!With.Contains(member))
+        {
+            return;
+        }
+
         With.Remove(member);
+        member.RemoveWithMember(this);
     }
 
     public void AddNotWithMember(Member member)
@@ -80,6 +91,7 @@ public class Member(string name) : ReactiveObject
         }
 
         NotWith.Add(member);
+        member.AddNotWithMember(this);
     }
 
     public void AddNotWithMembers(IEnumerable<Member> members)
@@ -92,7 +104,13 @@ public class Member(string name) : ReactiveObject
 
     public void RemoveNotWithMember(Member member)
     {
+        if (!NotWith.Contains(member))
+        {
+            return;
+        }
+        
         NotWith.Remove(member);
+        member.RemoveNotWithMember(this);
     }
 
     private Dictionary<string, bool> ValidateWith()
