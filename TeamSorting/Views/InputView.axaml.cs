@@ -51,13 +51,20 @@ public partial class InputView : UserControl
 
     private void DisciplinesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action == NotifyCollectionChangedAction.Remove)
+        if (e.Action is NotifyCollectionChangedAction.Remove)
         {
             if (e.OldItems is null || e.OldItems.Count <= 0) return;
             foreach (DisciplineInfo discipline in e.OldItems)
             {
-                var column =
-                    MemberGrid.Columns.First(column => column.Tag is Guid columnId && columnId == discipline.Id);
+                var column = MemberGrid.Columns.First(column =>
+                    column.Tag is DisciplineColumnTag tag && tag.DisciplineId == discipline.Id);
+                MemberGrid.Columns.Remove(column);
+            }
+        }
+        else if (e.Action is NotifyCollectionChangedAction.Reset)
+        {
+            foreach (DataGridColumn? column in MemberGrid.Columns.Where(column => column.Tag is DisciplineColumnTag).ToList())
+            {
                 MemberGrid.Columns.Remove(column);
             }
         }
@@ -122,7 +129,7 @@ public partial class InputView : UserControl
     {
         var customColumn = new DataGridTemplateColumn
         {
-            Tag = discipline.Id,
+            Tag = new DisciplineColumnTag(discipline.Id),
             Header = CreateDisciplineColumnHeader(discipline),
             IsReadOnly = false,
         };
@@ -168,7 +175,8 @@ public partial class InputView : UserControl
 
     private bool DataGridContainsDisciplineColumn(DataGrid dataGrid, DisciplineInfo discipline)
     {
-        var column = dataGrid.Columns.FirstOrDefault(column => column.Tag is Guid id && id == discipline.Id);
+        var column = dataGrid.Columns.FirstOrDefault(column =>
+            column.Tag is DisciplineColumnTag tag && tag.DisciplineId == discipline.Id);
         return column is not null;
     }
 
@@ -189,7 +197,7 @@ public partial class InputView : UserControl
             Margin = new Thickness(0, 0, 5, 0),
             [ToolTip.TipProperty] = Lang.Resources.InputView_RemoveDiscipline_Button
         };
-        removeButton.Click += RemoveButtonOnClick;
+        removeButton.Click += RemoveDiscipline_Button_OnClick;
         panel.Children.Add(removeButton);
 
         var iconSort = new Icon
@@ -240,7 +248,7 @@ public partial class InputView : UserControl
         return panel;
     }
 
-    private static void RemoveButtonOnClick(object? sender, RoutedEventArgs e)
+    private static void RemoveDiscipline_Button_OnClick(object? sender, RoutedEventArgs e)
     {
         if (sender is Button button)
         {
