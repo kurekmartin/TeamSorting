@@ -44,7 +44,8 @@
                                    Minimum="0"
                                    Maximum="59"
                                    Value="{Binding Seconds, RelativeSource={RelativeSource TemplatedParent}}" />
-                    <Label VerticalAlignment="Center">.</Label>
+                    <Label VerticalAlignment="Center"
+                           Content="{Binding Separator, RelativeSource={RelativeSource TemplatedParent}}"></Label>
                     <NumericUpDown x:Name="Milliseconds"
                                    Watermark="f"
                                    ToolTip.Tip="Milliseconds"

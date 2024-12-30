@@ -7,6 +7,9 @@ namespace TeamSorting.Controls;
 
 public class TimeSpanPicker : TemplatedControl
 {
+    public static char Separator =>
+        Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
     public static readonly DirectProperty<TimeSpanPicker, TimeSpan> TimeSpanProperty =
         AvaloniaProperty.RegisterDirect<TimeSpanPicker, TimeSpan>(
             nameof(TimeSpan),
