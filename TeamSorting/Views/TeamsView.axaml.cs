@@ -45,7 +45,10 @@ public partial class TeamsView : UserControl
         var window = TopLevel.GetTopLevel(this);
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
         {
-            var dialog = new WarningDialog(Lang.Resources.TeamsView_Back_WarningDialog)
+            var dialog = new WarningDialog(
+                message: Lang.Resources.TeamsView_Back_WarningDialog_Message,
+                confirmButtonText: Lang.Resources.TeamsView_Back_WarningDialog_Delete,
+                cancelButtonText: Lang.Resources.TeamsView_Back_WarningDialog_Cancel)
             {
                 Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
             };

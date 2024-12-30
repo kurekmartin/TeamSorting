@@ -423,12 +423,30 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string TeamsView_Back_WarningDialog_Cancel {
+            get {
+                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string TeamsView_Back_WarningDialog_Delete {
+            get {
+                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to By going back all teams will be deleted.
         ///Do you want to continue?.
         /// </summary>
-        public static string TeamsView_Back_WarningDialog {
+        public static string TeamsView_Back_WarningDialog_Message {
             get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Message", resourceCulture);
             }
         }
         
@@ -535,9 +553,9 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Continue.
         /// </summary>
-        public static string WarningDialog_Continue_Button {
+        public static string WarningDialog_Confirm_Button {
             get {
-                return ResourceManager.GetString("WarningDialog_Continue_Button", resourceCulture);
+                return ResourceManager.GetString("WarningDialog_Confirm_Button", resourceCulture);
             }
         }
     }

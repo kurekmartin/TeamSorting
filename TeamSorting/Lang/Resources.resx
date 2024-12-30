@@ -24,7 +24,7 @@
     <data name="InputView_RemoveDiscipline_Button" xml:space="preserve">
         <value>Remove discipline</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog" xml:space="preserve">
+    <data name="TeamsView_Back_WarningDialog_Message" xml:space="preserve">
         <value>By going back all teams will be deleted.
 Do you want to continue?</value>
     </data>
@@ -91,7 +91,7 @@ Do you want to continue?</value>
     <data name="WarningDialog_Cancel_Button" xml:space="preserve">
         <value>Cancel</value>
     </data>
-    <data name="WarningDialog_Continue_Button" xml:space="preserve">
+    <data name="WarningDialog_Confirm_Button" xml:space="preserve">
         <value>Continue</value>
     </data>
     <data name="Enum_DisciplineDataType_Number" xml:space="preserve">
@@ -181,5 +181,11 @@ Valid values: {2}</value>
     </data>
     <data name="InputView_ShowTeams_Button" xml:space="preserve">
         <value>Show teams</value>
+    </data>
+    <data name="TeamsView_Back_WarningDialog_Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="TeamsView_Back_WarningDialog_Delete" xml:space="preserve">
+        <value>Delete</value>
     </data>
 </root>

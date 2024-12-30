@@ -24,19 +24,20 @@
                    DockPanel.Dock="Top" />
         <DockPanel DockPanel.Dock="Bottom"
                    VerticalAlignment="Bottom">
-            <Button Name="Cancel"
+            <Button Name="BtnCancel"
                     Margin="0,0,10,0"
                     i:Attached.Icon="mdi-cancel"
                     Click="Cancel_OnClick"
                     HorizontalAlignment="Left"
                     DockPanel.Dock="Left"
                     Content="{x:Static lang:Resources.WarningDialog_Cancel_Button}"/>
-            <Button Name="Continue"
+            <Button Name="BtnConfirm"
                     Margin="10,0,0,0"
-                    Click="Continue_OnClick"
+                    Click="Confirm_OnClick"
                     HorizontalAlignment="Right"
                     DockPanel.Dock="Right"
-                    Content="{x:Static lang:Resources.WarningDialog_Continue_Button}"/>
+                    Background="Red"
+                    Content="{x:Static lang:Resources.WarningDialog_Confirm_Button}"/>
         </DockPanel>
     </DockPanel>
 </Window>

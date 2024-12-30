@@ -422,12 +422,30 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zrušit.
+        /// </summary>
+        public static string TeamsView_Back_WarningDialog_Cancel {
+            get {
+                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smazat.
+        /// </summary>
+        public static string TeamsView_Back_WarningDialog_Delete {
+            get {
+                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vrácením zpět budou všechny týmy smazány.
         ///Chcete pokračovat?.
         /// </summary>
-        public static string TeamsView_Back_WarningDialog {
+        public static string TeamsView_Back_WarningDialog_Message {
             get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Message", resourceCulture);
             }
         }
         
@@ -534,9 +552,9 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Pokračovat.
         /// </summary>
-        public static string WarningDialog_Continue_Button {
+        public static string WarningDialog_Confirm_Button {
             get {
-                return ResourceManager.GetString("WarningDialog_Continue_Button", resourceCulture);
+                return ResourceManager.GetString("WarningDialog_Confirm_Button", resourceCulture);
             }
         }
     }
