@@ -174,4 +174,11 @@ Platné hodnoty: {2}</value>
     <data name="TeamsView_CsvExport_Success" xml:space="preserve">
         <value>Soubor byl úspěšně uložen.</value>
     </data>
+    <data name="TeamsView_CsvExport_Error" xml:space="preserve">
+        <value>Chyba při ukládání souboru:
+{0}</value>
+    </data>
+    <data name="InputView_ShowTeams_Button" xml:space="preserve">
+        <value>Zobrazit týmy</value>
+    </data>
 </root>

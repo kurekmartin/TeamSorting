@@ -179,4 +179,7 @@ Valid values: {2}</value>
         <value>Error saving file:
 {0}</value>
     </data>
+    <data name="InputView_ShowTeams_Button" xml:space="preserve">
+        <value>Show teams</value>
+    </data>
 </root>

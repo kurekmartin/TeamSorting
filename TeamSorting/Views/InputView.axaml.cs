@@ -113,7 +113,7 @@ public partial class InputView : UserControl
             }
 
             DataGridTemplateColumn customColumn = CreateDisciplineColumn(discipline);
-            
+
             MemberGrid.Columns.Add(customColumn);
         }
     }
@@ -264,9 +264,9 @@ public partial class InputView : UserControl
         Cursor = new Cursor(StandardCursorType.Wait);
 
         var numberOfTeams = (int)(NumberOfTeams.Value ?? 1);
-        var sortResult = context.Sorter.Sort(context.Data.Members.ToList(), numberOfTeams, context.Data.Seed);
+        var sortResult = context.Sorter.Sort(context.Data.Members.ToList(), numberOfTeams, context.Data.InputSeed);
         context.Data.Teams = new ObservableCollection<Team>(sortResult.teams);
-        context.Data.Seed = sortResult.seed ?? string.Empty;
+        context.Data.UsedSeed = sortResult.seed ?? string.Empty;
 
         var window = TopLevel.GetTopLevel(this);
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })
@@ -276,6 +276,15 @@ public partial class InputView : UserControl
 
         button.IsEnabled = true;
         Cursor = Cursor.Default;
+    }
+
+    private void ShowTeamsButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        var window = TopLevel.GetTopLevel(this);
+        if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })
+        {
+            mainWindowViewModel.SwitchToTeamsView();
+        }
     }
 
     private void NewMemberTextBox_OnClick(object? sender, RoutedEventArgs e)

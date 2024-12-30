@@ -395,6 +395,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zobrazit týmy.
+        /// </summary>
+        public static string InputView_ShowTeams_Button {
+            get {
+                return ResourceManager.GetString("InputView_ShowTeams_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rozdělit do týmů.
         /// </summary>
         public static string InputView_SortToTeams_Button {
@@ -419,6 +428,16 @@ namespace TeamSorting.Lang {
         public static string TeamsView_Back_WarningDialog {
             get {
                 return ResourceManager.GetString("TeamsView_Back_WarningDialog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chyba při ukládání souboru:
+        ///{0}.
+        /// </summary>
+        public static string TeamsView_CsvExport_Error {
+            get {
+                return ResourceManager.GetString("TeamsView_CsvExport_Error", resourceCulture);
             }
         }
         

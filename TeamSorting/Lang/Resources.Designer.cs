@@ -396,6 +396,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show teams.
+        /// </summary>
+        public static string InputView_ShowTeams_Button {
+            get {
+                return ResourceManager.GetString("InputView_ShowTeams_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort to teams.
         /// </summary>
         public static string InputView_SortToTeams_Button {

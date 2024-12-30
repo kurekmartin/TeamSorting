@@ -68,6 +68,10 @@
             <StackPanel Orientation="Vertical"
                         HorizontalAlignment="Right"
                         Spacing="5">
+                <Button Click="ShowTeamsButton_OnClick"
+                        HorizontalAlignment="Right"
+                        IsVisible="False"
+                        Content="{x:Static lang:Resources.InputView_ShowTeams_Button}"/>
                 <NumericUpDown x:Name="NumberOfTeams"
                                Value="{Binding NumberOfTeams}"
                                FormatString="0"
@@ -75,7 +79,7 @@
                                Maximum="10" />
                 <TextBox MaxLength="10"
                          Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
-                         Text="{Binding Data.Seed}" />
+                         Text="{Binding Data.InputSeed}" />
                 <Button Click="SortToTeams_OnClick"
                         Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
             </StackPanel>

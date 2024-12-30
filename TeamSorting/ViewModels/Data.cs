@@ -53,7 +53,8 @@ public class Data : ReactiveObject
         }
     }
 
-    public string Seed { get; set; } = string.Empty;
+    public string InputSeed  { get; set; } = string.Empty;
+    public string UsedSeed { get; set; } = string.Empty;
 
     #region Discipline
 

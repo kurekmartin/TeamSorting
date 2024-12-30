@@ -55,11 +55,6 @@ public partial class TeamsView : UserControl
                 return;
             }
 
-            if (DataContext is TeamsViewModel teamsViewModel)
-            {
-                teamsViewModel.Data.Seed = string.Empty;
-            }
-
             mainWindowViewModel.SwitchToInputView();
         }
     }
