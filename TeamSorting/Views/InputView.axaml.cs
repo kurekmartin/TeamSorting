@@ -11,6 +11,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Markup.Xaml.Templates;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Projektanker.Icons.Avalonia;
 using TeamSorting.Controls;
@@ -131,14 +132,17 @@ public partial class InputView : UserControl
         {
             case DisciplineDataType.Number:
             {
-                //TODO change visual similar to TimeSpanPicker
                 template = new FuncDataTemplate<Member>((_, _) =>
                     new NumericUpDown
                     {
                         [!NumericUpDown.ValueProperty] =
                             new Binding($"{nameof(Member.Records)}[{discipline.Id}].{nameof(DisciplineRecord.Value)}"),
                         FormatString = "0.0",
-                        Increment = 1
+                        Increment = 1,
+                        BorderBrush = Brushes.Transparent,
+                        HorizontalContentAlignment = HorizontalAlignment.Right,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        ShowButtonSpinner = false
                     });
                 customColumn.CellTemplate = template;
                 break;
