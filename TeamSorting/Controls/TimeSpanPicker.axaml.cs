@@ -12,7 +12,7 @@ public class TimeSpanPicker : TemplatedControl
             nameof(TimeSpan),
             o => o.TimeSpan,
             (o, v) => o.TimeSpan = v,
-            new TimeSpan(),
+            TimeSpan.Zero,
             BindingMode.TwoWay);
 
     private TimeSpan _timeSpan;
