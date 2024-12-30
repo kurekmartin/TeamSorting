@@ -449,7 +449,7 @@ public class Data : ReactiveObject
         return csvErrors;
     }
 
-    private void ClearData()
+    public void ClearData()
     {
         Members.Clear();
         Disciplines.Clear();

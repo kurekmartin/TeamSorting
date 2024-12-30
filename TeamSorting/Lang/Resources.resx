@@ -188,4 +188,14 @@ Valid values: {2}</value>
     <data name="TeamsView_Back_WarningDialog_Delete" xml:space="preserve">
         <value>Delete</value>
     </data>
+    <data name="InputView_DeleteData_WarningDialog_Message" xml:space="preserve">
+        <value>All data will be deleted (members, teams, disciplines). 
+Do you want to continue?</value>
+    </data>
+    <data name="InputView_DeleteData_WarningDialog_Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="InputView_DeleteData_WarningDialog_Delete" xml:space="preserve">
+        <value>Delete</value>
+    </data>
 </root>

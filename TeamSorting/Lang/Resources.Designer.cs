@@ -324,6 +324,34 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string InputView_DeleteData_WarningDialog_Cancel {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_WarningDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string InputView_DeleteData_WarningDialog_Delete {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_WarningDialog_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All data will be deleted (members, teams, disciplines). 
+        ///Do you want to continue?.
+        /// </summary>
+        public static string InputView_DeleteData_WarningDialog_Message {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_WarningDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load data.
         /// </summary>
         public static string InputView_LoadData_Button {

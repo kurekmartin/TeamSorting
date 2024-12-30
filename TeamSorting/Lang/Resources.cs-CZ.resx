@@ -187,4 +187,14 @@ Platné hodnoty: {2}</value>
     <data name="TeamsView_Back_WarningDialog_Delete" xml:space="preserve">
         <value>Smazat</value>
     </data>
+    <data name="InputView_DeleteData_WarningDialog_Message" xml:space="preserve">
+        <value>Všechna data budou smazána (členové, týmy, disciplíny). 
+Chcete pokračovat?</value>
+    </data>
+    <data name="InputView_DeleteData_WarningDialog_Delete" xml:space="preserve">
+        <value>Smazat</value>
+    </data>
+    <data name="InputView_DeleteData_WarningDialog_Cancel" xml:space="preserve">
+        <value>Zrušit</value>
+    </data>
 </root>

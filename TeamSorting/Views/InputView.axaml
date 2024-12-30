@@ -33,6 +33,10 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Top"
                         Content="{x:Static lang:Resources.InputView_LoadData_Button}" />
+                <Button Click="DeleteDataButton_OnClick"
+                        DockPanel.Dock="Top">
+                    Delete data
+                </Button>
                 <DockPanel HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
                            DockPanel.Dock="Bottom">

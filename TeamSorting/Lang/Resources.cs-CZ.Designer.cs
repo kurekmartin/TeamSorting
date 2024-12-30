@@ -323,6 +323,34 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zrušit.
+        /// </summary>
+        public static string InputView_DeleteData_WarningDialog_Cancel {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_WarningDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smazat.
+        /// </summary>
+        public static string InputView_DeleteData_WarningDialog_Delete {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_WarningDialog_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Všechna data budou smazána (členové, týmy, disciplíny). 
+        ///Chcete pokračovat?.
+        /// </summary>
+        public static string InputView_DeleteData_WarningDialog_Message {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_WarningDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Načíst data.
         /// </summary>
         public static string InputView_LoadData_Button {

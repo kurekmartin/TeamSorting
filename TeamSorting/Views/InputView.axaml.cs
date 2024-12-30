@@ -419,4 +419,31 @@ public partial class InputView : UserControl
             }
         }
     }
+
+    private async void DeleteDataButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is InputViewModel context)
+        {
+            var window = TopLevel.GetTopLevel(this);
+            if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
+            {
+                var dialog = new WarningDialog(
+                    message: Lang.Resources.InputView_DeleteData_WarningDialog_Message,
+                    confirmButtonText: Lang.Resources.InputView_DeleteData_WarningDialog_Delete,
+                    cancelButtonText: Lang.Resources.InputView_DeleteData_WarningDialog_Cancel)
+                {
+                    Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
+                };
+                var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
+                if (result == WarningDialogResult.Cancel)
+                {
+                    return;
+                }
+
+                mainWindowViewModel.SwitchToInputView();
+            }
+
+            context.Data.ClearData();
+        }
+    }
 }
