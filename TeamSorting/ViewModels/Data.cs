@@ -64,12 +64,12 @@ public class Data : ReactiveObject
             return false;
         }
 
+        Disciplines.Add(discipline);
         foreach (var member in Members)
         {
             AddDisciplineRecord(member, discipline, "");
         }
 
-        Disciplines.Add(discipline);
         return true;
     }
 
