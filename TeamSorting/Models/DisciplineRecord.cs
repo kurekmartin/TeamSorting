@@ -5,6 +5,18 @@ namespace TeamSorting.Models;
 
 public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue)
 {
+    private static readonly string[] TimeFormats =
+    [
+        $@"hh\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        $@"h\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        @"h\:mm\:ss",
+        @"hh\:mm\:ss",
+        $@"mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        @"mm\:ss",
+        $@"ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        @"ss"
+    ];
+
     public Member Member { get; } = member;
     public DisciplineInfo DisciplineInfo { get; } = disciplineInfo;
 
@@ -36,7 +48,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             {
                 DisciplineDataType.Time => string.IsNullOrWhiteSpace(RawValue)
                     ? TimeSpan.Zero
-                    : TimeSpan.Parse(RawValue),
+                    : TimeSpan.ParseExact(RawValue, TimeFormats, CultureInfo.CurrentCulture),
                 DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
                     ? 0d
                     : decimal.Parse(RawValue),
@@ -48,7 +60,15 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
         }
         set
         {
-            RawValue = value.ToString() ?? string.Empty;
+            if (value is TimeSpan timeSpan)
+            {
+                RawValue = timeSpan.ToString("g", CultureInfo.CurrentCulture);
+            }
+            else
+            {
+                RawValue = value.ToString() ?? string.Empty;
+            }
+
             _value = value;
         }
     }
