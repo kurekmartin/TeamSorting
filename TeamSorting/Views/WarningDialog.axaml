@@ -11,33 +11,38 @@
         ExtendClientAreaChromeHints="SystemChrome"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
-        SystemDecorations="BorderOnly"
-        CanResize="False">
+        SystemDecorations="None"
+        CanResize="False"
+        ShowInTaskbar="False">
 
-    <DockPanel Margin="30">
-        <TextBlock Name="Message"
-                   Text="Warning text"
-                   VerticalAlignment="Stretch"
-                   TextWrapping="Wrap"
-                   MaxWidth="300"
-                   Margin="0,0,0,20"
-                   DockPanel.Dock="Top" />
-        <DockPanel DockPanel.Dock="Bottom"
-                   VerticalAlignment="Bottom">
-            <Button Name="BtnCancel"
-                    Margin="0,0,10,0"
-                    i:Attached.Icon="mdi-cancel"
-                    Click="Cancel_OnClick"
-                    HorizontalAlignment="Left"
-                    DockPanel.Dock="Left"
-                    Content="{x:Static lang:Resources.WarningDialog_Cancel_Button}"/>
-            <Button Name="BtnConfirm"
-                    Margin="10,0,0,0"
-                    Click="Confirm_OnClick"
-                    HorizontalAlignment="Right"
-                    DockPanel.Dock="Right"
-                    Background="Red"
-                    Content="{x:Static lang:Resources.WarningDialog_Confirm_Button}"/>
+    <Border BorderThickness="1"
+            BorderBrush="Gray"
+            CornerRadius="10">
+        <DockPanel Margin="30">
+            <TextBlock Name="Message"
+                       Text="Warning text"
+                       VerticalAlignment="Stretch"
+                       TextWrapping="Wrap"
+                       MaxWidth="300"
+                       Margin="0,0,0,20"
+                       DockPanel.Dock="Top" />
+            <DockPanel DockPanel.Dock="Bottom"
+                       VerticalAlignment="Bottom">
+                <Button Name="BtnCancel"
+                        Margin="0,0,10,0"
+                        i:Attached.Icon="mdi-cancel"
+                        Click="Cancel_OnClick"
+                        HorizontalAlignment="Left"
+                        DockPanel.Dock="Left"
+                        Content="{x:Static lang:Resources.WarningDialog_Cancel_Button}" />
+                <Button Name="BtnConfirm"
+                        Margin="10,0,0,0"
+                        Click="Confirm_OnClick"
+                        HorizontalAlignment="Right"
+                        DockPanel.Dock="Right"
+                        Background="Red"
+                        Content="{x:Static lang:Resources.WarningDialog_Confirm_Button}" />
+            </DockPanel>
         </DockPanel>
-    </DockPanel>
+    </Border>
 </Window>

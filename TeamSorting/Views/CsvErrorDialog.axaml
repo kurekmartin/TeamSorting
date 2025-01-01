@@ -12,46 +12,13 @@
         ExtendClientAreaChromeHints="SystemChrome"
         WindowStartupLocation="CenterOwner"
         SizeToContent="WidthAndHeight"
-        SystemDecorations="BorderOnly"
-        CanResize="False">
+        SystemDecorations="None"
+        CanResize="False"
+        ShowInTaskbar="False">
 
-    <DockPanel Margin="30">
-        <TextBlock Name="Message"
-                   Text="{x:Static lang:Resources.CsvErrorDialog_Title}"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Stretch"
-                   TextWrapping="Wrap"
-                   FontSize="18"
-                   FontWeight="Bold"
-                   MaxWidth="300"
-                   Margin="0,0,0,20"
-                   DockPanel.Dock="Top" />
-        <DataGrid ItemsSource="{Binding OrderedErrors}"
-                  IsReadOnly="True"
-                  CanUserReorderColumns="False"
-                  CanUserResizeColumns="True"
-                  CanUserSortColumns="False"
-                  DockPanel.Dock="Top"
-                  IsEnabled="False">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_RowNumber_Header}"
-                                    Binding="{Binding Row}"/>
-                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_ColumnNumber_Header}"
-                                    Binding="{Binding Column}"/>
-                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_Error_Header}"
-                                    Binding="{Binding Message}"/>
-            </DataGrid.Columns>
-        </DataGrid>
-        <DockPanel DockPanel.Dock="Bottom"
-                   VerticalAlignment="Bottom">
-            <Button Name="OkButton"
-                    Margin="0,10,0,0"
-                    Click="OkButton_OnClick"
-                    HorizontalAlignment="Right"
-                    DockPanel.Dock="Right"
-                    Content="{x:Static lang:Resources.CsvErrorDialog_Ok_Button}" />
-        </DockPanel>
-    </DockPanel>
+    <Border BorderThickness="1"
+            BorderBrush="Gray"
+            CornerRadius="10">
         <Grid Margin="30"
               RowDefinitions="Auto,*,Auto">
             <TextBlock Name="Message"
@@ -93,4 +60,5 @@
                         Content="{x:Static lang:Resources.CsvErrorDialog_Ok_Button}" />
             </DockPanel>
         </Grid>
+    </Border>
 </Window>
