@@ -13,11 +13,15 @@
         SizeToContent="WidthAndHeight"
         SystemDecorations="None"
         CanResize="False"
-        ShowInTaskbar="False">
+        ShowInTaskbar="False"
+        Background="Transparent">
 
     <Border BorderThickness="1"
             BorderBrush="Gray"
-            CornerRadius="10">
+            CornerRadius="10"
+            BoxShadow="0 0 25 0 DarkGray"
+            Margin="20"
+            Background="White">
         <DockPanel Margin="30">
             <TextBlock Name="Message"
                        Text="Warning text"
