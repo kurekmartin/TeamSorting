@@ -146,7 +146,8 @@ Valid values: {2}</value>
         <value>Found duplicate members in combination constrains</value>
     </data>
     <data name="Data_LoadMembersData_WrongDisciplineRecordFormat_Error" xml:space="preserve">
-        <value>Wrong format of discipline record value</value>
+        <value>Wrong format of discipline record value.
+Expected format is {0}</value>
     </data>
     <data name="Data_LoadMembersData_DisciplineRecord_UnknownError" xml:space="preserve">
         <value>Error reading value of discipline record: {0}</value>

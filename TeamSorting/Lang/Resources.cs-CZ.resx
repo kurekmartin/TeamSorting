@@ -145,7 +145,8 @@ Platné hodnoty: {2}</value>
         <value>Nalezeni neznámí členové v podmínkách kombinací členů: {0}</value>
     </data>
     <data name="Data_LoadMembersData_WrongDisciplineRecordFormat_Error" xml:space="preserve">
-        <value>Chybný formát hodnoty záznamu disciplíny</value>
+        <value>Chybný formát hodnoty záznamu disciplíny.
+Očekávaný formát je {0}</value>
     </data>
     <data name="Data_LoadMembersData_DisciplineRecord_UnknownError" xml:space="preserve">
         <value>Chyba čtení hodnoty záznamu disciplíny</value>

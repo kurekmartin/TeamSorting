@@ -602,7 +602,8 @@ public class Data : ReactiveObject
                 catch (FormatException)
                 {
                     errors.Add(new CsvError(
-                        Resources.Data_LoadMembersData_WrongDisciplineRecordFormat_Error,
+                        string.Format(Resources.Data_LoadMembersData_WrongDisciplineRecordFormat_Error,
+                            DisciplineRecord.ExampleValue(disciplineInfo.DataType)),
                         rowNumber: rowIndex + 3,
                         columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1
                     ));

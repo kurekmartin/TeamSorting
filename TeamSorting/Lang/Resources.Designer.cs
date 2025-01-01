@@ -187,6 +187,7 @@ namespace TeamSorting.Lang {
         
         /// <summary>
         ///   Looks up a localized string similar to Wrong format of discipline record value.
+        ///Expected format is {0}.
         /// </summary>
         public static string Data_LoadMembersData_WrongDisciplineRecordFormat_Error {
             get {

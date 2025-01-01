@@ -187,6 +187,7 @@ namespace TeamSorting.Lang {
         
         /// <summary>
         ///   Looks up a localized string similar to Chybný formát hodnoty záznamu disciplíny.
+        ///Očekávaný formát je {0}.
         /// </summary>
         public static string Data_LoadMembersData_WrongDisciplineRecordFormat_Error {
             get {

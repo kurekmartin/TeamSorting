@@ -80,4 +80,23 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             DisciplineDataType.Number => (decimal)Value,
             _ => throw new FormatException()
         };
+
+    public static string ExampleValue(DisciplineDataType disciplineDataType)
+    {
+        switch (disciplineDataType)
+        {
+            case DisciplineDataType.Number:
+            {
+                const decimal exampleNumber = 0.0m;
+                return exampleNumber.ToString("G");
+            }
+            case DisciplineDataType.Time:
+            {
+                TimeSpan exampleTime = TimeSpan.Zero;
+                return exampleTime.ToString(TimeFormats[0]);
+            }
+            default:
+                throw new ArgumentOutOfRangeException(nameof(disciplineDataType), disciplineDataType, null);
+        }
+    }
 }
