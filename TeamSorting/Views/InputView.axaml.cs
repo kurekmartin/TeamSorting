@@ -99,7 +99,12 @@ public partial class InputView : UserControl
             var window = TopLevel.GetTopLevel(this);
             if (window is MainWindow { DataContext: MainWindowViewModel } mainWindow)
             {
-                var dialog = new CsvErrorDialog { DataContext = new CsvErrorViewModel(loadDataErrors) };
+                var dialog = new CsvErrorDialog
+                {
+                    DataContext = new CsvErrorViewModel(loadDataErrors),
+                    MaxHeight = mainWindow.Height * 0.9,
+                    MaxWidth = mainWindow.Width * 0.9
+                };
                 await dialog.ShowDialog(mainWindow);
             }
         }
