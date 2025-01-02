@@ -36,7 +36,27 @@ public class Member : ReactiveObject
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
+                if (e.NewItems is not null)
+                {
+                    foreach (Member member in e.NewItems.OfType<Member>())
+                    {
+                        member.AddNotWithMember(this);
+                    }
+                }
+
+                this.RaisePropertyChanged(nameof(SortedNotWith));
+                break;
             case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is not null)
+                {
+                    foreach (Member member in e.OldItems.OfType<Member>())
+                    {
+                        member.RemoveNotWithMember(this);
+                    }
+                }
+
+                this.RaisePropertyChanged(nameof(SortedNotWith));
+                break;
             case NotifyCollectionChangedAction.Replace:
                 this.RaisePropertyChanged(nameof(SortedNotWith));
                 break;
@@ -48,7 +68,27 @@ public class Member : ReactiveObject
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
+                if (e.NewItems is not null)
+                {
+                    foreach (Member member in e.NewItems.OfType<Member>())
+                    {
+                        member.AddWithMember(this);
+                    }
+                }
+
+                this.RaisePropertyChanged(nameof(SortedWith));
+                break;
             case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is not null)
+                {
+                    foreach (Member member in e.OldItems.OfType<Member>())
+                    {
+                        member.RemoveWithMember(this);
+                    }
+                }
+
+                this.RaisePropertyChanged(nameof(SortedWith));
+                break;
             case NotifyCollectionChangedAction.Replace:
                 this.RaisePropertyChanged(nameof(SortedWith));
                 break;
