@@ -15,5 +15,6 @@
         <StyleInclude Source="Controls/MemberCard.axaml"/>
         <StyleInclude Source="Controls/IconRadioButton.axaml"/>
         <StyleInclude Source="Controls/TimeSpanPicker.axaml"/>
+        <StyleInclude Source="Controls/MemberListSelection.axaml"/>
     </Application.Styles>
 </Application>

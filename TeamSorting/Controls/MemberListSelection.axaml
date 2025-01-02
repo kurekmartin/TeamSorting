@@ -1,0 +1,49 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:TeamSorting.Controls"
+        xmlns:models="clr-namespace:TeamSorting.Models">
+    <Design.PreviewWith>
+        <controls:MemberListSelection />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MemberListSelection">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid RowDefinitions="Auto,*">
+                    <!-- TODO: implement search-->
+                    <TextBox Grid.Row="0"
+                             x:Name="SearchBox"
+                             Watermark="Search"
+                             IsVisible="False" />
+                    <ScrollViewer Grid.Row="1">
+                        <ListBox
+                            ItemsSource="{Binding Members, RelativeSource={RelativeSource TemplatedParent}}"
+                            SelectionMode="Multiple,Toggle"
+                            SelectedItems="{Binding SelectedMembers, RelativeSource={RelativeSource TemplatedParent}}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.DataType>
+                                        <x:Type TypeName="models:Member" />
+                                    </DataTemplate.DataType>
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center"
+                                                Name="Member">
+                                        <CheckBox IsChecked="{Binding $parent[ListBoxItem].IsSelected}" />
+                                        <TextBlock Text="{Binding Name}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                            <ListBox.Styles>
+                                <Style Selector="ListBoxItem">
+                                    <Setter Property="Padding" Value="5,0" />
+                                </Style>
+                            </ListBox.Styles>
+                        </ListBox>
+                    </ScrollViewer>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

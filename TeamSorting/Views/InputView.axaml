@@ -9,14 +9,14 @@
              xmlns:i="https://github.com/projektanker/icons.avalonia"
              xmlns:lang="clr-namespace:TeamSorting.Lang"
              xmlns:converter="clr-namespace:TeamSorting.Converters"
-             xmlns:models="clr-namespace:TeamSorting.Models">
+             xmlns:controls="clr-namespace:TeamSorting.Controls">
     <UserControl.Resources>
         <x:Double x:Key="DataGridSortIconMinWidth">0</x:Double>
         <converter:EnumDisplayNameConvertor x:Key="EnumDisplayNameConvertor" />
     </UserControl.Resources>
 
     <UserControl.Styles>
-        <Style Selector="MenuFlyoutPresenter.MemberSelectorFlyout">
+        <Style Selector="controls|MemberListSelection">
             <Setter Property="MaxHeight" Value="300" />
         </Style>
     </UserControl.Styles>
@@ -124,20 +124,14 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Button i:Attached.Icon="mdi-plus">
+                                <Button i:Attached.Icon="mdi-pencil-outline">
                                     <Button.Flyout>
-                                        <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
-                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}">
-                                            <MenuFlyout.ItemTemplate>
-                                                <DataTemplate>
-                                                    <DataTemplate.DataType>
-                                                        <x:Type TypeName="models:Member"></x:Type>
-                                                    </DataTemplate.DataType>
-                                                    <MenuItem Header="{Binding Name}"
-                                                              Click="AddWithMemberMenuItem_OnClick" />
-                                                </DataTemplate>
-                                            </MenuFlyout.ItemTemplate>
-                                        </MenuFlyout>
+                                        <Flyout Placement="RightEdgeAlignedTop">
+                                            <controls:MemberListSelection
+                                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                                                CurrentMember="{Binding .}"
+                                                SelectedMembers="{Binding With}" />
+                                        </Flyout>
                                     </Button.Flyout>
                                 </Button>
                                 <ItemsControl ItemsSource="{Binding SortedWith}">
@@ -173,20 +167,14 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <Button i:Attached.Icon="mdi-plus">
+                                <Button i:Attached.Icon="mdi-pencil-outline">
                                     <Button.Flyout>
-                                        <MenuFlyout FlyoutPresenterClasses="MemberSelectorFlyout"
-                                                    ItemsSource="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}">
-                                            <MenuFlyout.ItemTemplate>
-                                                <DataTemplate>
-                                                    <DataTemplate.DataType>
-                                                        <x:Type TypeName="models:Member"></x:Type>
-                                                    </DataTemplate.DataType>
-                                                    <MenuItem Header="{Binding Name}"
-                                                              Click="AddNotWithMemberMenuItem_OnClick" />
-                                                </DataTemplate>
-                                            </MenuFlyout.ItemTemplate>
-                                        </MenuFlyout>
+                                        <Flyout Placement="RightEdgeAlignedTop">
+                                            <controls:MemberListSelection
+                                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                                                CurrentMember="{Binding .}"
+                                                SelectedMembers="{Binding NotWith}" />
+                                        </Flyout>
                                     </Button.Flyout>
                                 </Button>
                                 <ItemsControl ItemsSource="{Binding SortedNotWith}">
