@@ -443,6 +443,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string MemberListSelection_Search {
+            get {
+                return ResourceManager.GetString("MemberListSelection_Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string TeamsView_Back_Button {

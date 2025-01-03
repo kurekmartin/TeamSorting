@@ -1,12 +1,10 @@
 ﻿using System.Collections.ObjectModel;
-using System.Reactive.Linq;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
-using DynamicData;
-using DynamicData.Binding;
 using Serilog;
 using TeamSorting.Models;
 using ListBox = Avalonia.Controls.ListBox;
@@ -48,18 +46,14 @@ public class MemberListSelection : TemplatedControl
     private Member _currentMember = null!;
     private ObservableCollection<Member> _selectedMembers = [];
     private string _searchText = string.Empty;
-    private readonly SourceCache<Member, string> _memberCache = new(x => x.Name);
-    private ReadOnlyObservableCollection<Member> _filteredMembers = null!;
-    public ReadOnlyObservableCollection<Member> FilteredMembers => _filteredMembers;
+    private ListBox? _listBox;
+
+    public ObservableCollection<FilterableMember> FilteredMembers { get; set; } = [];
 
     public ObservableCollection<Member> AllMembers
     {
         get => _allMembers;
-        set
-        {
-            SetAndRaise(AllMembersProperty, ref _allMembers, value);
-            InitializeFilter();
-        }
+        set => SetAndRaise(AllMembersProperty, ref _allMembers, value);
     }
 
     public Member CurrentMember
@@ -67,8 +61,6 @@ public class MemberListSelection : TemplatedControl
         get => _currentMember;
         set => SetAndRaise(CurrentMemberProperty, ref _currentMember, value);
     }
-
-    public IEnumerable<Member> Members => AllMembers.Except([CurrentMember]);
 
     public ObservableCollection<Member> SelectedMembers
     {
@@ -79,46 +71,64 @@ public class MemberListSelection : TemplatedControl
     public string SearchText
     {
         get => _searchText;
-        set => SetAndRaise(SearchTextProperty, ref _searchText, value);
-    }
-
-    private static Func<Member, bool> CreateFilter(string? text)
-    {
-        if (string.IsNullOrWhiteSpace(text))
+        set
         {
-            return _ => true;
+            SetAndRaise(SearchTextProperty, ref _searchText, value);
+            UpdateFilteredMembers();
         }
-
-        return member => member.Name.Contains(text, StringComparison.InvariantCultureIgnoreCase);
     }
 
-    private void InitializeFilter()
-    {
-        IObservable<Func<Member, bool>> filter = this.WhenValueChanged(@this => @this.SearchText)
-            .Select(CreateFilter);
 
+    private void InitializeFilteredMembers()
+    {
         foreach (Member member in AllMembers)
         {
-            _memberCache.AddOrUpdate(member);
+            if (FilteredMembers.FirstOrDefault(filterableMember => filterableMember.Member == member) is null)
+            {
+                FilteredMembers.Add(new FilterableMember(member));
+            }
+        }
+    }
+
+    private void UpdateSelectedMembers()
+    {
+        if (_listBox is null)
+        {
+            return;
         }
 
-        _memberCache.Connect()
-            .RefCount()
-            .Filter(filter)
-            .SortBy(member => member.Name)
-            .Bind(out _filteredMembers)
-            .Subscribe();
+        _listBox.SelectedItems = FilteredMembers.Where(member => SelectedMembers.Contains(member.Member)).ToList();
+    }
+
+    private void UpdateFilteredMembers()
+    {
+        foreach (Member member in AllMembers)
+        {
+            FilterableMember? filterableMember =
+                FilteredMembers.FirstOrDefault(filterableMember => filterableMember.Member == member);
+            if (filterableMember is null)
+            {
+                continue;
+            }
+
+            filterableMember.IsVisible = member != CurrentMember &&
+                                         member.Name.Contains(SearchText, StringComparison.InvariantCultureIgnoreCase);
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        var listboxObject = e.NameScope.Find("MemberSelectionListBox");
-        if (listboxObject is ListBox listBox)
+        object? listboxObject = e.NameScope.Find("MemberSelectionListBox");
+        if (listboxObject is not ListBox listBox)
         {
-            listBox.SelectionChanged += ListBoxOnSelectionChanged;
+            return;
         }
 
-        base.OnApplyTemplate(e);
+        listBox.SelectionChanged += ListBoxOnSelectionChanged;
+        _listBox = listBox;
+        InitializeFilteredMembers();
+        UpdateFilteredMembers();
+        UpdateSelectedMembers();
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
@@ -128,6 +138,20 @@ public class MemberListSelection : TemplatedControl
 
     private void ListBoxOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        throw new NotImplementedException();
+        foreach (object item in e.AddedItems)
+        {
+            if (item is FilterableMember filterableMember && !SelectedMembers.Contains(filterableMember.Member))
+            {
+                SelectedMembers.Add(filterableMember.Member);
+            }
+        }
+
+        foreach (object item in e.RemovedItems)
+        {
+            if (item is FilterableMember filterableMember)
+            {
+                SelectedMembers.Remove(filterableMember.Member);
+            }
+        }
     }
 }

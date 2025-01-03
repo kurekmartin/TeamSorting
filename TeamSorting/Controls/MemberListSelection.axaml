@@ -1,36 +1,35 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:TeamSorting.Controls"
-        xmlns:models="clr-namespace:TeamSorting.Models">
+        xmlns:models="clr-namespace:TeamSorting.Models"
+        xmlns:lang="clr-namespace:TeamSorting.Lang">
     <Design.PreviewWith>
         <controls:MemberListSelection />
     </Design.PreviewWith>
 
     <Style Selector="controls|MemberListSelection">
-        <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid RowDefinitions="Auto,*">
-                    <!-- TODO: implement search-->
                     <TextBox Grid.Row="0"
-                             x:Name="SearchBox"
-                             Watermark="Search"
+                             Watermark="{x:Static lang:Resources.MemberListSelection_Search}"
                              Text="{Binding SearchText, RelativeSource={RelativeSource TemplatedParent}}" />
                     <ScrollViewer Grid.Row="1">
                         <ListBox
                             ItemsSource="{Binding FilteredMembers, RelativeSource={RelativeSource TemplatedParent}}"
                             SelectionMode="Multiple,Toggle"
+                            AutoScrollToSelectedItem="False"
                             Name="MemberSelectionListBox">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
-                                        <x:Type TypeName="models:Member" />
+                                        <x:Type TypeName="models:FilterableMember" />
                                     </DataTemplate.DataType>
                                     <StackPanel Orientation="Horizontal"
                                                 VerticalAlignment="Center"
-                                                Name="Member">
+                                                IsVisible="{Binding IsVisible}">
                                         <CheckBox IsChecked="{Binding $parent[ListBoxItem].IsSelected}" />
-                                        <TextBlock Text="{Binding Name}"
+                                        <TextBlock Text="{Binding Member.Name}"
                                                    VerticalAlignment="Center" />
                                     </StackPanel>
                                 </DataTemplate>

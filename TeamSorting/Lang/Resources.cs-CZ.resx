@@ -198,4 +198,7 @@ Chcete pokračovat?</value>
     <data name="InputView_DeleteData_WarningDialog_Cancel" xml:space="preserve">
         <value>Zrušit</value>
     </data>
+    <data name="MemberListSelection_Search" xml:space="preserve">
+        <value>Hledat</value>
+    </data>
 </root>
