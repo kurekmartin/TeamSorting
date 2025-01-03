@@ -128,7 +128,7 @@
                                     <Button.Flyout>
                                         <Flyout Placement="RightEdgeAlignedTop">
                                             <controls:MemberListSelection
-                                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.Members}"
                                                 CurrentMember="{Binding .}"
                                                 SelectedMembers="{Binding With}" />
                                         </Flyout>
@@ -171,7 +171,7 @@
                                     <Button.Flyout>
                                         <Flyout Placement="RightEdgeAlignedTop">
                                             <controls:MemberListSelection
-                                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.Members}"
                                                 CurrentMember="{Binding .}"
                                                 SelectedMembers="{Binding NotWith}" />
                                         </Flyout>

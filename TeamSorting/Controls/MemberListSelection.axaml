@@ -15,12 +15,12 @@
                     <TextBox Grid.Row="0"
                              x:Name="SearchBox"
                              Watermark="Search"
-                             IsVisible="False" />
+                             Text="{Binding SearchText, RelativeSource={RelativeSource TemplatedParent}}" />
                     <ScrollViewer Grid.Row="1">
                         <ListBox
-                            ItemsSource="{Binding Members, RelativeSource={RelativeSource TemplatedParent}}"
+                            ItemsSource="{Binding FilteredMembers, RelativeSource={RelativeSource TemplatedParent}}"
                             SelectionMode="Multiple,Toggle"
-                            SelectedItems="{Binding SelectedMembers, RelativeSource={RelativeSource TemplatedParent}}">
+                            Name="MemberSelectionListBox">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <DataTemplate.DataType>
