@@ -81,11 +81,19 @@ public class MemberListSelection : TemplatedControl
 
     private void InitializeFilteredMembers()
     {
+        foreach (FilterableMember filterableMember in FilteredMembers.Where(filterableMember =>
+                     AllMembers.FirstOrDefault(member => member == filterableMember.Member) is null).ToList())
+        {
+            FilteredMembers.Remove(filterableMember);
+            Log.Debug("FilteredMembers removed member {name}", filterableMember.Member.Name);
+        }
+
         foreach (Member member in AllMembers)
         {
             if (FilteredMembers.FirstOrDefault(filterableMember => filterableMember.Member == member) is null)
             {
                 FilteredMembers.Add(new FilterableMember(member));
+                Log.Debug("FilteredMembers added member {name}", member.Name);
             }
         }
     }
@@ -118,6 +126,7 @@ public class MemberListSelection : TemplatedControl
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
+        Log.Debug("ApplyTemplate");
         object? listboxObject = e.NameScope.Find("MemberSelectionListBox");
         if (listboxObject is not ListBox listBox)
         {
@@ -126,6 +135,11 @@ public class MemberListSelection : TemplatedControl
 
         listBox.SelectionChanged += ListBoxOnSelectionChanged;
         _listBox = listBox;
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        Log.Debug("Loaded");
         InitializeFilteredMembers();
         UpdateFilteredMembers();
         UpdateSelectedMembers();
@@ -133,6 +147,7 @@ public class MemberListSelection : TemplatedControl
 
     protected override void OnUnloaded(RoutedEventArgs e)
     {
+        Log.Debug("Unloaded");
         SearchText = string.Empty;
     }
 
