@@ -7,7 +7,11 @@ namespace TeamSorting.Models;
 
 public class Member : ReactiveObject
 {
-    public string Name { get; set; }
+    public string Name
+    {
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
 
     public ObservableCollection<Member> With { get; } = [];
     public List<Member> SortedWith => With.OrderBy(member => member.Name).ToList();
@@ -23,6 +27,7 @@ public class Member : ReactiveObject
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
     private Team? _team;
+    private string _name;
 
     public Member(string name)
     {
