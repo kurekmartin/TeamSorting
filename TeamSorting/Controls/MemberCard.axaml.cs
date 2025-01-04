@@ -12,7 +12,7 @@ public class MemberCard : TemplatedControl
             nameof(Member),
             o => o.Member,
             (o, v) => o.Member = v,
-            new Member(string.Empty),
+            null!,
             BindingMode.TwoWay);
 
     private Member _member = null!;

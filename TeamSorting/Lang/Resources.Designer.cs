@@ -371,6 +371,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name cannot be empty.
+        /// </summary>
+        public static string InputView_Member_EmptyName_Error {
+            get {
+                return ResourceManager.GetString("InputView_Member_EmptyName_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New discipline name.
         /// </summary>
         public static string InputView_NewDiscipline_Watermark {

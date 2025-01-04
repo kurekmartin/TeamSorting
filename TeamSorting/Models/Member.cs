@@ -2,10 +2,12 @@
 using System.Collections.Specialized;
 using Avalonia.Collections;
 using ReactiveUI;
+using ReactiveUI.Validation.Extensions;
+using ReactiveUI.Validation.Helpers;
 
 namespace TeamSorting.Models;
 
-public class Member : ReactiveObject
+public class Member : ReactiveValidationObject
 {
     public string Name
     {
@@ -27,10 +29,15 @@ public class Member : ReactiveObject
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
     private Team? _team;
-    private string _name;
+    private string _name = string.Empty;
 
     public Member(string name)
     {
+        this.ValidationRule(
+            member => member.Name,
+            value => !string.IsNullOrWhiteSpace(value),
+            Lang.Resources.InputView_Member_EmptyName_Error);
+
         Name = name;
         With.CollectionChanged += WithOnCollectionChanged;
         NotWith.CollectionChanged += NotWithOnCollectionChanged;

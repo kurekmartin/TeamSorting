@@ -201,4 +201,7 @@ Chcete pokračovat?</value>
     <data name="MemberListSelection_Search" xml:space="preserve">
         <value>Hledat</value>
     </data>
+    <data name="InputView_Member_EmptyName_Error" xml:space="preserve">
+        <value>Jméno nemůže být prázdné</value>
+    </data>
 </root>

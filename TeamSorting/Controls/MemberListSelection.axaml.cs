@@ -32,7 +32,7 @@ public class MemberListSelection : TemplatedControl
             nameof(CurrentMember),
             o => o.CurrentMember,
             (o, v) => o.CurrentMember = v,
-            new Member(string.Empty),
+            null!,
             BindingMode.OneTime);
 
     public static readonly DirectProperty<MemberListSelection, ObservableCollection<Member>> AllMembersProperty =

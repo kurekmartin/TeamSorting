@@ -202,4 +202,7 @@ Do you want to continue?</value>
     <data name="MemberListSelection_Search" xml:space="preserve">
         <value>Search</value>
     </data>
+    <data name="InputView_Member_EmptyName_Error" xml:space="preserve">
+        <value>Name cannot be empty</value>
+    </data>
 </root>
