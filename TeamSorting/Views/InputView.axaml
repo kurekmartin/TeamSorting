@@ -168,8 +168,6 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <!-- <DataGridTextColumn Header="{x:Static lang:Resources.InputView_DataGrid_ColumnHeader_Name}" -->
-                <!--                     Binding="{Binding Name}" /> -->
                 <DataGridTemplateColumn Header="{x:Static lang:Resources.InputView_DataGrid_ColumnHeader_With}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
