@@ -160,11 +160,9 @@
                 <DataGridTemplateColumn Header="{x:Static lang:Resources.InputView_DataGrid_ColumnHeader_Name}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <DataValidationErrors>
-                                <TextBox Text="{Binding Name}"
-                                         BorderBrush="Transparent"
-                                         VerticalAlignment="Center" />
-                            </DataValidationErrors>
+                            <TextBox Text="{Binding Name}"
+                                     BorderBrush="Transparent"
+                                     VerticalAlignment="Center" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
