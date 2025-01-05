@@ -370,6 +370,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Člen se stejným jménem již existuje.
+        /// </summary>
+        public static string InputView_Member_DuplicateName_Error {
+            get {
+                return ResourceManager.GetString("InputView_Member_DuplicateName_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Jméno nemůže být prázdné.
         /// </summary>
         public static string InputView_Member_EmptyName_Error {

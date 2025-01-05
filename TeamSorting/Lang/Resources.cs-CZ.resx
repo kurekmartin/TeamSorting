@@ -204,4 +204,7 @@ Chcete pokračovat?</value>
     <data name="InputView_Member_EmptyName_Error" xml:space="preserve">
         <value>Jméno nemůže být prázdné</value>
     </data>
+    <data name="InputView_Member_DuplicateName_Error" xml:space="preserve">
+        <value>Člen se stejným jménem již existuje</value>
+    </data>
 </root>

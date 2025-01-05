@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data;
 using System.Dynamic;
 using System.Globalization;
-using Avalonia.Controls.Notifications;
 using CsvHelper;
 using ReactiveUI;
 using TeamSorting.Enums;
@@ -115,19 +115,52 @@ public class Data : ReactiveObject
 
     public bool AddMember(Member member)
     {
-        if (Members.Any(m => m.Name == member.Name))
-        {
-            return false;
-        }
-
         foreach (var discipline in Disciplines)
         {
             AddDisciplineRecord(member, discipline, "");
         }
 
+        member.PropertyChanged += MemberOnPropertyChanged;
         Members.Add(member);
+        ValidateMemberDuplicates();
         this.RaisePropertyChanged(nameof(SortedMembers));
         return true;
+    }
+
+    private void MemberOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender is not Member)
+        {
+            return;
+        }
+
+        if (e.PropertyName == nameof(Member.Name))
+        {
+            ValidateMemberDuplicates();
+        }
+    }
+
+    private void ValidateMemberDuplicates()
+    {
+        List<IGrouping<string, Member>> memberGroups = Members
+            .GroupBy(member => member.Name).ToList();
+        foreach (IGrouping<string, Member> members in memberGroups)
+        {
+            if (members.Count() > 1)
+            {
+                foreach (Member member in members)
+                {
+                    member.AddError(nameof(Member.Name), Resources.InputView_Member_DuplicateName_Error);
+                }
+            }
+            else
+            {
+                foreach (Member member in members)
+                {
+                    member.RemoveError(nameof(Member.Name), Resources.InputView_Member_DuplicateName_Error);
+                }
+            }
+        }
     }
 
     public bool RemoveMember(Member member)
@@ -138,6 +171,7 @@ public class Data : ReactiveObject
             Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
             member.ClearWithMembers();
             member.ClearNotWithMembers();
+            ValidateMemberDuplicates();
         }
 
         this.RaisePropertyChanged(nameof(SortedMembers));

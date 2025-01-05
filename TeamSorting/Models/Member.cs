@@ -1,18 +1,27 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using Avalonia.Collections;
 using ReactiveUI;
-using ReactiveUI.Validation.Extensions;
-using ReactiveUI.Validation.Helpers;
 
 namespace TeamSorting.Models;
 
-public class Member : ReactiveValidationObject
+public class Member : ReactiveObject, INotifyDataErrorInfo
 {
     public string Name
     {
         get => _name;
-        set => this.RaiseAndSetIfChanged(ref _name, value);
+        set
+        {
+            ClearErrors(nameof(Name));
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                AddError(nameof(Name), Lang.Resources.InputView_Member_EmptyName_Error);
+            }
+
+            this.RaiseAndSetIfChanged(ref _name, value);
+        }
     }
 
     public ObservableCollection<Member> With { get; } = [];
@@ -33,11 +42,6 @@ public class Member : ReactiveValidationObject
 
     public Member(string name)
     {
-        this.ValidationRule(
-            member => member.Name,
-            value => !string.IsNullOrWhiteSpace(value),
-            Lang.Resources.InputView_Member_EmptyName_Error);
-
         Name = name;
         With.CollectionChanged += WithOnCollectionChanged;
         NotWith.CollectionChanged += NotWithOnCollectionChanged;
@@ -275,4 +279,58 @@ public class Member : ReactiveValidationObject
         Team?.RemoveMember(this);
         team.AddMember(this);
     }
+
+    #region Errors
+
+    private readonly Dictionary<string, List<string>> _validationErrors = [];
+
+    public void AddError(string propertyName, string errorMessage)
+    {
+        if (_validationErrors.TryGetValue(propertyName, out List<string>? errors))
+        {
+            if (errors.Contains(errorMessage))
+            {
+                return;
+            }
+
+            errors.Add(errorMessage);
+        }
+        else
+        {
+            _validationErrors.Add(propertyName, [errorMessage]);
+        }
+
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+    }
+
+    public void RemoveError(string propertyName, string errorMessage)
+    {
+        if (_validationErrors.TryGetValue(propertyName, out List<string>? errors))
+        {
+            errors.Remove(errorMessage);
+            ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
+        }
+    }
+
+    private void ClearErrors(string propertyName)
+    {
+        _validationErrors.Remove(propertyName);
+    }
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (propertyName is null)
+        {
+            return _validationErrors.SelectMany(pair => pair.Value);
+        }
+
+        _validationErrors.TryGetValue(propertyName, out List<string>? errors);
+        return errors ?? [];
+    }
+
+    public bool HasErrors => _validationErrors.Count > 0;
+
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    #endregion
 }

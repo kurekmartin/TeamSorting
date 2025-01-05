@@ -371,6 +371,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Member with same name exists.
+        /// </summary>
+        public static string InputView_Member_DuplicateName_Error {
+            get {
+                return ResourceManager.GetString("InputView_Member_DuplicateName_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Name cannot be empty.
         /// </summary>
         public static string InputView_Member_EmptyName_Error {
