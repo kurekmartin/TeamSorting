@@ -30,6 +30,7 @@
                           IsExpanded="{TemplateBinding ShowDetail}"
                           HorizontalAlignment="Stretch"
                           CornerRadius="5"
+                          
                           Classes.Invalid="{Binding !Member.IsValid, 
                                         RelativeSource={RelativeSource TemplatedParent}}">
                     <Expander.Header>

@@ -1,10 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
+using Serilog;
 using TeamSorting.Controls;
 using TeamSorting.Enums;
 using TeamSorting.Models;
@@ -17,6 +19,54 @@ public partial class TeamsView : UserControl
     public TeamsView()
     {
         InitializeComponent();
+        AddHandler(DragDrop.DragOverEvent, DragOver);
+        AddHandler(DragDrop.DropEvent, Drop);
+    }
+
+    private void Drop(object? sender, DragEventArgs e)
+    {
+        Log.Debug("Drop");
+        object? data = e.Data.Get(TeamsViewModel.MemberFormat);
+        if (data is not Member member)
+        {
+            Log.Debug("No member dragged");
+            return;
+        }
+
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        teamsViewModel.Drop(member, e.Source as Control);
+    }
+
+    private void DragOver(object? sender, DragEventArgs e)
+    {
+        Log.Debug("DragOver {element}", e.Source?.GetType());
+        e.DragEffects = DragDropEffects.Move;
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        object? data = e.Data.Get(TeamsViewModel.MemberFormat);
+        if (data is not Member member) return;
+        if (!TeamsViewModel.IsValidDestination(member, e.Source as Control))
+        {
+            e.DragEffects = DragDropEffects.None;
+        }
+    }
+
+    private async void MemberCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        PointerPoint point = e.GetCurrentPoint(sender as Control);
+        if (point.Properties.IsRightButtonPressed)
+        {
+            return;
+        }
+
+        Log.Debug("MemberCard_OnPointerPressed");
+        if (sender is not MemberCard memberCard) return;
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        teamsViewModel.StartDrag(memberCard.Member);
+
+        var dragData = new DataObject();
+        dragData.Set(TeamsViewModel.MemberFormat, memberCard.Member);
+        DragDropEffects result = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
+        Log.Debug("DragDrop result: {result}", result);
     }
 
     protected override void OnInitialized()
@@ -26,7 +76,7 @@ public partial class TeamsView : UserControl
             context.NotificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this))
             {
                 Position = NotificationPosition.BottomRight,
-                Margin = new Thickness(0,0,0,35)
+                Margin = new Thickness(0, 0, 0, 35)
             };
 
             var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
