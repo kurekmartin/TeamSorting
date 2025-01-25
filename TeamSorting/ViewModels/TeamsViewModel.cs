@@ -13,7 +13,7 @@ namespace TeamSorting.ViewModels;
 public class TeamsViewModel(Data data) : ViewModelBase
 {
     public const string MemberFormat = "member-card-format";
-    public const string DragClass = "drag-active";
+    public const string DragActiveClass = "drag-active";
     public WindowNotificationManager? NotificationManager { get; set; }
     private MemberSortCriteria _teamsSortCriteria;
     private MemberCard? _draggingMemberCard;
@@ -40,13 +40,19 @@ public class TeamsViewModel(Data data) : ViewModelBase
     {
         Log.Debug("StartDrag {member}", memberCard.Member.Name);
         DraggingMemberCard = memberCard;
-        DraggingMemberCard.Classes.Add(DragClass);
+        DraggingMemberCard.Classes.Add(DragActiveClass);
+    }
+
+    public void EndDrag()
+    {
+        DraggingMemberCard?.Classes.Remove(DragActiveClass);
+        DraggingMemberCard = null;
     }
 
     public void Drop(Member member, Control? destination)
     {
         Log.Debug("Dropping member {Member}", member.Name);
-        DraggingMemberCard?.Classes.Remove(DragClass);
+        
         Visual? teamControl =
             destination?.GetVisualAncestors().FirstOrDefault(ancestor => ancestor.DataContext is Team);
         if (teamControl?.DataContext is not Team team) return;

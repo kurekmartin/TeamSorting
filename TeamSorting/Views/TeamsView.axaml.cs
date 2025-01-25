@@ -72,6 +72,7 @@ public partial class TeamsView : UserControl
         dragData.Set(TeamsViewModel.MemberFormat, memberCard.Member);
         DragDropEffects result = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
         Log.Debug("DragDrop result: {result}", result);
+        teamsViewModel.EndDrag();
     }
 
     protected override void OnInitialized()
