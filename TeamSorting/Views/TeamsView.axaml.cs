@@ -52,7 +52,12 @@ public partial class TeamsView : UserControl
 
     private async void MemberCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        PointerPoint point = e.GetCurrentPoint(sender as Control);
+        if (sender is not Control control)
+        {
+            return;
+        }
+        
+        PointerPoint point = e.GetCurrentPoint(control);
         if (point.Properties.IsRightButtonPressed)
         {
             return;
@@ -61,7 +66,7 @@ public partial class TeamsView : UserControl
         Log.Debug("MemberCard_OnPointerPressed");
         if (sender is not MemberCard memberCard) return;
         if (DataContext is not TeamsViewModel teamsViewModel) return;
-        teamsViewModel.StartDrag(memberCard.Member);
+        teamsViewModel.StartDrag(memberCard);
 
         var dragData = new DataObject();
         dragData.Set(TeamsViewModel.MemberFormat, memberCard.Member);

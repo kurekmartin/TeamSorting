@@ -24,6 +24,9 @@
             <Setter Property="Value" Value="mdi-close-circle" />
             <Setter Property="Foreground" Value="Red" />
         </Style>
+        <Style Selector="controls|MemberCard.drag-active">
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
     </UserControl.Styles>
 
     <DockPanel>
