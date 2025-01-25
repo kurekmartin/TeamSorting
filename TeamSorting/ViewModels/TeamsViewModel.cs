@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Notifications;
 using Avalonia.Controls.Primitives;
 using Avalonia.Layout;
@@ -9,7 +10,9 @@ using Avalonia.VisualTree;
 using ReactiveUI;
 using Serilog;
 using TeamSorting.Controls;
+using TeamSorting.Lang;
 using TeamSorting.Models;
+using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
@@ -76,10 +79,22 @@ public class TeamsViewModel(Data data) : ViewModelBase
             destination?.GetVisualAncestors().FirstOrDefault(ancestor => ancestor.DataContext is Team);
         if (teamControl?.DataContext is not Team team) return;
 
+        Team? oldTeam = member.Team;
         bool moved = member.MoveToTeam(team);
 
         if (!moved) return;
+
+        Team? newTeam = member.Team;
         Log.Debug("Moved member {name} to team {team}", member.Name, team.Name);
+        string message = string.Format(Resources.TeamsView_MemberMoved_Message, member.Name, oldTeam?.Name,
+            newTeam?.Name);
+        var textbox = new TextBlock
+        {
+            TextWrapping = TextWrapping.Wrap,
+            Margin = new Thickness(10),
+            Inlines = TextParser.Parse(message)
+        };
+        NotificationManager?.Show(textbox, NotificationType.Success);
     }
 
     public bool IsValidDestination(Member member, Control? destination, bool isLeaving = false)

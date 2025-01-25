@@ -208,4 +208,7 @@ Do you want to continue?</value>
     <data name="InputView_Member_DuplicateName_Error" xml:space="preserve">
         <value>Member with same name exists</value>
     </data>
+    <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
+        <value>Member **{0}** moved from team **{1}** to team **{2}**.</value>
+    </data>
 </root>

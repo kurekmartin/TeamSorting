@@ -553,6 +553,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Member **{0}** moved from team **{1}** to team **{2}**..
+        /// </summary>
+        public static string TeamsView_MemberMoved_Message {
+            get {
+                return ResourceManager.GetString("TeamsView_MemberMoved_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Seed.
         /// </summary>
         public static string TeamsView_Seed_Label {
