@@ -132,7 +132,8 @@
         </DockPanel>
         <ScrollViewer VerticalScrollBarVisibility="Disabled"
                       HorizontalScrollBarVisibility="Auto"
-                      MaxWidth="">
+                      MaxWidth=""
+                      DragDrop.AllowDrop="True">
             <ItemsControl ItemsSource="{Binding Data.Teams}"
                           DockPanel.Dock="Top">
                 <ItemsControl.ItemsPanel>
@@ -142,85 +143,87 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <DockPanel Margin="0,0,5,0"
-                                   Dock="Left"
-                                   VerticalAlignment="Top"
-                                   HorizontalAlignment="Left"
-                                   DragDrop.AllowDrop="True">
-                            <StackPanel Orientation="Vertical"
-                                        DockPanel.Dock="Top">
-                                <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Center"
-                                            Margin="5,0">
-                                    <i:Icon Name="TeamValidityIcon"
-                                            Classes.Valid="{Binding IsValid}"
-                                            ToolTip.Tip="{Binding IsValid, 
+                        <Border Name="Team"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left"
+                                Background="Transparent"
+                                DockPanel.Dock="Left">
+                            <DockPanel Margin="5">
+                                <StackPanel Orientation="Vertical"
+                                            DockPanel.Dock="Top">
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Center"
+                                                Margin="5,0">
+                                        <i:Icon Name="TeamValidityIcon"
+                                                Classes.Valid="{Binding IsValid}"
+                                                ToolTip.Tip="{Binding IsValid, 
                                                 StringFormat={x:Static lang:Resources.TeamsView_TeamIsValid_ToolTip},
                                                 Converter={StaticResource BoolDisplayNameConverter}}"
-                                            FontSize="19"
-                                            VerticalAlignment="Center" />
-                                    <TextBlock Text="{Binding Name}"
-                                               FontWeight="Bold"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                               Margin="5,0" />
-                                    <StackPanel Orientation="Horizontal"
-                                                VerticalAlignment="Center">
-                                        <i:Icon Value="mdi-account-group"
-                                                FontSize="16"
-                                                VerticalAlignment="Bottom"
-                                                Margin="0,0,2,0" />
-                                        <TextBlock Text="{Binding Members.Count}"
-                                                   DockPanel.Dock="Right"
-                                                   HorizontalAlignment="Right"
-                                                   VerticalAlignment="Bottom" />
+                                                FontSize="19"
+                                                VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Margin="5,0" />
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <i:Icon Value="mdi-account-group"
+                                                    FontSize="16"
+                                                    VerticalAlignment="Bottom"
+                                                    Margin="0,0,2,0" />
+                                            <TextBlock Text="{Binding Members.Count}"
+                                                       DockPanel.Dock="Right"
+                                                       HorizontalAlignment="Right"
+                                                       VerticalAlignment="Bottom" />
+                                        </StackPanel>
                                     </StackPanel>
+                                    <ItemsControl ItemsSource="{Binding AvgScores}"
+                                                  Margin="15,0,15,5">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <DataTemplate.DataType>
+                                                    <x:Type TypeName="generic:KeyValuePair"
+                                                            x:TypeArguments="models:DisciplineInfo,x:Decimal" />
+                                                </DataTemplate.DataType>
+                                                <DockPanel Margin="0,0,0,2">
+                                                    <TextBlock Text="{Binding Key.Name}"
+                                                               FontWeight="Bold"
+                                                               HorizontalAlignment="Left"
+                                                               Margin="0,0,5,0" />
+                                                    <TextBlock Text="{Binding Value}"
+                                                               HorizontalAlignment="Right" />
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
                                 </StackPanel>
-                                <ItemsControl ItemsSource="{Binding AvgScores}"
-                                              Margin="15,0,15,5">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <DataTemplate.DataType>
-                                                <x:Type TypeName="generic:KeyValuePair"
-                                                        x:TypeArguments="models:DisciplineInfo,x:Decimal" />
-                                            </DataTemplate.DataType>
-                                            <DockPanel Margin="0,0,0,2">
-                                                <TextBlock Text="{Binding Key.Name}"
-                                                           FontWeight="Bold"
-                                                           HorizontalAlignment="Left"
-                                                           Margin="0,0,5,0" />
-                                                <TextBlock Text="{Binding Value}"
-                                                           HorizontalAlignment="Right" />
-                                            </DockPanel>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </StackPanel>
-                            <ScrollViewer>
-                                <ItemsControl ItemsSource="{Binding SortedMembers}"
-                                              DockPanel.Dock="Top">
-                                    <ItemsControl.ItemTemplate>
-                                        <DataTemplate>
-                                            <controls:MemberCard Member="{Binding .}"
-                                                                 Margin="3"
-                                                                 PointerPressed="MemberCard_OnPointerPressed">
-                                                <controls:MemberCard.ContextMenu>
-                                                    <ContextMenu
-                                                        ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Data.Teams}">
-                                                        <ContextMenu.ItemTemplate>
-                                                            <DataTemplate>
-                                                                <MenuItem Header="{Binding Name}"
-                                                                          Click="MemberTeamMenu_OnClick" />
-                                                            </DataTemplate>
-                                                        </ContextMenu.ItemTemplate>
-                                                    </ContextMenu>
-                                                </controls:MemberCard.ContextMenu>
-                                            </controls:MemberCard>
-                                        </DataTemplate>
-                                    </ItemsControl.ItemTemplate>
-                                </ItemsControl>
-                            </ScrollViewer>
-                        </DockPanel>
+                                <ScrollViewer>
+                                    <ItemsControl ItemsSource="{Binding SortedMembers}"
+                                                  DockPanel.Dock="Top">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <controls:MemberCard Member="{Binding .}"
+                                                                     Margin="3"
+                                                                     PointerPressed="MemberCard_OnPointerPressed">
+                                                    <controls:MemberCard.ContextMenu>
+                                                        <ContextMenu
+                                                            ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Data.Teams}">
+                                                            <ContextMenu.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <MenuItem Header="{Binding Name}"
+                                                                              Click="MemberTeamMenu_OnClick" />
+                                                                </DataTemplate>
+                                                            </ContextMenu.ItemTemplate>
+                                                        </ContextMenu>
+                                                    </controls:MemberCard.ContextMenu>
+                                                </controls:MemberCard>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </Border>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

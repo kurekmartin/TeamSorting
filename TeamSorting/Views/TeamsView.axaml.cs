@@ -21,6 +21,15 @@ public partial class TeamsView : UserControl
         InitializeComponent();
         AddHandler(DragDrop.DragOverEvent, DragOver);
         AddHandler(DragDrop.DropEvent, Drop);
+        AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+    }
+
+    private void DragLeave(object? sender, DragEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        object? data = e.Data.Get(TeamsViewModel.MemberFormat);
+        if (data is not Member member) return;
+        teamsViewModel.IsValidDestination(member, e.Source as Control, true);
     }
 
     private void Drop(object? sender, DragEventArgs e)
@@ -44,7 +53,7 @@ public partial class TeamsView : UserControl
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         object? data = e.Data.Get(TeamsViewModel.MemberFormat);
         if (data is not Member member) return;
-        if (!TeamsViewModel.IsValidDestination(member, e.Source as Control))
+        if (!teamsViewModel.IsValidDestination(member, e.Source as Control))
         {
             e.DragEffects = DragDropEffects.None;
         }

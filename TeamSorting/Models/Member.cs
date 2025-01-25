@@ -113,7 +113,7 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
 
     public Team? Team
     {
-        private get => _team;
+        get => _team;
         set
         {
             if (_team == value) return;
@@ -269,15 +269,16 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
         Records.Remove(recordId);
     }
 
-    public void MoveToTeam(Team team)
+    public bool MoveToTeam(Team team)
     {
         if (Team == team)
         {
-            return;
+            return false;
         }
 
         Team?.RemoveMember(this);
         team.AddMember(this);
+        return true;
     }
 
     #region Errors
