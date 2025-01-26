@@ -52,10 +52,10 @@ public partial class TeamsView : UserControl
 
     private void DragOver(object? sender, DragEventArgs e)
     {
-        var currentPosition = e.GetPosition(TeamViewContainer);
+        Point currentPosition = e.GetPosition(TeamViewContainer);
 
-        var offsetX = currentPosition.X - _ghostPosition.X;
-        var offsetY = currentPosition.Y - _ghostPosition.Y;
+        double offsetX = currentPosition.X - _ghostPosition.X;
+        double offsetY = currentPosition.Y - _ghostPosition.Y;
 
         GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
 
