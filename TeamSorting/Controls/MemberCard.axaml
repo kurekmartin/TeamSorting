@@ -2,7 +2,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:TeamSorting.Controls"
         xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
-        xmlns:models="clr-namespace:TeamSorting.Models">
+        xmlns:models="clr-namespace:TeamSorting.Models"
+        xmlns:i="https://github.com/projektanker/icons.avalonia">
     <Design.PreviewWith>
         <controls:MemberCard />
     </Design.PreviewWith>
@@ -10,7 +11,30 @@
     <Style Selector="ItemsControl.MemberList:empty">
         <Setter Property="IsVisible" Value="False" />
     </Style>
-    <Style Selector="Expander#Card.Invalid ToggleButton > Border">
+    <Style Selector="ToggleButton i|Icon.collapsed">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="ToggleButton:checked  i|Icon.collapsed">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="ToggleButton  i|Icon.expanded">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="ToggleButton:checked  i|Icon.expanded">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="Black" />
+    </Style>
+    <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="#80808080" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Foreground" Value="Black" />
+    </Style>
+
+    <Style Selector="StackPanel.Invalid > DockPanel#CardHeader">
         <Setter Property="Background" Value="Tomato" />
     </Style>
     <Style Selector="TextBlock#NotWithMemberValue.Invalid">
@@ -23,84 +47,112 @@
 
     <Style Selector="controls|MemberCard">
         <!-- Set Defaults -->
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Expander Name="Card"
-                          ExpandDirection="Down"
-                          IsExpanded="{TemplateBinding ShowDetail}"
-                          HorizontalAlignment="Stretch"
-                          CornerRadius="5"
-                          
-                          Classes.Invalid="{Binding !Member.IsValid, 
-                                        RelativeSource={RelativeSource TemplatedParent}}">
-                    <Expander.Header>
-                        <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
-                                   FontWeight="Bold" />
-                    </Expander.Header>
-                    <StackPanel>
-                        <TextBlock Text="With"
-                                   FontWeight="Bold"
-                                   IsVisible="{Binding #MemberWithList.IsVisible}" />
-                        <ItemsControl Classes="MemberList"
-                                      Name="MemberWithList"
-                                      ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <DataTemplate.DataType>
-                                        <x:Type TypeName="generic:KeyValuePair"
-                                                x:TypeArguments="x:String,x:Boolean" />
-                                    </DataTemplate.DataType>
-                                    <TextBlock Name="WithMemberValue"
-                                               Text="{Binding Key}"
-                                               HorizontalAlignment="Left"
-                                               Margin="5,0,0,0"
-                                               Classes.Invalid="{Binding !Value}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
-                        <TextBlock Text="Not With"
-                                   FontWeight="Bold"
-                                   IsVisible="{Binding #MemberNotWithList.IsVisible}" />
-                        <ItemsControl Classes="MemberList"
-                                      Name="MemberNotWithList"
-                                      ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <DataTemplate.DataType>
-                                        <x:Type TypeName="generic:KeyValuePair"
-                                                x:TypeArguments="x:String,x:Boolean" />
-                                    </DataTemplate.DataType>
-                                    <TextBlock Name="NotWithMemberValue"
-                                               Text="{Binding Key}"
-                                               HorizontalAlignment="Left"
-                                               Margin="5,0,0,0"
-                                               Classes.Invalid="{Binding !Value}" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                        <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}" />
-                        <ItemsControl
-                            ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <DataTemplate.DataType>
-                                        <x:Type TypeName="models:DisciplineRecord" />
-                                    </DataTemplate.DataType>
-                                    <DockPanel Margin="0,0,0,2">
-                                        <TextBlock
-                                            Text="{Binding DisciplineInfo.Name}"
-                                            FontWeight="Bold"
-                                            HorizontalAlignment="Left"
-                                            Margin="0,0,5,0" />
-                                        <TextBlock Text="{Binding DecimalValue}"
-                                                   HorizontalAlignment="Right" />
-                                    </DockPanel>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
+                <Border HorizontalAlignment="Stretch"
+                        CornerRadius="5"
+                        Background="White"
+                        BorderThickness="1"
+                        BorderBrush="LightGray"
+                        ClipToBounds="True">
+                    <StackPanel Orientation="Vertical"
+                                HorizontalAlignment="Stretch"
+                                Classes.Invalid="{Binding !Member.IsValid,RelativeSource={RelativeSource TemplatedParent}}">
+                        <DockPanel Name="CardHeader"
+                                   VerticalAlignment="Stretch"
+                                   HorizontalAlignment="Stretch">
+                            <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
+                                       FontWeight="Bold"
+                                       Margin="10"
+                                       DockPanel.Dock="Left"
+                                       VerticalAlignment="Center" />
+                            <ToggleButton VerticalAlignment="Center"
+                                          HorizontalAlignment="Right"
+                                          Background="Transparent"
+                                          IsChecked="{TemplateBinding ShowDetail}"
+                                          Name="ToggleButton"
+                                          Width="40"
+                                          Height="40">
+                                <Panel>
+                                    <i:Icon Classes="collapsed"
+                                            Value="mdi:chevron-up"
+                                            FontSize="20" />
+                                    <i:Icon Classes="expanded"
+                                            Value="mdi:chevron-down"
+                                            FontSize="20" />
+                                </Panel>
+                            </ToggleButton>
+                        </DockPanel>
+                        <Separator IsVisible="{Binding #ToggleButton.IsChecked }"
+                                   Margin="0" />
+                        <StackPanel Margin="10"
+                                    IsVisible="{Binding #ToggleButton.IsChecked }">
+                            <TextBlock Text="With"
+                                       FontWeight="Bold"
+                                       IsVisible="{Binding #MemberWithList.IsVisible}" />
+                            <ItemsControl Classes="MemberList"
+                                          Name="MemberWithList"
+                                          ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.DataType>
+                                            <x:Type TypeName="generic:KeyValuePair"
+                                                    x:TypeArguments="x:String,x:Boolean" />
+                                        </DataTemplate.DataType>
+                                        <TextBlock Name="WithMemberValue"
+                                                   Text="{Binding Key}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="5,0,0,0"
+                                                   Classes.Invalid="{Binding !Value}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
+                            <TextBlock Text="Not With"
+                                       FontWeight="Bold"
+                                       IsVisible="{Binding #MemberNotWithList.IsVisible}" />
+                            <ItemsControl Classes="MemberList"
+                                          Name="MemberNotWithList"
+                                          ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.DataType>
+                                            <x:Type TypeName="generic:KeyValuePair"
+                                                    x:TypeArguments="x:String,x:Boolean" />
+                                        </DataTemplate.DataType>
+                                        <TextBlock Name="NotWithMemberValue"
+                                                   Text="{Binding Key}"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="5,0,0,0"
+                                                   Classes.Invalid="{Binding !Value}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                            <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}" />
+                            <ItemsControl
+                                ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <DataTemplate.DataType>
+                                            <x:Type TypeName="models:DisciplineRecord" />
+                                        </DataTemplate.DataType>
+                                        <DockPanel Margin="0,0,0,2">
+                                            <TextBlock
+                                                Text="{Binding DisciplineInfo.Name}"
+                                                FontWeight="Bold"
+                                                HorizontalAlignment="Left"
+                                                Margin="0,0,5,0" />
+                                            <TextBlock Text="{Binding DecimalValue}"
+                                                       HorizontalAlignment="Right" />
+                                        </DockPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
                     </StackPanel>
-                </Expander>
+                </Border>
             </ControlTemplate>
         </Setter>
     </Style>
