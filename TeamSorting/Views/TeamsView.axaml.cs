@@ -18,7 +18,7 @@ namespace TeamSorting.Views;
 public partial class TeamsView : UserControl
 {
     private Point _ghostPosition = new(0, 0);
-    private Point _mouseOffset = new(-5, -5);
+    private Point _mouseOffset;
 
     public TeamsView()
     {
