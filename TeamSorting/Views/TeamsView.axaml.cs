@@ -83,20 +83,22 @@ public partial class TeamsView : UserControl
 
         if (sender is not MemberCard memberCard) return;
 
-        _mouseOffset = e.GetPosition(memberCard);
         memberCard.Copy(GhostCard);
+        _mouseOffset = e.GetPosition(memberCard);
+
+        GhostCard.IsVisible = true;
+        GhostCard.UpdateLayout(); //position is not updated when hidden
+
         Point ghostPos = GhostCard.Bounds.Position;
         _ghostPosition = new Point(ghostPos.X + _mouseOffset.X, ghostPos.Y + _mouseOffset.Y);
 
         Point mousePos = e.GetPosition(TeamViewContainer);
-        double offsetX = mousePos.X - ghostPos.X;
-        double offsetY = mousePos.Y - ghostPos.Y + _mouseOffset.X;
+        double offsetX = mousePos.X - _ghostPosition.X;
+        double offsetY = mousePos.Y - _ghostPosition.Y + _mouseOffset.X;
         GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
 
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         teamsViewModel.StartDrag(memberCard);
-
-        GhostCard.IsVisible = true;
 
         var dragData = new DataObject();
         dragData.Set(TeamsViewModel.MemberFormat, memberCard.Member);
