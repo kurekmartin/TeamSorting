@@ -97,7 +97,7 @@ public class TeamsViewModel(Data data) : ViewModelBase
         NotificationManager?.Show(textbox, NotificationType.Success);
     }
 
-    public bool IsValidDestination(Member member, Control? destination, bool isLeaving = false)
+    public bool IsValidDestination(Member member, Control? destination)
     {
         Log.Debug("Validating destination {dest}", destination?.GetType());
         Visual? teamControl;

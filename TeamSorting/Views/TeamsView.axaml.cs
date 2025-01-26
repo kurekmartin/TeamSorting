@@ -33,7 +33,7 @@ public partial class TeamsView : UserControl
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         object? data = e.Data.Get(TeamsViewModel.MemberFormat);
         if (data is not Member member) return;
-        teamsViewModel.IsValidDestination(member, e.Source as Control, true);
+        teamsViewModel.IsValidDestination(member, e.Source as Control);
     }
 
     private void Drop(object? sender, DragEventArgs e)
