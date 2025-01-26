@@ -73,13 +73,13 @@
                                               GroupName="SortOrder"
                                               Icon="mdi-sort-ascending"
                                               Size="27"
+                                              IsChecked="True"
                                               IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
                     <controls:IconRadioButton Name="SortDescRadioButton"
                                               GroupName="SortOrder"
                                               Icon="mdi-sort-descending"
                                               Size="27"
-                                              IsCheckedChanged="ToggleButton_OnIsCheckedChanged"
-                                              IsChecked="True" />
+                                              IsCheckedChanged="ToggleButton_OnIsCheckedChanged"/>
 
                     <ComboBox x:Name="SortCriteriaComboBox"
                               SelectionChanged="SortCriteriaComboBox_OnSelectionChanged">
