@@ -76,7 +76,7 @@ public partial class TeamsView : UserControl
         }
 
         PointerPoint point = e.GetCurrentPoint(control);
-        if (point.Properties.IsRightButtonPressed)
+        if (!point.Properties.IsLeftButtonPressed)
         {
             return;
         }
