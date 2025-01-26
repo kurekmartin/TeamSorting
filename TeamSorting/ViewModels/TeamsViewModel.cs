@@ -44,7 +44,6 @@ public class TeamsViewModel(Data data) : ViewModelBase
 
     public void StartDrag(MemberCard memberCard)
     {
-        Log.Debug("StartDrag {member}", memberCard.Member.Name);
         DraggingMemberCard = memberCard;
         DraggingMemberCard.Classes.Add(DragActiveClass);
     }
@@ -61,8 +60,6 @@ public class TeamsViewModel(Data data) : ViewModelBase
 
     public void Drop(Member member, Control? destination)
     {
-        Log.Debug("Dropping member {Member}", member.Name);
-
         Visual? teamControl =
             destination?.GetVisualAncestors().FirstOrDefault(ancestor => ancestor.DataContext is Team);
         if (teamControl?.DataContext is not Team team) return;
@@ -73,7 +70,6 @@ public class TeamsViewModel(Data data) : ViewModelBase
         if (!moved) return;
 
         Team? newTeam = member.Team;
-        Log.Debug("Moved member {name} to team {team}", member.Name, team.Name);
         string message = string.Format(Resources.TeamsView_MemberMoved_Message, member.Name, oldTeam?.Name,
             newTeam?.Name);
         var textbox = new TextBlock
@@ -87,7 +83,6 @@ public class TeamsViewModel(Data data) : ViewModelBase
 
     public bool IsValidDestination(Member member, Control? destination)
     {
-        Log.Debug("Validating destination {dest}", destination?.GetType());
         Visual? teamControl;
         if (destination is Grid && destination is { DataContext: Team, Name: "Team" })
         {
@@ -162,7 +157,6 @@ public class TeamsViewModel(Data data) : ViewModelBase
 
     private void CheckDrag()
     {
-        Log.Debug("Checking drag");
         Dispatcher.UIThread.Post(() => RemoveTeamHighlight(_dragOverTeam));
         _timer?.Dispose();
         _timer = null;

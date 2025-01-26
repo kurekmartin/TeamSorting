@@ -39,11 +39,9 @@ public partial class TeamsView : UserControl
 
     private void Drop(object? sender, DragEventArgs e)
     {
-        Log.Debug("Drop");
         object? data = e.Data.Get(TeamsViewModel.MemberFormat);
         if (data is not Member member)
         {
-            Log.Debug("No member dragged");
             return;
         }
 
@@ -60,7 +58,6 @@ public partial class TeamsView : UserControl
 
         GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
 
-        Log.Debug("DragOver {element}", e.Source?.GetType());
         e.DragEffects = DragDropEffects.Move;
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         object? data = e.Data.Get(TeamsViewModel.MemberFormat);
@@ -84,7 +81,6 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        Log.Debug("MemberCard_OnPointerPressed");
         if (sender is not MemberCard memberCard) return;
 
         _mouseOffset = e.GetPosition(memberCard);
@@ -104,8 +100,7 @@ public partial class TeamsView : UserControl
 
         var dragData = new DataObject();
         dragData.Set(TeamsViewModel.MemberFormat, memberCard.Member);
-        DragDropEffects result = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
-        Log.Debug("DragDrop result: {result}", result);
+        await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
         teamsViewModel.EndDrag();
         GhostCard.IsVisible = false;
     }
