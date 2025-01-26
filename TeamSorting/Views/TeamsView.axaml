@@ -133,9 +133,9 @@
         <ScrollViewer VerticalScrollBarVisibility="Disabled"
                       HorizontalScrollBarVisibility="Auto"
                       MaxWidth=""
-                      DragDrop.AllowDrop="True">
-            <ItemsControl ItemsSource="{Binding Data.Teams}"
-                          DockPanel.Dock="Top">
+                      DragDrop.AllowDrop="True"
+                      DockPanel.Dock="Top">
+            <ItemsControl ItemsSource="{Binding Data.Teams}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <DockPanel />
@@ -143,11 +143,11 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Name="Team"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Left"
-                                Background="Transparent"
-                                DockPanel.Dock="Left">
+                        <Grid Name="Team"
+                              VerticalAlignment="Top"
+                              HorizontalAlignment="Left"
+                              Background="Transparent"
+                              DockPanel.Dock="Left">
                             <DockPanel Margin="5">
                                 <StackPanel Orientation="Vertical"
                                             DockPanel.Dock="Top">
@@ -223,14 +223,23 @@
                                     </ItemsControl>
                                 </ScrollViewer>
                             </DockPanel>
-                        </Border>
+                            <Border Name="TeamHighlight"
+                                    Background="Aqua"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    IsHitTestVisible="False"
+                                    Opacity="0.5"
+                                    CornerRadius="5"
+                                    IsVisible="False"/>
+                        </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
         </ScrollViewer>
-        <controls:MemberCard Name="GhostCard" 
+        <controls:MemberCard Name="GhostCard"
                              IsHitTestVisible="False"
                              VerticalAlignment="Center"
-                             HorizontalAlignment="Center"/>
+                             HorizontalAlignment="Center"
+                             ZIndex="10"/>
     </DockPanel>
 </UserControl>

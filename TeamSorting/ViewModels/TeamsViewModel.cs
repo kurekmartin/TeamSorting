@@ -1,9 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Documents;
 using Avalonia.Controls.Notifications;
-using Avalonia.Controls.Primitives;
-using Avalonia.Layout;
+using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -25,16 +23,6 @@ public class TeamsViewModel(Data data) : ViewModelBase
     private MemberCard? _draggingMemberCard;
     private Timer? _timer;
     private Visual? _dragOverTeam;
-
-    private static readonly Border TeamHighlight = new()
-    {
-        Background = Brushes.Aqua,
-        HorizontalAlignment = HorizontalAlignment.Stretch,
-        VerticalAlignment = VerticalAlignment.Stretch,
-        IsHitTestVisible = false,
-        Opacity = 0.5,
-        CornerRadius = new CornerRadius(5)
-    };
 
     public MemberCard? DraggingMemberCard
     {
@@ -67,7 +55,7 @@ public class TeamsViewModel(Data data) : ViewModelBase
         DraggingMemberCard = null;
         if (_dragOverTeam is not null)
         {
-            AdornerLayer.SetAdorner(_dragOverTeam, null);
+            RemoveTeamHighlight(_dragOverTeam);
         }
     }
 
@@ -101,7 +89,7 @@ public class TeamsViewModel(Data data) : ViewModelBase
     {
         Log.Debug("Validating destination {dest}", destination?.GetType());
         Visual? teamControl;
-        if (destination is Border && destination is { DataContext: Team, Name: "Team" })
+        if (destination is Grid && destination is { DataContext: Team, Name: "Team" })
         {
             teamControl = destination;
         }
@@ -109,7 +97,7 @@ public class TeamsViewModel(Data data) : ViewModelBase
         {
             teamControl = destination?
                 .GetVisualAncestors()
-                .OfType<Border>()
+                .OfType<Grid>()
                 .FirstOrDefault(ancestor => ancestor is { Name: "Team", DataContext: Team });
         }
 
@@ -139,15 +127,31 @@ public class TeamsViewModel(Data data) : ViewModelBase
         }
 
         _dragOverTeam = teamControl;
-        AdornerLayer.SetAdorner(_dragOverTeam, TeamHighlight);
+
+        AddTeamHighlight(_dragOverTeam);
 
         return true;
     }
 
+    private static void AddTeamHighlight(Visual? control)
+    {
+        Border? highlight = control?.GetLogicalChildren().OfType<Border>()
+            .FirstOrDefault(child => child.Name == "TeamHighlight");
+        if (highlight != null)
+        {
+            highlight.IsVisible = true;
+        }
+    }
+
     private void RemoveTeamHighlight(Visual? control)
     {
-        if (control is null) return;
-        AdornerLayer.SetAdorner(control, null);
+        Border? highlight = control?.GetLogicalChildren().OfType<Border>()
+            .FirstOrDefault(child => child.Name == "TeamHighlight");
+        if (highlight != null)
+        {
+            highlight.IsVisible = false;
+        }
+
         _dragOverTeam = null;
     }
 
