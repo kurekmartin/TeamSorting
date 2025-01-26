@@ -101,7 +101,7 @@ public class TeamsViewModel(Data data) : ViewModelBase
     {
         Log.Debug("Validating destination {dest}", destination?.GetType());
         Visual? teamControl;
-        if (destination is Border && destination.DataContext is Team)
+        if (destination is Border && destination is { DataContext: Team, Name: "Team" })
         {
             teamControl = destination;
         }
