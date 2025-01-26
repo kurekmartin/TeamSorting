@@ -4,6 +4,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
 using Serilog;
@@ -16,6 +17,9 @@ namespace TeamSorting.Views;
 
 public partial class TeamsView : UserControl
 {
+    private Point _ghostPosition = new(0, 0);
+    private Point _mouseOffset = new(-5, -5);
+
     public TeamsView()
     {
         InitializeComponent();
@@ -48,6 +52,13 @@ public partial class TeamsView : UserControl
 
     private void DragOver(object? sender, DragEventArgs e)
     {
+        var currentPosition = e.GetPosition(TeamViewContainer);
+
+        var offsetX = currentPosition.X - _ghostPosition.X;
+        var offsetY = currentPosition.Y - _ghostPosition.Y;
+
+        GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
+
         Log.Debug("DragOver {element}", e.Source?.GetType());
         e.DragEffects = DragDropEffects.Move;
         if (DataContext is not TeamsViewModel teamsViewModel) return;
@@ -65,7 +76,7 @@ public partial class TeamsView : UserControl
         {
             return;
         }
-        
+
         PointerPoint point = e.GetCurrentPoint(control);
         if (point.Properties.IsRightButtonPressed)
         {
@@ -74,14 +85,28 @@ public partial class TeamsView : UserControl
 
         Log.Debug("MemberCard_OnPointerPressed");
         if (sender is not MemberCard memberCard) return;
+
+        _mouseOffset = e.GetPosition(memberCard);
+        memberCard.Copy(GhostCard);
+        Point ghostPos = GhostCard.Bounds.Position;
+        _ghostPosition = new Point(ghostPos.X + _mouseOffset.X, ghostPos.Y + _mouseOffset.Y);
+
+        Point mousePos = e.GetPosition(TeamViewContainer);
+        double offsetX = mousePos.X - ghostPos.X;
+        double offsetY = mousePos.Y - ghostPos.Y + _mouseOffset.X;
+        GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
+
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         teamsViewModel.StartDrag(memberCard);
+
+        GhostCard.IsVisible = true;
 
         var dragData = new DataObject();
         dragData.Set(TeamsViewModel.MemberFormat, memberCard.Member);
         DragDropEffects result = await DragDrop.DoDragDrop(e, dragData, DragDropEffects.Move);
         Log.Debug("DragDrop result: {result}", result);
         teamsViewModel.EndDrag();
+        GhostCard.IsVisible = false;
     }
 
     protected override void OnInitialized()
@@ -103,6 +128,12 @@ public partial class TeamsView : UserControl
             SortCriteriaComboBox.ItemsSource = items.OrderBy(criteria => criteria.DisplayText).ToList();
             SortCriteriaComboBox.SelectedValue = nameItem;
         }
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        GhostCard.IsVisible = false;
+        base.OnLoaded(e);
     }
 
     private async void Back_OnClick(object? sender, RoutedEventArgs e)

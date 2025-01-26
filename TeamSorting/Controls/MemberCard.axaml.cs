@@ -38,4 +38,12 @@ public class MemberCard : TemplatedControl
         get => _showDetail;
         set => SetAndRaise(ShowDetailProperty, ref _showDetail, value);
     }
+
+    public void Copy(MemberCard card)
+    {
+        card.ShowDetail = ShowDetail;
+        card.Member = Member;
+        card.Width = Bounds.Width;
+        card.Height = Bounds.Height;
+    }
 }
