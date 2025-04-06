@@ -1,0 +1,6 @@
+﻿Name,With,NotWith,Age
+,,,Number
+,,,Asc
+Name1,,,1.5
+Name2,,,15
+Name3,,,"1,5"

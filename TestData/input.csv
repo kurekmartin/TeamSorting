@@ -1,0 +1,9 @@
+﻿Name,With,NotWith,Age,Discipline1,Discipline2
+,,,Number,Time,Number
+,,,Asc,Asc,Asc
+Name1,,,10,00:00:10,10
+Name2,,"Name1,Name4",11,00:01:15,20
+Name3,Name1,,12,,
+Name4,,,10,,
+Name5,,,12,,
+Name6,,,12,,
