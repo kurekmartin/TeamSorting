@@ -156,7 +156,7 @@ public class Team : ReactiveObject
     public decimal GetAverageValueByDiscipline(DisciplineInfo discipline)
     {
         var records = Members.Select(member => member.GetRecord(discipline));
-        return records.Sum(record => record.DecimalValue) / Members.Count;
+        return Members.Count == 0 ? 0 : records.Sum(record => record.DecimalValue) / Members.Count;
     }
 
     public static int InvalidMemberCount(IEnumerable<Member> members)
