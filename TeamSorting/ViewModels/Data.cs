@@ -35,6 +35,8 @@ public class Data : ReactiveObject
         }
     }
 
+    public Team MembersWithoutTeam { get; } = new("Unsorted");
+
     public Dictionary<DisciplineInfo, decimal> DisciplineDelta
     {
         get
@@ -122,6 +124,7 @@ public class Data : ReactiveObject
 
         member.PropertyChanged += MemberOnPropertyChanged;
         Members.Add(member);
+        MembersWithoutTeam.AddMember(member);
         ValidateMemberDuplicates();
         this.RaisePropertyChanged(nameof(SortedMembers));
         return true;
@@ -168,7 +171,7 @@ public class Data : ReactiveObject
         bool result = Members.Remove(member);
         if (result)
         {
-            Teams.FirstOrDefault(team => team.Members.Contains(member))?.Members.Remove(member);
+            member.Team?.RemoveMember(member);
             member.ClearWithMembers();
             member.ClearNotWithMembers();
             ValidateMemberDuplicates();
