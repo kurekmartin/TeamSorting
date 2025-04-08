@@ -276,7 +276,6 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
             return false;
         }
 
-        Team?.RemoveMember(this);
         team.AddMember(this);
         return true;
     }

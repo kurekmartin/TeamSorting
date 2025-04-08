@@ -130,6 +130,7 @@ public class Team : ReactiveObject
 
     public void AddMember(Member member)
     {
+        member.Team?.RemoveMember(member);
         member.Team = this;
         Members.Add(member);
     }
