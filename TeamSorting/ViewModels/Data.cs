@@ -438,6 +438,7 @@ public class Data : ReactiveObject
         {
             team.SortCriteria = sortCriteria;
         }
+        MembersWithoutTeam.SortCriteria = sortCriteria;
     }
 
     #endregion
