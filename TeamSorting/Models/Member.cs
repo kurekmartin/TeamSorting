@@ -220,6 +220,11 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
 
     private Dictionary<string, bool> ValidateWith()
     {
+        if (Team is null || Team.DisableValidation)
+        {
+            return SortedWith.ToDictionary(member => member.Name, _ => true);
+        }
+
         Dictionary<string, bool> dict = [];
         foreach (string withMember in SortedWith.Select(m => m.Name))
         {
@@ -232,6 +237,11 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
 
     private Dictionary<string, bool> ValidateNotWith()
     {
+        if (Team is null || Team.DisableValidation)
+        {
+            return SortedNotWith.ToDictionary(member => member.Name, _ => true);
+        }
+
         Dictionary<string, bool> dict = [];
         foreach (string notWithMember in SortedNotWith.Select(m => m.Name))
         {

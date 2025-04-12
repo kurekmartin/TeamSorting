@@ -114,10 +114,11 @@ public class Team : ReactiveObject
 #endif
     }
 
+    public bool DisableValidation { get; init; }
 
     public bool IsValid
     {
-        get { return Members.All(member => member.IsValid); }
+        get { return !DisableValidation && Members.All(member => member.IsValid); }
     }
 
     public void AddMembers(IEnumerable<Member> members)
