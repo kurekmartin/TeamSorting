@@ -35,7 +35,7 @@ public class Data : ReactiveObject
         }
     }
 
-    public Team MembersWithoutTeam { get; } = new("Unsorted") { DisableValidation = true };
+    public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
 
     public Dictionary<DisciplineInfo, decimal> DisciplineDelta
     {

@@ -210,4 +210,7 @@ Chcete pokračovat?</value>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Člen **{0}** přesunut z týmu **{1}** do týmu **{2}**.</value>
     </data>
+    <data name="Data_TeamName_Unsorted" xml:space="preserve">
+        <value>Nezařazení</value>
+    </data>
 </root>

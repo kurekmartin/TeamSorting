@@ -234,6 +234,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nezařazení.
+        /// </summary>
+        public static string Data_TeamName_Unsorted {
+            get {
+                return ResourceManager.GetString("Data_TeamName_Unsorted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hlavička obsahuje duplicitní sloupce: .
         /// </summary>
         public static string Data_ValidateCsvHeader_DuplicateColumns_Error {
