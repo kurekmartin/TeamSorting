@@ -140,7 +140,7 @@ public class EvolutionSorter : ISorter
     {
         return members.SelectMany(member => member.Records.Values)
             .GroupBy(record => record.DisciplineInfo)
-            .ToDictionary(g => g.Key, g => g.Sum(record => record.DecimalValue) / members.Count);
+            .ToDictionary(g => g.Key, g => g.Sum(record => record.NormalizedValue) / members.Count);
     }
 
     private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren, Random random)

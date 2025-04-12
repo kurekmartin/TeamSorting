@@ -70,16 +70,31 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             }
 
             _value = value;
+            //updates min/max values for discipline
+            //TODO: optimize calculation
+            _ = DecimalValue;
         }
     }
 
-    public decimal DecimalValue =>
-        DisciplineInfo.DataType switch
+    public decimal NormalizedValue => (DecimalValue - DisciplineInfo.MinValue) / (DisciplineInfo.MaxValue - DisciplineInfo.MinValue);
+
+    public decimal DecimalValue
+    {
+        get
         {
-            DisciplineDataType.Time => (decimal)((TimeSpan)Value).TotalSeconds,
-            DisciplineDataType.Number => (decimal)Value,
-            _ => throw new FormatException()
-        };
+            //TODO: cache value
+            decimal decimalValue = DisciplineInfo.DataType switch
+            {
+                DisciplineDataType.Time => (decimal)((TimeSpan)Value).TotalSeconds,
+                DisciplineDataType.Number => (decimal)Value,
+                _ => throw new FormatException()
+            };
+
+            DisciplineInfo.UpdateMinMax(decimalValue);
+            return decimalValue;
+        }
+    }
+
 
     public static string ExampleValue(DisciplineDataType disciplineDataType)
     {
