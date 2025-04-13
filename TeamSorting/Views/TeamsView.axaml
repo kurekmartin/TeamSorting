@@ -48,8 +48,10 @@
                 MinWidth="150"
                 Background="White"
                 HorizontalAlignment="Left">
-            <DockPanel 
-                       Margin="5,0">
+            <DockPanel Margin="5,0">
+                <Button DockPanel.Dock="Top"
+                        Click="AddTeamButton_OnClick"
+                        Content="Add team" />
                 <StackPanel Orientation="Horizontal"
                             Margin="0,0,0,2"
                             DockPanel.Dock="Top">
@@ -140,7 +142,7 @@
                 </StackPanel>
             </DockPanel>
         </Border>
-        
+
         <!-- Members without team -->
         <Border DockPanel.Dock="Right"
                 BorderBrush="LightGray"
@@ -160,22 +162,19 @@
                         <StackPanel Orientation="Horizontal"
                                     HorizontalAlignment="Center"
                                     Margin="5,0">
-                            <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Center">
-                                <TextBlock Text="{Binding Name}"
-                                           FontWeight="Bold"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Margin="5,0" />
-                                <i:Icon Value="mdi-account-group"
-                                        FontSize="16"
-                                        VerticalAlignment="Bottom"
-                                        Margin="0,0,2,0" />
-                                <TextBlock Text="{Binding Members.Count}"
-                                           DockPanel.Dock="Right"
-                                           HorizontalAlignment="Right"
-                                           VerticalAlignment="Bottom" />
-                            </StackPanel>
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Bold"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="5,0" />
+                            <i:Icon Value="mdi-account-group"
+                                    FontSize="16"
+                                    VerticalAlignment="Bottom"
+                                    Margin="0,0,2,0" />
+                            <TextBlock Text="{Binding Members.Count}"
+                                       DockPanel.Dock="Right"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Bottom" />
                         </StackPanel>
                     </StackPanel>
                     <ScrollViewer>
@@ -257,6 +256,9 @@
                                                        HorizontalAlignment="Right"
                                                        VerticalAlignment="Bottom" />
                                         </StackPanel>
+                                        <Button i:Attached.Icon="mdi-delete"
+                                                Click="DeleteTeamButton_OnClick"
+                                                Background="Transparent" />
                                     </StackPanel>
                                     <ItemsControl ItemsSource="{Binding AvgScores}"
                                                   Margin="15,0,15,5">

@@ -113,7 +113,6 @@
                         Spacing="5">
                 <Button Click="ShowTeamsButton_OnClick"
                         HorizontalAlignment="Right"
-                        IsVisible="False"
                         Content="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
                 <NumericUpDown x:Name="NumberOfTeams"
                                Value="{Binding NumberOfTeams}"

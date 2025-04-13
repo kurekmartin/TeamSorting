@@ -44,6 +44,12 @@ public class Data : ReactiveObject
             var dict = new Dictionary<DisciplineInfo, decimal>();
             foreach (var discipline in Disciplines)
             {
+                if (Teams.Count == 0)
+                {
+                    dict.Add(discipline, 0);
+                    continue;
+                }
+
                 var teamScores = Teams.Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
                 decimal min = teamScores.Min();
                 decimal max = teamScores.Max();
@@ -55,7 +61,7 @@ public class Data : ReactiveObject
         }
     }
 
-    public string InputSeed  { get; set; } = string.Empty;
+    public string InputSeed { get; set; } = string.Empty;
     public string UsedSeed { get; set; } = string.Empty;
 
     #region Discipline
@@ -146,7 +152,7 @@ public class Data : ReactiveObject
     private void ValidateMemberDuplicates()
     {
         List<IGrouping<string, Member>> memberGroups = Members
-            .GroupBy(member => member.Name).ToList();
+                                                       .GroupBy(member => member.Name).ToList();
         foreach (IGrouping<string, Member> members in memberGroups)
         {
             if (members.Count() > 1)
@@ -286,7 +292,7 @@ public class Data : ReactiveObject
                 newMembersAdded = false;
                 var newMembers = group[i..];
                 var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Select(m => m.Name)))
-                    .Distinct();
+                                            .Distinct();
                 foreach (var withMember in withMembers)
                 {
                     if (group.Contains(withMember)) continue;
@@ -298,7 +304,7 @@ public class Data : ReactiveObject
             } while (newMembersAdded);
 
             var notWithMembers = group.SelectMany(member => GetMembersByName(member.NotWith.Select(m => m.Name)))
-                .Distinct().ToList();
+                                      .Distinct().ToList();
             bool intersectExists = group.Intersect(notWithMembers).Any();
             if (intersectExists)
             {
@@ -319,7 +325,7 @@ public class Data : ReactiveObject
             newMembersAdded = false;
             var newMembers = group[i..];
             var withMembers = newMembers.SelectMany(member => GetMembersByName(member.With.Select(m => m.Name)))
-                .Distinct();
+                                        .Distinct();
             foreach (var withMember in withMembers)
             {
                 if (group.Contains(withMember)) continue;
@@ -385,12 +391,24 @@ public class Data : ReactiveObject
         }
 
         Teams.Add(team);
+        
+        team.WhenAnyValue(t => t.AvgScores)
+            .Subscribe(_ => this.RaisePropertyChanged(nameof(DisciplineDelta)));
+        
+        this.RaisePropertyChanged(nameof(DisciplineDelta));
         return true;
     }
 
     public bool RemoveTeam(Team team)
     {
-        return Teams.Remove(team);
+        foreach (Member member in team.Members.ToList())
+        {
+            member.MoveToTeam(MembersWithoutTeam);
+        }
+
+        bool result = Teams.Remove(team);
+        this.RaisePropertyChanged(nameof(DisciplineDelta));
+        return result;
     }
 
     public bool AddMemberToTeam(Member member, Team team)
@@ -421,15 +439,12 @@ public class Data : ReactiveObject
         return dict.OrderBy(pair => pair.Value).ToDictionary();
     }
 
-    public ObservableCollection<Team> CreateTeams(int count)
+    public Team CreateAndAddTeam()
     {
-        Teams.Clear();
-        for (var i = 0; i < count; i++)
-        {
-            AddTeam(new Team(string.Format(Resources.Data_TeamName_Template, i + 1)));
-        }
-
-        return Teams;
+        int teamCount = Teams.Count;
+        var team = new Team(string.Format(Resources.Data_TeamName_Template, teamCount + 1));
+        AddTeam(team);
+        return team;
     }
 
     public void SortTeamsByCriteria(MemberSortCriteria sortCriteria)
@@ -438,6 +453,7 @@ public class Data : ReactiveObject
         {
             team.SortCriteria = sortCriteria;
         }
+
         MembersWithoutTeam.SortCriteria = sortCriteria;
     }
 
@@ -584,8 +600,8 @@ public class Data : ReactiveObject
             if (withMembersIndex != -1)
             {
                 withMembers = dataRow[withMembersIndex].ToString()?
-                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                    .ToList() ?? [];
+                                                       .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                                       .ToList() ?? [];
             }
 
             List<string> notWithMembers = [];
@@ -593,13 +609,13 @@ public class Data : ReactiveObject
             if (notWithMembersIndex != -1)
             {
                 notWithMembers = dataRow[nameof(Member.NotWith)].ToString()
-                    ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
-                    .ToList() ?? [];
+                                                                ?.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                                                                .ToList() ?? [];
             }
 
             var unknownWithMembers = AddWithMembers(member, withMembers)
-                .Where(result => !result.Added)
-                .ToList();
+                                     .Where(result => !result.Added)
+                                     .ToList();
             //TODO add warning if duplicate members are found
             if (unknownWithMembers.Count != 0)
             {
@@ -613,8 +629,8 @@ public class Data : ReactiveObject
             }
 
             var unknownNotWithMembers = AddNotWithMembers(member, notWithMembers)
-                .Where(result => !result.Added)
-                .ToList();
+                                        .Where(result => !result.Added)
+                                        .ToList();
             //TODO add warning if duplicate members are found
             if (unknownNotWithMembers.Count != 0)
             {

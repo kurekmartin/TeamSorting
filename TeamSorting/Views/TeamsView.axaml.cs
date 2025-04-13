@@ -134,24 +134,11 @@ public partial class TeamsView : UserControl
         base.OnLoaded(e);
     }
 
-    private async void Back_OnClick(object? sender, RoutedEventArgs e)
+    private void Back_OnClick(object? sender, RoutedEventArgs e)
     {
         var window = TopLevel.GetTopLevel(this);
         if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
         {
-            var dialog = new WarningDialog(
-                message: Lang.Resources.TeamsView_Back_WarningDialog_Message,
-                confirmButtonText: Lang.Resources.TeamsView_Back_WarningDialog_Delete,
-                cancelButtonText: Lang.Resources.TeamsView_Back_WarningDialog_Cancel)
-            {
-                Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
-            };
-            var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
-            if (result == WarningDialogResult.Cancel)
-            {
-                return;
-            }
-
             mainWindowViewModel.SwitchToInputView();
         }
     }
@@ -251,6 +238,22 @@ public partial class TeamsView : UserControl
                 context.TeamsSortCriteria =
                     new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Desc);
             }
+        }
+    }
+
+    private void AddTeamButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is TeamsViewModel context)
+        {
+            context.Data.CreateAndAddTeam();
+        }
+    }
+
+    private void DeleteTeamButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel context)
+        {
+            context.Data.RemoveTeam(team);
         }
     }
 }
