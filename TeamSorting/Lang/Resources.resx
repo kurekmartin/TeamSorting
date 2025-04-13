@@ -24,9 +24,9 @@
     <data name="InputView_RemoveDiscipline_Button" xml:space="preserve">
         <value>Remove discipline</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog_Message" xml:space="preserve">
-        <value>By going back all teams will be deleted.
-Do you want to continue?</value>
+    <data name="InputView_Sort_WarningDialog_Message" xml:space="preserve">
+        <value>All teams will be deleted and replaced with new ones.
+Do you want to delete current teams?</value>
     </data>
     <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
         <value>Export Teams to CSV</value>
@@ -183,10 +183,10 @@ Expected format is {0}</value>
     <data name="InputView_ShowTeams_Button" xml:space="preserve">
         <value>Show teams</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog_Cancel" xml:space="preserve">
+    <data name="InputView_Sort_WarningDialog_Cancel" xml:space="preserve">
         <value>Cancel</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog_Delete" xml:space="preserve">
+    <data name="InputView_Sort_WarningDialog_Delete" xml:space="preserve">
         <value>Delete</value>
     </data>
     <data name="InputView_DeleteData_WarningDialog_Message" xml:space="preserve">

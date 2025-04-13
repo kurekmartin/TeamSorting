@@ -51,9 +51,9 @@
     <data name="InputView_Seed_Watermark" xml:space="preserve">
         <value>Semínko</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog_Message" xml:space="preserve">
-        <value>Vrácením zpět budou všechny týmy smazány.
-Chcete pokračovat?</value>
+    <data name="InputView_Sort_WarningDialog_Message" xml:space="preserve">
+        <value>Všechny týmy budou smazány a nahrazeny novými.
+Chcete smazat stávající týmy?</value>
     </data>
     <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
         <value>Exportovat týmy do CSV</value>
@@ -182,10 +182,10 @@ Očekávaný formát je {0}</value>
     <data name="InputView_ShowTeams_Button" xml:space="preserve">
         <value>Zobrazit týmy</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog_Cancel" xml:space="preserve">
+    <data name="InputView_Sort_WarningDialog_Cancel" xml:space="preserve">
         <value>Zrušit</value>
     </data>
-    <data name="TeamsView_Back_WarningDialog_Delete" xml:space="preserve">
+    <data name="InputView_Sort_WarningDialog_Delete" xml:space="preserve">
         <value>Smazat</value>
     </data>
     <data name="InputView_DeleteData_WarningDialog_Message" xml:space="preserve">

@@ -269,23 +269,47 @@ public partial class InputView : UserControl
         }
     }
 
-    private void SortToTeams_OnClick(object? sender, RoutedEventArgs e)
+    private async void SortToTeams_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not InputViewModel context || sender is not Button button) return;
+
+        var window = TopLevel.GetTopLevel(this);
+        if (window is not MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
+        {
+            return;
+        }
+
+        //Warn user about deletion of current teams
+        if (context.Data.Teams.Count > 0)
+        {
+            var dialog = new WarningDialog(
+                message: Lang.Resources.InputView_Sort_WarningDialog_Message,
+                confirmButtonText: Lang.Resources.InputView_Sort_WarningDialog_Delete,
+                cancelButtonText: Lang.Resources.InputView_Sort_WarningDialog_Cancel)
+            {
+                Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
+            };
+            var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
+            if (result == WarningDialogResult.Cancel)
+            {
+                return;
+            }
+        }
 
         button.IsEnabled = false;
         Cursor = new Cursor(StandardCursorType.Wait);
 
         var numberOfTeams = (int)(NumberOfTeams.Value ?? 1);
         var sortResult = context.Sorter.Sort(context.Data.Members.ToList(), numberOfTeams, context.Data.InputSeed);
-        context.Data.Teams = new ObservableCollection<Team>(sortResult.teams);
+        context.Data.RemoveAllTeams();
+        foreach (Team team in sortResult.teams)
+        {
+            context.Data.AddTeam(team);
+        }
+
         context.Data.UsedSeed = sortResult.seed ?? string.Empty;
 
-        var window = TopLevel.GetTopLevel(this);
-        if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel })
-        {
-            mainWindowViewModel.SwitchToTeamsView();
-        }
+        mainWindowViewModel.SwitchToTeamsView();
 
         button.IsEnabled = true;
         Cursor = Cursor.Default;

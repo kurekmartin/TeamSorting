@@ -20,11 +20,12 @@ public class Data : ReactiveObject
     public List<Member> SortedMembers => Members.OrderBy(m => m.Name).ToList();
 
     private ObservableCollection<Team> _teams = [];
+    private int _teamNumber = 1;
 
     public ObservableCollection<Team> Teams
     {
         get => _teams;
-        set
+        private set
         {
             _teams = value;
             foreach (var team in _teams)
@@ -44,13 +45,14 @@ public class Data : ReactiveObject
             var dict = new Dictionary<DisciplineInfo, decimal>();
             foreach (var discipline in Disciplines)
             {
-                if (Teams.Count == 0)
+                if (Teams.All(team => team.Members.Count == 0))
                 {
                     dict.Add(discipline, 0);
                     continue;
                 }
 
-                var teamScores = Teams.Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
+                var teamScores = Teams.Where(team => team.Members.Count > 0)
+                                      .Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
                 decimal min = teamScores.Min();
                 decimal max = teamScores.Max();
                 decimal diff = decimal.Abs(min - max);
@@ -391,12 +393,19 @@ public class Data : ReactiveObject
         }
 
         Teams.Add(team);
-        
+        _teamNumber++;
+
         team.WhenAnyValue(t => t.AvgScores)
             .Subscribe(_ => this.RaisePropertyChanged(nameof(DisciplineDelta)));
-        
+
         this.RaisePropertyChanged(nameof(DisciplineDelta));
         return true;
+    }
+
+    public void RemoveAllTeams()
+    {
+        Teams.Clear();
+        _teamNumber = 1;
     }
 
     public bool RemoveTeam(Team team)
@@ -441,8 +450,7 @@ public class Data : ReactiveObject
 
     public Team CreateAndAddTeam()
     {
-        int teamCount = Teams.Count;
-        var team = new Team(string.Format(Resources.Data_TeamName_Template, teamCount + 1));
+        var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber));
         AddTeam(team);
         return team;
     }
@@ -507,7 +515,7 @@ public class Data : ReactiveObject
     {
         Members.Clear();
         Disciplines.Clear();
-        Teams.Clear();
+        RemoveAllTeams();
     }
 
     /// <summary>

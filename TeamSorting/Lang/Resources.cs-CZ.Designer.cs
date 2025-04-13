@@ -460,6 +460,34 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zrušit.
+        /// </summary>
+        public static string InputView_Sort_WarningDialog_Cancel {
+            get {
+                return ResourceManager.GetString("InputView_Sort_WarningDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smazat.
+        /// </summary>
+        public static string InputView_Sort_WarningDialog_Delete {
+            get {
+                return ResourceManager.GetString("InputView_Sort_WarningDialog_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Všechny týmy budou smazány a nahrazeny novými.
+        ///Chcete smazat stávající týmy?.
+        /// </summary>
+        public static string InputView_Sort_WarningDialog_Message {
+            get {
+                return ResourceManager.GetString("InputView_Sort_WarningDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rozdělit do týmů.
         /// </summary>
         public static string InputView_SortToTeams_Button {
@@ -483,34 +511,6 @@ namespace TeamSorting.Lang {
         public static string TeamsView_Back_Button {
             get {
                 return ResourceManager.GetString("TeamsView_Back_Button", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Zrušit.
-        /// </summary>
-        public static string TeamsView_Back_WarningDialog_Cancel {
-            get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Smazat.
-        /// </summary>
-        public static string TeamsView_Back_WarningDialog_Delete {
-            get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vrácením zpět budou všechny týmy smazány.
-        ///Chcete pokračovat?.
-        /// </summary>
-        public static string TeamsView_Back_WarningDialog_Message {
-            get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Message", resourceCulture);
             }
         }
         

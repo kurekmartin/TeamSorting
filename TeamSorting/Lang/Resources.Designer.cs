@@ -461,6 +461,34 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string InputView_Sort_WarningDialog_Cancel {
+            get {
+                return ResourceManager.GetString("InputView_Sort_WarningDialog_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string InputView_Sort_WarningDialog_Delete {
+            get {
+                return ResourceManager.GetString("InputView_Sort_WarningDialog_Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All teams will be deleted and replaced with new ones.
+        ///Do you want to delete current teams?.
+        /// </summary>
+        public static string InputView_Sort_WarningDialog_Message {
+            get {
+                return ResourceManager.GetString("InputView_Sort_WarningDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sort to teams.
         /// </summary>
         public static string InputView_SortToTeams_Button {
@@ -484,34 +512,6 @@ namespace TeamSorting.Lang {
         public static string TeamsView_Back_Button {
             get {
                 return ResourceManager.GetString("TeamsView_Back_Button", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cancel.
-        /// </summary>
-        public static string TeamsView_Back_WarningDialog_Cancel {
-            get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Delete.
-        /// </summary>
-        public static string TeamsView_Back_WarningDialog_Delete {
-            get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Delete", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to By going back all teams will be deleted.
-        ///Do you want to continue?.
-        /// </summary>
-        public static string TeamsView_Back_WarningDialog_Message {
-            get {
-                return ResourceManager.GetString("TeamsView_Back_WarningDialog_Message", resourceCulture);
             }
         }
         
