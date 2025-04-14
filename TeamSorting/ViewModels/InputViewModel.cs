@@ -1,6 +1,4 @@
-﻿using ReactiveUI;
-using TeamSorting.Enums;
-using TeamSorting.Models;
+﻿using TeamSorting.Enums;
 using TeamSorting.Sorting;
 
 namespace TeamSorting.ViewModels;
@@ -15,7 +13,7 @@ public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
     public string NewMemberName
     {
         get => _newMemberName;
-        set => this.RaiseAndSetIfChanged(ref _newMemberName, value);
+        set => SetProperty(ref _newMemberName, value);
     }
     
     private string _newDisciplineName = string.Empty;
@@ -23,7 +21,7 @@ public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
     public string NewDisciplineName
     {
         get => _newDisciplineName;
-        set => this.RaiseAndSetIfChanged(ref _newDisciplineName, value);
+        set => SetProperty(ref _newDisciplineName, value);
     }
 
     public static Array DisciplineDataTypes => Enum.GetValues(typeof(DisciplineDataType));

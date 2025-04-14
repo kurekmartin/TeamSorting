@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using ReactiveUI;
 
 namespace TeamSorting.ViewModels;
 
@@ -10,7 +9,7 @@ public class MainWindowViewModel(TeamsViewModel teamsViewModel, InputViewModel i
     public ViewModelBase ContentViewModel
     {
         get => _contentViewModel;
-        private set => this.RaiseAndSetIfChanged(ref _contentViewModel, value);
+        private set => SetProperty(ref _contentViewModel, value);
     }
 
     [Localizable(false)]

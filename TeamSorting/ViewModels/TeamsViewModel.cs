@@ -5,8 +5,6 @@ using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
-using ReactiveUI;
-using Serilog;
 using TeamSorting.Controls;
 using TeamSorting.Lang;
 using TeamSorting.Models;
@@ -27,7 +25,7 @@ public class TeamsViewModel(Data data) : ViewModelBase
     public MemberCard? DraggingMemberCard
     {
         get => _draggingMemberCard;
-        set => this.RaiseAndSetIfChanged(ref _draggingMemberCard, value);
+        set => SetProperty(ref _draggingMemberCard, value);
     }
 
     public Data Data { get; } = data;
