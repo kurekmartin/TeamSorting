@@ -2,7 +2,6 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using TeamSorting.Enums;
-using TeamSorting.Models;
 
 namespace TeamSorting.Converters;
 

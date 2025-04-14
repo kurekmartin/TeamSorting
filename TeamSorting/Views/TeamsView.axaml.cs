@@ -1,14 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
-using Serilog;
 using TeamSorting.Controls;
 using TeamSorting.Enums;
 using TeamSorting.Models;

@@ -1,11 +1,8 @@
 ﻿using System.Data;
-using System.Globalization;
 using CsvHelper;
-using DynamicData;
 using TeamSorting.Enums;
 using TeamSorting.Lang;
 using TeamSorting.Models;
-using TeamSorting.ViewModels;
 
 namespace TeamSorting.Utils;
 
