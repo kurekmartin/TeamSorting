@@ -496,7 +496,7 @@ public class Data(ISorter sorter) : ReactiveObject
             }
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => mainWindow.Cursor = new Cursor(StandardCursorType.Wait));
+        mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
         
         int teamsCount = numberOfTeams ?? Teams.Count;
         (List<Team> teams, string? seed) sortResult = await Task.Run(() => sorter.Sort(Members.ToList(), teamsCount, InputSeed));
@@ -509,7 +509,7 @@ public class Data(ISorter sorter) : ReactiveObject
         UsedSeed = sortResult.seed ?? string.Empty;
 
         mainWindowViewModel.SwitchToTeamsView();
-        await Dispatcher.UIThread.InvokeAsync(() => mainWindow.Cursor = Cursor.Default);
+        mainWindow.Cursor = Cursor.Default;
     }
 
     #endregion
