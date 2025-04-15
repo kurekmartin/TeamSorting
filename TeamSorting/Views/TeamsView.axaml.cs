@@ -68,7 +68,9 @@ public partial class TeamsView : UserControl
 
     private async void MemberCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not Control control)
+        if (sender is not Control control 
+            || DataContext is not TeamsViewModel teamsViewModel 
+            || teamsViewModel.Data.SortingInProgress)
         {
             return;
         }
@@ -95,7 +97,6 @@ public partial class TeamsView : UserControl
         double offsetY = mousePos.Y - _ghostPosition.Y + _mouseOffset.X;
         GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
 
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
         teamsViewModel.StartDrag(memberCard);
 
         var dragData = new DataObject();

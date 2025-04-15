@@ -25,6 +25,7 @@ public class Data(ISorter sorter) : ReactiveObject
 
     private ObservableCollection<Team> _teams = [];
     private int _teamNumber = 1;
+    public bool SortingInProgress { get; set; }
 
     public ObservableCollection<Team> Teams
     {
@@ -497,6 +498,8 @@ public class Data(ISorter sorter) : ReactiveObject
         mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
         
         int teamsCount = numberOfTeams ?? Teams.Count;
+        SortingInProgress = true;
+        mainWindow.IsEnabled = false;
         (List<Team> teams, string? seed) sortResult = await Task.Run(() => sorter.Sort(Members.ToList(), teamsCount, InputSeed));
         RemoveAllTeams();
         foreach (Team team in sortResult.teams)
@@ -505,9 +508,10 @@ public class Data(ISorter sorter) : ReactiveObject
         }
 
         UsedSeed = sortResult.seed ?? string.Empty;
-
+        SortingInProgress = false;
         mainWindowViewModel.SwitchToTeamsView();
         mainWindow.Cursor = Cursor.Default;
+        mainWindow.IsEnabled = true;
     }
 
     #endregion
