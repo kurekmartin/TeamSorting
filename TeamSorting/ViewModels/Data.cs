@@ -3,17 +3,23 @@ using System.ComponentModel;
 using System.Data;
 using System.Dynamic;
 using System.Globalization;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Threading;
 using CsvHelper;
 using ReactiveUI;
 using TeamSorting.Enums;
 using TeamSorting.Extensions;
 using TeamSorting.Lang;
 using TeamSorting.Models;
+using TeamSorting.Sorting;
 using TeamSorting.Utils;
+using TeamSorting.Views;
 
 namespace TeamSorting.ViewModels;
 
-public class Data : ReactiveObject
+public class Data(ISorter sorter) : ReactiveObject
 {
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
     public ObservableCollection<Member> Members { get; } = [];
@@ -463,6 +469,47 @@ public class Data : ReactiveObject
         }
 
         MembersWithoutTeam.SortCriteria = sortCriteria;
+    }
+
+    public async Task SortToTeams(UserControl visual, int? numberOfTeams = null)
+    {
+        var window = TopLevel.GetTopLevel(visual);
+        if (window is not MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
+        {
+            return;
+        }
+
+        //Warn user about deletion of current teams
+        if (Teams.Count > 0)
+        {
+            var dialog = new WarningDialog(
+                message: Resources.InputView_Sort_WarningDialog_Message,
+                confirmButtonText: Resources.InputView_Sort_WarningDialog_Delete,
+                cancelButtonText: Resources.InputView_Sort_WarningDialog_Cancel)
+            {
+                Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
+            };
+            var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
+            if (result == WarningDialogResult.Cancel)
+            {
+                return;
+            }
+        }
+
+        await Dispatcher.UIThread.InvokeAsync(() => mainWindow.Cursor = new Cursor(StandardCursorType.Wait));
+        
+        int teamsCount = numberOfTeams ?? Teams.Count;
+        (List<Team> teams, string? seed) sortResult = await Task.Run(() => sorter.Sort(Members.ToList(), teamsCount, InputSeed));
+        RemoveAllTeams();
+        foreach (Team team in sortResult.teams)
+        {
+            AddTeam(team);
+        }
+
+        UsedSeed = sortResult.seed ?? string.Empty;
+
+        mainWindowViewModel.SwitchToTeamsView();
+        await Dispatcher.UIThread.InvokeAsync(() => mainWindow.Cursor = Cursor.Default);
     }
 
     #endregion

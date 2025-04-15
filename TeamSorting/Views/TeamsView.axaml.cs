@@ -254,4 +254,12 @@ public partial class TeamsView : UserControl
             context.Data.RemoveTeam(team);
         }
     }
+
+    private async void CreateNewTeamCombinationButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        button.IsEnabled = false;
+        await context.Data.SortToTeams(this);
+        button.IsEnabled = true;
+    }
 }

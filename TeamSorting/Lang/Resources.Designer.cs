@@ -534,6 +534,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create new combination.
+        /// </summary>
+        public static string TeamsView_CreateNewCombination_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_CreateNewCombination_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error saving file:
         ///{0}.
         /// </summary>

@@ -220,4 +220,7 @@ Do you want to continue?</value>
     <data name="InputView_DeleteData_Button" xml:space="preserve">
         <value>Delete data</value>
     </data>
+    <data name="TeamsView_CreateNewCombination_Button" xml:space="preserve">
+        <value>Create new combination</value>
+    </data>
 </root>

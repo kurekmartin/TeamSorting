@@ -3,9 +3,8 @@ using TeamSorting.Sorting;
 
 namespace TeamSorting.ViewModels;
 
-public class InputViewModel(Data data, ISorter sorter) : ViewModelBase
+public class InputViewModel(Data data) : ViewModelBase
 {
-    public ISorter Sorter { get; } = sorter;
     public Data Data { get; } = data;
     public int NumberOfTeams { get; set; } = 2;
     private string _newMemberName = string.Empty;

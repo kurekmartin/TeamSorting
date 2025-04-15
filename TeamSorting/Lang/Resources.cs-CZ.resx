@@ -219,4 +219,7 @@ Chcete pokračovat?</value>
     <data name="InputView_DeleteData_Button" xml:space="preserve">
         <value>Smazat data</value>
     </data>
+    <data name="TeamsView_CreateNewCombination_Button" xml:space="preserve">
+        <value>Vytvořit novou kombinaci</value>
+    </data>
 </root>

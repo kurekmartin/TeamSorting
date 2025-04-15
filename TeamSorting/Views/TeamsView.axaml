@@ -52,6 +52,9 @@
                 <Button DockPanel.Dock="Top"
                         Click="AddTeamButton_OnClick"
                         Content="{x:Static lang:Resources.TeamsView_AddTeam_Button}" />
+                <Button DockPanel.Dock="Top"
+                        Click="CreateNewTeamCombinationButton_OnClick"
+                        Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}" />
                 <StackPanel Orientation="Horizontal"
                             Margin="0,0,0,2"
                             DockPanel.Dock="Top">

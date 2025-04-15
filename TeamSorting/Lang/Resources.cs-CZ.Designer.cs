@@ -533,6 +533,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Vytvořit novou kombinaci.
+        /// </summary>
+        public static string TeamsView_CreateNewCombination_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_CreateNewCombination_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chyba při ukládání souboru:
         ///{0}.
         /// </summary>
