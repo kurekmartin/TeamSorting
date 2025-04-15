@@ -3,10 +3,14 @@
         xmlns:controls="using:TeamSorting.Controls"
         xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
         xmlns:models="clr-namespace:TeamSorting.Models"
-        xmlns:i="https://github.com/projektanker/icons.avalonia">
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:converters="clr-namespace:TeamSorting.Converters">
     <Design.PreviewWith>
         <controls:MemberCard />
     </Design.PreviewWith>
+    <Styles.Resources>
+        <converters:DisciplineRecordValueConverter x:Key="DisciplineRecordValueConverter" />
+    </Styles.Resources>
 
     <Style Selector="ItemsControl.MemberList:empty">
         <Setter Property="IsVisible" Value="False" />
@@ -145,8 +149,9 @@
                                                 FontWeight="Bold"
                                                 HorizontalAlignment="Left"
                                                 Margin="0,0,5,0" />
-                                            <TextBlock Text="{Binding DecimalValue}"
-                                                       HorizontalAlignment="Right" />
+                                            <TextBlock
+                                                Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                HorizontalAlignment="Right" />
                                         </DockPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
