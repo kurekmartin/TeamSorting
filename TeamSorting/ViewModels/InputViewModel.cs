@@ -1,5 +1,4 @@
 ﻿using TeamSorting.Enums;
-using TeamSorting.Sorting;
 
 namespace TeamSorting.ViewModels;
 
