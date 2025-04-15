@@ -213,4 +213,7 @@ Chcete pokračovat?</value>
     <data name="Data_TeamName_Unsorted" xml:space="preserve">
         <value>Nezařazení</value>
     </data>
+    <data name="TeamsView_AddTeam_Button" xml:space="preserve">
+        <value>Přidat tým</value>
+    </data>
 </root>

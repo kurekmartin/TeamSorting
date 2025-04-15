@@ -214,4 +214,7 @@ Do you want to continue?</value>
     <data name="Data_TeamName_Unsorted" xml:space="preserve">
         <value>Unsorted</value>
     </data>
+    <data name="TeamsView_AddTeam_Button" xml:space="preserve">
+        <value>Add team</value>
+    </data>
 </root>

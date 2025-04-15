@@ -507,6 +507,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add team.
+        /// </summary>
+        public static string TeamsView_AddTeam_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_AddTeam_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Back.
         /// </summary>
         public static string TeamsView_Back_Button {
