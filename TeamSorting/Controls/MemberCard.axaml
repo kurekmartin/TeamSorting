@@ -49,6 +49,7 @@
         <!-- Set Defaults -->
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border HorizontalAlignment="Stretch"
