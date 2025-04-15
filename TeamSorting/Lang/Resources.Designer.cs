@@ -334,6 +334,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete data.
+        /// </summary>
+        public static string InputView_DeleteData_Button {
+            get {
+                return ResourceManager.GetString("InputView_DeleteData_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string InputView_DeleteData_WarningDialog_Cancel {

@@ -217,4 +217,7 @@ Do you want to continue?</value>
     <data name="TeamsView_AddTeam_Button" xml:space="preserve">
         <value>Add team</value>
     </data>
+    <data name="InputView_DeleteData_Button" xml:space="preserve">
+        <value>Delete data</value>
+    </data>
 </root>

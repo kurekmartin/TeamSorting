@@ -216,4 +216,7 @@ Chcete pokračovat?</value>
     <data name="TeamsView_AddTeam_Button" xml:space="preserve">
         <value>Přidat tým</value>
     </data>
+    <data name="InputView_DeleteData_Button" xml:space="preserve">
+        <value>Smazat data</value>
+    </data>
 </root>
