@@ -1,8 +1,8 @@
-﻿using DynamicData.Binding;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TeamSorting.Models;
 
-public class FilterableMember(Member member) : AbstractNotifyPropertyChanged
+public class FilterableMember(Member member) : ObservableObject
 {
     private Member _member = member;
     private bool _isVisible = true;
@@ -10,12 +10,12 @@ public class FilterableMember(Member member) : AbstractNotifyPropertyChanged
     public Member Member
     {
         get => _member;
-        set => SetAndRaise(ref _member, value);
+        set => SetProperty(ref _member, value);
     }
 
     public bool IsVisible
     {
         get => _isVisible;
-        set => SetAndRaise(ref _isVisible, value);
+        set => SetProperty(ref _isVisible, value);
     }
 }
