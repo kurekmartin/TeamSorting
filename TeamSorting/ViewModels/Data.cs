@@ -24,7 +24,13 @@ public class Data(ISorter sorter) : ObservableObject
     public List<Member> SortedMembers => Members.OrderBy(m => m.Name).ToList();
 
     private int _teamNumber = 1;
-    public bool SortingInProgress { get; set; }
+    private bool _sortingInProgress;
+
+    public bool SortingInProgress
+    {
+        get => _sortingInProgress;
+        set => SetProperty(ref _sortingInProgress, value);
+    }
 
     public ObservableCollection<Team> Teams { get; } = [];
 

@@ -2,9 +2,11 @@
 
 namespace TeamSorting.ViewModels;
 
-public class MainWindowViewModel(TeamsViewModel teamsViewModel, InputViewModel inputViewModel) : ViewModelBase
+public class MainWindowViewModel(Data data, TeamsViewModel teamsViewModel, InputViewModel inputViewModel) : ViewModelBase
 {
     private ViewModelBase _contentViewModel = inputViewModel;
+
+    public Data Data { get; } = data;
 
     public ViewModelBase ContentViewModel
     {

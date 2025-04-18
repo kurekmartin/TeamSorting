@@ -22,5 +22,17 @@
                        Margin="3"
                        HorizontalAlignment="Right" />
         </StackPanel>
+        <!-- Overlay -->
+        <Border Grid.Row=""
+                Background="Gray"
+                Opacity="0.5"
+                IsVisible="{Binding Data.SortingInProgress}">
+            <Label VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   FontSize="50"
+                   Foreground="White">
+                Sorting in progress..
+            </Label>
+        </Border>
     </Grid>
 </Window>
