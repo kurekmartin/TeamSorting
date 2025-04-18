@@ -3,7 +3,7 @@ using Avalonia.Data.Converters;
 
 namespace TeamSorting.Converters;
 
-public class DisciplineRecordValueConverter: IValueConverter
+public class DisciplineRecordValueConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -11,8 +11,12 @@ public class DisciplineRecordValueConverter: IValueConverter
         {
             case TimeSpan timeSpan:
             {
-                TimeSpan roundedTimespan = TimeSpan.FromSeconds(Math.Round(timeSpan.TotalSeconds,1));
-                return roundedTimespan.ToString($@"hh\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f");
+                TimeSpan roundedTimespan = TimeSpan.FromSeconds(Math.Round(timeSpan.TotalSeconds, 1));
+                if (roundedTimespan.Hours > 0)
+                {
+                    return roundedTimespan.ToString($@"hh\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f");
+                }
+                return roundedTimespan.ToString($@"mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f");
             }
             case decimal numberValue:
             {
