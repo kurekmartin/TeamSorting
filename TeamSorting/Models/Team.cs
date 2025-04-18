@@ -143,22 +143,33 @@ public class Team : ReactiveObject
         Members.Remove(member);
     }
 
-    public Dictionary<DisciplineInfo, decimal> AvgScores
+    public Dictionary<DisciplineInfo, object> AvgScores
     {
         get
         {
-            return Members.SelectMany(member => member.Records.Values)
-                .GroupBy(record => record.DisciplineInfo)
-                .ToDictionary(g => g.Key,
-                    g =>
-                        Math.Round(g.Sum(record => record.DecimalValue) / Members.Count, 2));
+            Dictionary<DisciplineInfo, object> dictionary = [];
+            var records = Members.SelectMany(member => member.Records.Values);
+            var disciplines = records.Select(record => record.DisciplineInfo).Distinct();
+            foreach (var discipline in disciplines)
+            {
+                dictionary[discipline] = GetAverageValueByDiscipline(discipline);
+            }
+
+            return dictionary;
         }
     }
 
-    public decimal GetAverageValueByDiscipline(DisciplineInfo discipline)
+    public object GetAverageValueByDiscipline(DisciplineInfo discipline)
     {
-        var records = Members.Select(member => member.GetRecord(discipline));
-        return Members.Count == 0 ? 0 : records.Sum(record => record.DecimalValue) / Members.Count;
+        IEnumerable<DisciplineRecord> records = Members.Select(member => member.GetRecord(discipline));
+        return discipline.DataType switch
+        {
+            DisciplineDataType.Time when Members.Count == 0 => TimeSpan.Zero,
+            DisciplineDataType.Time => new TimeSpan(records.Sum(record => ((TimeSpan)record.Value).Ticks) / Members.Count),
+            DisciplineDataType.Number when Members.Count == 0 => 0,
+            DisciplineDataType.Number => records.Sum(record => (decimal)record.Value) / Members.Count,
+            _ => 0
+        };
     }
 
     public static int InvalidMemberCount(IEnumerable<Member> members)

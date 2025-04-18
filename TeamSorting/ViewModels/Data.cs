@@ -43,12 +43,12 @@ public class Data(ISorter sorter) : ReactiveObject
 
     public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
 
-    public Dictionary<DisciplineInfo, decimal> DisciplineDelta
+    public Dictionary<DisciplineInfo, object> DisciplineDelta
     {
         get
         {
-            var dict = new Dictionary<DisciplineInfo, decimal>();
-            foreach (var discipline in Disciplines)
+            var dict = new Dictionary<DisciplineInfo, object>();
+            foreach (DisciplineInfo discipline in Disciplines)
             {
                 if (Teams.All(team => team.Members.Count == 0))
                 {
@@ -56,12 +56,31 @@ public class Data(ISorter sorter) : ReactiveObject
                     continue;
                 }
 
-                var teamScores = Teams.Where(team => team.Members.Count > 0)
-                                      .Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
-                decimal min = teamScores.Min();
-                decimal max = teamScores.Max();
-                decimal diff = decimal.Abs(min - max);
-                dict.Add(discipline, Math.Round(diff, 2));
+                List<object> teamScores = Teams.Where(team => team.Members.Count > 0)
+                                               .Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
+
+                switch (discipline.DataType)
+                {
+                    case DisciplineDataType.Time:
+                    {
+                        TimeSpan minTimeSpan = teamScores.Select(o => (TimeSpan)o).Min();
+                        TimeSpan maxTimeSpan = teamScores.Select(o => (TimeSpan)o).Max();
+                        TimeSpan diffTimeSpan = maxTimeSpan - minTimeSpan;
+                        dict.Add(discipline, diffTimeSpan);
+                        break;
+                    }
+                    case DisciplineDataType.Number:
+                    {
+                        decimal min = teamScores.Select(o => (decimal)o).Min();
+                        decimal max = teamScores.Select(o => (decimal)o).Max();
+                        decimal diff = max - min;
+                        dict.Add(discipline, Math.Round(diff, 2));
+                        break;
+                    }
+                    default:
+                        dict.Add(discipline, 0);
+                        break;
+                }
             }
 
             return dict;

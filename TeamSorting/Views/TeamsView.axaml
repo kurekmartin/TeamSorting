@@ -14,6 +14,7 @@
              xmlns:converter="clr-namespace:TeamSorting.Converters">
     <UserControl.Resources>
         <converter:BoolDisplayNameConverter x:Key="BoolDisplayNameConverter" />
+        <converter:DisciplineRecordValueConverter x:Key="DisciplineRecordValueConverter" />
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="i|Icon#TeamValidityIcon.Valid">
@@ -118,7 +119,7 @@
                             <DataTemplate>
                                 <DataTemplate.DataType>
                                     <x:Type TypeName="generic:KeyValuePair"
-                                            x:TypeArguments="models:DisciplineInfo,x:Decimal" />
+                                            x:TypeArguments="models:DisciplineInfo,x:Object" />
                                 </DataTemplate.DataType>
                                 <DockPanel Margin="0,0,0,2">
                                     <TextBlock DockPanel.Dock="Left"
@@ -127,7 +128,7 @@
                                                Margin="0,0,5,0"
                                                VerticalAlignment="Center" />
                                     <TextBlock DockPanel.Dock="Right"
-                                               Text="{Binding Value}"
+                                               Text="{Binding Value,Converter={StaticResource DisciplineRecordValueConverter}}"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Right" />
                                 </DockPanel>
@@ -269,15 +270,16 @@
                                             <DataTemplate>
                                                 <DataTemplate.DataType>
                                                     <x:Type TypeName="generic:KeyValuePair"
-                                                            x:TypeArguments="models:DisciplineInfo,x:Decimal" />
+                                                            x:TypeArguments="models:DisciplineInfo,x:Object" />
                                                 </DataTemplate.DataType>
                                                 <DockPanel Margin="0,0,0,2">
                                                     <TextBlock Text="{Binding Key.Name}"
                                                                FontWeight="Bold"
                                                                HorizontalAlignment="Left"
                                                                Margin="0,0,5,0" />
-                                                    <TextBlock Text="{Binding Value}"
-                                                               HorizontalAlignment="Right" />
+                                                    <TextBlock
+                                                        Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                        HorizontalAlignment="Right" />
                                                 </DockPanel>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
