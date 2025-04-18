@@ -3,11 +3,11 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia.Collections;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace TeamSorting.Models;
 
-public class Member : ReactiveObject, INotifyDataErrorInfo
+public class Member : ObservableObject, INotifyDataErrorInfo
 {
     public string Name
     {
@@ -20,7 +20,7 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
                 AddError(nameof(Name), Lang.Resources.InputView_Member_EmptyName_Error);
             }
 
-            this.RaiseAndSetIfChanged(ref _name, value);
+            SetProperty(ref _name, value);
         }
     }
 
@@ -60,7 +60,7 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
                     }
                 }
 
-                this.RaisePropertyChanged(nameof(SortedNotWith));
+                OnPropertyChanged(nameof(SortedNotWith));
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems is not null)
@@ -71,10 +71,10 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
                     }
                 }
 
-                this.RaisePropertyChanged(nameof(SortedNotWith));
+                OnPropertyChanged(nameof(SortedNotWith));
                 break;
             case NotifyCollectionChangedAction.Replace:
-                this.RaisePropertyChanged(nameof(SortedNotWith));
+                OnPropertyChanged(nameof(SortedNotWith));
                 break;
         }
     }
@@ -92,7 +92,7 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
                     }
                 }
 
-                this.RaisePropertyChanged(nameof(SortedWith));
+                OnPropertyChanged(nameof(SortedWith));
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems is not null)
@@ -103,10 +103,10 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
                     }
                 }
 
-                this.RaisePropertyChanged(nameof(SortedWith));
+                OnPropertyChanged(nameof(SortedWith));
                 break;
             case NotifyCollectionChangedAction.Replace:
-                this.RaisePropertyChanged(nameof(SortedWith));
+                OnPropertyChanged(nameof(SortedWith));
                 break;
         }
     }
@@ -120,17 +120,17 @@ public class Member : ReactiveObject, INotifyDataErrorInfo
             _team = value;
             if (_team is null) return;
             _team.Members.CollectionChanged += MembersOnCollectionChanged;
-            this.RaisePropertyChanged(nameof(WithValidation));
-            this.RaisePropertyChanged(nameof(NotWithValidation));
-            this.RaisePropertyChanged(nameof(IsValid));
+            OnPropertyChanged(nameof(WithValidation));
+            OnPropertyChanged(nameof(NotWithValidation));
+            OnPropertyChanged(nameof(IsValid));
         }
     }
 
     private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        this.RaisePropertyChanged(nameof(WithValidation));
-        this.RaisePropertyChanged(nameof(NotWithValidation));
-        this.RaisePropertyChanged(nameof(IsValid));
+        OnPropertyChanged(nameof(WithValidation));
+        OnPropertyChanged(nameof(NotWithValidation));
+        OnPropertyChanged(nameof(IsValid));
     }
 
     public bool IsValid

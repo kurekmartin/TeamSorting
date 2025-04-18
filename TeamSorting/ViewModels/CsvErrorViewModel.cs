@@ -2,7 +2,7 @@
 
 namespace TeamSorting.ViewModels;
 
-public class CsvErrorViewModel(List<CsvError> errors)
+public class CsvErrorViewModel(List<CsvError> errors) : ViewModelBase
 {
     public List<CsvError> Errors { get; set; } = errors;
 

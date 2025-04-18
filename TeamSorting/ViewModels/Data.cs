@@ -5,6 +5,7 @@ using System.Dynamic;
 using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
 using ReactiveUI;
 using TeamSorting.Enums;
@@ -17,7 +18,7 @@ using TeamSorting.Views;
 
 namespace TeamSorting.ViewModels;
 
-public class Data(ISorter sorter) : ReactiveObject
+public class Data(ISorter sorter) : ObservableObject
 {
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
     public ObservableCollection<Member> Members { get; } = [];
@@ -36,7 +37,7 @@ public class Data(ISorter sorter) : ReactiveObject
             foreach (var team in _teams)
             {
                 team.WhenAnyValue(t => t.AvgScores)
-                    .Subscribe(_ => this.RaisePropertyChanged(nameof(DisciplineDelta)));
+                    .Subscribe(_ => OnPropertyChanged(nameof(DisciplineDelta)));
             }
         }
     }
@@ -158,7 +159,7 @@ public class Data(ISorter sorter) : ReactiveObject
         Members.Add(member);
         MembersWithoutTeam.AddMember(member);
         ValidateMemberDuplicates();
-        this.RaisePropertyChanged(nameof(SortedMembers));
+        OnPropertyChanged(nameof(SortedMembers));
         return true;
     }
 
@@ -209,7 +210,7 @@ public class Data(ISorter sorter) : ReactiveObject
             ValidateMemberDuplicates();
         }
 
-        this.RaisePropertyChanged(nameof(SortedMembers));
+        OnPropertyChanged(nameof(SortedMembers));
         return result;
     }
 
@@ -420,9 +421,9 @@ public class Data(ISorter sorter) : ReactiveObject
         _teamNumber++;
 
         team.WhenAnyValue(t => t.AvgScores)
-            .Subscribe(_ => this.RaisePropertyChanged(nameof(DisciplineDelta)));
+            .Subscribe(_ => OnPropertyChanged(nameof(DisciplineDelta)));
 
-        this.RaisePropertyChanged(nameof(DisciplineDelta));
+        OnPropertyChanged(nameof(DisciplineDelta));
         return true;
     }
 
@@ -440,7 +441,7 @@ public class Data(ISorter sorter) : ReactiveObject
         }
 
         bool result = Teams.Remove(team);
-        this.RaisePropertyChanged(nameof(DisciplineDelta));
+        OnPropertyChanged(nameof(DisciplineDelta));
         return result;
     }
 

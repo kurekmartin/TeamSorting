@@ -1,13 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using ReactiveUI;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Serilog;
 using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 
-public class Team : ReactiveObject
+public class Team : ObservableObject
 {
     public Team([Localizable(false)] string name)
     {
@@ -23,9 +23,9 @@ public class Team : ReactiveObject
             case NotifyCollectionChangedAction.Remove:
             case NotifyCollectionChangedAction.Replace:
             case NotifyCollectionChangedAction.Reset:
-                this.RaisePropertyChanged(nameof(IsValid));
-                this.RaisePropertyChanged(nameof(AvgScores));
-                this.RaisePropertyChanged(nameof(SortedMembers));
+                OnPropertyChanged(nameof(IsValid));
+                OnPropertyChanged(nameof(AvgScores));
+                OnPropertyChanged(nameof(SortedMembers));
                 break;
         }
     }
@@ -40,8 +40,8 @@ public class Team : ReactiveObject
         private get => _memberSortCriteria;
         set
         {
-            this.RaiseAndSetIfChanged(ref _memberSortCriteria, value);
-            this.RaisePropertyChanged(nameof(SortedMembers));
+            SetProperty(ref _memberSortCriteria, value);
+            OnPropertyChanged(nameof(SortedMembers));
         }
     }
 
