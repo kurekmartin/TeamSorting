@@ -7,7 +7,6 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
-using ReactiveUI;
 using TeamSorting.Enums;
 using TeamSorting.Extensions;
 using TeamSorting.Lang;
@@ -24,23 +23,10 @@ public class Data(ISorter sorter) : ObservableObject
     public ObservableCollection<Member> Members { get; } = [];
     public List<Member> SortedMembers => Members.OrderBy(m => m.Name).ToList();
 
-    private ObservableCollection<Team> _teams = [];
     private int _teamNumber = 1;
     public bool SortingInProgress { get; set; }
 
-    public ObservableCollection<Team> Teams
-    {
-        get => _teams;
-        private set
-        {
-            _teams = value;
-            foreach (var team in _teams)
-            {
-                team.WhenAnyValue(t => t.AvgScores)
-                    .Subscribe(_ => OnPropertyChanged(nameof(DisciplineDelta)));
-            }
-        }
-    }
+    public ObservableCollection<Team> Teams { get; } = [];
 
     public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
 
@@ -420,11 +406,19 @@ public class Data(ISorter sorter) : ObservableObject
         Teams.Add(team);
         _teamNumber++;
 
-        team.WhenAnyValue(t => t.AvgScores)
-            .Subscribe(_ => OnPropertyChanged(nameof(DisciplineDelta)));
+        team.PropertyChanged += TeamOnPropertyChanged;
 
         OnPropertyChanged(nameof(DisciplineDelta));
         return true;
+    }
+
+    private void TeamOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (sender?.GetType() == typeof(Team) &&
+            e.PropertyName == nameof(Team.AvgScores))
+        {
+            OnPropertyChanged(nameof(DisciplineDelta));
+        }
     }
 
     public void RemoveAllTeams()
@@ -504,7 +498,7 @@ public class Data(ISorter sorter) : ObservableObject
         }
 
         mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
-        
+
         int teamsCount = numberOfTeams ?? Teams.Count;
         SortingInProgress = true;
         mainWindow.IsEnabled = false;
