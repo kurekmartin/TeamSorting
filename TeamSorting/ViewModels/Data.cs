@@ -441,18 +441,6 @@ public class Data(ISorter sorter) : ReactiveObject
         return team.Members.Remove(member);
     }
 
-    public Dictionary<Team, decimal> GetSortedTeamsByValueByDiscipline(DisciplineInfo discipline)
-    {
-        var dict = new Dictionary<Team, decimal>();
-        foreach (var team in Teams)
-        {
-            decimal value = team.GetAverageValueByDiscipline(discipline);
-            dict.Add(team, value);
-        }
-
-        return dict.OrderBy(pair => pair.Value).ToDictionary();
-    }
-
     public Team CreateAndAddTeam()
     {
         var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber));
