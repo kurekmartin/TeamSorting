@@ -32,6 +32,8 @@ public class Data(ISorter sorter) : ObservableObject
         set => SetProperty(ref _sortingInProgress, value);
     }
 
+    public ProgressValues Progress { get; } = new();
+
     public ObservableCollection<Team> Teams { get; } = [];
 
     public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
@@ -507,8 +509,7 @@ public class Data(ISorter sorter) : ObservableObject
 
         int teamsCount = numberOfTeams ?? Teams.Count;
         SortingInProgress = true;
-        mainWindow.IsEnabled = false;
-        (List<Team> teams, string? seed) sortResult = await Task.Run(() => sorter.Sort(Members.ToList(), teamsCount, InputSeed));
+        (List<Team> teams, string? seed) sortResult = await Task.Run(() => sorter.Sort(Members.ToList(), teamsCount, Progress, InputSeed));
         RemoveAllTeams();
         foreach (Team team in sortResult.teams)
         {
@@ -519,7 +520,6 @@ public class Data(ISorter sorter) : ObservableObject
         SortingInProgress = false;
         mainWindowViewModel.SwitchToTeamsView();
         mainWindow.Cursor = Cursor.Default;
-        mainWindow.IsEnabled = true;
     }
 
     #endregion

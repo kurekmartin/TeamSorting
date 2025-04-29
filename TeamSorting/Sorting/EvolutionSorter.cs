@@ -16,8 +16,14 @@ public class EvolutionSorter : ISorter
     private const float PreserveBestResults = 0.1f;
     private const int InvalidSolutionPenalty = 100000;
 
-    public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, string? seed = null)
+    public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, ProgressValues progress, string? seed = null)
     {
+        progress.Minimum = 0;
+        progress.Maximum = MaxGenerations;
+        progress.Value = 0;
+        progress.IsIndeterminate = true;
+        progress.Text = Lang.Resources.Sorting_ProgressText;
+        
         if (string.IsNullOrWhiteSpace(seed))
         {
             seed = SeedGenerator.CreateSeed(10);
@@ -31,9 +37,11 @@ public class EvolutionSorter : ISorter
             currentGeneration.Add(CreateRandomCombination(members, random));
         }
 
+        progress.IsIndeterminate = false;
         var generationNumber = 0;
         do
         {
+            progress.Value = generationNumber;
             var sortedGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
                 .OrderBy(solution => solution.Value).ToDictionary();
 

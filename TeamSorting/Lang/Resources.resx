@@ -223,4 +223,7 @@ Do you want to continue?</value>
     <data name="TeamsView_CreateNewCombination_Button" xml:space="preserve">
         <value>Create new combination</value>
     </data>
+    <data name="Sorting_ProgressText" xml:space="preserve">
+        <value>Sorting in progress...</value>
+    </data>
 </root>

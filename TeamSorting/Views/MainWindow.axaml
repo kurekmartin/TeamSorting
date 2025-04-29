@@ -24,15 +24,27 @@
         </StackPanel>
         <!-- Overlay -->
         <Border Grid.Row=""
-                Background="Gray"
-                Opacity="0.5"
+                Background="White"
+                Opacity="0.7"
+                IsVisible="{Binding Data.SortingInProgress}"/>
+        <Border Grid.Row=""
+                Background="Transparent"
                 IsVisible="{Binding Data.SortingInProgress}">
-            <Label VerticalAlignment="Center"
-                   HorizontalAlignment="Center"
-                   FontSize="50"
-                   Foreground="White">
-                Sorting in progress..
-            </Label>
+            <StackPanel VerticalAlignment="Center"
+                        HorizontalAlignment="Center">
+                <Label VerticalAlignment="Center"
+                       HorizontalAlignment="Center"
+                       FontSize="30"
+                       Foreground="Black"
+                       Content="{Binding Data.Progress.Text}" />
+                <ProgressBar IsIndeterminate="{Binding Data.Progress.IsIndeterminate}"
+                             Minimum="{Binding Data.Progress.Minimum}"
+                             Maximum="{Binding Data.Progress.Maximum}"
+                             Value="{Binding Data.Progress.Value}"
+                             ShowProgressText="{Binding Data.Progress.ShowText}"
+                             VerticalAlignment="Center"
+                             HorizontalAlignment="Center"/>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

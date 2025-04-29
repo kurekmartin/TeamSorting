@@ -515,6 +515,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Probíhá rozřazení....
+        /// </summary>
+        public static string Sorting_ProgressText {
+            get {
+                return ResourceManager.GetString("Sorting_ProgressText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Přidat tým.
         /// </summary>
         public static string TeamsView_AddTeam_Button {

@@ -222,4 +222,7 @@ Chcete pokračovat?</value>
     <data name="TeamsView_CreateNewCombination_Button" xml:space="preserve">
         <value>Vytvořit novou kombinaci</value>
     </data>
+    <data name="Sorting_ProgressText" xml:space="preserve">
+        <value>Probíhá rozřazení...</value>
+    </data>
 </root>
