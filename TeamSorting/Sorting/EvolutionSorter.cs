@@ -76,7 +76,7 @@ public class EvolutionSorter : ISorter
         decimal max = generationScores.Values.Max();
         decimal avg = generationScores.Values.Average();
         decimal mean = generationScores.Values.ElementAt(count / 2);
-        Log.Information(
+        Log.Debug(
             "Generation number {num} - count: {count} - min: {min} - max: {max} - avg: {avg} - mean: {mean}",
             generationNumber, count, min, max, avg, mean);
     }
