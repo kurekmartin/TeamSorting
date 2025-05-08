@@ -29,6 +29,9 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
         {
             _rawValue = value;
             _isValueUpdated = false;
+            //updates min/max values for discipline
+            //TODO: optimize calculation
+            _ = Value;
         }
     }
 
@@ -56,6 +59,9 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
             };
 
             _isValueUpdated = true;
+            //updates min/max values for discipline
+            //TODO: optimize calculation
+            _ = DecimalValue;
             return _value;
         }
         set
@@ -76,7 +82,23 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
         }
     }
 
-    public decimal NormalizedValue => (DecimalValue - DisciplineInfo.MinValue) / (DisciplineInfo.MaxValue - DisciplineInfo.MinValue);
+    public decimal NormalizedValue
+    {
+        get
+        {
+            decimal value;
+            try
+            {
+                value = (DecimalValue - DisciplineInfo.MinValue) / (DisciplineInfo.MaxValue - DisciplineInfo.MinValue);
+            }
+            catch
+            {
+                value = 1;
+            }
+
+            return value;
+        }
+    }
 
     public decimal DecimalValue
     {
