@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -51,7 +52,14 @@ public class InputViewModel : ViewModelBase
         {
             Columns =
             {
-                new TemplateColumn<Member>(null, "RemoveMemberCell", null, GridLength.Auto),
+                new TemplateColumn<Member>(null,
+                    "RemoveMemberCell",
+                    null,
+                    GridLength.Auto,
+                    new TemplateColumnOptions<Member>
+                    {
+                        CanUserResizeColumn = false
+                    }),
                 new TextColumn<Member, string>(Resources.InputView_DataGrid_ColumnHeader_Name,
                     member => member.Name,
                     (member, s) => member.Name = s ?? member.Name,
