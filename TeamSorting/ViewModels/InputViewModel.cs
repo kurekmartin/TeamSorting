@@ -147,7 +147,7 @@ public class InputViewModel : ViewModelBase
         return new FuncDataTemplate<Member?>((member, _) =>
             new TextBlock
             {
-                Text = (string)(new DisciplineRecordValueConverter().Convert(member?.Records[discipline.Id].Value, typeof(string), null, CultureInfo.CurrentCulture) ?? string.Empty),
+                Text = (string)(new DisciplineRecordValueConverter().Convert(member?.Records.GetValueOrDefault(discipline.Id)?.Value, typeof(string), null, CultureInfo.CurrentCulture) ?? string.Empty),
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 VerticalAlignment = VerticalAlignment.Center,
                 Padding = new Thickness(4, 2),
