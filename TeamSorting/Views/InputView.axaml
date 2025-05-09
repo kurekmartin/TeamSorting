@@ -74,7 +74,7 @@
                         Content="{x:Static lang:Resources.InputView_LoadData_Button}" />
                 <Button Click="DeleteDataButton_OnClick"
                         DockPanel.Dock="Top"
-                        Content="{x:Static lang:Resources.InputView_DeleteData_Button}"/>
+                        Content="{x:Static lang:Resources.InputView_DeleteData_Button}" />
                 <DockPanel HorizontalAlignment="Left"
                            VerticalAlignment="Bottom"
                            DockPanel.Dock="Bottom">
@@ -215,6 +215,11 @@
                     </StackPanel>
                 </DataTemplate>
             </TreeDataGrid.Resources>
+            <TreeDataGrid.Styles>
+                <Style Selector="TreeDataGrid TreeDataGridRow:nth-last-child(2n)">
+                    <Setter Property="Background" Value="#20808080" />
+                </Style>
+            </TreeDataGrid.Styles>
         </TreeDataGrid>
         <DockPanel Grid.Row="2"
                    VerticalAlignment="Center">
