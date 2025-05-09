@@ -267,6 +267,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
         if (Records.TryGetValue(discipline.Id, out var record))
         {
             record.RawValue = value;
+            return record;
         }
 
         record = new DisciplineRecord(this, discipline, value);

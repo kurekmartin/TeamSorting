@@ -389,7 +389,7 @@ public class Data(ISorter sorter) : ObservableObject
 
     public DisciplineRecord? AddDisciplineRecord(Member member, DisciplineInfo discipline, string value)
     {
-        if (!Members.Contains(member) || !Disciplines.Contains(discipline)) return null;
+        if (!Disciplines.Contains(discipline)) return null;
         var record = member.AddDisciplineRecord(discipline, value);
         return record;
     }
