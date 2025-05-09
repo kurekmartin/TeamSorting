@@ -79,11 +79,29 @@ public class InputViewModel : ViewModelBase
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                AddDisciplineColumns(e.NewItems);
-                break;
             case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Replace:
+                AddDisciplineColumns(e.NewItems);
                 RemoveDisciplineColumns(e.OldItems);
                 break;
+            case NotifyCollectionChangedAction.Reset:
+                RemoveDisciplineColumns();
+                AddDisciplineColumns(Data.Disciplines);
+                break;
+        }
+    }
+
+    private void RemoveDisciplineColumns()
+    {
+        int columnCount = TreeDataGridSource.Columns.Count;
+        var columns = new IColumn<Member>[columnCount];
+        TreeDataGridSource.Columns.CopyTo(columns,0);
+        foreach (IColumn<Member> column in columns)
+        {
+            if (column.Tag is string tag && tag.StartsWith("Discipline-"))
+            {
+                TreeDataGridSource.Columns.Remove(column);
+            }
         }
     }
 
