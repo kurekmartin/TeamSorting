@@ -34,14 +34,14 @@ public class MemberListSelection : TemplatedControl
             null!,
             BindingMode.OneTime);
 
-    public static readonly DirectProperty<MemberListSelection, ObservableCollection<Member>> AllMembersProperty =
-        AvaloniaProperty.RegisterDirect<MemberListSelection, ObservableCollection<Member>>(
+    public static readonly DirectProperty<MemberListSelection, List<Member>> AllMembersProperty =
+        AvaloniaProperty.RegisterDirect<MemberListSelection, List<Member>>(
             nameof(AllMembers),
             o => o.AllMembers,
             (o, v) => o.AllMembers = v,
             []);
 
-    private ObservableCollection<Member> _allMembers = [];
+    private List<Member> _allMembers = [];
     private Member _currentMember = null!;
     private ObservableCollection<Member> _selectedMembers = [];
     private string _searchText = string.Empty;
@@ -49,7 +49,7 @@ public class MemberListSelection : TemplatedControl
 
     public ObservableCollection<FilterableMember> FilteredMembers { get; set; } = [];
 
-    public ObservableCollection<Member> AllMembers
+    public List<Member> AllMembers
     {
         get => _allMembers;
         set => SetAndRaise(AllMembersProperty, ref _allMembers, value);
@@ -89,11 +89,24 @@ public class MemberListSelection : TemplatedControl
 
         foreach (Member member in AllMembers)
         {
-            if (FilteredMembers.FirstOrDefault(filterableMember => filterableMember.Member == member) is null)
+            if (FilteredMembers.FirstOrDefault(filterableMember => filterableMember.Member == member) is not null)
             {
-                FilteredMembers.Add(new FilterableMember(member));
-                Log.Debug("FilteredMembers added member {name}", member.Name);
+                continue;
             }
+            
+            var newMember = new FilterableMember(member);
+
+            // Find the correct insertion point
+            var insertIndex = 0;
+            while (insertIndex < FilteredMembers.Count &&
+                   string.Compare(FilteredMembers[insertIndex].Member.Name, member.Name, StringComparison.OrdinalIgnoreCase) < 0)
+            {
+                insertIndex++;
+            }
+
+            FilteredMembers.Insert(insertIndex, newMember);
+
+            Log.Debug("FilteredMembers added member {name}", member.Name);
         }
     }
 

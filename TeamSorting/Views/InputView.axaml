@@ -137,82 +137,16 @@
                             i:Attached.Icon="mdi-close" />
                 </DataTemplate>
                 <DataTemplate x:Key="WithCell" DataType="models:Member">
-                    <StackPanel>
-                        <Button i:Attached.Icon="mdi-pencil-outline">
-                            <Button.Flyout>
-                                <Flyout Placement="RightEdgeAlignedTop">
-                                    <controls:MemberListSelection
-                                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.Members}"
-                                        CurrentMember="{Binding .}"
-                                        SelectedMembers="{Binding With}" />
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <ItemsControl ItemsSource="{Binding SortedWith}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="2"
-                                            BorderThickness="1"
-                                            BorderBrush="Black"
-                                            CornerRadius="5"
-                                            Margin="3">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button i:Attached.Icon="mdi-close"
-                                                    Padding="2"
-                                                    Margin="0,0,3,0"
-                                                    Click="RemoveWithMemberButton_OnClick" />
-                                            <TextBlock Text="{Binding Name}"
-                                                       VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
+                    <controls:MemberListControl
+                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                        CurrentMember="{Binding .}"
+                        SelectedMembers="{Binding With}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="NotWithCell" DataType="models:Member">
-                    <StackPanel>
-                        <Button i:Attached.Icon="mdi-pencil-outline">
-                            <Button.Flyout>
-                                <Flyout Placement="RightEdgeAlignedTop">
-                                    <controls:MemberListSelection
-                                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.Members}"
-                                        CurrentMember="{Binding .}"
-                                        SelectedMembers="{Binding NotWith}" />
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <ItemsControl ItemsSource="{Binding SortedNotWith}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="2"
-                                            BorderThickness="1"
-                                            BorderBrush="Black"
-                                            CornerRadius="5"
-                                            Margin="3">
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button i:Attached.Icon="mdi-close"
-                                                    Padding="2"
-                                                    Margin="0,0,3,0"
-                                                    Click="RemoveNotWithMemberButton_OnClick" />
-                                            <TextBlock Text="{Binding Name}"
-                                                       VerticalAlignment="Center" />
-                                        </StackPanel>
-                                    </Border>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
+                    <controls:MemberListControl
+                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                        CurrentMember="{Binding .}"
+                        SelectedMembers="{Binding NotWith}"/>
                 </DataTemplate>
             </TreeDataGrid.Resources>
             <TreeDataGrid.Styles>

@@ -1,0 +1,59 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:TeamSorting.Controls"
+        xmlns:i="https://github.com/projektanker/icons.avalonia"
+        xmlns:models="clr-namespace:TeamSorting.Models">
+    <Design.PreviewWith>
+        <controls:MemberListControl />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MemberListControl">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel>
+                    <Button i:Attached.Icon="mdi-pencil-outline">
+                        <Button.Flyout>
+                            <Flyout Placement="RightEdgeAlignedTop">
+                                <controls:MemberListSelection
+                                    AllMembers="{TemplateBinding AllMembers}"
+                                    CurrentMember="{TemplateBinding CurrentMember}"
+                                    SelectedMembers="{TemplateBinding SelectedMembers}" />
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                    <ItemsControl Name="MemberList"
+                        ItemsSource="{Binding SelectedMembersSorted, RelativeSource={RelativeSource TemplatedParent}}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel Orientation="Horizontal" />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DataTemplate.DataType>
+                                    <x:Type TypeName="models:Member"></x:Type>
+                                </DataTemplate.DataType>
+                                <Border Padding="2"
+                                        BorderThickness="1"
+                                        BorderBrush="Black"
+                                        CornerRadius="5"
+                                        Margin="3">
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button Command="{Binding RemoveMember, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:MemberListControl}}"
+                                                CommandParameter="{Binding .}"
+                                                i:Attached.Icon="mdi-close"
+                                                Padding="2"
+                                                Margin="0,0,3,0"/>
+                                        <TextBlock Text="{Binding Name}"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

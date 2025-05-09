@@ -4,14 +4,9 @@ namespace TeamSorting.Models;
 
 public class FilterableMember(Member member) : ObservableObject
 {
-    private Member _member = member;
     private bool _isVisible = true;
 
-    public Member Member
-    {
-        get => _member;
-        set => SetProperty(ref _member, value);
-    }
+    public Member Member { get; } = member;
 
     public bool IsVisible
     {
