@@ -116,7 +116,7 @@ public class InputViewModel : ViewModelBase
         TreeDataGridSource.Columns.Add(column);
     }
 
-    private static IDataTemplate GetDisciplineCellTemplate(DisciplineInfo discipline)
+    private static FuncDataTemplate<Member?> GetDisciplineCellTemplate(DisciplineInfo discipline)
     {
         return new FuncDataTemplate<Member?>((member, _) =>
             new TextBlock
@@ -130,7 +130,7 @@ public class InputViewModel : ViewModelBase
         );
     }
 
-    private IDataTemplate GetDisciplineEditTemplate(DisciplineInfo discipline)
+    private static FuncDataTemplate<Member> GetDisciplineEditTemplate(DisciplineInfo discipline)
     {
         FuncDataTemplate<Member> template = discipline.DataType switch
         {
