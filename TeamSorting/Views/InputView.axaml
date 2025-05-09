@@ -127,6 +127,7 @@
         </DockPanel>
 
         <TreeDataGrid Grid.Row="1"
+                      Name="Members"
                       Source="{Binding TreeDataGridSource}"
                       AutoDragDropRows="False">
             <TreeDataGrid.Resources>

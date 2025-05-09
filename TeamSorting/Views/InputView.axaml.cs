@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Avalonia.Controls;
+using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -94,7 +95,25 @@ public partial class InputView : UserControl
         var member = new Member(context.NewMemberName);
         context.Data.AddMember(member);
         context.NewMemberName = string.Empty;
-        //TODO: scroll to added member
+
+        var members = this.FindControl<TreeDataGrid>("Members");
+        if (members?.Rows is null)
+        {
+            return;
+        }
+        
+        var index = 0;
+        foreach (IRow row in members.Rows)
+        {
+            if (row.Model is Member rowMember && rowMember == member)
+            {
+                break;
+            }
+            index++;
+        }
+        
+        members.RowsPresenter!.BringIntoView(index);
+        members.TryGetRow(index)?.Focus();
     }
 
     private void RemoveMemberButton_OnClick(object? sender, RoutedEventArgs e)
