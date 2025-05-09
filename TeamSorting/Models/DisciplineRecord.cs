@@ -53,7 +53,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
                     ? TimeSpan.Zero
                     : TimeSpan.ParseExact(RawValue, TimeFormats, CultureInfo.CurrentCulture),
                 DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
-                    ? 0d
+                    ? decimal.Zero
                     : decimal.Parse(RawValue),
                 _ => throw new FormatException()
             };
