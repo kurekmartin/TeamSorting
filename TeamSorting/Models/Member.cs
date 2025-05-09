@@ -291,6 +291,29 @@ public class Member : ObservableObject, INotifyDataErrorInfo
         return true;
     }
 
+    public static int CompareDisciplinesDescending(Member? m1, Member? m2, DisciplineInfo discipline)
+    {
+        return CompareDisciplineValues(m2, m1, discipline);
+    }
+
+    public static int CompareDisciplinesAscending(Member? m1, Member? m2, DisciplineInfo discipline)
+    {
+        return CompareDisciplineValues(m1, m2, discipline);
+    }
+
+    private static int CompareDisciplineValues(Member? m1, Member? m2, DisciplineInfo discipline)
+    {
+        if (m1 is null
+            || !m1.Records.TryGetValue(discipline.Id, out DisciplineRecord? member1Record)
+            || m2 is null
+            || !m2.Records.TryGetValue(discipline.Id, out DisciplineRecord? member2Record))
+        {
+            return 0;
+        }
+
+        return member1Record.DecimalValue.CompareTo(member2Record.DecimalValue);
+    }
+
     #region Errors
 
     private readonly Dictionary<string, List<string>> _validationErrors = [];

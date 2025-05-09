@@ -104,8 +104,10 @@ public class InputViewModel : ViewModelBase
             GridLength.Auto,
             new TemplateColumnOptions<Member>
             {
-                CanUserSortColumn = false,
+                CanUserSortColumn = true,
                 BeginEditGestures = BeginEditGestures.Tap,
+                CompareAscending = (member, member1) => Member.CompareDisciplinesAscending(member, member1, discipline),
+                CompareDescending = (member, member1) => Member.CompareDisciplinesDescending(member, member1, discipline)
             })
         {
             Tag = CreateDisciplineColumnTag(discipline)
