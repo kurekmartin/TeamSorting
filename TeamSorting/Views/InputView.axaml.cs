@@ -170,30 +170,6 @@ public partial class InputView : UserControl
         }
     }
 
-    private void RemoveWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (sender is Button { DataContext: Member removeName } button)
-        {
-            var parent = button.FindLogicalAncestorOfType<ItemsControl>();
-            if (parent?.DataContext is Member member)
-            {
-                member.RemoveWithMember(removeName);
-            }
-        }
-    }
-
-    private void RemoveNotWithMemberButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (sender is Button { DataContext: Member removeName } button)
-        {
-            var parent = button.FindLogicalAncestorOfType<ItemsControl>();
-            if (parent?.DataContext is Member member)
-            {
-                member.RemoveNotWithMember(removeName);
-            }
-        }
-    }
-
     private async void DeleteDataButton_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is InputViewModel context)
