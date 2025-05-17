@@ -15,54 +15,47 @@
         SystemDecorations="None"
         CanResize="False"
         ShowInTaskbar="False"
-        Background="Transparent">
+        Background="White">
 
-    <Border BorderThickness="1"
-            BorderBrush="Gray"
-            CornerRadius="10"
-            BoxShadow="0 0 25 0 DarkGray"
-            Margin="20"
-            Background="White">
-        <Grid Margin="30"
-              RowDefinitions="Auto,*,Auto">
-            <TextBlock Name="Message"
-                       Grid.Row="0"
-                       Text="{x:Static lang:Resources.CsvErrorDialog_Title}"
-                       HorizontalAlignment="Left"
-                       VerticalAlignment="Stretch"
-                       TextWrapping="Wrap"
-                       FontSize="18"
-                       FontWeight="Bold"
-                       MaxWidth="300"
-                       Margin="0,0,0,20"
-                       DockPanel.Dock="Top" />
-            <DataGrid ItemsSource="{Binding OrderedErrors}"
-                      Grid.Row="1"
-                      IsReadOnly="True"
-                      CanUserReorderColumns="False"
-                      CanUserResizeColumns="True"
-                      CanUserSortColumns="False"
-                      VerticalScrollBarVisibility="Auto"
-                      DockPanel.Dock="Top">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_RowNumber_Header}"
-                                        Binding="{Binding Row}" />
-                    <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_ColumnNumber_Header}"
-                                        Binding="{Binding Column}" />
-                    <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_Error_Header}"
-                                        Binding="{Binding Message}" />
-                </DataGrid.Columns>
-            </DataGrid>
-            <DockPanel Grid.Row="2"
-                       DockPanel.Dock="Bottom"
-                       VerticalAlignment="Bottom">
-                <Button Name="OkButton"
-                        Margin="0,10,0,0"
-                        Click="OkButton_OnClick"
-                        HorizontalAlignment="Right"
-                        DockPanel.Dock="Right"
-                        Content="{x:Static lang:Resources.CsvErrorDialog_Ok_Button}" />
-            </DockPanel>
-        </Grid>
-    </Border>
+    <Grid Margin="30"
+          RowDefinitions="Auto,*,Auto">
+        <TextBlock Name="Message"
+                   Grid.Row="0"
+                   Text="{x:Static lang:Resources.CsvErrorDialog_Title}"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Stretch"
+                   TextWrapping="Wrap"
+                   FontSize="18"
+                   FontWeight="Bold"
+                   MaxWidth="300"
+                   Margin="0,0,0,20"
+                   DockPanel.Dock="Top" />
+        <DataGrid ItemsSource="{Binding OrderedErrors}"
+                  Grid.Row="1"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="False"
+                  VerticalScrollBarVisibility="Auto"
+                  DockPanel.Dock="Top">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_RowNumber_Header}"
+                                    Binding="{Binding Row}" />
+                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_ColumnNumber_Header}"
+                                    Binding="{Binding Column}" />
+                <DataGridTextColumn Header="{x:Static lang:Resources.CsvErrorDialog_Grid_Error_Header}"
+                                    Binding="{Binding Message}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <DockPanel Grid.Row="2"
+                   DockPanel.Dock="Bottom"
+                   VerticalAlignment="Bottom">
+            <Button Name="OkButton"
+                    Margin="0,10,0,0"
+                    Click="OkButton_OnClick"
+                    HorizontalAlignment="Right"
+                    DockPanel.Dock="Right"
+                    Content="{x:Static lang:Resources.CsvErrorDialog_Ok_Button}" />
+        </DockPanel>
+    </Grid>
 </Window>
