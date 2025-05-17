@@ -18,5 +18,6 @@
         <StyleInclude Source="Controls/TimeSpanPicker.axaml"/>
         <StyleInclude Source="Controls/MemberListSelection.axaml"/>
         <StyleInclude Source="Controls/MemberListControl.axaml"/>
+        <StyleInclude Source="Controls/ValidationTextBlock.axaml"/>
     </Application.Styles>
 </Application>
