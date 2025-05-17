@@ -131,6 +131,15 @@
                       Source="{Binding TreeDataGridSource}"
                       AutoDragDropRows="False">
             <TreeDataGrid.Resources>
+                <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
+                    <controls:ValidationTextBlock ValidatedText="{Binding Name}"
+                                                  VerticalAlignment="Center"
+                                                  Margin="4,2">
+                    </controls:ValidationTextBlock>
+                </DataTemplate>
+                <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
+                    <TextBox Text="{Binding Name}" />
+                </DataTemplate>
                 <DataTemplate x:Key="RemoveMemberCell">
                     <Button Click="RemoveMemberButton_OnClick"
                             ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"

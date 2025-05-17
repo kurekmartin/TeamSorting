@@ -60,11 +60,11 @@ public class InputViewModel : ViewModelBase
                     {
                         CanUserResizeColumn = false
                     }),
-                new TextColumn<Member, string>(Resources.InputView_DataGrid_ColumnHeader_Name,
-                    member => member.Name,
-                    (member, s) => member.Name = s ?? member.Name,
+                new TemplateColumn<Member>(Resources.InputView_DataGrid_ColumnHeader_Name,
+                    "MemberNameCell",
+                    "MemberNameCellEdit",
                     GridLength.Auto,
-                    new TextColumnOptions<Member>
+                    new TemplateColumnOptions<Member>
                     {
                         BeginEditGestures = BeginEditGestures.Tap
                     }),
