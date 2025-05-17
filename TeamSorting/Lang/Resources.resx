@@ -226,4 +226,7 @@ Do you want to continue?</value>
     <data name="Sorting_ProgressText" xml:space="preserve">
         <value>Sorting in progress...</value>
     </data>
+    <data name="TeamsView_DisciplineAverages_Label" xml:space="preserve">
+        <value>Discipline averages:</value>
+    </data>
 </root>

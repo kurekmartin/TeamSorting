@@ -579,6 +579,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Průměry disciplín:.
+        /// </summary>
+        public static string TeamsView_DisciplineAverages_Label {
+            get {
+                return ResourceManager.GetString("TeamsView_DisciplineAverages_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Exportovat týmy do CSV.
         /// </summary>
         public static string TeamsView_ExportTeamsToCsv_FileDialogTitle {

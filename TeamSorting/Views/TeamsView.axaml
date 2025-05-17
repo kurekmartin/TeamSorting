@@ -110,7 +110,8 @@
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical"
-                            DockPanel.Dock="Top">
+                            DockPanel.Dock="Top"
+                            Margin="0,8,0,0">
                     <TextBlock Text="{x:Static lang:Resources.TeamsView_Differences_Label}"
                                FontWeight="Bold" />
                     <ItemsControl ItemsSource="{Binding Data.DisciplineDelta}"
@@ -136,6 +137,36 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
+                
+                <StackPanel Orientation="Vertical"
+                            DockPanel.Dock="Top"
+                            Margin="0,8,0,0">
+                    <TextBlock Text="{x:Static lang:Resources.TeamsView_DisciplineAverages_Label}"
+                               FontWeight="Bold" />
+                    <ItemsControl ItemsSource="{Binding Data.DisciplineAverage}"
+                                  HorizontalAlignment="Left">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <DataTemplate.DataType>
+                                    <x:Type TypeName="generic:KeyValuePair"
+                                            x:TypeArguments="models:DisciplineInfo,x:Object" />
+                                </DataTemplate.DataType>
+                                <DockPanel Margin="0,0,0,2">
+                                    <TextBlock DockPanel.Dock="Left"
+                                               Text="{Binding Key.Name}"
+                                               FontWeight="Bold"
+                                               Margin="0,0,5,0"
+                                               VerticalAlignment="Center" />
+                                    <TextBlock DockPanel.Dock="Right"
+                                               Text="{Binding Value,Converter={StaticResource DisciplineRecordValueConverter}}"
+                                               VerticalAlignment="Center"
+                                               HorizontalAlignment="Right" />
+                                </DockPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                
                 <StackPanel DockPanel.Dock="Bottom"
                             Orientation="Vertical"
                             HorizontalAlignment="Left"

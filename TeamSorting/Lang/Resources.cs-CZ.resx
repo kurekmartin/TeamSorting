@@ -225,4 +225,7 @@ Chcete pokračovat?</value>
     <data name="Sorting_ProgressText" xml:space="preserve">
         <value>Probíhá rozřazení...</value>
     </data>
+    <data name="TeamsView_DisciplineAverages_Label" xml:space="preserve">
+        <value>Průměry disciplín:</value>
+    </data>
 </root>

@@ -580,6 +580,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Discipline averages:.
+        /// </summary>
+        public static string TeamsView_DisciplineAverages_Label {
+            get {
+                return ResourceManager.GetString("TeamsView_DisciplineAverages_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Export Teams to CSV.
         /// </summary>
         public static string TeamsView_ExportTeamsToCsv_FileDialogTitle {
