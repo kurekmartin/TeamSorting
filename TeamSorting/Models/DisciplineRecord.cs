@@ -1,9 +1,10 @@
 ﻿using System.Globalization;
+using CommunityToolkit.Mvvm.ComponentModel;
 using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 
-public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue)
+public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue) : ObservableObject
 {
     private static readonly string[] TimeFormats =
     [
@@ -27,7 +28,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
         get => _rawValue;
         set
         {
-            _rawValue = value;
+            SetProperty(ref _rawValue, value);
             _isValueUpdated = false;
             //updates min/max values for discipline
             //TODO: optimize calculation
@@ -75,7 +76,7 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
                 RawValue = value.ToString() ?? string.Empty;
             }
 
-            _value = value;
+            SetProperty(ref _value, value);
             //updates min/max values for discipline
             //TODO: optimize calculation
             _ = DecimalValue;

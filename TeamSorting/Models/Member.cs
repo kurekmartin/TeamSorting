@@ -9,6 +9,7 @@ namespace TeamSorting.Models;
 
 public class Member : ObservableObject, INotifyDataErrorInfo
 {
+    public event EventHandler DisciplineRecordChanged;
     public string Name
     {
         get => _name;
@@ -45,6 +46,38 @@ public class Member : ObservableObject, INotifyDataErrorInfo
         Name = name;
         With.CollectionChanged += WithOnCollectionChanged;
         NotWith.CollectionChanged += NotWithOnCollectionChanged;
+        Records.CollectionChanged += RecordsOnCollectionChanged;
+    }
+
+    private void RecordsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                foreach (KeyValuePair<Guid, DisciplineRecord> disciplineRecord in e.NewItems!)
+                {
+                    disciplineRecord.Value.PropertyChanged += DisciplineRecordOnPropertyChanged;
+                }
+
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                foreach (KeyValuePair<Guid, DisciplineRecord> disciplineRecord in e.OldItems!)
+                {
+                    disciplineRecord.Value.PropertyChanged -= DisciplineRecordOnPropertyChanged;
+                }
+
+                break;
+        }
+    }
+
+    private void DisciplineRecordOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName is nameof(DisciplineRecord.RawValue)
+            or nameof(DisciplineRecord.DecimalValue)
+            or nameof(DisciplineRecord.Value))
+        {
+            DisciplineRecordChanged(this, EventArgs.Empty);
+        }
     }
 
     private void NotWithOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
