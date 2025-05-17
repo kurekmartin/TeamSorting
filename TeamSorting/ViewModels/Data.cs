@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Dynamic;
@@ -17,7 +18,7 @@ using TeamSorting.Views;
 
 namespace TeamSorting.ViewModels;
 
-public class Data(ISorter sorter) : ObservableObject
+public class Data : ObservableObject
 {
     public ObservableCollection<DisciplineInfo> Disciplines { get; } = [];
     public ObservableCollection<Member> Members { get; } = [];
@@ -25,6 +26,51 @@ public class Data(ISorter sorter) : ObservableObject
 
     private int _teamNumber = 1;
     private bool _sortingInProgress;
+    private readonly ISorter _sorter;
+
+    public Data(ISorter sorter)
+    {
+        _sorter = sorter;
+        Members.CollectionChanged += MembersOnCollectionChanged;
+    }
+
+    private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                foreach (Member member in e.NewItems!)
+                {
+                    member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
+                }
+
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                foreach (Member member in e.OldItems!)
+                {
+                    member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
+                }
+
+                break;
+            case NotifyCollectionChangedAction.Replace:
+                foreach (Member member in e.NewItems!)
+                {
+                    member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
+                }
+
+                foreach (Member member in e.OldItems!)
+                {
+                    member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
+                }
+
+                break;
+        }
+    }
+
+    private void MemberOnDisciplineRecordChanged(object? sender, EventArgs e)
+    {
+        OnPropertyChanged(nameof(DisciplineAverage));
+    }
 
     public bool SortingInProgress
     {
@@ -76,6 +122,29 @@ public class Data(ISorter sorter) : ObservableObject
                         dict.Add(discipline, 0);
                         break;
                 }
+            }
+
+            return dict;
+        }
+    }
+
+    public Dictionary<DisciplineInfo, object> DisciplineAverage
+    {
+        get
+        {
+            var dict = new Dictionary<DisciplineInfo, object>();
+            foreach (DisciplineInfo discipline in Disciplines)
+            {
+                IEnumerable<DisciplineRecord> records = Members.Select(member => member.GetRecord(discipline));
+                object average = discipline.DataType switch
+                {
+                    DisciplineDataType.Time when Members.Count == 0 => TimeSpan.Zero,
+                    DisciplineDataType.Time => new TimeSpan(records.Sum(record => ((TimeSpan)record.Value).Ticks) / Members.Count),
+                    DisciplineDataType.Number when Members.Count == 0 => 0,
+                    DisciplineDataType.Number => records.Sum(record => (decimal)record.Value) / Members.Count,
+                    _ => 0
+                };
+                dict.Add(discipline, average);
             }
 
             return dict;
@@ -509,7 +578,7 @@ public class Data(ISorter sorter) : ObservableObject
 
         int teamsCount = numberOfTeams ?? Teams.Count;
         SortingInProgress = true;
-        (List<Team> teams, string? seed) sortResult = await Task.Run(() => sorter.Sort(Members.ToList(), teamsCount, Progress, InputSeed));
+        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(Members.ToList(), teamsCount, Progress, InputSeed));
         RemoveAllTeams();
         foreach (Team team in sortResult.teams)
         {
