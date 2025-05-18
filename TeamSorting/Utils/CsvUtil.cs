@@ -12,31 +12,6 @@ public static class CsvUtil
 
     private static readonly HashSet<string> NonDisciplineColumnNames =
         [nameof(Member.Name), nameof(Member.With), nameof(Member.NotWith)];
-
-    // public static bool CheckCsvFile(StreamReader inputFile)
-    // {
-    //     using var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
-    //     csv.Read();
-    //     csv.ReadHeader();
-    //
-    //     using var dataReader = new CsvDataReader(csv);
-    //     var dataTable = new DataTable();
-    //     dataTable.Load(dataReader);
-    //
-    //     if (!CheckDisciplineDataTypesRow(dataTable) || !CheckDuplicateNames(dataTable))
-    //     {
-    //         return false;
-    //     }
-    //
-    //     //TODO check empty names
-    //     //TODO check discipline records
-    //     //TODO check duplicate with names
-    //     //TODO check duplicate not with names
-    //     //TODO check unknown with names
-    //     //TODO check unknown not with names
-    //     return true;
-    // }
-
     public static bool IsDisciplineColumn(DataColumn column)
     {
         return !NonDisciplineColumnNames.Contains(column.ColumnName);
