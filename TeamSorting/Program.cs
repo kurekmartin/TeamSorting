@@ -2,6 +2,7 @@
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using Serilog;
+using Serilog.Events;
 
 namespace TeamSorting;
 
@@ -13,11 +14,25 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .WriteTo.Console()
-            .CreateLogger();
+                     .MinimumLevel.Debug()
+                     .WriteTo.Console(outputTemplate: outputTemplate)
+                     .WriteTo.File(path: @"log\TeamSorting.log",
+                         restrictedToMinimumLevel: LogEventLevel.Information,
+                         rollingInterval: RollingInterval.Day,
+                         retainedFileCountLimit: 1,
+                         shared: true,
+                         outputTemplate: outputTemplate)
+                     .CreateLogger();
 
+        Log.Information("Application starting");
+        Log.Information("Version: {versionNumber}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
+        Log.Information("System: {architecture} - {os}",
+            System.Runtime.InteropServices.RuntimeInformation.OSArchitecture,
+            System.Runtime.InteropServices.RuntimeInformation.OSDescription
+        );
+        
         BuildAvaloniaApp()
             .StartWithClassicDesktopLifetime(args);
     }

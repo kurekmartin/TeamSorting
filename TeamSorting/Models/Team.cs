@@ -2,13 +2,15 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Serilog;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 
 public class Team : ObservableObject
 {
+    private readonly ILogger? _logger = Ioc.Default.GetService<ILogger<Team>>();
     public Team([Localizable(false)] string name)
     {
         Name = name;
@@ -92,11 +94,11 @@ public class Team : ObservableObject
 #if DEBUG
         if (SortCriteria.Discipline is not null)
         {
-            Log.Debug($"Sorted members for {Name} by discipline {SortCriteria.Discipline.Name}");
+            _logger?.LogDebug("Sorted members for {TeamName} by discipline {DisciplineName}", Name, SortCriteria.Discipline.Name);
         }
         else
         {
-            Log.Debug($"Sorted members for {Name} by name");
+            _logger?.LogDebug("Sorted members for {TeamName} by name", Name);
         }
 
         foreach (var member in sortedMembers)
@@ -104,11 +106,11 @@ public class Team : ObservableObject
             if (SortCriteria.Discipline is not null)
             {
                 var value = member.Records.First(record => record.Key == SortCriteria.Discipline.Id);
-                Log.Debug($"{member.Name}: {value.Value.Value}");
+                _logger?.LogDebug("{MemberName}: {ValueValue}", member.Name, value.Value.Value);
             }
             else
             {
-                Log.Debug($"{member.Name}");
+                _logger?.LogDebug("{MemberName}", member.Name);
             }
         }
 #endif

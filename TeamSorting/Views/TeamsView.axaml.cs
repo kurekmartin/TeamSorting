@@ -7,6 +7,8 @@ using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TeamSorting.Controls;
 using TeamSorting.Enums;
 using TeamSorting.Models;
@@ -18,6 +20,7 @@ public partial class TeamsView : UserControl
 {
     private Point _ghostPosition = new(0, 0);
     private Point _mouseOffset;
+    private readonly ILogger<TeamsView>? _logger = Ioc.Default.GetService<ILogger<TeamsView>>();
 
     public TeamsView()
     {
@@ -173,6 +176,7 @@ public partial class TeamsView : UserControl
         }
         catch (Exception exception)
         {
+            _logger?.LogError("Error writing teams to csv: {message}", exception.Message);
             string message = string.Format(Lang.Resources.TeamsView_CsvExport_Error, exception.Message);
             context.NotificationManager?.Show(message, NotificationType.Error);
         }

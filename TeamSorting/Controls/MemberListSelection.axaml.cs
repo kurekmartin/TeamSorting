@@ -4,14 +4,18 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Interactivity;
-using Serilog;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using TeamSorting.Models;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 using ListBox = Avalonia.Controls.ListBox;
 
 namespace TeamSorting.Controls;
 
 public class MemberListSelection : TemplatedControl
 {
+    private readonly ILogger? _logger = Ioc.Default.GetService<ILogger<MemberListSelection>>();
+
     public static readonly DirectProperty<MemberListSelection, string> SearchTextProperty =
         AvaloniaProperty.RegisterDirect<MemberListSelection, string>(
             nameof(SearchText),
@@ -84,7 +88,7 @@ public class MemberListSelection : TemplatedControl
                      AllMembers.FirstOrDefault(member => member == filterableMember.Member) is null).ToList())
         {
             FilteredMembers.Remove(filterableMember);
-            Log.Debug("FilteredMembers removed member {name}", filterableMember.Member.Name);
+            _logger?.LogDebug("FilteredMembers removed member {name}", filterableMember.Member.Name);
         }
 
         foreach (Member member in AllMembers)
@@ -106,7 +110,7 @@ public class MemberListSelection : TemplatedControl
 
             FilteredMembers.Insert(insertIndex, newMember);
 
-            Log.Debug("FilteredMembers added member {name}", member.Name);
+            _logger?.LogDebug("FilteredMembers added member {name}", member.Name);
         }
     }
 
@@ -138,7 +142,7 @@ public class MemberListSelection : TemplatedControl
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        Log.Debug("ApplyTemplate");
+        _logger?.LogDebug("ApplyTemplate");
         object? listboxObject = e.NameScope.Find("MemberSelectionListBox");
         if (listboxObject is not ListBox listBox)
         {
@@ -151,7 +155,7 @@ public class MemberListSelection : TemplatedControl
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
-        Log.Debug("Loaded");
+        _logger?.LogDebug("Loaded");
         InitializeFilteredMembers();
         UpdateFilteredMembers();
         UpdateSelectedMembers();
@@ -159,7 +163,7 @@ public class MemberListSelection : TemplatedControl
 
     protected override void OnUnloaded(RoutedEventArgs e)
     {
-        Log.Debug("Unloaded");
+        _logger?.LogDebug("Unloaded");
         SearchText = string.Empty;
     }
 

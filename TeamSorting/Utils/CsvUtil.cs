@@ -1,12 +1,13 @@
 ﻿using System.Data;
 using CsvHelper;
+using Microsoft.Extensions.Logging;
 using TeamSorting.Enums;
 using TeamSorting.Lang;
 using TeamSorting.Models;
 
 namespace TeamSorting.Utils;
 
-public static class CsvUtil
+public class CsvUtil(ILogger<CsvUtil> logger)
 {
     private static readonly HashSet<string> RequiredColumnNames = [nameof(Member.Name)];
 
@@ -61,7 +62,7 @@ public static class CsvUtil
         return errors;
     }
 
-    public static CsvError? ReadDisciplineDataType(DisciplineInfo discipline, DataTable dataTable)
+    public CsvError? ReadDisciplineDataType(DisciplineInfo discipline, DataTable dataTable)
     {
         int column = dataTable.Columns.IndexOf(discipline.Name);
         string value = dataTable.Rows[0][column].ToString() ?? string.Empty;
@@ -69,8 +70,9 @@ public static class CsvUtil
         {
             discipline.DataType = Enum.Parse<DisciplineDataType>(value);
         }
-        catch (ArgumentException)
+        catch (ArgumentException e)
         {
+            logger.LogError("Error parsing discipline data type: {message}", e.Message);
             return new CsvError(string.Format(
                     Resources.Data_ReadDisciplineDataTypes_WrongDisciplineDataTypes_Error,
                     value,
@@ -79,10 +81,11 @@ public static class CsvUtil
                 rowNumber: 1,
                 columnNumber: column + 1);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
+            logger.LogError("Error parsing discipline data type: {message}", e.Message);
             return new CsvError(string.Format(
-                    Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message),
+                    Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, e.Message),
                 rowNumber: 1,
                 columnNumber: column + 1);
         }
@@ -90,7 +93,7 @@ public static class CsvUtil
         return null;
     }
 
-    public static CsvError? ReadDisciplineSortType(DisciplineInfo discipline, DataTable dataTable)
+    public CsvError? ReadDisciplineSortType(DisciplineInfo discipline, DataTable dataTable)
     {
         int column = dataTable.Columns.IndexOf(discipline.Name);
         string value = dataTable.Rows[1][column].ToString() ?? string.Empty;
@@ -98,8 +101,9 @@ public static class CsvUtil
         {
             discipline.SortOrder = Enum.Parse<SortOrder>(value);
         }
-        catch (ArgumentException)
+        catch (ArgumentException e)
         {
+            logger.LogError("Error parsing discipline sort order: {message}", e.Message);
             return new CsvError(string.Format(
                     Resources.Data_ReadDisciplineSortTypes_WrongDisciplineSortOrder_Error,
                     value,
@@ -108,10 +112,11 @@ public static class CsvUtil
                 rowNumber: 2,
                 columnNumber: column + 1);
         }
-        catch (Exception ex)
+        catch (Exception e)
         {
+            logger.LogError("Error parsing discipline sort order: {message}", e.Message);
             return new CsvError(string.Format(
-                    Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, ex.Message),
+                    Resources.Data_ReadDisciplineDataTypes_ReadingError, discipline.Name, e.Message),
                 rowNumber: 2,
                 columnNumber: column + 1);
         }

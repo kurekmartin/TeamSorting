@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
-using Serilog;
+using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using TeamSorting.Extensions;
 using TeamSorting.Models;
 using TeamSorting.Utils;
@@ -7,7 +8,7 @@ using TeamSorting.Utils;
 namespace TeamSorting.Sorting;
 
 [Localizable(false)]
-public class EvolutionSorter : ISorter
+public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
 {
     private const int GenerationSize = 100;
     private const int MaxGenerations = 200;
@@ -19,6 +20,18 @@ public class EvolutionSorter : ISorter
 
     public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, ProgressValues progress, string? seed = null)
     {
+        var stopwatch = Stopwatch.StartNew();
+        logger.LogInformation("Sorting using evolutionary algorithm");
+        logger.LogInformation("Sorting settings:" +
+                              " GenerationSize - {generationSize}," +
+                              " MaxGenerations - {maxGenerations}," +
+                              " CrossSelection - {crossSelection}," +
+                              " ChanceOfMutation - {chanceOfMutation}," +
+                              " PreserveBestResults - {preserveBestResults}," +
+                              " InvalidSolutionPenalty - {invalidSolutionPenalty}," +
+                              " PriorityMultiplier - {priorityMultiplier}"
+            , GenerationSize, MaxGenerations, CrossSelection, ChanceOfMutation, PreserveBestResults, InvalidSolutionPenalty, PriorityMultiplier);
+
         progress.Minimum = 0;
         progress.Maximum = MaxGenerations;
         progress.Value = 0;
@@ -27,11 +40,15 @@ public class EvolutionSorter : ISorter
 
         if (string.IsNullOrWhiteSpace(seed))
         {
+            logger.LogInformation("Seed not set, creating new seed");
             seed = SeedGenerator.CreateSeed(10);
         }
 
+        logger.LogInformation("Starting sorting with seed {seed}", seed);
+
         var random = new Random(seed.GetHashCode());
         var teamSizes = GetSizeOfTeams(members.Count, numberOfTeams);
+        logger.LogInformation("Total members {memberCount}, team sizes: {teamSizes}", members.Count, string.Join(", ", teamSizes));
         var currentGeneration = new List<List<Member>>(GenerationSize);
         for (var i = 0; i < GenerationSize; i++)
         {
@@ -67,19 +84,31 @@ public class EvolutionSorter : ISorter
         var finalGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
                                                .OrderBy(solution => solution.Value).ToDictionary();
 
+        stopwatch.Stop();
+        logger.LogInformation("Sorting finished in {time} ms", stopwatch.ElapsedMilliseconds);
+
         return (ListToTeams(finalGeneration.First().Key, teamSizes), seed);
     }
 
-    private static void LogGenerationStats(Dictionary<List<Member>, decimal> generationScores, int generationNumber)
+    private void LogGenerationStats(Dictionary<List<Member>, decimal> generationScores, int generationNumber)
     {
         int count = generationScores.Count;
         decimal min = generationScores.Values.Min();
         decimal max = generationScores.Values.Max();
         decimal avg = generationScores.Values.Average();
         decimal mean = generationScores.Values.ElementAt(count / 2);
-        Log.Debug(
-            "Generation number {num} - count: {count} - min: {min} - max: {max} - avg: {avg} - mean: {mean}",
-            generationNumber, count, min, max, avg, mean);
+        if (generationNumber is 0 or MaxGenerations)
+        {
+            logger.LogInformation(
+                "Generation number {num} - count: {count} - min: {min} - max: {max} - avg: {avg} - mean: {mean}",
+                generationNumber, count, min, max, avg, mean);
+        }
+        else
+        {
+            logger.LogDebug(
+                "Generation number {num} - count: {count} - min: {min} - max: {max} - avg: {avg} - mean: {mean}",
+                generationNumber, count, min, max, avg, mean);
+        }
     }
 
     private static List<int> GetSizeOfTeams(int membersCount, int numberOfTeams)

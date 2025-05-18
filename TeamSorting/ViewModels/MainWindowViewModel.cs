@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel;
+using Microsoft.Extensions.Logging;
 
 namespace TeamSorting.ViewModels;
 
-public class MainWindowViewModel(Data data, TeamsViewModel teamsViewModel, InputViewModel inputViewModel) : ViewModelBase
+public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, Data data, TeamsViewModel teamsViewModel, InputViewModel inputViewModel) : ViewModelBase
 {
     private ViewModelBase _contentViewModel = inputViewModel;
 
@@ -20,11 +21,13 @@ public class MainWindowViewModel(Data data, TeamsViewModel teamsViewModel, Input
 
     public void SwitchToTeamsView()
     {
+        logger.LogInformation("Switching to teams view");
         ContentViewModel = teamsViewModel;
     }
 
     public void SwitchToInputView()
     {
+        logger.LogInformation("Switching to input view");
         ContentViewModel = inputViewModel;
     }
 }

@@ -8,6 +8,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CsvHelper;
+using Microsoft.Extensions.Logging;
 using TeamSorting.Enums;
 using TeamSorting.Extensions;
 using TeamSorting.Lang;
@@ -27,10 +28,14 @@ public class Data : ObservableObject
     private int _teamNumber = 1;
     private bool _sortingInProgress;
     private readonly ISorter _sorter;
+    private readonly ILogger<Data> _logger;
+    private readonly CsvUtil _csvUtil;
 
-    public Data(ISorter sorter)
+    public Data(ILogger<Data> logger, ISorter sorter, CsvUtil csvUtil)
     {
         _sorter = sorter;
+        _csvUtil = csvUtil;
+        _logger = logger;
         Members.CollectionChanged += MembersOnCollectionChanged;
     }
 
@@ -626,6 +631,7 @@ public class Data : ObservableObject
         }
         catch (Exception e)
         {
+            _logger.LogError("Error loading members data: {message}", e.Message);
             csvErrors.Add(new CsvError(Resources.Data_LoadFromFile_Error + ": " + e.Message));
         }
 
@@ -660,13 +666,13 @@ public class Data : ObservableObject
             }
 
             var discipline = new DisciplineInfo(column.ColumnName);
-            var dataTypeError = CsvUtil.ReadDisciplineDataType(discipline, dataTable);
+            var dataTypeError = _csvUtil.ReadDisciplineDataType(discipline, dataTable);
             if (dataTypeError is not null)
             {
                 errors.Add(dataTypeError);
             }
 
-            var sortTypeError = CsvUtil.ReadDisciplineSortType(discipline, dataTable);
+            var sortTypeError = _csvUtil.ReadDisciplineSortType(discipline, dataTable);
             if (sortTypeError is not null)
             {
                 errors.Add(sortTypeError);
@@ -787,8 +793,9 @@ public class Data : ObservableObject
                 {
                     _ = record.Value;
                 }
-                catch (FormatException)
+                catch (FormatException e)
                 {
+                    _logger.LogError("Format error getting record value:{message}", e.Message);
                     errors.Add(new CsvError(
                         string.Format(Resources.Data_LoadMembersData_WrongDisciplineRecordFormat_Error,
                             DisciplineRecord.ExampleValue(disciplineInfo.DataType)),
@@ -798,6 +805,7 @@ public class Data : ObservableObject
                 }
                 catch (Exception e)
                 {
+                    _logger.LogError("Error getting record value:{message}", e.Message);
                     errors.Add(new CsvError(
                         string.Format(Resources.Data_LoadMembersData_DisciplineRecord_UnknownError, e.Message),
                         rowNumber: rowIndex + 3,
