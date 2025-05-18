@@ -242,6 +242,26 @@ public class InputViewModel : ViewModelBase
         removeButton.Click += RemoveDiscipline_Button_OnClick;
         panel.Children.Add(removeButton);
 
+        var priorityField = new NumericUpDown
+        {
+            AllowSpin = true,
+            ShowButtonSpinner = false,
+            [DockPanel.DockProperty] = Dock.Right,
+            Minimum = DisciplineInfo.PriorityMin,
+            Maximum = DisciplineInfo.PriorityMax,
+            FormatString = "0",
+            HorizontalContentAlignment = HorizontalAlignment.Right,
+            MinWidth = 40,
+            [ToolTip.TipProperty] = Resources.DisciplineInfo_Priority
+        };
+        var priorityBinding = new Binding
+        {
+            Source = discipline,
+            Path = nameof(DisciplineInfo.Priority)
+        };
+        priorityField.Bind(NumericUpDown.ValueProperty, priorityBinding);
+        panel.Children.Add(priorityField);
+
         var iconSort = new Icon
         {
             FontSize = 20,

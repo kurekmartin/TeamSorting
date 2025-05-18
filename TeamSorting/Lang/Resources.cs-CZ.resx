@@ -228,4 +228,7 @@ Chcete pokračovat?</value>
     <data name="TeamsView_DisciplineAverages_Label" xml:space="preserve">
         <value>Průměry disciplín:</value>
     </data>
+    <data name="DisciplineInfo_Priority" xml:space="preserve">
+        <value>Priorita</value>
+    </data>
 </root>

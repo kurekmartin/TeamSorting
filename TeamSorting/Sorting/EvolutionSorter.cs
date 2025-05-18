@@ -15,6 +15,7 @@ public class EvolutionSorter : ISorter
     private const float ChanceOfMutation = 0.2f;
     private const float PreserveBestResults = 0.1f;
     private const int InvalidSolutionPenalty = 100000;
+    private const int PriorityMultiplier = 10;
 
     public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, ProgressValues progress, string? seed = null)
     {
@@ -23,7 +24,7 @@ public class EvolutionSorter : ISorter
         progress.Value = 0;
         progress.IsIndeterminate = true;
         progress.Text = Lang.Resources.Sorting_ProgressText;
-        
+
         if (string.IsNullOrWhiteSpace(seed))
         {
             seed = SeedGenerator.CreateSeed(10);
@@ -43,7 +44,7 @@ public class EvolutionSorter : ISorter
         {
             progress.Value = generationNumber;
             var sortedGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
-                .OrderBy(solution => solution.Value).ToDictionary();
+                                                    .OrderBy(solution => solution.Value).ToDictionary();
 
 
             LogGenerationStats(sortedGeneration, generationNumber);
@@ -64,7 +65,7 @@ public class EvolutionSorter : ISorter
         } while (generationNumber < MaxGenerations);
 
         var finalGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
-            .OrderBy(solution => solution.Value).ToDictionary();
+                                               .OrderBy(solution => solution.Value).ToDictionary();
 
         return (ListToTeams(finalGeneration.First().Key, teamSizes), seed);
     }
@@ -138,7 +139,7 @@ public class EvolutionSorter : ISorter
         {
             decimal min = disciplineScore.Value.Min();
             decimal max = disciplineScore.Value.Max();
-            score += decimal.Abs(min - max);
+            score += decimal.Abs(min - max) * (DisciplineInfo.PriorityMax + 1 - disciplineScore.Key.Priority) * PriorityMultiplier;
         }
 
         return score;

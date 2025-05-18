@@ -261,6 +261,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Priorita.
+        /// </summary>
+        public static string DisciplineInfo_Priority {
+            get {
+                return ResourceManager.GetString("DisciplineInfo_Priority", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Číslo.
         /// </summary>
         public static string Enum_DisciplineDataType_Number {
