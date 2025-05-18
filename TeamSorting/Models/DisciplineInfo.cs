@@ -15,8 +15,8 @@ public class DisciplineInfo(string name)
             MaxValue = value;
         }
     }
-    public decimal MinValue { get; set; } = decimal.MaxValue;
-    public decimal MaxValue { get; set; } = decimal.MinValue;
+    public decimal MinValue { get; private set; } = decimal.MaxValue;
+    public decimal MaxValue { get; private set; } = decimal.MinValue;
     public Guid Id { get; } = Guid.NewGuid();
     public string Name { get; set; } = name;
     public DisciplineDataType DataType { get; set; }
