@@ -141,7 +141,7 @@ Platné hodnoty: {2}</value>
     <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">
         <value>Nalezen duplicitní člen v podmínkách kombinací členů</value>
     </data>
-    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Error" xml:space="preserve">
+    <data name="Data_LoadMembersData_UnknownMemberInConstrains_Error" xml:space="preserve">
         <value>Nalezeni neznámí členové v podmínkách kombinací členů: {0}</value>
     </data>
     <data name="Data_LoadMembersData_WrongDisciplineRecordFormat_Error" xml:space="preserve">

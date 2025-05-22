@@ -179,9 +179,9 @@ namespace TeamSorting.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Found unknown members in combination constrains: {0}.
         /// </summary>
-        public static string Data_LoadMembersData_UnknownMemberInConstarins_Error {
+        public static string Data_LoadMembersData_UnknownMemberInConstrains_Error {
             get {
-                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstarins_Error", resourceCulture);
+                return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstrains_Error", resourceCulture);
             }
         }
         

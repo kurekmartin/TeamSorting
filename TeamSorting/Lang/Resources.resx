@@ -139,7 +139,7 @@ Valid values: {2}</value>
     <data name="Data_LoadMembersData_DuplicateMemberNames_Error" xml:space="preserve">
         <value>Member with name {0} already exists.</value>
     </data>
-    <data name="Data_LoadMembersData_UnknownMemberInConstarins_Error" xml:space="preserve">
+    <data name="Data_LoadMembersData_UnknownMemberInConstrains_Error" xml:space="preserve">
         <value>Found unknown members in combination constrains: {0}</value>
     </data>
     <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">

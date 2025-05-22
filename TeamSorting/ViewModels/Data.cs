@@ -761,7 +761,7 @@ public class Data : ObservableObject
             {
                 errors.Add(new CsvError(
                     string.Format(
-                        Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
+                        Resources.Data_LoadMembersData_UnknownMemberInConstrains_Error,
                         string.Join(", ", unknownWithMembers.Select(tuple => tuple.Name))),
                     rowNumber: rowIndex + 3,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.With)) + 1
@@ -776,7 +776,7 @@ public class Data : ObservableObject
             {
                 errors.Add(new CsvError(
                     string.Format(
-                        Resources.Data_LoadMembersData_UnknownMemberInConstarins_Error,
+                        Resources.Data_LoadMembersData_UnknownMemberInConstrains_Error,
                         string.Join(", ", unknownNotWithMembers.Select(tuple => tuple.Name))),
                     rowNumber: rowIndex + 3,
                     columnNumber: dataRow.GetColumnIndex(nameof(Member.NotWith)) + 1
