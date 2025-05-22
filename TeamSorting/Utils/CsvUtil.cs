@@ -123,40 +123,4 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
         return null;
     }
-
-    private static bool CheckDisciplineDataTypesRow(DataTable dataTable)
-    {
-        foreach (DataColumn column in dataTable.Columns)
-        {
-            var fieldValue = dataTable.Rows[0][column.ColumnName].ToString();
-            if (!IsDisciplineColumn(column) && !string.IsNullOrWhiteSpace(fieldValue))
-            {
-                return false;
-            }
-
-            bool valid = Enum.TryParse(typeof(DisciplineDataType), fieldValue, out _);
-            if (!valid)
-            {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private static bool CheckDuplicateNames(DataTable dataTable)
-    {
-        var names = dataTable.AsEnumerable()
-            .Select(row => row[nameof(Member.Name)].ToString())
-            .Where(s => !string.IsNullOrWhiteSpace(s))
-            .Cast<string>()
-            .ToList();
-
-        var duplicateNames = names.GroupBy(s => s)
-            .Where(g => g.Count() > 1)
-            .Select(y => y.Key)
-            .ToList();
-
-        return duplicateNames.Count == 0;
-    }
 }
