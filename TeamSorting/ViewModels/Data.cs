@@ -521,22 +521,6 @@ public class Data : ObservableObject
         return result;
     }
 
-    public bool AddMemberToTeam(Member member, Team team)
-    {
-        if (!Members.Contains(member))
-        {
-            return false;
-        }
-
-        team.Members.Add(member);
-        return true;
-    }
-
-    public bool RemoveMemberFromTeam(Member member, Team team)
-    {
-        return team.Members.Remove(member);
-    }
-
     public Team CreateAndAddTeam()
     {
         var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber));
