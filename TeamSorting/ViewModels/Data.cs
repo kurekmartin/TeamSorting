@@ -612,7 +612,7 @@ public class Data : ObservableObject
 
         //TODO check minimum rows (2)
 
-        var headerErrors = CsvUtil.CheckHeader(csv);
+        List<CsvError> headerErrors = _csvUtil.CheckHeader(csv);
         if (headerErrors.Count != 0)
         {
             csvErrors.AddRange(headerErrors);

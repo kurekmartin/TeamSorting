@@ -18,7 +18,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
         return !NonDisciplineColumnNames.Contains(column.ColumnName);
     }
 
-    public static List<CsvError> CheckHeader(CsvReader csv)
+    public List<CsvError> CheckHeader(CsvReader csv)
     {
         List<CsvError> errors = [];
         errors.AddRange(CheckRequiredColumns(csv));
@@ -26,7 +26,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
         return errors;
     }
 
-    private static List<CsvError> CheckRequiredColumns(CsvReader csv)
+    private List<CsvError> CheckRequiredColumns(CsvReader csv)
     {
         List<CsvError> errors = [];
         var missingColumns = RequiredColumnNames.Except(csv.HeaderRecord).ToList();
@@ -42,7 +42,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
         return errors;
     }
 
-    private static List<CsvError> CheckDuplicateColumns(CsvReader csv)
+    private List<CsvError> CheckDuplicateColumns(CsvReader csv)
     {
         List<CsvError> errors = [];
         var duplicateColumns = csv.HeaderRecord.GroupBy(s => s)
