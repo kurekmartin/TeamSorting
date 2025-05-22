@@ -13,6 +13,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
     private static readonly HashSet<string> NonDisciplineColumnNames =
         [nameof(Member.Name), nameof(Member.With), nameof(Member.NotWith)];
+
     public static bool IsDisciplineColumn(DataColumn column)
     {
         return !NonDisciplineColumnNames.Contains(column.ColumnName);
@@ -20,6 +21,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
     public List<CsvError> CheckHeader(CsvReader csv)
     {
+        logger.LogInformation("Checking CSV header");
         List<CsvError> errors = [];
         errors.AddRange(CheckRequiredColumns(csv));
         errors.AddRange(CheckDuplicateColumns(csv));
@@ -28,8 +30,16 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
     private List<CsvError> CheckRequiredColumns(CsvReader csv)
     {
+        logger.LogInformation("Checking required columns");
         List<CsvError> errors = [];
-        var missingColumns = RequiredColumnNames.Except(csv.HeaderRecord).ToList();
+        if (csv.HeaderRecord is null)
+        {
+            logger.LogError("CSV header is null");
+            errors.Add(new CsvError(Resources.Data_ValidateCsvHeader_MissingHeader, rowNumber: 1));
+            return errors;
+        }
+
+        List<string> missingColumns = RequiredColumnNames.Except(csv.HeaderRecord).ToList();
 
         if (missingColumns.Count > 0)
         {
@@ -44,14 +54,23 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
     private List<CsvError> CheckDuplicateColumns(CsvReader csv)
     {
+        logger.LogInformation("Checking duplicate columns");
         List<CsvError> errors = [];
-        var duplicateColumns = csv.HeaderRecord.GroupBy(s => s)
-            .Where(g => g.Count() > 1)
-            .Select(y => y.Key)
-            .ToList();
+        if (csv.HeaderRecord is null)
+        {
+            logger.LogError("CSV header is null");
+            errors.Add(new CsvError(Resources.Data_ValidateCsvHeader_MissingHeader, rowNumber: 1));
+            return errors;
+        }
+
+        List<string> duplicateColumns = csv.HeaderRecord.GroupBy(s => s)
+                                           .Where(g => g.Count() > 1)
+                                           .Select(y => y.Key)
+                                           .ToList();
 
         if (duplicateColumns.Count > 0)
         {
+            logger.LogError("Duplicate columns count: {count}", duplicateColumns.Count);
             errors.Add(
                 new CsvError(
                     Resources.Data_ValidateCsvHeader_DuplicateColumns_Error + string.Join(", ", duplicateColumns),
@@ -64,6 +83,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
     public CsvError? ReadDisciplineDataType(DisciplineInfo discipline, DataTable dataTable)
     {
+        logger.LogInformation("Reading discipline data type for {disciplineId}", discipline.Id);
         int column = dataTable.Columns.IndexOf(discipline.Name);
         string value = dataTable.Rows[0][column].ToString() ?? string.Empty;
         try
@@ -95,6 +115,7 @@ public class CsvUtil(ILogger<CsvUtil> logger)
 
     public CsvError? ReadDisciplineSortType(DisciplineInfo discipline, DataTable dataTable)
     {
+        logger.LogInformation("Reading discipline sort type for {disciplineId}", discipline.Id);
         int column = dataTable.Columns.IndexOf(discipline.Name);
         string value = dataTable.Rows[1][column].ToString() ?? string.Empty;
         try

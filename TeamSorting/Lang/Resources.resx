@@ -232,4 +232,7 @@ Do you want to continue?</value>
     <data name="DisciplineInfo_Priority" xml:space="preserve">
         <value>Priority</value>
     </data>
+    <data name="Data_ValidateCsvHeader_MissingHeader" xml:space="preserve">
+        <value>Header is missing</value>
+    </data>
 </root>

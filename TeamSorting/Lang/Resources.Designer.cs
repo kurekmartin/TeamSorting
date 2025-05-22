@@ -262,6 +262,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Header is missing.
+        /// </summary>
+        public static string Data_ValidateCsvHeader_MissingHeader {
+            get {
+                return ResourceManager.GetString("Data_ValidateCsvHeader_MissingHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Priority.
         /// </summary>
         public static string DisciplineInfo_Priority {
