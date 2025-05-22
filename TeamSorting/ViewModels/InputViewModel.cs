@@ -13,6 +13,7 @@ using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.LogicalTree;
 using Avalonia.Media;
+using Microsoft.Extensions.Logging;
 using Projektanker.Icons.Avalonia;
 using TeamSorting.Controls;
 using TeamSorting.Converters;
@@ -22,6 +23,7 @@ namespace TeamSorting.ViewModels;
 
 public class InputViewModel : ViewModelBase
 {
+    private readonly ILogger<InputViewModel> _logger;
     public Data Data { get; }
     public FlatTreeDataGridSource<Member> TreeDataGridSource { get; }
     public int NumberOfTeams { get; set; } = 2;
@@ -44,9 +46,10 @@ public class InputViewModel : ViewModelBase
     public static Array DisciplineDataTypes => Enum.GetValues(typeof(DisciplineDataType));
     public static Array SortOrder => Enum.GetValues(typeof(SortOrder));
 
-    public InputViewModel(Data data)
+    public InputViewModel(Data data, ILogger<InputViewModel> logger)
     {
         Data = data;
+        _logger = logger;
         data.Disciplines.CollectionChanged += DisciplinesOnCollectionChanged;
         TreeDataGridSource = new FlatTreeDataGridSource<Member>(data.Members)
         {
@@ -93,9 +96,10 @@ public class InputViewModel : ViewModelBase
 
     private void RemoveDisciplineColumns()
     {
+        _logger.LogInformation("Removing all discipline columns");
         int columnCount = TreeDataGridSource.Columns.Count;
         var columns = new IColumn<Member>[columnCount];
-        TreeDataGridSource.Columns.CopyTo(columns,0);
+        TreeDataGridSource.Columns.CopyTo(columns, 0);
         foreach (IColumn<Member> column in columns)
         {
             if (column.Tag is string tag && tag.StartsWith("Discipline-"))
@@ -139,6 +143,7 @@ public class InputViewModel : ViewModelBase
             Tag = CreateDisciplineColumnTag(discipline)
         };
 
+        _logger.LogInformation("Adding discipline column {ColumnTag}", column.Tag);
         TreeDataGridSource.Columns.Add(column);
     }
 
@@ -219,6 +224,7 @@ public class InputViewModel : ViewModelBase
             return;
         }
 
+        _logger.LogInformation("Removing discipline column {ColumnTag}", disciplineColumn.Tag);
         TreeDataGridSource.Columns.Remove(disciplineColumn);
     }
 

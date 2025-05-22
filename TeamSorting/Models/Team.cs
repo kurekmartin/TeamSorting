@@ -31,6 +31,8 @@ public class Team : ObservableObject
                 break;
         }
     }
+    
+    public Guid Id { get; } = Guid.NewGuid();
 
     public string Name { get; set; }
     public ObservableCollection<Member> Members { get; } = [];
@@ -133,6 +135,7 @@ public class Team : ObservableObject
 
     public void AddMember(Member member)
     {
+        _logger?.LogInformation("Adding member {memberId} to team {teamId}", member.Id, Id);
         member.Team?.RemoveMember(member);
         member.Team = this;
         Members.Add(member);
@@ -141,6 +144,7 @@ public class Team : ObservableObject
 
     public void RemoveMember(Member member)
     {
+        _logger?.LogInformation("Removing member {memberId} from team {teamId}", member.Id, Id);
         member.Team = null;
         Members.Remove(member);
     }

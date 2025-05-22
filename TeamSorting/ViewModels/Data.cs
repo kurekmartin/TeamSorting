@@ -168,6 +168,7 @@ public class Data : ObservableObject
             return false;
         }
 
+        _logger.LogInformation("Adding discipline {disciplineId}", discipline.Id);
         Disciplines.Add(discipline);
         foreach (var member in Members)
         {
@@ -179,6 +180,7 @@ public class Data : ObservableObject
 
     public bool RemoveDiscipline(DisciplineInfo discipline)
     {
+        _logger.LogInformation("Removing discipline {disciplineId}", discipline.Id);
         bool result = Disciplines.Remove(discipline);
         if (!result) return result;
         foreach (var member in Members)
@@ -218,6 +220,7 @@ public class Data : ObservableObject
 
     public bool AddMember(Member member)
     {
+        _logger.LogInformation("Adding member {memberId}", member.Id);
         foreach (var discipline in Disciplines)
         {
             AddDisciplineRecord(member, discipline, "");
@@ -269,6 +272,7 @@ public class Data : ObservableObject
 
     public bool RemoveMember(Member member)
     {
+        _logger.LogInformation("Removing member {memberId}", member.Id);
         bool result = Members.Remove(member);
         if (result)
         {
@@ -485,6 +489,7 @@ public class Data : ObservableObject
             return false;
         }
 
+        _logger.LogInformation("Adding team {teamId}", team.Id);
         Teams.Add(team);
         _teamNumber++;
 
@@ -505,6 +510,7 @@ public class Data : ObservableObject
 
     public void RemoveAllTeams()
     {
+        _logger.LogInformation("Removing all teams.");
         Teams.Clear();
         _teamNumber = 1;
     }
@@ -516,6 +522,7 @@ public class Data : ObservableObject
             member.MoveToTeam(MembersWithoutTeam);
         }
 
+        _logger.LogInformation("Removing team {teamId}", team.Id);
         bool result = Teams.Remove(team);
         OnPropertyChanged(nameof(DisciplineDelta));
         return result;
@@ -586,6 +593,7 @@ public class Data : ObservableObject
 
     public List<CsvError> LoadFromFile(StreamReader inputFile)
     {
+        _logger.LogInformation("Loading data from file started.");
         List<CsvError> csvErrors = [];
         ClearData();
         using var csv = new CsvReader(inputFile, CultureInfo.InvariantCulture);
@@ -629,6 +637,7 @@ public class Data : ObservableObject
 
     public void ClearData()
     {
+        _logger.LogInformation("Clearing all data.");
         Members.Clear();
         Disciplines.Clear();
         RemoveAllTeams();
@@ -641,6 +650,7 @@ public class Data : ObservableObject
     /// <returns></returns>
     private List<CsvError> LoadDisciplinesInfo(DataTable dataTable)
     {
+        _logger.LogInformation("Loading disciplines info");
         List<CsvError> errors = [];
         foreach (DataColumn column in dataTable.Columns)
         {
@@ -673,6 +683,8 @@ public class Data : ObservableObject
 
     private List<CsvError> LoadMembersData(IList<DataRow> dataRows)
     {
+        const int headerOffset = 3;
+        _logger.LogInformation("Loading members data");
         List<CsvError> errors = [];
 
         //add all members for later constrains (with/not with) check 
@@ -688,12 +700,15 @@ public class Data : ObservableObject
         {
             var dataRow = dataRows[rowIndex];
             string memberName = dataRow[nameof(Member.Name)].ToString() ?? string.Empty;
+            int rowNumber = rowIndex + headerOffset;
             if (string.IsNullOrWhiteSpace(memberName))
             {
+                int columnNumber = dataRow.GetColumnIndex(nameof(Member.Name)) + 1;
+                _logger.LogWarning("Skipping empty member name at row {row}, column {column}", rowNumber, columnNumber);
                 errors.Add(new CsvError(
                     Resources.Data_LoadMembersData_EmptyMemberName_Error,
-                    rowNumber: rowIndex + 3,
-                    columnNumber: dataRow.GetColumnIndex(nameof(Member.Name)) + 1
+                    rowNumber: rowNumber,
+                    columnNumber: columnNumber
                 ));
                 continue;
             }
@@ -708,12 +723,14 @@ public class Data : ObservableObject
             //check duplicate names
             if (processedMembers.Contains(member))
             {
+                int columnNumber = dataRow.GetColumnIndex(nameof(Member.Name)) + 1;
+                _logger.LogWarning("Skipping duplicate member name at row {row}, column {column}", rowNumber, columnNumber);
                 errors.Add(new CsvError(
                     string.Format(
                         Resources.Data_LoadMembersData_DuplicateMemberNames_Error,
                         memberName),
-                    rowNumber: rowIndex + 3,
-                    columnNumber: dataRow.GetColumnIndex(nameof(Member.Name)) + 1
+                    rowNumber: rowNumber,
+                    columnNumber: columnNumber
                 ));
                 continue;
             }
@@ -743,12 +760,14 @@ public class Data : ObservableObject
             //TODO add warning if duplicate members are found
             if (unknownWithMembers.Count != 0)
             {
+                int columnNumber = dataRow.GetColumnIndex(nameof(Member.With)) + 1;
+                _logger.LogWarning("Unknown with members at row {rowIndex}, column {columnIndex}", rowNumber, columnNumber);
                 errors.Add(new CsvError(
                     string.Format(
                         Resources.Data_LoadMembersData_UnknownMemberInConstrains_Error,
                         string.Join(", ", unknownWithMembers.Select(tuple => tuple.Name))),
-                    rowNumber: rowIndex + 3,
-                    columnNumber: dataRow.GetColumnIndex(nameof(Member.With)) + 1
+                    rowNumber: rowNumber,
+                    columnNumber: columnNumber
                 ));
             }
 
@@ -758,12 +777,14 @@ public class Data : ObservableObject
             //TODO add warning if duplicate members are found
             if (unknownNotWithMembers.Count != 0)
             {
+                int columnNumber = dataRow.GetColumnIndex(nameof(Member.NotWith)) + 1;
+                _logger.LogWarning("Unknown members in constrains at row {rowIndex}, column {column}", rowNumber, columnNumber);
                 errors.Add(new CsvError(
                     string.Format(
                         Resources.Data_LoadMembersData_UnknownMemberInConstrains_Error,
                         string.Join(", ", unknownNotWithMembers.Select(tuple => tuple.Name))),
-                    rowNumber: rowIndex + 3,
-                    columnNumber: dataRow.GetColumnIndex(nameof(Member.NotWith)) + 1
+                    rowNumber: rowNumber,
+                    columnNumber: columnNumber
                 ));
             }
 
@@ -773,27 +794,28 @@ public class Data : ObservableObject
                     dataRow[disciplineInfo.Name].ToString() ?? string.Empty);
                 if (record is null) continue;
 
+                int columnNumber = dataRow.GetColumnIndex(disciplineInfo.Name) + 1;
                 try
                 {
                     _ = record.Value;
                 }
                 catch (FormatException e)
                 {
-                    _logger.LogError("Format error getting record value:{message}", e.Message);
+                    _logger.LogError("Format error getting record value - row {row}, column {column}: {message}", e.Message, rowNumber, columnNumber);
                     errors.Add(new CsvError(
                         string.Format(Resources.Data_LoadMembersData_WrongDisciplineRecordFormat_Error,
                             DisciplineRecord.ExampleValue(disciplineInfo.DataType)),
-                        rowNumber: rowIndex + 3,
-                        columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1
+                        rowNumber: rowNumber,
+                        columnNumber: columnNumber
                     ));
                 }
                 catch (Exception e)
                 {
-                    _logger.LogError("Error getting record value:{message}", e.Message);
+                    _logger.LogError("Error getting record value - row {row}, column {column}: {message}", e.Message, rowNumber, columnNumber);
                     errors.Add(new CsvError(
                         string.Format(Resources.Data_LoadMembersData_DisciplineRecord_UnknownError, e.Message),
-                        rowNumber: rowIndex + 3,
-                        columnNumber: dataRow.GetColumnIndex(disciplineInfo.Name) + 1)
+                        rowNumber: rowNumber,
+                        columnNumber: columnNumber)
                     );
                 }
             }
@@ -801,11 +823,13 @@ public class Data : ObservableObject
             processedMembers.Add(member);
         }
 
+        _logger.LogInformation("Loading members data finished");
         return errors;
     }
 
     public void WriteTeamsToCsv(string path)
     {
+        _logger.LogInformation("Writing teams to CSV");
         var records = new List<dynamic>();
 
         int maxMembers = Teams.MaxBy(team => team.Members.Count)!.Members.Count;
@@ -830,6 +854,7 @@ public class Data : ObservableObject
         using var writer = new StreamWriter(path);
         using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
         csv.WriteRecords(records);
+        _logger.LogInformation("Finished writing teams to CSV");
     }
 
     #endregion

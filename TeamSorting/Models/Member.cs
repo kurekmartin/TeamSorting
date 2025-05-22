@@ -4,12 +4,17 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace TeamSorting.Models;
 
 public class Member : ObservableObject, INotifyDataErrorInfo
 {
-    public event EventHandler DisciplineRecordChanged;
+    private readonly ILogger<Member>? _logger = Ioc.Default.GetService<ILogger<Member>>();
+    public event EventHandler? DisciplineRecordChanged;
+    public Guid Id { get; } = Guid.NewGuid();
+
     public string Name
     {
         get => _name;
@@ -76,7 +81,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             or nameof(DisciplineRecord.DecimalValue)
             or nameof(DisciplineRecord.Value))
         {
-            DisciplineRecordChanged(this, EventArgs.Empty);
+            DisciplineRecordChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 
@@ -182,6 +187,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             return;
         }
 
+        _logger?.LogInformation("Adding with member {withMemberId} for member {memberId}", member.Id, Id);
         With.Add(member);
         member.AddWithMember(this);
     }
@@ -201,6 +207,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             return;
         }
 
+        _logger?.LogInformation("Removing with member {withMemberId} for member {memberId}", member.Id, Id);
         With.Remove(member);
         member.RemoveWithMember(this);
     }
@@ -220,6 +227,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             return;
         }
 
+        _logger?.LogInformation("Adding not with member {notWithMemberId} for member {memberId}", member.Id, Id);
         NotWith.Add(member);
         member.AddNotWithMember(this);
     }
@@ -239,6 +247,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             return;
         }
 
+        _logger?.LogInformation("Removing not with member {notWithMemberId} for member {memberId}", member.Id, Id);
         NotWith.Remove(member);
         member.RemoveNotWithMember(this);
     }
@@ -297,20 +306,22 @@ public class Member : ObservableObject, INotifyDataErrorInfo
 
     public DisciplineRecord AddDisciplineRecord(DisciplineInfo discipline, string value)
     {
-        if (Records.TryGetValue(discipline.Id, out var record))
+        if (Records.TryGetValue(discipline.Id, out DisciplineRecord? record))
         {
             record.RawValue = value;
             return record;
         }
 
+        _logger?.LogInformation("Adding new discipline record to member {memberId} for discipline {disciplineId}", Id, discipline.Id);
         record = new DisciplineRecord(this, discipline, value);
         Records.Add(discipline.Id, record);
         return record;
     }
 
-    public void RemoveDisciplineRecord(Guid recordId)
+    public void RemoveDisciplineRecord(Guid disciplineId)
     {
-        Records.Remove(recordId);
+        _logger?.LogInformation("Removing discipline record to member {memberId} for discipline {disciplineId}", Id, disciplineId);
+        Records.Remove(disciplineId);
     }
 
     public bool MoveToTeam(Team team)
