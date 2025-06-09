@@ -120,7 +120,7 @@
                                Maximum="10" />
                 <TextBox MaxLength="10"
                          Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
-                         Text="{Binding Data.InputSeed}" />
+                         Text="{Binding Teams.InputSeed}" />
                 <Button Click="SortToTeams_OnClick"
                         Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
             </StackPanel>
@@ -147,13 +147,13 @@
                 </DataTemplate>
                 <DataTemplate x:Key="WithCell" DataType="models:Member">
                     <controls:MemberListControl
-                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
                         CurrentMember="{Binding .}"
                         SelectedMembers="{Binding With}"/>
                 </DataTemplate>
                 <DataTemplate x:Key="NotWithCell" DataType="models:Member">
                     <controls:MemberListControl
-                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Data.SortedMembers}"
+                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
                         CurrentMember="{Binding .}"
                         SelectedMembers="{Binding NotWith}"/>
                 </DataTemplate>

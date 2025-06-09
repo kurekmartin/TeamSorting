@@ -63,7 +63,7 @@ public partial class InputView : UserControl
     {
         if (DataContext is not InputViewModel context || sender is not Button button) return;
         button.IsEnabled = false;
-        await context.Data.SortToTeams(this, (int)(NumberOfTeams.Value ?? 1));
+        await context.Teams.SortToTeams(this, (int)(NumberOfTeams.Value ?? 1));
         button.IsEnabled = true;
     }
 
@@ -93,7 +93,7 @@ public partial class InputView : UserControl
     {
         var context = (InputViewModel)DataContext!;
         var member = new Member(context.NewMemberName);
-        context.Data.AddMember(member);
+        context.Members.AddMember(member);
         context.NewMemberName = string.Empty;
 
         var members = this.FindControl<TreeDataGrid>("Members");
@@ -124,7 +124,7 @@ public partial class InputView : UserControl
             if (gridRow?.DataContext is Member member)
             {
                 var context = (InputViewModel)DataContext!;
-                context.Data.RemoveMember(member);
+                context.Members.RemoveMember(member);
             }
         }
     }
@@ -152,10 +152,10 @@ public partial class InputView : UserControl
             DataType = disciplineType,
             SortOrder = disciplineSortOrder
         };
-        context.Data.AddDiscipline(discipline);
+        context.Disciplines.AddDiscipline(discipline);
         //TODO error handling when discipline with same name exists 
         context.NewDisciplineName = string.Empty;
-        if (context.Data.Members.Count > 0)
+        if (context.Members.MemberList.Count > 0)
         {
             //TODO scroll even if members are empty
             // MemberGrid.ScrollIntoView(null, MemberGrid.Columns.Last());

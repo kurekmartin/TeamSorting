@@ -25,6 +25,9 @@ public class InputViewModel : ViewModelBase
 {
     private readonly ILogger<InputViewModel> _logger;
     public Data Data { get; }
+    public Disciplines Disciplines { get; }
+    public Members Members { get; }
+    public Teams Teams { get; }
     public FlatTreeDataGridSource<Member> TreeDataGridSource { get; }
     public int NumberOfTeams { get; set; } = 2;
     private string _newMemberName = string.Empty;
@@ -46,12 +49,15 @@ public class InputViewModel : ViewModelBase
     public static Array DisciplineDataTypes => Enum.GetValues(typeof(DisciplineDataType));
     public static Array SortOrder => Enum.GetValues(typeof(SortOrder));
 
-    public InputViewModel(Data data, ILogger<InputViewModel> logger)
+    public InputViewModel(Data data, ILogger<InputViewModel> logger, Disciplines disciplines, Members members, Teams teams)
     {
         Data = data;
         _logger = logger;
-        data.Disciplines.CollectionChanged += DisciplinesOnCollectionChanged;
-        TreeDataGridSource = new FlatTreeDataGridSource<Member>(data.Members)
+        Disciplines = disciplines;
+        Members = members;
+        Teams = teams;
+        Disciplines.DisciplineList.CollectionChanged += DisciplinesOnCollectionChanged;
+        TreeDataGridSource = new FlatTreeDataGridSource<Member>(Members.MemberList)
         {
             Columns =
             {
@@ -89,7 +95,7 @@ public class InputViewModel : ViewModelBase
                 break;
             case NotifyCollectionChangedAction.Reset:
                 RemoveDisciplineColumns();
-                AddDisciplineColumns(Data.Disciplines);
+                AddDisciplineColumns(Disciplines.DisciplineList);
                 break;
         }
     }
@@ -228,7 +234,7 @@ public class InputViewModel : ViewModelBase
         TreeDataGridSource.Columns.Remove(disciplineColumn);
     }
 
-    private static DockPanel CreateDisciplineColumnHeader(DisciplineInfo discipline)
+    private DockPanel CreateDisciplineColumnHeader(DisciplineInfo discipline)
     {
         var panel = new DockPanel
         {
@@ -243,7 +249,7 @@ public class InputViewModel : ViewModelBase
             [DockPanel.DockProperty] = Dock.Left,
             [Attached.IconProperty] = "mdi-close",
             Margin = new Thickness(0, 0, 5, 0),
-            [ToolTip.TipProperty] = Lang.Resources.InputView_RemoveDiscipline_Button
+            [ToolTip.TipProperty] = Resources.InputView_RemoveDiscipline_Button
         };
         removeButton.Click += RemoveDiscipline_Button_OnClick;
         panel.Children.Add(removeButton);
@@ -293,7 +299,7 @@ public class InputViewModel : ViewModelBase
         {
             Source = discipline,
             Path = nameof(DisciplineInfo.DataType),
-            Converter = new Converters.DisciplineTypeToIconConverter()
+            Converter = new DisciplineTypeToIconConverter()
         };
         iconType.Bind(Icon.ValueProperty, iconTypeBinding);
         panel.Children.Add(iconType);
@@ -316,7 +322,7 @@ public class InputViewModel : ViewModelBase
         return panel;
     }
 
-    private static void RemoveDiscipline_Button_OnClick(object? sender, RoutedEventArgs e)
+    private void RemoveDiscipline_Button_OnClick(object? sender, RoutedEventArgs e)
     {
         if (sender is not Button button)
         {
@@ -329,10 +335,10 @@ public class InputViewModel : ViewModelBase
             return;
         }
 
-        DisciplineInfo? discipline = context.Data.GetDisciplineById(disciplineId);
+        DisciplineInfo? discipline = Disciplines.GetDisciplineById(disciplineId);
         if (discipline is not null)
         {
-            context.Data.RemoveDiscipline(discipline);
+            Disciplines.RemoveDiscipline(discipline);
         }
     }
 }
