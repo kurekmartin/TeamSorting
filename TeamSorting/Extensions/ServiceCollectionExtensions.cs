@@ -21,14 +21,4 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<CsvUtil>();
         collection.AddLogging(builder => builder.AddSerilog(dispose: true));
     }
-
-    //Fix for circular dependency
-    public static void AddLazyResolution(this IServiceCollection services)
-    {
-        services.AddTransient(
-            typeof(Lazy<>),
-            typeof(LazilyResolved<>));
-    }
-
-    private class LazilyResolved<T>(IServiceProvider serviceProvider) : Lazy<T>(serviceProvider.GetRequiredService<T>) where T : notnull;
 }
