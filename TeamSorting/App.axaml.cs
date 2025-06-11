@@ -28,6 +28,7 @@ public partial class App : Application
 
         // Register all the services needed for the application to run
         var collection = new ServiceCollection();
+        collection.AddLazyResolution();
         collection.AddCommonServices();
 
         // Creates a ServiceProvider containing services from the provided IServiceCollection
