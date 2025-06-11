@@ -11,20 +11,20 @@ public class Disciplines : ObservableObject
 {
     private readonly ILogger<Disciplines> _logger;
     private readonly Lazy<Members> _members;
-    private readonly Lazy<Teams> _teams;
+    private readonly Teams _teams;
 
     /// <summary>
     /// Do not modify this list directly.
     /// </summary>
     public ObservableCollection<DisciplineInfo> DisciplineList { get; } = [];
 
-    public Disciplines(ILogger<Disciplines> logger, Lazy<Members> members, Lazy<Teams> teams)
+    public Disciplines(ILogger<Disciplines> logger, Lazy<Members> members, Teams teams)
     {
         _logger = logger;
         _members = members;
         _teams = teams;
         _members.Value.MemberList.CollectionChanged += MembersOnCollectionChanged;
-        _teams.Value.TeamList.CollectionChanged += TeamListOnCollectionChanged;
+        _teams.TeamList.CollectionChanged += TeamListOnCollectionChanged;
     }
 
     private void TeamListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -120,13 +120,13 @@ public class Disciplines : ObservableObject
             var dict = new Dictionary<DisciplineInfo, object>();
             foreach (DisciplineInfo discipline in DisciplineList)
             {
-                if (_teams.Value.TeamList.All(team => team.Members.Count == 0))
+                if (_teams.TeamList.All(team => team.Members.Count == 0))
                 {
                     dict.Add(discipline, 0);
                     continue;
                 }
 
-                List<object> teamScores = _teams.Value.TeamList.Where(team => team.Members.Count > 0)
+                List<object> teamScores = _teams.TeamList.Where(team => team.Members.Count > 0)
                                                 .Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
 
                 switch (discipline.DataType)
