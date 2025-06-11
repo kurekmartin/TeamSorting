@@ -73,7 +73,7 @@ public partial class TeamsView : UserControl
     {
         if (sender is not Control control 
             || DataContext is not TeamsViewModel teamsViewModel 
-            || teamsViewModel.Data.SortingInProgress)
+            || teamsViewModel.Teams.SortingInProgress)
         {
             return;
         }
@@ -122,7 +122,7 @@ public partial class TeamsView : UserControl
             var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
 
             List<ComboBoxSortCriteria> items = [nameItem];
-            items.AddRange(context.Data.Disciplines.Select(discipline =>
+            items.AddRange(context.Disciplines.DisciplineList.Select(discipline =>
                 new ComboBoxSortCriteria(discipline.Name, discipline)));
 
             SortCriteriaComboBox.ItemsSource = items.OrderBy(criteria => criteria.DisplayText).ToList();
@@ -171,7 +171,7 @@ public partial class TeamsView : UserControl
         var fileSaved = false;
         try
         {
-            context.Data.WriteTeamsToCsv(file.Path.LocalPath);
+            context.CsvUtil.WriteTeamsToCsv(file.Path.LocalPath);
             fileSaved = true;
         }
         catch (Exception exception)
@@ -194,7 +194,7 @@ public partial class TeamsView : UserControl
         var memberCard = menuItem.FindLogicalAncestorOfType<MemberCard>();
         if (memberCard is { DataContext: Member member })
         {
-            var team = context.Data.Teams.First(team =>
+            var team = context.Teams.TeamList.First(team =>
                 string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
             member.MoveToTeam(team);
         }
@@ -248,7 +248,7 @@ public partial class TeamsView : UserControl
     {
         if (DataContext is TeamsViewModel context)
         {
-            context.Data.CreateAndAddTeam();
+            context.Teams.CreateAndAddTeam();
         }
     }
 
@@ -256,7 +256,7 @@ public partial class TeamsView : UserControl
     {
         if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel context)
         {
-            context.Data.RemoveTeam(team);
+            context.Teams.RemoveTeam(team);
         }
     }
 
@@ -264,7 +264,7 @@ public partial class TeamsView : UserControl
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button) return;
         button.IsEnabled = false;
-        await context.Data.SortToTeams(this);
+        await context.Teams.SortToTeams(this);
         button.IsEnabled = true;
     }
 }

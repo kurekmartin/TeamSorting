@@ -18,16 +18,17 @@ using Projektanker.Icons.Avalonia;
 using TeamSorting.Controls;
 using TeamSorting.Converters;
 using TeamSorting.Lang;
+using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
 public class InputViewModel : ViewModelBase
 {
     private readonly ILogger<InputViewModel> _logger;
-    public Data Data { get; }
     public Disciplines Disciplines { get; }
     public Members Members { get; }
     public Teams Teams { get; }
+    public CsvUtil CsvUtil { get; }
     public FlatTreeDataGridSource<Member> TreeDataGridSource { get; }
     public int NumberOfTeams { get; set; } = 2;
     private string _newMemberName = string.Empty;
@@ -49,13 +50,13 @@ public class InputViewModel : ViewModelBase
     public static Array DisciplineDataTypes => Enum.GetValues(typeof(DisciplineDataType));
     public static Array SortOrder => Enum.GetValues(typeof(SortOrder));
 
-    public InputViewModel(Data data, ILogger<InputViewModel> logger, Disciplines disciplines, Members members, Teams teams)
+    public InputViewModel(ILogger<InputViewModel> logger, Disciplines disciplines, Members members, Teams teams, CsvUtil csvUtil)
     {
-        Data = data;
         _logger = logger;
         Disciplines = disciplines;
         Members = members;
         Teams = teams;
+        CsvUtil = csvUtil;
         Disciplines.DisciplineList.CollectionChanged += DisciplinesOnCollectionChanged;
         TreeDataGridSource = new FlatTreeDataGridSource<Member>(Members.MemberList)
         {
@@ -340,5 +341,12 @@ public class InputViewModel : ViewModelBase
         {
             Disciplines.RemoveDiscipline(discipline);
         }
+    }
+
+    public void ClearData()
+    {
+        Members.RemoveAllMembers();
+        Disciplines.RemoveAllDisciplines();
+        Teams.RemoveAllTeams();
     }
 }

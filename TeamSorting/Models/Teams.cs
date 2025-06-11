@@ -13,23 +13,25 @@ namespace TeamSorting.Models;
 public class Teams : ObservableObject
 {
     private readonly ILogger<Teams> _logger;
-    private readonly Disciplines _disciplines;
-    private readonly Members _members;
+    private readonly Lazy<Members> _members;
     private readonly ISorter _sorter;
     private int _teamNumber = 1;
     private bool _sortingInProgress;
 
-    public Teams(ILogger<Teams> logger, Disciplines disciplines, Members members, ISorter sorter)
+    public Teams(ILogger<Teams> logger, Lazy<Members> members, ISorter sorter)
     {
         _logger = logger;
-        _disciplines = disciplines;
         _members = members;
         _sorter = sorter;
     }
 
+    /// <summary>
+    /// Do not modify this list directly.
+    /// </summary>
     public ObservableCollection<Team> TeamList { get; } = [];
     public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
 
+    //TODO: move progress indication to separate class
     public bool SortingInProgress
     {
         get => _sortingInProgress;
@@ -91,6 +93,7 @@ public class Teams : ObservableObject
         MembersWithoutTeam.SortCriteria = sortCriteria;
     }
 
+    //TODO: move sorting to separate class
     public async Task SortToTeams(UserControl visual, int? numberOfTeams = null)
     {
         var window = TopLevel.GetTopLevel(visual);
@@ -120,7 +123,7 @@ public class Teams : ObservableObject
 
         int teamsCount = numberOfTeams ?? TeamList.Count;
         SortingInProgress = true;
-        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), teamsCount, Progress, InputSeed));
+        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.Value.MemberList.ToList(), teamsCount, Progress, InputSeed));
         RemoveAllTeams();
         foreach (Team team in sortResult.teams)
         {

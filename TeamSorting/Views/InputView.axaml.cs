@@ -33,16 +33,16 @@ public partial class InputView : UserControl
         {
             Title = Lang.Resources.InputView_LoadData_FileDialog,
             AllowMultiple = false,
-            FileTypeFilter = new[]
-            {
+            FileTypeFilter =
+            [
                 new FilePickerFileType("csv") { Patterns = ["*.csv"] }
-            }
+            ]
         });
 
         if (file.Count <= 0) return;
         await using var stream = await file[0].OpenReadAsync();
         using var streamReader = new StreamReader(stream);
-        var loadDataErrors = context.Data.LoadFromFile(streamReader);
+        var loadDataErrors = context.CsvUtil.LoadFromFile(streamReader);
         if (loadDataErrors.Count != 0)
         {
             var window = TopLevel.GetTopLevel(this);
@@ -193,7 +193,7 @@ public partial class InputView : UserControl
                 mainWindowViewModel.SwitchToInputView();
             }
 
-            context.Data.ClearData();
+            context.ClearData();
         }
     }
 }

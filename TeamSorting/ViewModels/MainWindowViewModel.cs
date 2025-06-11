@@ -1,13 +1,14 @@
 ﻿using System.ComponentModel;
 using Microsoft.Extensions.Logging;
+using TeamSorting.Models;
 
 namespace TeamSorting.ViewModels;
 
-public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, Data data, TeamsViewModel teamsViewModel, InputViewModel inputViewModel) : ViewModelBase
+public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, TeamsViewModel teamsViewModel, InputViewModel inputViewModel, Teams teams) : ViewModelBase
 {
     private ViewModelBase _contentViewModel = inputViewModel;
 
-    public Data Data { get; } = data;
+    public Teams Teams { get; } = teams;
 
     public ViewModelBase ContentViewModel
     {

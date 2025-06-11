@@ -7,33 +7,26 @@ using TeamSorting.Lang;
 
 namespace TeamSorting.Models;
 
-public class Members : ObservableObject
+public class Members(ILogger<Members> logger, Lazy<Disciplines> disciplines, Lazy<Teams> teams)
+    : ObservableObject
 {
-    private readonly ILogger<Members> _logger;
-    private readonly Disciplines _disciplines;
-    private readonly Teams _teams;
-
-    public Members(ILogger<Members> logger, Disciplines disciplines, Teams teams)
-    {
-        _logger = logger;
-        _disciplines = disciplines;
-        _teams = teams;
-    }
-
+    /// <summary>
+    /// Do not modify this list directly.
+    /// </summary>
     public ObservableCollection<Member> MemberList { get; } = [];
     public List<Member> SortedMembers => MemberList.OrderBy(m => m.Name).ToList();
 
     public bool AddMember(Member member)
     {
-        _logger.LogInformation("Adding member {memberId}", member.Id);
-        foreach (DisciplineInfo discipline in _disciplines.DisciplineList)
+        logger.LogInformation("Adding member {memberId}", member.Id);
+        foreach (DisciplineInfo discipline in disciplines.Value.DisciplineList)
         {
-            _disciplines.AddDisciplineRecord(member, discipline, "");
+            disciplines.Value.AddDisciplineRecord(member, discipline, "");
         }
 
         member.PropertyChanged += MemberOnPropertyChanged;
         MemberList.Add(member);
-        _teams.MembersWithoutTeam.AddMember(member);
+        teams.Value.MembersWithoutTeam.AddMember(member);
         ValidateMemberDuplicates();
         OnPropertyChanged(nameof(SortedMembers));
         return true;
@@ -41,7 +34,7 @@ public class Members : ObservableObject
 
     public bool RemoveMember(Member member)
     {
-        _logger.LogInformation("Removing member {memberId}", member.Id);
+        logger.LogInformation("Removing member {memberId}", member.Id);
         bool result = MemberList.Remove(member);
         if (result)
         {
@@ -53,6 +46,11 @@ public class Members : ObservableObject
 
         OnPropertyChanged(nameof(SortedMembers));
         return result;
+    }
+
+    public void RemoveAllMembers()
+    {
+        MemberList.Clear();
     }
 
     public Member? GetMemberByName(string name)
