@@ -10,7 +10,7 @@ namespace TeamSorting.Models;
 public class Disciplines : ObservableObject
 {
     private readonly ILogger<Disciplines> _logger;
-    private readonly Lazy<Members> _members;
+    private readonly Members _members;
     private readonly Teams _teams;
 
     /// <summary>
@@ -18,12 +18,12 @@ public class Disciplines : ObservableObject
     /// </summary>
     public ObservableCollection<DisciplineInfo> DisciplineList { get; } = [];
 
-    public Disciplines(ILogger<Disciplines> logger, Lazy<Members> members, Teams teams)
+    public Disciplines(ILogger<Disciplines> logger, Members members, Teams teams)
     {
         _logger = logger;
         _members = members;
         _teams = teams;
-        _members.Value.MemberList.CollectionChanged += MembersOnCollectionChanged;
+        _members.MemberList.CollectionChanged += MembersOnCollectionChanged;
         _teams.TeamList.CollectionChanged += TeamListOnCollectionChanged;
     }
 
@@ -83,6 +83,10 @@ public class Disciplines : ObservableObject
                 foreach (Member member in e.NewItems!)
                 {
                     member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
+                    foreach (DisciplineInfo discipline in DisciplineList)
+                    {
+                        AddDisciplineRecord(member, discipline, "");
+                    }
                 }
 
                 break;
@@ -97,6 +101,10 @@ public class Disciplines : ObservableObject
                 foreach (Member member in e.NewItems!)
                 {
                     member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
+                    foreach (DisciplineInfo discipline in DisciplineList)
+                    {
+                        AddDisciplineRecord(member, discipline, "");
+                    }
                 }
 
                 foreach (Member member in e.OldItems!)
@@ -164,13 +172,13 @@ public class Disciplines : ObservableObject
             var dict = new Dictionary<DisciplineInfo, object>();
             foreach (DisciplineInfo discipline in DisciplineList)
             {
-                IEnumerable<DisciplineRecord> records = _members.Value.MemberList.Select(member => member.GetRecord(discipline));
+                IEnumerable<DisciplineRecord> records = _members.MemberList.Select(member => member.GetRecord(discipline));
                 object average = discipline.DataType switch
                 {
-                    DisciplineDataType.Time when _members.Value.MemberList.Count == 0 => TimeSpan.Zero,
-                    DisciplineDataType.Time => new TimeSpan(records.Sum(record => ((TimeSpan)record.Value).Ticks) / _members.Value.MemberList.Count),
-                    DisciplineDataType.Number when _members.Value.MemberList.Count == 0 => 0,
-                    DisciplineDataType.Number => records.Sum(record => (decimal)record.Value) / _members.Value.MemberList.Count,
+                    DisciplineDataType.Time when _members.MemberList.Count == 0 => TimeSpan.Zero,
+                    DisciplineDataType.Time => new TimeSpan(records.Sum(record => ((TimeSpan)record.Value).Ticks) / _members.MemberList.Count),
+                    DisciplineDataType.Number when _members.MemberList.Count == 0 => 0,
+                    DisciplineDataType.Number => records.Sum(record => (decimal)record.Value) / _members.MemberList.Count,
                     _ => 0
                 };
                 dict.Add(discipline, average);
@@ -189,7 +197,7 @@ public class Disciplines : ObservableObject
 
         _logger.LogInformation("Adding discipline {disciplineId}", discipline.Id);
         DisciplineList.Add(discipline);
-        foreach (var member in _members.Value.MemberList)
+        foreach (var member in _members.MemberList)
         {
             AddDisciplineRecord(member, discipline, "");
         }
@@ -202,7 +210,7 @@ public class Disciplines : ObservableObject
         _logger.LogInformation("Removing discipline {disciplineId}", discipline.Id);
         bool result = DisciplineList.Remove(discipline);
         if (!result) return result;
-        foreach (var member in _members.Value.MemberList)
+        foreach (var member in _members.MemberList)
         {
             member.RemoveDisciplineRecord(discipline.Id);
         }
@@ -222,7 +230,7 @@ public class Disciplines : ObservableObject
 
     public IEnumerable<DisciplineRecord> GetAllRecords()
     {
-        return _members.Value.MemberList.SelectMany(member => member.Records.Values);
+        return _members.MemberList.SelectMany(member => member.Records.Values);
     }
 
     public DisciplineRecord? AddDisciplineRecord(Member member, DisciplineInfo discipline, string value)

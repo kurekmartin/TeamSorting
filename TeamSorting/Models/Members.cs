@@ -6,23 +6,19 @@ using TeamSorting.Lang;
 
 namespace TeamSorting.Models;
 
-public class Members(ILogger<Members> logger, Lazy<Disciplines> disciplines)
+public class Members(ILogger<Members> logger)
     : ObservableObject
 {
     /// <summary>
     /// Do not modify this list directly.
     /// </summary>
     public ObservableCollection<Member> MemberList { get; } = [];
+
     public List<Member> SortedMembers => MemberList.OrderBy(m => m.Name).ToList();
 
     public bool AddMember(Member member)
     {
         logger.LogInformation("Adding member {memberId}", member.Id);
-        foreach (DisciplineInfo discipline in disciplines.Value.DisciplineList)
-        {
-            disciplines.Value.AddDisciplineRecord(member, discipline, "");
-        }
-
         member.PropertyChanged += MemberOnPropertyChanged;
         MemberList.Add(member);
         ValidateMemberDuplicates();
