@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -13,22 +15,65 @@ namespace TeamSorting.Models;
 public class Teams : ObservableObject
 {
     private readonly ILogger<Teams> _logger;
-    private readonly Lazy<Members> _members;
+    private readonly Members _members;
     private readonly ISorter _sorter;
     private int _teamNumber = 1;
     private bool _sortingInProgress;
 
-    public Teams(ILogger<Teams> logger, Lazy<Members> members, ISorter sorter)
+    public Teams(ILogger<Teams> logger, Members members, ISorter sorter)
     {
         _logger = logger;
         _members = members;
         _sorter = sorter;
+        _members.MemberList.CollectionChanged += MemberListOnCollectionChanged;
+    }
+
+    private void MemberListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                HandleAddedMembers(e.NewItems!);
+                break;
+            case NotifyCollectionChangedAction.Remove:
+                HandleRemovedMembers(e.OldItems!);
+                break;
+            case NotifyCollectionChangedAction.Replace:
+                HandleRemovedMembers(e.OldItems!);
+                HandleAddedMembers(e.NewItems!);
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                //TODO: implement
+                break;
+        }
+    }
+
+    private void HandleAddedMembers(IList addedMembers)
+    {
+        foreach (Member member in addedMembers)
+        {
+            if (member.Team is not null)
+            {
+                continue;
+            }
+
+            MembersWithoutTeam.AddMember(member);
+        }
+    }
+
+    private static void HandleRemovedMembers(IList removedMembers)
+    {
+        foreach (Member member in removedMembers)
+        {
+            member.Team?.RemoveMember(member);
+        }
     }
 
     /// <summary>
     /// Do not modify this list directly.
     /// </summary>
     public ObservableCollection<Team> TeamList { get; } = [];
+
     public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
 
     //TODO: move progress indication to separate class
@@ -123,7 +168,7 @@ public class Teams : ObservableObject
 
         int teamsCount = numberOfTeams ?? TeamList.Count;
         SortingInProgress = true;
-        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.Value.MemberList.ToList(), teamsCount, Progress, InputSeed));
+        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), teamsCount, Progress, InputSeed));
         RemoveAllTeams();
         foreach (Team team in sortResult.teams)
         {

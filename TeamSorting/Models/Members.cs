@@ -6,7 +6,7 @@ using TeamSorting.Lang;
 
 namespace TeamSorting.Models;
 
-public class Members(ILogger<Members> logger, Lazy<Disciplines> disciplines, Lazy<Teams> teams)
+public class Members(ILogger<Members> logger, Lazy<Disciplines> disciplines)
     : ObservableObject
 {
     /// <summary>
@@ -25,7 +25,6 @@ public class Members(ILogger<Members> logger, Lazy<Disciplines> disciplines, Laz
 
         member.PropertyChanged += MemberOnPropertyChanged;
         MemberList.Add(member);
-        teams.Value.MembersWithoutTeam.AddMember(member);
         ValidateMemberDuplicates();
         OnPropertyChanged(nameof(SortedMembers));
         return true;
