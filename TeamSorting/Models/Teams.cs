@@ -25,7 +25,8 @@ public class Teams : ObservableObject
         _logger = logger;
         _members = members;
         _sorter = sorter;
-        _members.MemberList.CollectionChanged += MemberListOnCollectionChanged;
+        ((INotifyCollectionChanged)_members.MemberList).CollectionChanged += MemberListOnCollectionChanged;
+        TeamList = new ReadOnlyObservableCollection<Team>(_teamList);
     }
 
     private void MemberListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -69,10 +70,9 @@ public class Teams : ObservableObject
         }
     }
 
-    /// <summary>
-    /// Do not modify this list directly.
-    /// </summary>
-    public ObservableCollection<Team> TeamList { get; } = [];
+    private readonly ObservableCollection<Team> _teamList = [];
+
+    public ReadOnlyObservableCollection<Team> TeamList { get; }
 
     public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
 
@@ -89,13 +89,13 @@ public class Teams : ObservableObject
 
     public bool AddTeam(Team team)
     {
-        if (TeamList.Any(t => t.Name == team.Name))
+        if (_teamList.Any(t => t.Name == team.Name))
         {
             return false;
         }
 
         _logger.LogInformation("Adding team {teamId}", team.Id);
-        TeamList.Add(team);
+        _teamList.Add(team);
         _teamNumber++;
 
         return true;
@@ -116,21 +116,21 @@ public class Teams : ObservableObject
         }
 
         _logger.LogInformation("Removing team {teamId}", team.Id);
-        bool result = TeamList.Remove(team);
+        bool result = _teamList.Remove(team);
         return result;
     }
 
     public void RemoveAllTeams()
     {
         _logger.LogInformation("Removing all teams.");
-        TeamList.Clear();
+        _teamList.Clear();
         _teamNumber = 1;
     }
 
 
     public void SortTeamsByCriteria(MemberSortCriteria sortCriteria)
     {
-        foreach (var team in TeamList)
+        foreach (var team in _teamList)
         {
             team.SortCriteria = sortCriteria;
         }
@@ -148,7 +148,7 @@ public class Teams : ObservableObject
         }
 
         //Warn user about deletion of current teams
-        if (TeamList.Count > 0)
+        if (_teamList.Count > 0)
         {
             var dialog = new WarningDialog(
                 message: Resources.InputView_Sort_WarningDialog_Message,
@@ -166,7 +166,7 @@ public class Teams : ObservableObject
 
         mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
 
-        int teamsCount = numberOfTeams ?? TeamList.Count;
+        int teamsCount = numberOfTeams ?? _teamList.Count;
         SortingInProgress = true;
         (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), teamsCount, Progress, InputSeed));
         RemoveAllTeams();

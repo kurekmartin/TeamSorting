@@ -6,21 +6,26 @@ using TeamSorting.Lang;
 
 namespace TeamSorting.Models;
 
-public class Members(ILogger<Members> logger)
-    : ObservableObject
+public class Members : ObservableObject
 {
-    /// <summary>
-    /// Do not modify this list directly.
-    /// </summary>
-    public ObservableCollection<Member> MemberList { get; } = [];
+    private readonly ObservableCollection<Member> _memberList = [];
 
-    public List<Member> SortedMembers => MemberList.OrderBy(m => m.Name).ToList();
+    public ReadOnlyObservableCollection<Member> MemberList { get; }
+    private readonly ILogger<Members> _logger;
+
+    public Members(ILogger<Members> logger)
+    {
+        _logger = logger;
+        MemberList = new ReadOnlyObservableCollection<Member>(_memberList);
+    }
+
+    public List<Member> SortedMembers => _memberList.OrderBy(m => m.Name).ToList();
 
     public bool AddMember(Member member)
     {
-        logger.LogInformation("Adding member {memberId}", member.Id);
+        _logger.LogInformation("Adding member {memberId}", member.Id);
         member.PropertyChanged += MemberOnPropertyChanged;
-        MemberList.Add(member);
+        _memberList.Add(member);
         ValidateMemberDuplicates();
         OnPropertyChanged(nameof(SortedMembers));
         return true;
@@ -28,8 +33,8 @@ public class Members(ILogger<Members> logger)
 
     public bool RemoveMember(Member member)
     {
-        logger.LogInformation("Removing member {memberId}", member.Id);
-        bool result = MemberList.Remove(member);
+        _logger.LogInformation("Removing member {memberId}", member.Id);
+        bool result = _memberList.Remove(member);
         if (result)
         {
             member.Team?.RemoveMember(member);
@@ -44,22 +49,22 @@ public class Members(ILogger<Members> logger)
 
     public void RemoveAllMembers()
     {
-        MemberList.Clear();
+        _memberList.Clear();
     }
 
     public Member? GetMemberByName(string name)
     {
-        return MemberList.FirstOrDefault(member => member.Name == name);
+        return _memberList.FirstOrDefault(member => member.Name == name);
     }
 
     public IEnumerable<Member> GetMembersByName(IEnumerable<string> names)
     {
-        return MemberList.Where(member => names.Contains(member.Name));
+        return _memberList.Where(member => names.Contains(member.Name));
     }
 
     public bool AddWithMember(Member member, string withMemberName)
     {
-        Member? withMember = MemberList.FirstOrDefault(m => m.Name == withMemberName);
+        Member? withMember = _memberList.FirstOrDefault(m => m.Name == withMemberName);
         if (withMember is null)
         {
             return false;
@@ -83,7 +88,7 @@ public class Members(ILogger<Members> logger)
 
     public bool AddNotWithMember(Member member, string notWithMemberName)
     {
-        Member? notWithMember = MemberList.FirstOrDefault(m => m.Name == notWithMemberName);
+        Member? notWithMember = _memberList.FirstOrDefault(m => m.Name == notWithMemberName);
         if (notWithMember is null)
         {
             return false;
@@ -120,7 +125,7 @@ public class Members(ILogger<Members> logger)
 
     private void ValidateMemberDuplicates()
     {
-        List<IGrouping<string, Member>> memberGroups = MemberList
+        List<IGrouping<string, Member>> memberGroups = _memberList
                                                        .GroupBy(member => member.Name).ToList();
         foreach (IGrouping<string, Member> members in memberGroups)
         {

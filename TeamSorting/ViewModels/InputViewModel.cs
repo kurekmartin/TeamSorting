@@ -56,7 +56,7 @@ public class InputViewModel : ViewModelBase
         Members = members;
         Teams = teams;
         CsvUtil = csvUtil;
-        Disciplines.DisciplineList.CollectionChanged += DisciplinesOnCollectionChanged;
+        ((INotifyCollectionChanged)Disciplines.DisciplineList).CollectionChanged += DisciplinesOnCollectionChanged;
         TreeDataGridSource = new FlatTreeDataGridSource<Member>(Members.MemberList)
         {
             Columns =

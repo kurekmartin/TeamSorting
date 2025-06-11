@@ -13,18 +13,18 @@ public class Disciplines : ObservableObject
     private readonly Members _members;
     private readonly Teams _teams;
 
-    /// <summary>
-    /// Do not modify this list directly.
-    /// </summary>
-    public ObservableCollection<DisciplineInfo> DisciplineList { get; } = [];
+    public ReadOnlyObservableCollection<DisciplineInfo> DisciplineList { get; }
+    private readonly ObservableCollection<DisciplineInfo> _disciplineList = [];
+
 
     public Disciplines(ILogger<Disciplines> logger, Members members, Teams teams)
     {
         _logger = logger;
         _members = members;
         _teams = teams;
-        _members.MemberList.CollectionChanged += MembersOnCollectionChanged;
-        _teams.TeamList.CollectionChanged += TeamListOnCollectionChanged;
+        DisciplineList = new ReadOnlyObservableCollection<DisciplineInfo>(_disciplineList);
+        ((INotifyCollectionChanged)_members.MemberList).CollectionChanged += MembersOnCollectionChanged;
+        ((INotifyCollectionChanged)_teams.TeamList).CollectionChanged += TeamListOnCollectionChanged;
     }
 
     private void TeamListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -196,7 +196,7 @@ public class Disciplines : ObservableObject
         }
 
         _logger.LogInformation("Adding discipline {disciplineId}", discipline.Id);
-        DisciplineList.Add(discipline);
+        _disciplineList.Add(discipline);
         foreach (var member in _members.MemberList)
         {
             AddDisciplineRecord(member, discipline, "");
@@ -208,7 +208,7 @@ public class Disciplines : ObservableObject
     public bool RemoveDiscipline(DisciplineInfo discipline)
     {
         _logger.LogInformation("Removing discipline {disciplineId}", discipline.Id);
-        bool result = DisciplineList.Remove(discipline);
+        bool result = _disciplineList.Remove(discipline);
         if (!result) return result;
         foreach (var member in _members.MemberList)
         {
@@ -220,7 +220,7 @@ public class Disciplines : ObservableObject
 
     public void RemoveAllDisciplines()
     {
-        DisciplineList.Clear();
+        _disciplineList.Clear();
     }
 
     public DisciplineInfo? GetDisciplineById(Guid id)
