@@ -11,10 +11,12 @@ namespace TeamSorting.Models;
 public class Team : ObservableObject
 {
     private readonly ILogger? _logger = Ioc.Default.GetService<ILogger<Team>>();
+
     public Team([Localizable(false)] string name)
     {
         Name = name;
-        Members.CollectionChanged += MembersOnCollectionChanged;
+        Members = new ReadOnlyObservableCollection<Member>(_members);
+        _members.CollectionChanged += MembersOnCollectionChanged;
     }
 
     private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -35,7 +37,8 @@ public class Team : ObservableObject
     public Guid Id { get; } = Guid.NewGuid();
 
     public string Name { get; set; }
-    public ObservableCollection<Member> Members { get; } = [];
+    public ReadOnlyObservableCollection<Member> Members { get; }
+    private readonly ObservableCollection<Member> _members = [];
 
     private MemberSortCriteria _memberSortCriteria = new(null, SortOrder.Asc);
 
@@ -138,7 +141,7 @@ public class Team : ObservableObject
         _logger?.LogInformation("Adding member {memberId} to team {teamId}", member.Id, Id);
         member.Team?.RemoveMember(member);
         member.Team = this;
-        Members.Add(member);
+        _members.Add(member);
     }
 
 
@@ -146,7 +149,7 @@ public class Team : ObservableObject
     {
         _logger?.LogInformation("Removing member {memberId} from team {teamId}", member.Id, Id);
         member.Team = null;
-        Members.Remove(member);
+        _members.Remove(member);
     }
 
     public Dictionary<DisciplineInfo, object> AvgScores

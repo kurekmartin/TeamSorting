@@ -157,7 +157,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             if (_team == value) return;
             _team = value;
             if (_team is null) return;
-            _team.Members.CollectionChanged += MembersOnCollectionChanged;
+            ((INotifyCollectionChanged)_team.Members).CollectionChanged += MembersOnCollectionChanged;
             OnPropertyChanged(nameof(WithValidation));
             OnPropertyChanged(nameof(NotWithValidation));
             OnPropertyChanged(nameof(IsValid));
