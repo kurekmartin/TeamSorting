@@ -4,7 +4,7 @@ using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 
-public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, string rawValue) : ObservableObject
+public class DisciplineRecord(DisciplineInfo disciplineInfo, string rawValue) : ObservableObject
 {
     private static readonly string[] TimeFormats =
     [
@@ -18,7 +18,6 @@ public class DisciplineRecord(Member member, DisciplineInfo disciplineInfo, stri
         @"ss"
     ];
 
-    public Member Member { get; } = member;
     public DisciplineInfo DisciplineInfo { get; } = disciplineInfo;
 
     private string _rawValue = rawValue;

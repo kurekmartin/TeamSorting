@@ -313,7 +313,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
         }
 
         _logger?.LogInformation("Adding new discipline record to member {memberId} for discipline {disciplineId}", Id, discipline.Id);
-        record = new DisciplineRecord(this, discipline, value);
+        record = new DisciplineRecord(discipline, value);
         Records.Add(discipline.Id, record);
         return record;
     }
