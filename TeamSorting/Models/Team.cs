@@ -152,6 +152,15 @@ public class Team : ObservableObject
         _members.Remove(member);
     }
 
+    public void RemoveAllMembers()
+    {
+        _logger?.LogInformation("Removing all members from team {teamId}", Id);
+        foreach (Member member in _members)
+        {
+            RemoveMember(member);
+        }
+    }
+
     public Dictionary<DisciplineInfo, object> AvgScores
     {
         get

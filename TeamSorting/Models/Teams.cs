@@ -44,9 +44,15 @@ public class Teams : ObservableObject
                 HandleAddedMembers(e.NewItems!);
                 break;
             case NotifyCollectionChangedAction.Reset:
-                //TODO: implement
+                HandleMembersReset();
                 break;
         }
+    }
+
+    private void HandleMembersReset()
+    {
+        MembersWithoutTeam.RemoveAllMembers();
+        MembersWithoutTeam.AddMembers(_members.MemberList);
     }
 
     private void HandleAddedMembers(IList addedMembers)
