@@ -75,7 +75,10 @@ public class InputViewModel : ViewModelBase
                     GridLength.Auto,
                     new TemplateColumnOptions<Member>
                     {
-                        BeginEditGestures = BeginEditGestures.Tap
+                        BeginEditGestures = BeginEditGestures.Tap,
+                        CompareAscending = (member, member1) => string.Compare(member?.Name, member1?.Name, StringComparison.Ordinal),
+                        CompareDescending = (member, member1) => string.Compare(member1?.Name, member?.Name, StringComparison.Ordinal),
+                        CanUserSortColumn = true
                     }),
                 new TemplateColumn<Member>(Resources.InputView_DataGrid_ColumnHeader_With, "WithCell", null, GridLength.Auto),
                 new TemplateColumn<Member>(Resources.InputView_DataGrid_ColumnHeader_NotWith, "NotWithCell", null, GridLength.Auto)
