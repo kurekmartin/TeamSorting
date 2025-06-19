@@ -77,8 +77,8 @@ public class Member : ObservableObject, INotifyDataErrorInfo
 
     private void DisciplineRecordOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is nameof(DisciplineRecord.RawValue)
-            or nameof(DisciplineRecord.DecimalValue)
+        if (e.PropertyName
+            is nameof(DisciplineRecord.DecimalValue)
             or nameof(DisciplineRecord.Value))
         {
             DisciplineRecordChanged?.Invoke(this, EventArgs.Empty);
@@ -308,7 +308,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
     {
         if (Records.TryGetValue(discipline.Id, out DisciplineRecord? record))
         {
-            record.RawValue = value;
+            record.SetValueFromString(value);
             return record;
         }
 

@@ -4,8 +4,14 @@ using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 
-public class DisciplineRecord(DisciplineInfo disciplineInfo, string rawValue) : ObservableObject
+public class DisciplineRecord : ObservableObject
 {
+    public DisciplineRecord(DisciplineInfo disciplineInfo, string value)
+    {
+        DisciplineInfo = disciplineInfo;
+        SetValueFromString(value);
+    }
+    
     private static readonly string[] TimeFormats =
     [
         $@"hh\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
@@ -18,61 +24,33 @@ public class DisciplineRecord(DisciplineInfo disciplineInfo, string rawValue) : 
         @"ss"
     ];
 
-    public DisciplineInfo DisciplineInfo { get; } = disciplineInfo;
+    public DisciplineInfo DisciplineInfo { get; }
 
-    private string _rawValue = rawValue;
-
-    public string RawValue
+    public void SetValueFromString(string value)
     {
-        get => _rawValue;
-        set
+        Value = DisciplineInfo.DataType switch
         {
-            SetProperty(ref _rawValue, value);
-            _isValueUpdated = false;
-            //updates min/max values for discipline
-            //TODO: optimize calculation
-            _ = Value;
-        }
+            DisciplineDataType.Time => string.IsNullOrWhiteSpace(value)
+                ? TimeSpan.Zero
+                : TimeSpan.ParseExact(value, TimeFormats, CultureInfo.CurrentCulture),
+            DisciplineDataType.Number => string.IsNullOrWhiteSpace(value)
+                ? decimal.Zero
+                : decimal.Parse(value),
+            _ => throw new FormatException()
+        };
     }
 
-    private bool _isValueUpdated;
-    private object? _value;
+    private object _value = null!;
 
     public object Value
     {
-        get
-        {
-            if (_isValueUpdated && _value is not null)
-            {
-                return _value;
-            }
-
-            _value = DisciplineInfo.DataType switch
-            {
-                DisciplineDataType.Time => string.IsNullOrWhiteSpace(RawValue)
-                    ? TimeSpan.Zero
-                    : TimeSpan.ParseExact(RawValue, TimeFormats, CultureInfo.CurrentCulture),
-                DisciplineDataType.Number => string.IsNullOrWhiteSpace(RawValue)
-                    ? decimal.Zero
-                    : decimal.Parse(RawValue),
-                _ => throw new FormatException()
-            };
-
-            _isValueUpdated = true;
-            //updates min/max values for discipline
-            //TODO: optimize calculation
-            _ = DecimalValue;
-            return _value;
-        }
+        get => _value;
         set
         {
-            if (value is TimeSpan timeSpan)
+            if (DisciplineInfo.DataType == DisciplineDataType.Time && value is not TimeSpan
+                || DisciplineInfo.DataType == DisciplineDataType.Number && value is not decimal)
             {
-                RawValue = timeSpan.ToString("g", CultureInfo.CurrentCulture);
-            }
-            else
-            {
-                RawValue = value.ToString() ?? string.Empty;
+                throw new FormatException();
             }
 
             SetProperty(ref _value, value);
