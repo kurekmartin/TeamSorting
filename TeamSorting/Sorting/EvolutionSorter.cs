@@ -50,7 +50,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         logger.LogInformation("Starting sorting with seed {seed}", seed);
 
         var random = new Random(seed.GetHashCode());
-        int minTeamSize = GetSizeOfTeams(members.Count, numberOfTeams);
+        int minTeamSize = GetMinSizeOfTeams(members.Count, TODO);
         logger.LogInformation("Total members {memberCount}, min team size: {teamSize}", members.Count, string.Join(", ", minTeamSize));
         var currentGeneration = new List<SortGeneration>(GenerationSize);
         for (var i = 0; i < GenerationSize; i++)
@@ -69,7 +69,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
 
             var crossSelection = (int)Math.Round(GenerationSize * CrossSelection, MidpointRounding.ToPositiveInfinity);
             var numberOfChildren = (int)Math.Round(GenerationSize * (1 - PreserveBestResults), MidpointRounding.ToNegativeInfinity);
-            List<List<Member>> newGeneration = CrossSolution(sortedGeneration.Keys.Take(crossSelection).ToList(), numberOfChildren, random);
+            List<SortGeneration> newGeneration = CrossSolution(sortedGeneration.Keys.Take(crossSelection).ToList(), numberOfChildren, random);
             MutateSolution(newGeneration, random);
 
             newGeneration.AddRange(
@@ -90,11 +90,11 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
 
     private static Dictionary<SortGeneration, decimal> SortGeneration(List<SortGeneration> currentGeneration, int minTeamSize, List<Team> teams)
     {
-        return currentGeneration.ToDictionary(g => g, g => SolutionScore(g, minTeamSize, teams))
+        return currentGeneration.ToDictionary(g => g, g => SolutionScore(ref g, minTeamSize, teams))
                                 .OrderBy(solution => solution.Value).ToDictionary();
     }
 
-    private void LogGenerationStats(Dictionary<List<Member>, decimal> generationScores, int generationNumber)
+    private void LogGenerationStats(Dictionary<SortGeneration, decimal> generationScores, int generationNumber)
     {
         int count = generationScores.Count;
         decimal min = generationScores.Values.Min();
@@ -115,9 +115,12 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         }
     }
 
-    private static int GetSizeOfTeams(int membersCount, int numberOfTeams)
+    private static int GetMinSizeOfTeams(int membersCount, List<Team> teams)
     {
-        return membersCount / numberOfTeams;
+        int numberOfTeams = teams.Count;
+        int minTeamSize = membersCount / numberOfTeams;
+        //TODO check if teams are not already over ideal capacity 
+        return minTeamSize;
     }
 
     private static SortGeneration CreateRandomCombination(List<Member> members, Random random)
@@ -127,29 +130,45 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         return new SortGeneration(newList);
     }
 
-    private static (decimal score, Dictionary<Team, int> teamMemberCount) SolutionScore(List<Member> members, int teamSizes, List<Team> teams)
+    private static decimal SolutionScore(ref SortGeneration generation, int teamSize, List<Team> teams)
     {
-        //TODO create teams with existing members and newly sorted ones
-        //assign extra members to random teams with min member count
-        //extra members must be persisted across runs
-        int numberOfTeams = teams.Count;
+        generation.TeamMemberCount ??= new Dictionary<Team, int>();
+        int extraMembers = generation.Members.Count % teamSize;
+        var startIndex = 0;
         decimal score = 0;
         Dictionary<DisciplineInfo, List<decimal>> teamsDisciplineScores = [];
-        var startIndex = 0;
-        foreach (int teamSize in teamSizes)
+        foreach (Team team in teams)
         {
-            var team = members.Skip(startIndex).Take(teamSize).ToList();
-            int invalidMemberCount = Team.InvalidMemberCount(team);
+            if (generation.TeamMemberCount.TryGetValue(team, out int teamCapacity))
+            {
+                continue;
+            }
+
+            teamCapacity = Math.Max(team.Members.Count(member => !member.AllowTeamChange), teamSize);
+            generation.TeamMemberCount[team] = teamCapacity;
+        }
+        
+        //TODO add extra members
+        for (var i = 0; i < extraMembers; i++)
+        {
+        }
+
+        
+        foreach (Team team in teams)
+        {
+            int teamCapacity = generation.TeamMemberCount[team];
+            List<Member> teamMembers = generation.Members.Skip(startIndex).Take(teamCapacity).ToList();
+            int invalidMemberCount = Team.InvalidMemberCount(teamMembers);
             if (invalidMemberCount > 0)
             {
-                score = ((decimal)InvalidSolutionPenalty / numberOfTeams) * invalidMemberCount;
+                score = ((decimal)InvalidSolutionPenalty / teams.Count) * invalidMemberCount;
                 return score;
             }
 
-            var teamScoreAverages = AverageScoreByDiscipline(team);
-            foreach (var discipline in teamScoreAverages)
+            Dictionary<DisciplineInfo, decimal> teamScoreAverages = AverageScoreByDiscipline(teamMembers);
+            foreach (KeyValuePair<DisciplineInfo, decimal> discipline in teamScoreAverages)
             {
-                if (!teamsDisciplineScores.TryGetValue(discipline.Key, out var listOfValues))
+                if (!teamsDisciplineScores.TryGetValue(discipline.Key, out List<decimal>? listOfValues))
                 {
                     teamsDisciplineScores.Add(discipline.Key, [discipline.Value]);
                 }
@@ -159,10 +178,10 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
                 }
             }
 
-            startIndex += teamSize;
+            startIndex += teamCapacity;
         }
 
-        foreach (var disciplineScore in teamsDisciplineScores)
+        foreach (KeyValuePair<DisciplineInfo, List<decimal>> disciplineScore in teamsDisciplineScores)
         {
             decimal min = disciplineScore.Value.Min();
             decimal max = disciplineScore.Value.Max();
@@ -179,56 +198,56 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
                       .ToDictionary(g => g.Key, g => g.Sum(record => record.NormalizedValue) / members.Count);
     }
 
-    private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren, Random random)
+    private static List<SortGeneration> CrossSolution(List<SortGeneration> generations, int numberOfChildren, Random random)
     {
-        List<List<Member>> children = new(numberOfChildren);
+        List<SortGeneration> children = new(numberOfChildren);
         while (children.Count < numberOfChildren)
         {
-            var parent1 = members[random.Next(members.Count)];
-            var parent2 = members[random.Next(members.Count)];
-            var newChildren = CrossMembers(parent1, parent2);
+            SortGeneration parent1 = generations[random.Next(generations.Count)];
+            SortGeneration parent2 = generations[random.Next(generations.Count)];
+            List<SortGeneration> newChildren = CrossMembers(parent1, parent2);
             children.AddRange(newChildren);
         }
 
         return children;
     }
 
-    private static List<List<Member>> CrossMembers(List<Member> parent1, List<Member> parent2)
+    private static List<SortGeneration> CrossMembers(SortGeneration parent1, SortGeneration parent2)
     {
-        int startIndex = parent1.Count / 3;
+        int startIndex = parent1.Members.Count / 3;
         int endIndex = startIndex * 2 + 1;
-        if (parent1.Count % 3 == 0)
+        if (parent1.Members.Count % 3 == 0)
         {
             endIndex--;
         }
 
-        var parent1Section = parent1[startIndex..endIndex];
-        var parent2Section = parent2[startIndex..endIndex];
+        List<Member> parent1Section = parent1.Members[startIndex..endIndex];
+        List<Member> parent2Section = parent2.Members[startIndex..endIndex];
 
-        List<Member> parent1Rest = [..parent1[endIndex..], ..parent1[..endIndex]];
+        List<Member> parent1Rest = [..parent1.Members[endIndex..], ..parent1.Members[..endIndex]];
         parent1Rest = parent1Rest.Except(parent2Section).ToList();
 
-        List<Member> parent2Rest = [..parent2[endIndex..], ..parent2[..endIndex]];
+        List<Member> parent2Rest = [..parent2.Members[endIndex..], ..parent2.Members[..endIndex]];
         parent2Rest = parent2Rest.Except(parent1Section).ToList();
 
-        int endSectionSize = parent1.Count - endIndex + 1;
-        List<Member> child1 =
+        int endSectionSize = parent1.Members.Count - endIndex + 1;
+        SortGeneration child1 = new(
         [
             ..parent1Rest[endSectionSize..],
             ..parent2Section,
             ..parent1Rest[..endSectionSize]
-        ];
-        List<Member> child2 =
+        ]);
+        SortGeneration child2 = new(
         [
             ..parent2Rest[endSectionSize..],
             ..parent1Section,
             ..parent2Rest[..endSectionSize]
-        ];
+        ]);
 
         return [child1, child2];
     }
 
-    private void MutateSolution(List<List<Member>> members, Random random)
+    private void MutateSolution(List<SortGeneration> members, Random random)
     {
         foreach (var memberList in members)
         {
@@ -236,13 +255,13 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         }
     }
 
-    private void MutateMembers(List<Member> members, Random random)
+    private static void MutateMembers(SortGeneration generation, Random random)
     {
-        for (var i = 0; i < members.Count; i++)
+        for (var i = 0; i < generation.Members.Count; i++)
         {
             if (random.NextDouble() > ChanceOfMutation) continue;
-            int index = random.Next(members.Count);
-            members.Swap(i, index);
+            int index = random.Next(generation.Members.Count);
+            generation.Members.Swap(i, index);
         }
     }
 
