@@ -174,7 +174,8 @@ public class Teams : ObservableObject
 
         int teamsCount = numberOfTeams ?? _teamList.Count;
         SortingInProgress = true;
-        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), teamsCount, Progress, InputSeed));
+        //TODO create teams if not created   
+        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), TeamList.ToList(), Progress, InputSeed));
         RemoveAllTeams();
         foreach (Team team in sortResult.teams)
         {

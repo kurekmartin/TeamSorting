@@ -18,7 +18,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
     private const int InvalidSolutionPenalty = 100000;
     private const int PriorityMultiplier = 10;
 
-    public (List<Team> teams, string? seed) Sort(List<Member> members, int numberOfTeams, ProgressValues progress, string? seed = null)
+    public (List<Team> teams, string? seed) Sort(List<Member> members, List<Team> teams, ProgressValues progress, string? seed = null)
     {
         var stopwatch = Stopwatch.StartNew();
         logger.LogInformation("Sorting using evolutionary algorithm");
@@ -38,6 +38,9 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         progress.IsIndeterminate = true;
         progress.Text = Lang.Resources.Sorting_ProgressText;
 
+        int numberOfTeams = teams.Count;
+        List<Member> membersToSort = members.Where(member => member.AllowTeamChange).ToList();
+
         if (string.IsNullOrWhiteSpace(seed))
         {
             logger.LogInformation("Seed not set, creating new seed");
@@ -47,12 +50,12 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         logger.LogInformation("Starting sorting with seed {seed}", seed);
 
         var random = new Random(seed.GetHashCode());
-        var teamSizes = GetSizeOfTeams(members.Count, numberOfTeams);
-        logger.LogInformation("Total members {memberCount}, team sizes: {teamSizes}", members.Count, string.Join(", ", teamSizes));
-        var currentGeneration = new List<List<Member>>(GenerationSize);
+        int minTeamSize = GetSizeOfTeams(members.Count, numberOfTeams);
+        logger.LogInformation("Total members {memberCount}, min team size: {teamSize}", members.Count, string.Join(", ", minTeamSize));
+        var currentGeneration = new List<SortGeneration>(GenerationSize);
         for (var i = 0; i < GenerationSize; i++)
         {
-            currentGeneration.Add(CreateRandomCombination(members, random));
+            currentGeneration.Add(CreateRandomCombination(membersToSort, random));
         }
 
         progress.IsIndeterminate = false;
@@ -60,17 +63,13 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         do
         {
             progress.Value = generationNumber;
-            var sortedGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
-                                                    .OrderBy(solution => solution.Value).ToDictionary();
-
+            Dictionary<SortGeneration, decimal> sortedGeneration = SortGeneration(currentGeneration, minTeamSize, teams);
 
             LogGenerationStats(sortedGeneration, generationNumber);
 
             var crossSelection = (int)Math.Round(GenerationSize * CrossSelection, MidpointRounding.ToPositiveInfinity);
-            var numberOfChildren =
-                (int)Math.Round(GenerationSize * (1 - PreserveBestResults), MidpointRounding.ToNegativeInfinity);
-            var newGeneration = CrossSolution(sortedGeneration.Keys.Take(crossSelection).ToList(),
-                numberOfChildren, random);
+            var numberOfChildren = (int)Math.Round(GenerationSize * (1 - PreserveBestResults), MidpointRounding.ToNegativeInfinity);
+            List<List<Member>> newGeneration = CrossSolution(sortedGeneration.Keys.Take(crossSelection).ToList(), numberOfChildren, random);
             MutateSolution(newGeneration, random);
 
             newGeneration.AddRange(
@@ -81,13 +80,18 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
             generationNumber++;
         } while (generationNumber < MaxGenerations);
 
-        var finalGeneration = currentGeneration.ToDictionary(g => g, g => SolutionScore(g, teamSizes))
-                                               .OrderBy(solution => solution.Value).ToDictionary();
+        Dictionary<SortGeneration, decimal> finalGeneration = SortGeneration(currentGeneration, minTeamSize, teams);
 
         stopwatch.Stop();
         logger.LogInformation("Sorting finished in {time} ms", stopwatch.ElapsedMilliseconds);
 
-        return (ListToTeams(finalGeneration.First().Key, teamSizes), seed);
+        return (ListToTeams(finalGeneration.First().Key, minTeamSize), seed);
+    }
+
+    private static Dictionary<SortGeneration, decimal> SortGeneration(List<SortGeneration> currentGeneration, int minTeamSize, List<Team> teams)
+    {
+        return currentGeneration.ToDictionary(g => g, g => SolutionScore(g, minTeamSize, teams))
+                                .OrderBy(solution => solution.Value).ToDictionary();
     }
 
     private void LogGenerationStats(Dictionary<List<Member>, decimal> generationScores, int generationNumber)
@@ -111,30 +115,24 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         }
     }
 
-    private static List<int> GetSizeOfTeams(int membersCount, int numberOfTeams)
+    private static int GetSizeOfTeams(int membersCount, int numberOfTeams)
     {
-        int minTeamSize = membersCount / numberOfTeams;
-        int teamsWithExtraMembers = membersCount % numberOfTeams;
-
-        var sizeList = Enumerable.Repeat(minTeamSize, numberOfTeams).ToList();
-        for (var i = 0; i < teamsWithExtraMembers; i++)
-        {
-            sizeList[i]++;
-        }
-
-        return sizeList;
+        return membersCount / numberOfTeams;
     }
 
-    private static List<Member> CreateRandomCombination(List<Member> members, Random random)
+    private static SortGeneration CreateRandomCombination(List<Member> members, Random random)
     {
         var newList = new List<Member>(members);
         newList.Shuffle(random);
-        return newList;
+        return new SortGeneration(newList);
     }
 
-    private static decimal SolutionScore(List<Member> members, List<int> teamSizes)
+    private static (decimal score, Dictionary<Team, int> teamMemberCount) SolutionScore(List<Member> members, int teamSizes, List<Team> teams)
     {
-        int numberOfTeams = teamSizes.Count;
+        //TODO create teams with existing members and newly sorted ones
+        //assign extra members to random teams with min member count
+        //extra members must be persisted across runs
+        int numberOfTeams = teams.Count;
         decimal score = 0;
         Dictionary<DisciplineInfo, List<decimal>> teamsDisciplineScores = [];
         var startIndex = 0;
@@ -177,8 +175,8 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
     private static Dictionary<DisciplineInfo, decimal> AverageScoreByDiscipline(List<Member> members)
     {
         return members.SelectMany(member => member.Records.Values)
-            .GroupBy(record => record.DisciplineInfo)
-            .ToDictionary(g => g.Key, g => g.Sum(record => record.NormalizedValue) / members.Count);
+                      .GroupBy(record => record.DisciplineInfo)
+                      .ToDictionary(g => g.Key, g => g.Sum(record => record.NormalizedValue) / members.Count);
     }
 
     private List<List<Member>> CrossSolution(List<List<Member>> members, int numberOfChildren, Random random)

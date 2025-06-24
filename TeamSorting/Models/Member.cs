@@ -43,6 +43,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
     public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
+    private bool _allowTeamChange = true;
     private Team? _team;
     private string _name = string.Empty;
 
@@ -147,6 +148,12 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedWith));
                 break;
         }
+    }
+
+    public bool AllowTeamChange
+    {
+        get => _allowTeamChange;
+        set => SetProperty(ref _allowTeamChange, value);
     }
 
     public Team? Team
