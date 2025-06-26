@@ -670,6 +670,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sort rest of members.
+        /// </summary>
+        public static string TeamsView_SortRestOfMembers_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_SortRestOfMembers_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team is valid: {0}.
         /// </summary>
         public static string TeamsView_TeamIsValid_ToolTip {

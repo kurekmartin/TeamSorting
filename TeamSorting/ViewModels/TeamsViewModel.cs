@@ -12,7 +12,7 @@ using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
-public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil) : ViewModelBase
+public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil, Members members) : ViewModelBase
 {
     public const string MemberFormat = "member-card-format";
     public const string DragActiveClass = "drag-active";
@@ -91,9 +91,9 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
         else
         {
             teamControl = destination?
-                .GetVisualAncestors()
-                .OfType<Grid>()
-                .FirstOrDefault(ancestor => ancestor is { Name: "Team", DataContext: Team });
+                          .GetVisualAncestors()
+                          .OfType<Grid>()
+                          .FirstOrDefault(ancestor => ancestor is { Name: "Team", DataContext: Team });
         }
 
         if (teamControl is not null)
@@ -131,7 +131,7 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
     private static void AddTeamHighlight(Visual? control)
     {
         Border? highlight = control?.GetLogicalChildren().OfType<Border>()
-            .FirstOrDefault(child => child.Name == "TeamHighlight");
+                                   .FirstOrDefault(child => child.Name == "TeamHighlight");
         if (highlight != null)
         {
             highlight.IsVisible = true;
@@ -141,7 +141,7 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
     private void RemoveTeamHighlight(Visual? control)
     {
         Border? highlight = control?.GetLogicalChildren().OfType<Border>()
-            .FirstOrDefault(child => child.Name == "TeamHighlight");
+                                   .FirstOrDefault(child => child.Name == "TeamHighlight");
         if (highlight != null)
         {
             highlight.IsVisible = false;

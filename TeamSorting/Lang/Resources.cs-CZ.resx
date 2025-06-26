@@ -231,4 +231,7 @@ Chcete pokračovat?</value>
     <data name="DisciplineInfo_Priority" xml:space="preserve">
         <value>Priorita</value>
     </data>
+    <data name="TeamsView_SortRestOfMembers_Button" xml:space="preserve">
+        <value>Rozřadit zbývající členy</value>
+    </data>
 </root>

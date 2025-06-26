@@ -235,4 +235,7 @@ Do you want to continue?</value>
     <data name="Data_ValidateCsvHeader_MissingHeader" xml:space="preserve">
         <value>Header is missing</value>
     </data>
+    <data name="TeamsView_SortRestOfMembers_Button" xml:space="preserve">
+        <value>Sort rest of members</value>
+    </data>
 </root>

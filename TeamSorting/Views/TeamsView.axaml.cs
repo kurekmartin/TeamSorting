@@ -267,4 +267,13 @@ public partial class TeamsView : UserControl
         await context.Teams.SortToTeams(this);
         button.IsEnabled = true;
     }
+
+    private async void SortRestOfMembers_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        button.IsEnabled = false;
+        context.Teams.LockCurrentMembers();
+        await context.Teams.SortToTeams(this);
+        button.IsEnabled = true;
+    }
 }

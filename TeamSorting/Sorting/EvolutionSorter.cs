@@ -18,7 +18,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
     private const int InvalidSolutionPenalty = 100000;
     private const int PriorityMultiplier = 10;
 
-    public (List<Team> teams, string? seed) Sort(List<Member> members, List<Team> teams, ProgressValues progress, string? seed = null)
+    public string Sort(List<Member> members, List<Team> teams, ProgressValues progress, string? seed = null)
     {
         var stopwatch = Stopwatch.StartNew();
         logger.LogInformation("Sorting using evolutionary algorithm");
@@ -38,8 +38,8 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         progress.IsIndeterminate = true;
         progress.Text = Lang.Resources.Sorting_ProgressText;
 
-        int numberOfTeams = teams.Count;
         List<Member> membersToSort = members.Where(member => member.AllowTeamChange).ToList();
+        int membersCount = members.Count;
 
         if (string.IsNullOrWhiteSpace(seed))
         {
@@ -50,7 +50,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         logger.LogInformation("Starting sorting with seed {seed}", seed);
 
         var random = new Random(seed.GetHashCode());
-        int minTeamSize = GetMinSizeOfTeams(members.Count, TODO);
+        int minTeamSize = GetMinSizeOfTeams(members.Count, teams);
         logger.LogInformation("Total members {memberCount}, min team size: {teamSize}", members.Count, string.Join(", ", minTeamSize));
         var currentGeneration = new List<SortGeneration>(GenerationSize);
         for (var i = 0; i < GenerationSize; i++)
@@ -63,7 +63,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         do
         {
             progress.Value = generationNumber;
-            Dictionary<SortGeneration, decimal> sortedGeneration = SortGeneration(currentGeneration, minTeamSize, teams);
+            Dictionary<SortGeneration, decimal> sortedGeneration = SortGeneration(currentGeneration, minTeamSize, teams, membersCount, random);
 
             LogGenerationStats(sortedGeneration, generationNumber);
 
@@ -80,18 +80,24 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
             generationNumber++;
         } while (generationNumber < MaxGenerations);
 
-        Dictionary<SortGeneration, decimal> finalGeneration = SortGeneration(currentGeneration, minTeamSize, teams);
+        Dictionary<SortGeneration, decimal> finalGeneration = SortGeneration(currentGeneration, minTeamSize, teams, membersCount, random);
 
         stopwatch.Stop();
         logger.LogInformation("Sorting finished in {time} ms", stopwatch.ElapsedMilliseconds);
 
-        return (ListToTeams(finalGeneration.First().Key, minTeamSize), seed);
+        ListToTeams(finalGeneration.First().Key, teams);
+        return seed;
     }
 
-    private static Dictionary<SortGeneration, decimal> SortGeneration(List<SortGeneration> currentGeneration, int minTeamSize, List<Team> teams)
+    private Dictionary<SortGeneration, decimal> SortGeneration(List<SortGeneration> generation, int minTeamSize, List<Team> teams, int totalMembersCount, Random random)
     {
-        return currentGeneration.ToDictionary(g => g, g => SolutionScore(ref g, minTeamSize, teams))
-                                .OrderBy(solution => solution.Value).ToDictionary();
+        foreach (SortGeneration sortGeneration in generation)
+        {
+            CalculateNewMemberCount(sortGeneration, minTeamSize, teams, totalMembersCount, random);
+        }
+
+        return generation.ToDictionary(g => g, g => SolutionScore(g, teams))
+                         .OrderBy(solution => solution.Value).ToDictionary();
     }
 
     private void LogGenerationStats(Dictionary<SortGeneration, decimal> generationScores, int generationNumber)
@@ -115,11 +121,21 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         }
     }
 
-    private static int GetMinSizeOfTeams(int membersCount, List<Team> teams)
+    private static int GetMinSizeOfTeams(int totalMembersCount, List<Team> teams)
     {
         int numberOfTeams = teams.Count;
-        int minTeamSize = membersCount / numberOfTeams;
-        //TODO check if teams are not already over ideal capacity 
+        int minTeamSize = totalMembersCount / numberOfTeams;
+
+        //Check if already sorted teams are over capacity
+        List<Team> teamsOverCapacity = teams.Where(team => team.Members.Count(member => !member.AllowTeamChange) > minTeamSize).ToList();
+        if (teamsOverCapacity.Count == 0)
+        {
+            return minTeamSize;
+        }
+
+        int sortedMembersCount = teamsOverCapacity.Sum(team => team.Members.Count(member => !member.AllowTeamChange));
+        int membersToSortCount = totalMembersCount - sortedMembersCount;
+        minTeamSize = membersToSortCount / numberOfTeams;
         return minTeamSize;
     }
 
@@ -130,34 +146,25 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         return new SortGeneration(newList);
     }
 
-    private static decimal SolutionScore(ref SortGeneration generation, int teamSize, List<Team> teams)
+    private decimal SolutionScore(SortGeneration generation, List<Team> teams)
     {
-        generation.TeamMemberCount ??= new Dictionary<Team, int>();
-        int extraMembers = generation.Members.Count % teamSize;
         var startIndex = 0;
         decimal score = 0;
         Dictionary<DisciplineInfo, List<decimal>> teamsDisciplineScores = [];
+
         foreach (Team team in teams)
         {
-            if (generation.TeamMemberCount.TryGetValue(team, out int teamCapacity))
+            List<Member> teamMembers = team.Members.Where(member => !member.AllowTeamChange).ToList();
+
+            if (generation.NewMemberCount == null)
             {
+                logger.LogError("NewMemberCount not set for current generation");
                 continue;
             }
+            int newMemberCount = generation.NewMemberCount[team];
+            List<Member> newMembers = generation.Members.Skip(startIndex).Take(newMemberCount).ToList();
+            teamMembers.AddRange(newMembers);
 
-            teamCapacity = Math.Max(team.Members.Count(member => !member.AllowTeamChange), teamSize);
-            generation.TeamMemberCount[team] = teamCapacity;
-        }
-        
-        //TODO add extra members
-        for (var i = 0; i < extraMembers; i++)
-        {
-        }
-
-        
-        foreach (Team team in teams)
-        {
-            int teamCapacity = generation.TeamMemberCount[team];
-            List<Member> teamMembers = generation.Members.Skip(startIndex).Take(teamCapacity).ToList();
             int invalidMemberCount = Team.InvalidMemberCount(teamMembers);
             if (invalidMemberCount > 0)
             {
@@ -178,7 +185,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
                 }
             }
 
-            startIndex += teamCapacity;
+            startIndex += newMemberCount;
         }
 
         foreach (KeyValuePair<DisciplineInfo, List<decimal>> disciplineScore in teamsDisciplineScores)
@@ -189,6 +196,40 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         }
 
         return score;
+    }
+
+    private static void CalculateNewMemberCount(SortGeneration generation, int minTeamSize, List<Team> teams, int totalMembersCount, Random random)
+    {
+        generation.NewMemberCount ??= new Dictionary<Team, int>();
+        int extraMembers = totalMembersCount;
+        foreach (Team team in teams)
+        {
+            int lockedMembersCount = team.Members.Count(member => !member.AllowTeamChange);
+            extraMembers -= lockedMembersCount;
+            if (generation.NewMemberCount.TryGetValue(team, out int newMemberCount))
+            {
+                extraMembers -= newMemberCount;
+                continue;
+            }
+
+            int memberCountToTeamSize = minTeamSize - team.Members.Count(member => !member.AllowTeamChange);
+            newMemberCount = Math.Max(memberCountToTeamSize, 0);
+            generation.NewMemberCount[team] = newMemberCount;
+
+            extraMembers -= newMemberCount;
+        }
+
+        for (var i = 0; i < extraMembers; i++)
+        {
+            KeyValuePair<Team, int> teamWithMinCapacity = generation.NewMemberCount.MinBy(pair => pair.Value + pair.Key.Members.Count(member => !member.AllowTeamChange));
+            int minCapacity = teamWithMinCapacity.Key.Members.Count(member => !member.AllowTeamChange) + teamWithMinCapacity.Value;
+            List<KeyValuePair<Team, int>> teamsWithMinCapacity = generation.NewMemberCount.Where(pair => pair.Value + pair.Key.Members.Count(member => !member.AllowTeamChange) == minCapacity).ToList();
+            
+            int additionalTeamMemberIndex = random.Next(teamsWithMinCapacity.Count);
+            
+            KeyValuePair<Team, int> team = generation.NewMemberCount.ElementAt(additionalTeamMemberIndex);
+            generation.NewMemberCount[team.Key]++;
+        }
     }
 
     private static Dictionary<DisciplineInfo, decimal> AverageScoreByDiscipline(List<Member> members)
@@ -247,9 +288,9 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         return [child1, child2];
     }
 
-    private void MutateSolution(List<SortGeneration> members, Random random)
+    private static void MutateSolution(List<SortGeneration> members, Random random)
     {
-        foreach (var memberList in members)
+        foreach (SortGeneration memberList in members)
         {
             MutateMembers(memberList, random);
         }
@@ -265,18 +306,21 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         }
     }
 
-    private static List<Team> ListToTeams(List<Member> members, List<int> teamSizes)
+    private static void ListToTeams(SortGeneration generation, List<Team> teams)
     {
-        List<Team> teams = [];
         var startIndex = 0;
-        foreach (int teamSize in teamSizes)
+        foreach (Team team in teams)
         {
-            var team = new Team(string.Format(Lang.Resources.Data_TeamName_Template, teams.Count + 1));
-            team.AddMembers(members.Skip(startIndex).Take(teamSize));
-            teams.Add(team);
-            startIndex += teamSize;
-        }
+            if (generation.NewMemberCount == null)
+            {
+                continue;
+            }
 
-        return teams;
+            int newMemberCount = generation.NewMemberCount[team];
+            List<Member> newMembers = generation.Members.Skip(startIndex).Take(newMemberCount).ToList();
+            team.AddMembers(newMembers);
+
+            startIndex += newMemberCount;
+        }
     }
 }

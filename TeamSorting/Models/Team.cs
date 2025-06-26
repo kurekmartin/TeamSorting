@@ -130,7 +130,8 @@ public class Team : ObservableObject
 
     public void AddMembers(IEnumerable<Member> members)
     {
-        foreach (var member in members)
+        //TODO pause collection changed events while adding
+        foreach (Member member in members)
         {
             AddMember(member);
         }
@@ -204,5 +205,13 @@ public class Team : ObservableObject
         var notWith = memberList.SelectMany(member => member.NotWith);
 
         return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m => m.Name)).ToList());
+    }
+
+    public void LockMembers()
+    {
+        foreach (Member member in _members)
+        {
+            member.AllowTeamChange = false;
+        }
     }
 }

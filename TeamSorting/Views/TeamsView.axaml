@@ -56,6 +56,9 @@
                 <Button DockPanel.Dock="Top"
                         Click="CreateNewTeamCombinationButton_OnClick"
                         Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}" />
+                <Button DockPanel.Dock="Top"
+                        Click="SortRestOfMembers_OnClick"
+                        Content="{x:Static lang:Resources.TeamsView_SortRestOfMembers_Button}" />
                 <StackPanel Orientation="Horizontal"
                             Margin="0,0,0,2"
                             DockPanel.Dock="Top">

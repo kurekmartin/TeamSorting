@@ -144,6 +144,14 @@ public class Teams : ObservableObject
         MembersWithoutTeam.SortCriteria = sortCriteria;
     }
 
+    public void LockCurrentMembers()
+    {
+        foreach (Team team in _teamList)
+        {
+            team.LockMembers();
+        }
+    }
+
     //TODO: move sorting to separate class
     public async Task SortToTeams(UserControl visual, int? numberOfTeams = null)
     {
@@ -172,17 +180,24 @@ public class Teams : ObservableObject
 
         mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
 
-        int teamsCount = numberOfTeams ?? _teamList.Count;
         SortingInProgress = true;
-        //TODO create teams if not created   
-        (List<Team> teams, string? seed) sortResult = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), TeamList.ToList(), Progress, InputSeed));
-        RemoveAllTeams();
-        foreach (Team team in sortResult.teams)
+        var teamsToCreate = 0;
+        if (numberOfTeams is not null && _teamList.Count < numberOfTeams)
         {
-            AddTeam(team);
+            teamsToCreate = (int)(_teamList.Count - numberOfTeams);
         }
 
-        UsedSeed = sortResult.seed ?? string.Empty;
+        if (teamsToCreate > 0)
+        {
+            for (var i = 0; i < teamsToCreate; i++)
+            {
+                CreateAndAddTeam();
+            }
+        }
+
+        string? seed = await Task.Run(() => _sorter.Sort(_members.MemberList.ToList(), _teamList.ToList(), Progress, InputSeed));
+
+        UsedSeed = seed ?? string.Empty;
         SortingInProgress = false;
         mainWindowViewModel.SwitchToTeamsView();
         mainWindow.Cursor = Cursor.Default;
