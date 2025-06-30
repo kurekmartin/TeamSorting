@@ -84,7 +84,7 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        if (sender is not MemberCard memberCard) return;
+        if (sender is not MemberCard memberCard || !memberCard.Member.AllowTeamChange) return;
 
         memberCard.Copy(GhostCard);
         _mouseOffset = e.GetPosition(memberCard);
