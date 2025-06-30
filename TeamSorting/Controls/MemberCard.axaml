@@ -15,6 +15,8 @@
     <Style Selector="ItemsControl.MemberList:empty">
         <Setter Property="IsVisible" Value="False" />
     </Style>
+
+    <!-- Show detail toggle -->
     <Style Selector="ToggleButton i|Icon.collapsed">
         <Setter Property="IsVisible" Value="False" />
     </Style>
@@ -27,6 +29,37 @@
     <Style Selector="ToggleButton:checked  i|Icon.expanded">
         <Setter Property="IsVisible" Value="False" />
     </Style>
+
+    <!-- Allow team change toggle -->
+    <Style Selector="ToggleButton i|Icon.allow-team-change">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="ToggleButton:checked i|Icon.allow-team-change">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="ToggleButton i|Icon.not-allow-team-change">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="ToggleButton:checked i|Icon.not-allow-team-change">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+    <Style Selector="ToggleButton:checked:pointerover i|Icon.allow-team-change">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="ToggleButton:checked:pointerover i|Icon.not-allow-team-change">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="ToggleButton:unchecked:pointerover i|Icon.allow-team-change">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    <Style Selector="ToggleButton:unchecked:pointerover i|Icon.not-allow-team-change">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+
+
     <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
@@ -73,27 +106,48 @@
                                        Margin="10"
                                        DockPanel.Dock="Left"
                                        VerticalAlignment="Center" />
-                            <ToggleButton VerticalAlignment="Center"
-                                          HorizontalAlignment="Right"
-                                          Background="Transparent"
-                                          IsChecked="{TemplateBinding ShowDetail}"
-                                          Name="ToggleButton"
-                                          Width="40"
-                                          Height="40">
-                                <Panel>
-                                    <i:Icon Classes="collapsed"
-                                            Value="mdi:chevron-up"
-                                            FontSize="20" />
-                                    <i:Icon Classes="expanded"
-                                            Value="mdi:chevron-down"
-                                            FontSize="20" />
-                                </Panel>
-                            </ToggleButton>
+                            <StackPanel DockPanel.Dock="Right"
+                                        VerticalAlignment="Center" 
+                                        HorizontalAlignment="Right"
+                                        Orientation="Horizontal">
+                                <ToggleButton VerticalAlignment="Center"
+                                              HorizontalAlignment="Right"
+                                              Background="Transparent"
+                                              IsChecked="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
+                                              Name="ToggleTeamChange"
+                                              Width="40"
+                                              Height="40">
+                                    <Panel>
+                                        <i:Icon Classes="allow-team-change"
+                                                Value="mdi:pin-off"
+                                                FontSize="20" />
+                                        <i:Icon Classes="not-allow-team-change"
+                                                Value="mdi:pin"
+                                                FontSize="20" />
+                                    </Panel>
+                                </ToggleButton>
+                                <ToggleButton VerticalAlignment="Center"
+                                              HorizontalAlignment="Right"
+                                              Background="Transparent"
+                                              IsChecked="{TemplateBinding ShowDetail}"
+                                              Name="ToggleDetail"
+                                              Width="40"
+                                              Height="40">
+                                    <Panel>
+                                        <i:Icon Classes="collapsed"
+                                                Value="mdi:chevron-up"
+                                                FontSize="20" />
+                                        <i:Icon Classes="expanded"
+                                                Value="mdi:chevron-down"
+                                                FontSize="20" />
+                                    </Panel>
+                                </ToggleButton>
+                            </StackPanel>
                         </DockPanel>
-                        <Separator IsVisible="{Binding #ToggleButton.IsChecked }"
+                        <Separator IsVisible="{Binding #ToggleDetail.IsChecked }"
                                    Margin="0" />
                         <StackPanel Margin="10"
-                                    IsVisible="{Binding #ToggleButton.IsChecked }">
+                                    IsVisible="{Binding #ToggleDetail.IsChecked }">
                             <TextBlock Text="With"
                                        FontWeight="Bold"
                                        IsVisible="{Binding #MemberWithList.IsVisible}" />
