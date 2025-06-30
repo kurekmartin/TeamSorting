@@ -184,7 +184,7 @@ public class Teams : ObservableObject
         var teamsToCreate = 0;
         if (numberOfTeams is not null && _teamList.Count < numberOfTeams)
         {
-            teamsToCreate = (int)(_teamList.Count - numberOfTeams);
+            teamsToCreate = (int)(numberOfTeams - _teamList.Count);
         }
 
         if (teamsToCreate > 0)
