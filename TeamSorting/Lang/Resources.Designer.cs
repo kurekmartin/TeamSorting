@@ -625,6 +625,24 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disallow changing team.
+        /// </summary>
+        public static string TeamsView_MemberCard_PinMember {
+            get {
+                return ResourceManager.GetString("TeamsView_MemberCard_PinMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow changing team.
+        /// </summary>
+        public static string TeamsView_MemberCard_UnpinMember {
+            get {
+                return ResourceManager.GetString("TeamsView_MemberCard_UnpinMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Member **{0}** moved from team **{1}** to team **{2}**..
         /// </summary>
         public static string TeamsView_MemberMoved_Message {

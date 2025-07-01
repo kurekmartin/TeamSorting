@@ -615,6 +615,24 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zakázat změnu týmu.
+        /// </summary>
+        public static string TeamsView_MemberCard_PinMember {
+            get {
+                return ResourceManager.GetString("TeamsView_MemberCard_PinMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Povolit změnu týmu.
+        /// </summary>
+        public static string TeamsView_MemberCard_UnpinMember {
+            get {
+                return ResourceManager.GetString("TeamsView_MemberCard_UnpinMember", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Člen **{0}** přesunut z týmu **{1}** do týmu **{2}**..
         /// </summary>
         public static string TeamsView_MemberMoved_Message {

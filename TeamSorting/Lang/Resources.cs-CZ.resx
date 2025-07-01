@@ -234,4 +234,10 @@ Chcete pokračovat?</value>
     <data name="TeamsView_SortRestOfMembers_Button" xml:space="preserve">
         <value>Rozřadit zbývající členy</value>
     </data>
+    <data name="TeamsView_MemberCard_UnpinMember" xml:space="preserve">
+        <value>Povolit změnu týmu</value>
+    </data>
+    <data name="TeamsView_MemberCard_PinMember" xml:space="preserve">
+        <value>Zakázat změnu týmu</value>
+    </data>
 </root>

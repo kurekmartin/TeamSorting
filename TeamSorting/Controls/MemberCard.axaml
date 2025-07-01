@@ -3,6 +3,7 @@
         xmlns:controls="using:TeamSorting.Controls"
         xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
         xmlns:models="clr-namespace:TeamSorting.Models"
+        xmlns:lang="clr-namespace:TeamSorting.Lang"
         xmlns:i="https://github.com/projektanker/icons.avalonia"
         xmlns:converters="clr-namespace:TeamSorting.Converters">
     <Design.PreviewWith>
@@ -31,6 +32,14 @@
     </Style>
 
     <!-- Allow team change toggle -->
+    <Style Selector="ToggleButton:checked">
+        <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_PinMember}" />
+    </Style>
+    
+    <Style Selector="ToggleButton:unchecked">
+        <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_UnpinMember}" />
+    </Style>
+    
     <Style Selector="ToggleButton i|Icon.allow-team-change">
         <Setter Property="IsVisible" Value="False" />
     </Style>
