@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.VisualTree;
@@ -184,19 +183,6 @@ public partial class TeamsView : UserControl
         if (fileSaved)
         {
             context.NotificationManager?.Show(Lang.Resources.TeamsView_CsvExport_Success, NotificationType.Success);
-        }
-    }
-
-    private void MemberTeamMenu_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not TeamsViewModel context) return;
-        if (sender is not MenuItem menuItem) return;
-        var memberCard = menuItem.FindLogicalAncestorOfType<MemberCard>();
-        if (memberCard is { DataContext: Member member })
-        {
-            var team = context.Teams.TeamList.First(team =>
-                string.Equals(team.Name, menuItem.Header as string, StringComparison.InvariantCultureIgnoreCase));
-            member.MoveToTeam(team);
         }
     }
 

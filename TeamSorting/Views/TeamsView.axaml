@@ -222,19 +222,7 @@
                                 <DataTemplate>
                                     <controls:MemberCard Member="{Binding .}"
                                                          Margin="3"
-                                                         PointerPressed="MemberCard_OnPointerPressed">
-                                        <controls:MemberCard.ContextMenu>
-                                            <ContextMenu
-                                                ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Teams.TeamList}">
-                                                <ContextMenu.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <MenuItem Header="{Binding Name}"
-                                                                  Click="MemberTeamMenu_OnClick" />
-                                                    </DataTemplate>
-                                                </ContextMenu.ItemTemplate>
-                                            </ContextMenu>
-                                        </controls:MemberCard.ContextMenu>
-                                    </controls:MemberCard>
+                                                         PointerPressed="MemberCard_OnPointerPressed" />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -326,19 +314,7 @@
                                             <DataTemplate>
                                                 <controls:MemberCard Member="{Binding .}"
                                                                      Margin="3"
-                                                                     PointerPressed="MemberCard_OnPointerPressed">
-                                                    <controls:MemberCard.ContextMenu>
-                                                        <ContextMenu
-                                                            ItemsSource="{Binding $parent[UserControl].((viewModel:TeamsViewModel)DataContext).Teams.TeamList}">
-                                                            <ContextMenu.ItemTemplate>
-                                                                <DataTemplate>
-                                                                    <MenuItem Header="{Binding Name}"
-                                                                              Click="MemberTeamMenu_OnClick" />
-                                                                </DataTemplate>
-                                                            </ContextMenu.ItemTemplate>
-                                                        </ContextMenu>
-                                                    </controls:MemberCard.ContextMenu>
-                                                </controls:MemberCard>
+                                                                     PointerPressed="MemberCard_OnPointerPressed" />
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
