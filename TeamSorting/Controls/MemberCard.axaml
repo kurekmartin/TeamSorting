@@ -80,13 +80,16 @@
     <Style Selector="TextBlock#WithMemberValue.Invalid">
         <Setter Property="Background" Value="Tomato" />
     </Style>
+    
+    <Style Selector="controls|MemberCard Border.AllowTeamChange">
+        <Setter Property="Cursor" Value="Hand"/>
+    </Style>
 
 
     <Style Selector="controls|MemberCard">
         <!-- Set Defaults -->
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
-        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border HorizontalAlignment="Stretch"
@@ -94,7 +97,8 @@
                         Background="White"
                         BorderThickness="1"
                         BorderBrush="LightGray"
-                        ClipToBounds="True">
+                        ClipToBounds="True"
+                        Classes.AllowTeamChange="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}">
                     <StackPanel Orientation="Vertical"
                                 HorizontalAlignment="Stretch"
                                 Classes.Invalid="{Binding !Member.IsValid,RelativeSource={RelativeSource TemplatedParent}}">
