@@ -103,6 +103,7 @@
         <!-- Set Defaults -->
         <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border HorizontalAlignment="Stretch"
@@ -128,6 +129,7 @@
                                         VerticalAlignment="Center" 
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal">
+                                <!-- Button is visible only when member is in team that allows pinning members -->
                                 <ToggleButton VerticalAlignment="Center"
                                               HorizontalAlignment="Right"
                                               Background="Transparent"
