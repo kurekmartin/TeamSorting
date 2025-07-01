@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
+using TeamSorting.Enums;
 using TeamSorting.Lang;
 using TeamSorting.Sorting;
 using TeamSorting.ViewModels;
@@ -80,7 +81,7 @@ public class Teams : ObservableObject
 
     public ReadOnlyObservableCollection<Team> TeamList { get; }
 
-    public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted) { DisableValidation = true };
+    public Team MembersWithoutTeam { get; } = new(Resources.Data_TeamName_Unsorted, TeamType.UnsortedTeam);
 
     //TODO: move progress indication to separate class
     public bool SortingInProgress
@@ -109,7 +110,7 @@ public class Teams : ObservableObject
 
     public Team CreateAndAddTeam()
     {
-        var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber));
+        var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber), TeamType.SortTeam);
         AddTeam(team);
         return team;
     }

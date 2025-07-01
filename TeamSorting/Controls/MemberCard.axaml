@@ -32,6 +32,10 @@
     </Style>
 
     <!-- Allow team change toggle -->
+    <Style Selector="controls|MemberCard Border.AllowPinMember ToggleButton#ToggleTeamChange">
+        <Setter Property="IsVisible" Value="True"/>
+    </Style>
+    
     <Style Selector="ToggleButton:checked">
         <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_PinMember}" />
     </Style>
@@ -107,7 +111,8 @@
                         BorderThickness="1"
                         BorderBrush="LightGray"
                         ClipToBounds="True"
-                        Classes.AllowTeamChange="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}">
+                        Classes.AllowTeamChange="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
+                        Classes.AllowPinMember="{Binding Member.Team.CanPinMember, RelativeSource={RelativeSource TemplatedParent}}">
                     <StackPanel Orientation="Vertical"
                                 HorizontalAlignment="Stretch"
                                 Classes.Invalid="{Binding !Member.IsValid,RelativeSource={RelativeSource TemplatedParent}}">
@@ -127,6 +132,7 @@
                                               HorizontalAlignment="Right"
                                               Background="Transparent"
                                               IsChecked="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
+                                              IsVisible="False"
                                               Name="ToggleTeamChange"
                                               Width="40"
                                               Height="40">

@@ -12,9 +12,10 @@ public class Team : ObservableObject
 {
     private readonly ILogger? _logger = Ioc.Default.GetService<ILogger<Team>>();
 
-    public Team([Localizable(false)] string name)
+    public Team([Localizable(false)] string name, TeamType teamType)
     {
         Name = name;
+        TeamType = teamType;
         Members = new ReadOnlyObservableCollection<Member>(_members);
         _members.CollectionChanged += MembersOnCollectionChanged;
     }
@@ -33,10 +34,11 @@ public class Team : ObservableObject
                 break;
         }
     }
-    
+
     public Guid Id { get; } = Guid.NewGuid();
 
     public string Name { get; set; }
+    public TeamType TeamType { get; }
     public ReadOnlyObservableCollection<Member> Members { get; }
     private readonly ObservableCollection<Member> _members = [];
 
@@ -67,11 +69,11 @@ public class Team : ObservableObject
                 }
 
                 sortedMembers = Members.OrderBy(member =>
-                        member.Records
-                            .First(record =>
-                                record.Key == SortCriteria.Discipline.Id)
-                            .Value.DecimalValue)
-                    .ToList();
+                                           member.Records
+                                                 .First(record =>
+                                                     record.Key == SortCriteria.Discipline.Id)
+                                                 .Value.DecimalValue)
+                                       .ToList();
                 LogMembersOrder(sortedMembers);
                 return sortedMembers;
             }
@@ -84,11 +86,11 @@ public class Team : ObservableObject
             }
 
             sortedMembers = Members.OrderByDescending(member =>
-                    member.Records
-                        .First(record =>
-                            record.Key == SortCriteria.Discipline.Id)
-                        .Value.DecimalValue)
-                .ToList();
+                                       member.Records
+                                             .First(record =>
+                                                 record.Key == SortCriteria.Discipline.Id)
+                                             .Value.DecimalValue)
+                                   .ToList();
             LogMembersOrder(sortedMembers);
             return sortedMembers;
         }
@@ -121,7 +123,8 @@ public class Team : ObservableObject
 #endif
     }
 
-    public bool DisableValidation { get; init; }
+    public bool DisableValidation => TeamType == TeamType.UnsortedTeam;
+    public bool CanPinMember => TeamType == TeamType.SortTeam;
 
     public bool IsValid
     {
@@ -142,6 +145,11 @@ public class Team : ObservableObject
         _logger?.LogInformation("Adding member {memberId} to team {teamId}", member.Id, Id);
         member.Team?.RemoveMember(member);
         member.Team = this;
+        if (TeamType == TeamType.UnsortedTeam)
+        {
+            member.AllowTeamChange = true;
+        }
+
         _members.Add(member);
     }
 
