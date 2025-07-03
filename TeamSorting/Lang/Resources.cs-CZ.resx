@@ -252,4 +252,19 @@ Chcete pokračovat?</value>
     <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
         <value>Povolit změny týmu a rozřadit</value>
     </data>
+    <data name="TeamsView_CreateNewCombination_ToolTip" xml:space="preserve">
+        <value>Zachovat připnuté členy a vytvořit novou kombinaci zostatních členů.</value>
+    </data>
+    <data name="TeamsView_UnlockMembersAndSort_ToolTip" xml:space="preserve">
+        <value>Odepnout všechny členy a vytvořit novou kombinaci.
+</value>
+    </data>
+    <data name="TeamsView_LockTeamsAndSortRestOfMembers_ToolTip" xml:space="preserve">
+        <value>Připnout všechny členy v týmech a vytvořit novou kombinaci ze zbývajících členů.
+</value>
+    </data>
+    <data name="TeamsView_FillTeams_ToolTip" xml:space="preserve">
+        <value>Zachovat aktuální členy v týmech a rozdělit zbývající členy.
+</value>
+    </data>
 </root>

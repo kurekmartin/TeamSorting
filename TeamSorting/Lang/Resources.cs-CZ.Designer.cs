@@ -587,6 +587,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zachovat připnuté členy a vytvořit novou kombinaci zostatních členů..
+        /// </summary>
+        public static string TeamsView_CreateNewCombination_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_CreateNewCombination_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Chyba při ukládání souboru:
         ///{0}.
         /// </summary>
@@ -651,11 +660,31 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zachovat aktuální členy v týmech a rozdělit zbývající členy.
+        ///.
+        /// </summary>
+        public static string TeamsView_FillTeams_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_FillTeams_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zachovat týmy a rozřadit.
         /// </summary>
         public static string TeamsView_LockTeamsAndSortRestOfMembers_Button {
             get {
                 return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Připnout všechny členy v týmech a vytvořit novou kombinaci ze zbývajících členů.
+        ///.
+        /// </summary>
+        public static string TeamsView_LockTeamsAndSortRestOfMembers_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_ToolTip", resourceCulture);
             }
         }
         
@@ -728,6 +757,16 @@ namespace TeamSorting.Lang {
         public static string TeamsView_UnlockMembersAndSort_Button {
             get {
                 return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Odepnout všechny členy a vytvořit novou kombinaci.
+        ///.
+        /// </summary>
+        public static string TeamsView_UnlockMembersAndSort_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_ToolTip", resourceCulture);
             }
         }
         

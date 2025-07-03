@@ -267,4 +267,17 @@ Do you want to discard current combination?
     <data name="TeamsView_Sorting_Warning_Cancel" xml:space="preserve">
         <value>Cancel</value>
     </data>
+    <data name="TeamsView_CreateNewCombination_ToolTip" xml:space="preserve">
+        <value>Keep the pinned members and create a new combination of the remaining members.</value>
+    </data>
+    <data name="TeamsView_UnlockMembersAndSort_ToolTip" xml:space="preserve">
+        <value>Unpin all members and create a new combination.</value>
+    </data>
+    <data name="TeamsView_LockTeamsAndSortRestOfMembers_ToolTip" xml:space="preserve">
+        <value>Pin all members in teams and create a new combination from the remaining members.
+</value>
+    </data>
+    <data name="TeamsView_FillTeams_ToolTip" xml:space="preserve">
+        <value>Keep the current members in the teams and sort the remaining members.</value>
+    </data>
 </root>

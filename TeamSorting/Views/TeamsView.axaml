@@ -87,7 +87,7 @@
                         </ComboBox>
                     </StackPanel>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Vertical"
                             DockPanel.Dock="Top"
                             Margin="0,0,0,8"
@@ -96,18 +96,22 @@
                                FontWeight="Bold" />
                     <Button DockPanel.Dock="Top"
                             Click="CreateNewTeamCombinationButton_OnClick"
-                            Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}" />
+                            Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}"
+                            ToolTip.Tip="{x:Static lang:Resources.TeamsView_CreateNewCombination_ToolTip}" />
                     <Button DockPanel.Dock="Top"
                             Click="UnlockMembersAndSortButton_OnClick"
-                            Content="{x:Static lang:Resources.TeamsView_UnlockMembersAndSort_Button}" />
+                            Content="{x:Static lang:Resources.TeamsView_UnlockMembersAndSort_Button}"
+                            ToolTip.Tip="{x:Static lang:Resources.TeamsView_UnlockMembersAndSort_ToolTip}" />
                     <Button DockPanel.Dock="Top"
                             Click="LockTeamsAndSortRestOfMembers_OnClick"
-                            Content="{x:Static lang:Resources.TeamsView_LockTeamsAndSortRestOfMembers_Button}" />
+                            Content="{x:Static lang:Resources.TeamsView_LockTeamsAndSortRestOfMembers_Button}"
+                            ToolTip.Tip="{x:Static lang:Resources.TeamsView_LockTeamsAndSortRestOfMembers_ToolTip}" />
                     <Button DockPanel.Dock="Top"
                             Click="FillTeams_OnClick"
-                            Content="{x:Static lang:Resources.TeamsView_FillTeams_Button}" />
+                            Content="{x:Static lang:Resources.TeamsView_FillTeams_Button}"
+                            ToolTip.Tip="{x:Static lang:Resources.TeamsView_FillTeams_ToolTip}" />
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Vertical"
                             DockPanel.Dock="Top"
                             Margin="0,0,0,8"

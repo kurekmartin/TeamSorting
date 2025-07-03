@@ -597,6 +597,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep the pinned members and create a new combination of the remaining members..
+        /// </summary>
+        public static string TeamsView_CreateNewCombination_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_CreateNewCombination_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error saving file:
         ///{0}.
         /// </summary>
@@ -661,11 +670,30 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep the current members in the teams and sort the remaining members..
+        /// </summary>
+        public static string TeamsView_FillTeams_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_FillTeams_ToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keep teams and sort.
         /// </summary>
         public static string TeamsView_LockTeamsAndSortRestOfMembers_Button {
             get {
                 return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pin all members in teams and create a new combination from the remaining members.
+        ///.
+        /// </summary>
+        public static string TeamsView_LockTeamsAndSortRestOfMembers_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_ToolTip", resourceCulture);
             }
         }
         
@@ -767,6 +795,15 @@ namespace TeamSorting.Lang {
         public static string TeamsView_UnlockMembersAndSort_Button {
             get {
                 return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unpin all members and create a new combination..
+        /// </summary>
+        public static string TeamsView_UnlockMembersAndSort_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_ToolTip", resourceCulture);
             }
         }
         
