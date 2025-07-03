@@ -170,31 +170,6 @@ public class Teams : ObservableObject
     //TODO: move sorting to separate class
     public async Task SortToTeams(UserControl visual, int? numberOfTeams = null)
     {
-        var window = TopLevel.GetTopLevel(visual);
-        if (window is not MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
-        {
-            return;
-        }
-
-        //Warn user about deletion of current teams
-        if (_teamList.Count > 0)
-        {
-            var dialog = new WarningDialog(
-                message: Resources.InputView_Sort_WarningDialog_Message,
-                confirmButtonText: Resources.InputView_Sort_WarningDialog_Delete,
-                cancelButtonText: Resources.InputView_Sort_WarningDialog_Cancel)
-            {
-                Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
-            };
-            var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
-            if (result == WarningDialogResult.Cancel)
-            {
-                return;
-            }
-        }
-
-        mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
-
         SortingInProgress = true;
         var teamsToCreate = 0;
         if (numberOfTeams is not null && _teamList.Count < numberOfTeams)
@@ -214,7 +189,5 @@ public class Teams : ObservableObject
 
         UsedSeed = seed ?? string.Empty;
         SortingInProgress = false;
-        mainWindowViewModel.SwitchToTeamsView();
-        mainWindow.Cursor = Cursor.Default;
     }
 }

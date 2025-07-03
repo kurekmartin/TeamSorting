@@ -23,4 +23,11 @@ public partial class MainWindow : Window
         _logger?.LogInformation("Window loaded");
         base.OnLoaded(e);
     }
+
+    public async Task<WarningDialogResult> ShowWarningDialog(WarningDialog warningDialog)
+    {
+        warningDialog.Position = Position; //fix for WindowStartupLocation="CenterOwner" not working
+        var result = await warningDialog.ShowDialog<WarningDialogResult>(this);
+        return result;
+    }
 }

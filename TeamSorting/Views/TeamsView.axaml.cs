@@ -249,32 +249,43 @@ public partial class TeamsView : UserControl
     private async void CreateNewTeamCombinationButton_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+
+        Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         await context.Teams.SortToTeams(this);
         button.IsEnabled = true;
+        Cursor = Cursor.Default;
     }
-    
+
     private async void UnlockMembersAndSortButton_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+
+        Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         context.Teams.UnlockCurrentMembers();
         await context.Teams.SortToTeams(this);
         button.IsEnabled = true;
+        Cursor = Cursor.Default;
     }
 
     private async void LockTeamsAndSortRestOfMembers_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        
+        Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         context.Teams.LockCurrentMembers();
         await context.Teams.SortToTeams(this);
         button.IsEnabled = true;
+        Cursor = Cursor.Default;
     }
 
     private async void FillTeams_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        
+        Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         List<Member> changedMembers = context.Teams.LockCurrentMembers();
         await context.Teams.SortToTeams(this);
@@ -284,6 +295,7 @@ public partial class TeamsView : UserControl
         }
 
         button.IsEnabled = true;
+        Cursor = Cursor.Default;
     }
 
     private void PinMembersButton_OnClick(object? sender, RoutedEventArgs e)

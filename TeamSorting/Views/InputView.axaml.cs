@@ -62,9 +62,36 @@ public partial class InputView : UserControl
     private async void SortToTeams_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not InputViewModel context || sender is not Button button) return;
+        var window = TopLevel.GetTopLevel(this);
+        if (window is not MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
+        {
+            return;
+        }
+
+        if (context.Teams.TeamList.Count > 0)
+        {
+            var dialog = new WarningDialog(
+                message: Lang.Resources.InputView_Sort_WarningDialog_Message,
+                confirmButtonText: Lang.Resources.InputView_Sort_WarningDialog_Delete,
+                cancelButtonText: Lang.Resources.InputView_Sort_WarningDialog_Cancel);
+
+            WarningDialogResult result = await mainWindow.ShowWarningDialog(dialog);
+
+            if (result == WarningDialogResult.Cancel)
+            {
+                return;
+            }
+        }
+
+        mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
+
         button.IsEnabled = false;
+        context.Teams.UnlockCurrentMembers();
         await context.Teams.SortToTeams(this, (int)(NumberOfTeams.Value ?? 1));
         button.IsEnabled = true;
+
+        mainWindowViewModel.SwitchToTeamsView();
+        mainWindow.Cursor = Cursor.Default;
     }
 
     private void ShowTeamsButton_OnClick(object? sender, RoutedEventArgs e)
@@ -101,7 +128,7 @@ public partial class InputView : UserControl
         {
             return;
         }
-        
+
         var index = 0;
         foreach (IRow row in members.Rows)
         {
@@ -109,9 +136,10 @@ public partial class InputView : UserControl
             {
                 break;
             }
+
             index++;
         }
-        
+
         members.RowsPresenter!.BringIntoView(index);
         members.TryGetRow(index)?.Focus();
     }
