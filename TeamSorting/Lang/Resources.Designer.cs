@@ -506,8 +506,8 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to All teams will be deleted and replaced with new ones.
-        ///Do you want to delete current teams?.
+        ///   Looks up a localized string similar to Current combination of members will be discarded.
+        ///Do you want to discard current combination of members?.
         /// </summary>
         public static string InputView_Sort_WarningDialog_Message {
             get {

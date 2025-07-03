@@ -52,8 +52,8 @@
         <value>Semínko</value>
     </data>
     <data name="InputView_Sort_WarningDialog_Message" xml:space="preserve">
-        <value>Všechny týmy budou smazány a nahrazeny novými.
-Chcete smazat stávající týmy?</value>
+        <value>Aktuální kombinace členů bude zahozena.
+Chcete zahodit aktuální kombinaci členů?</value>
     </data>
     <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
         <value>Exportovat týmy do CSV</value>

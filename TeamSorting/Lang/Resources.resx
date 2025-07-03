@@ -25,8 +25,8 @@
         <value>Remove discipline</value>
     </data>
     <data name="InputView_Sort_WarningDialog_Message" xml:space="preserve">
-        <value>All teams will be deleted and replaced with new ones.
-Do you want to delete current teams?</value>
+        <value>Current combination of members will be discarded.
+Do you want to discard current combination of members?</value>
     </data>
     <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
         <value>Export Teams to CSV</value>

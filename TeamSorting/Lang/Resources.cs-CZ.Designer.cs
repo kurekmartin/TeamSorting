@@ -496,8 +496,8 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Všechny týmy budou smazány a nahrazeny novými.
-        ///Chcete smazat stávající týmy?.
+        ///   Looks up a localized string similar to Aktuální kombinace členů bude zahozena.
+        ///Chcete zahodit aktuální kombinaci členů?.
         /// </summary>
         public static string InputView_Sort_WarningDialog_Message {
             get {
