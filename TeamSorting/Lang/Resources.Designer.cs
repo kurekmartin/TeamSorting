@@ -724,11 +724,31 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sort by name.
+        ///   Looks up a localized string similar to Current combination will be discarded and all members will be allowed to change teams.
+        ///Do you want to discard current combination?
+        ///.
         /// </summary>
-        public static string TeamsView_SortByMemberName_Label {
+        public static string TeamsView_Sorting_UnlockMembersAndSort_Warning_Message {
             get {
-                return ResourceManager.GetString("TeamsView_SortByMemberName_Label", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Sorting_UnlockMembersAndSort_Warning_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string TeamsView_Sorting_Warning_Cancel {
+            get {
+                return ResourceManager.GetString("TeamsView_Sorting_Warning_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Discard.
+        /// </summary>
+        public static string TeamsView_Sorting_Warning_Discard {
+            get {
+                return ResourceManager.GetString("TeamsView_Sorting_Warning_Discard", resourceCulture);
             }
         }
         

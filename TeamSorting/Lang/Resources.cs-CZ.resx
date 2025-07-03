@@ -73,9 +73,6 @@ Chcete zahodit aktuální kombinaci členů?</value>
     <data name="TeamsView_ShowMemberDetails_Label" xml:space="preserve">
         <value>Zobrazit detaily členů</value>
     </data>
-    <data name="TeamsView_SortByMemberName_Label" xml:space="preserve">
-        <value>Seřadit podle jména</value>
-    </data>
     <data name="TeamsView_Differences_Label" xml:space="preserve">
         <value>Rozdíly mezi týmy:</value>
     </data>
@@ -230,9 +227,6 @@ Chcete pokračovat?</value>
     </data>
     <data name="DisciplineInfo_Priority" xml:space="preserve">
         <value>Priorita</value>
-    </data>
-    <data name="TeamsView_SortRestOfMembers_Button" xml:space="preserve">
-        <value>Rozřadit zbývající členy</value>
     </data>
     <data name="TeamsView_MemberCard_UnpinMember" xml:space="preserve">
         <value>Povolit změnu týmu</value>

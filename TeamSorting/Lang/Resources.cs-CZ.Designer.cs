@@ -714,24 +714,6 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Seřadit podle jména.
-        /// </summary>
-        public static string TeamsView_SortByMemberName_Label {
-            get {
-                return ResourceManager.GetString("TeamsView_SortByMemberName_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Rozřadit zbývající členy.
-        /// </summary>
-        public static string TeamsView_SortRestOfMembers_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_SortRestOfMembers_Button", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Tým je platný: {0}.
         /// </summary>
         public static string TeamsView_TeamIsValid_ToolTip {

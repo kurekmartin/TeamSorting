@@ -73,9 +73,6 @@ Do you want to discard current combination of members?</value>
     <data name="TeamsView_ShowMemberDetails_Label" xml:space="preserve">
         <value>Show member details</value>
     </data>
-    <data name="TeamsView_SortByMemberName_Label" xml:space="preserve">
-        <value>Sort by name</value>
-    </data>
     <data name="TeamsView_Differences_Label" xml:space="preserve">
         <value>Team differences:</value>
     </data>
@@ -258,5 +255,16 @@ Do you want to continue?</value>
     </data>
     <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
         <value>Allow team changing and sort</value>
+    </data>
+    <data name="TeamsView_Sorting_UnlockMembersAndSort_Warning_Message" xml:space="preserve">
+        <value>Current combination will be discarded and all members will be allowed to change teams.
+Do you want to discard current combination?
+</value>
+    </data>
+    <data name="TeamsView_Sorting_Warning_Discard" xml:space="preserve">
+        <value>Discard</value>
+    </data>
+    <data name="TeamsView_Sorting_Warning_Cancel" xml:space="preserve">
+        <value>Cancel</value>
     </data>
 </root>
