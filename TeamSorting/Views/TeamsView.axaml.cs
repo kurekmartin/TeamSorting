@@ -262,4 +262,16 @@ public partial class TeamsView : UserControl
         await context.Teams.SortToTeams(this);
         button.IsEnabled = true;
     }
+
+    private void PinMembersButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel context) return;
+        context.Teams.LockCurrentMembers();
+    }
+
+    private void UnpinMembersButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel context) return;
+        context.Teams.UnlockCurrentMembers();
+    }
 }

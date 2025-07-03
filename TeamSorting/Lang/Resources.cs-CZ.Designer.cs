@@ -551,6 +551,33 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Členové.
+        /// </summary>
+        public static string TeamsView_ControlsSection_Members {
+            get {
+                return ResourceManager.GetString("TeamsView_ControlsSection_Members", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Řazení.
+        /// </summary>
+        public static string TeamsView_ControlsSection_Sorting {
+            get {
+                return ResourceManager.GetString("TeamsView_ControlsSection_Sorting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Týmy.
+        /// </summary>
+        public static string TeamsView_ControlsSection_Teams {
+            get {
+                return ResourceManager.GetString("TeamsView_ControlsSection_Teams", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Vytvořit novou kombinaci.
         /// </summary>
         public static string TeamsView_CreateNewCombination_Button {
@@ -642,6 +669,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Zakázat změnu týmu.
+        /// </summary>
+        public static string TeamsView_PinMembers_Label {
+            get {
+                return ResourceManager.GetString("TeamsView_PinMembers_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Semínko.
         /// </summary>
         public static string TeamsView_Seed_Label {
@@ -665,15 +701,6 @@ namespace TeamSorting.Lang {
         public static string TeamsView_SortByMemberName_Label {
             get {
                 return ResourceManager.GetString("TeamsView_SortByMemberName_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Řazení.
-        /// </summary>
-        public static string TeamsView_Sorting_Label {
-            get {
-                return ResourceManager.GetString("TeamsView_Sorting_Label", resourceCulture);
             }
         }
         

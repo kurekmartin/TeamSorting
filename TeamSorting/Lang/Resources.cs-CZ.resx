@@ -169,7 +169,7 @@ Očekávaný formát je {0}</value>
     <data name="CsvErrorDialog_Grid_Error_Header" xml:space="preserve">
         <value>Chyba</value>
     </data>
-    <data name="TeamsView_Sorting_Label" xml:space="preserve">
+    <data name="TeamsView_ControlsSection_Sorting" xml:space="preserve">
         <value>Řazení</value>
     </data>
     <data name="TeamsView_CsvExport_Success" xml:space="preserve">
@@ -239,5 +239,14 @@ Chcete pokračovat?</value>
     </data>
     <data name="TeamsView_MemberCard_PinMember" xml:space="preserve">
         <value>Zakázat změnu týmu</value>
+    </data>
+    <data name="TeamsView_PinMembers_Label" xml:space="preserve">
+        <value>Zakázat změnu týmu</value>
+    </data>
+    <data name="TeamsView_ControlsSection_Members" xml:space="preserve">
+        <value>Členové</value>
+    </data>
+    <data name="TeamsView_ControlsSection_Teams" xml:space="preserve">
+        <value>Týmy</value>
     </data>
 </root>

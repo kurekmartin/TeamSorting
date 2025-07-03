@@ -170,7 +170,7 @@ Expected format is {0}</value>
     <data name="CsvErrorDialog_Grid_Error_Header" xml:space="preserve">
         <value>Error</value>
     </data>
-    <data name="TeamsView_Sorting_Label" xml:space="preserve">
+    <data name="TeamsView_ControlsSection_Sorting" xml:space="preserve">
         <value>Sorting</value>
     </data>
     <data name="TeamsView_CsvExport_Success" xml:space="preserve">
@@ -243,5 +243,14 @@ Do you want to continue?</value>
     </data>
     <data name="TeamsView_MemberCard_UnpinMember" xml:space="preserve">
         <value>Allow changing team</value>
+    </data>
+    <data name="TeamsView_PinMembers_Label" xml:space="preserve">
+        <value>Disallow changing team</value>
+    </data>
+    <data name="TeamsView_ControlsSection_Members" xml:space="preserve">
+        <value>Members</value>
+    </data>
+    <data name="TeamsView_ControlsSection_Teams" xml:space="preserve">
+        <value>Teams</value>
     </data>
 </root>

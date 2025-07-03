@@ -222,4 +222,12 @@ public class Team : ObservableObject
             member.AllowTeamChange = false;
         }
     }
+    
+    public void UnlockMembers()
+    {
+        foreach (Member member in _members)
+        {
+            member.AllowTeamChange = true;
+        }
+    }
 }

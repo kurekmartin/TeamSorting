@@ -50,37 +50,15 @@
                 Background="White"
                 HorizontalAlignment="Left">
             <DockPanel Margin="5,0">
-                <Button DockPanel.Dock="Top"
-                        Click="AddTeamButton_OnClick"
-                        Content="{x:Static lang:Resources.TeamsView_AddTeam_Button}" />
-                <Button DockPanel.Dock="Top"
-                        Click="CreateNewTeamCombinationButton_OnClick"
-                        Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}" />
-                <Button DockPanel.Dock="Top"
-                        Click="SortRestOfMembers_OnClick"
-                        Content="{x:Static lang:Resources.TeamsView_SortRestOfMembers_Button}" />
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,0,0,2"
-                            DockPanel.Dock="Top">
-                    <Button i:Attached.Icon="mdi-eye"
-                            Click="ShowMemberDetailsButton_OnClick"
-                            Background="Transparent" />
-                    <Button i:Attached.Icon="mdi-eye-off"
-                            Click="HideMemberDetailsButton_OnClick"
-                            Background="Transparent" />
-                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ShowMemberDetails_Label}"
-                               FontWeight="Bold"
-                               Margin="0,0,5,0"
-                               VerticalAlignment="Center" />
-                </StackPanel>
                 <StackPanel Orientation="Vertical"
-                            Margin="0,0,0,2"
-                            DockPanel.Dock="Top">
-                    <TextBlock Text="{x:Static lang:Resources.TeamsView_Sorting_Label}"
-                               FontWeight="Bold"
-                               Margin="0,0,5,0"
-                               VerticalAlignment="Center" />
-
+                            DockPanel.Dock="Top"
+                            Margin="0,0,0,8"
+                            Spacing="2">
+                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Teams}"
+                               FontWeight="Bold" />
+                    <Button DockPanel.Dock="Top"
+                            Click="AddTeamButton_OnClick"
+                            Content="{x:Static lang:Resources.TeamsView_AddTeam_Button}" />
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,0,0,2"
                                 DockPanel.Dock="Top"
@@ -96,7 +74,6 @@
                                                   Icon="mdi-sort-descending"
                                                   Size="27"
                                                   IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
-
                         <ComboBox x:Name="SortCriteriaComboBox"
                                   SelectionChanged="SortCriteriaComboBox_OnSelectionChanged">
                             <ComboBox.ItemTemplate>
@@ -109,7 +86,52 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
                     </StackPanel>
-
+                </StackPanel>
+                
+                <StackPanel Orientation="Vertical"
+                            DockPanel.Dock="Top"
+                            Margin="0,0,0,8"
+                            Spacing="2">
+                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Sorting}"
+                               FontWeight="Bold" />
+                    <Button DockPanel.Dock="Top"
+                            Click="CreateNewTeamCombinationButton_OnClick"
+                            Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}" />
+                    <Button DockPanel.Dock="Top"
+                            Click="SortRestOfMembers_OnClick"
+                            Content="{x:Static lang:Resources.TeamsView_SortRestOfMembers_Button}" />
+                </StackPanel>
+                
+                <StackPanel Orientation="Vertical"
+                            DockPanel.Dock="Top"
+                            Margin="0,0,0,8"
+                            Spacing="2">
+                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Members}"
+                               FontWeight="Bold" />
+                    <StackPanel Orientation="Horizontal">
+                        <Button i:Attached.Icon="mdi-eye"
+                                Click="ShowMemberDetailsButton_OnClick"
+                                Background="Transparent" />
+                        <Button i:Attached.Icon="mdi-eye-off"
+                                Click="HideMemberDetailsButton_OnClick"
+                                Background="Transparent" />
+                        <TextBlock Text="{x:Static lang:Resources.TeamsView_ShowMemberDetails_Label}"
+                                   Margin="0,0,5,0"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,0,0,2"
+                                DockPanel.Dock="Top">
+                        <Button i:Attached.Icon="mdi-pin"
+                                Click="PinMembersButton_OnClick"
+                                Background="Transparent" />
+                        <Button i:Attached.Icon="mdi-pin-off"
+                                Click="UnpinMembersButton_OnClick"
+                                Background="Transparent" />
+                        <TextBlock Text="{x:Static lang:Resources.TeamsView_PinMembers_Label}"
+                                   Margin="0,0,5,0"
+                                   VerticalAlignment="Center" />
+                    </StackPanel>
                 </StackPanel>
 
                 <StackPanel Orientation="Vertical"
@@ -140,7 +162,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                
+
                 <StackPanel Orientation="Vertical"
                             DockPanel.Dock="Top"
                             Margin="0,8,0,0">
@@ -169,7 +191,7 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                 </StackPanel>
-                
+
                 <StackPanel DockPanel.Dock="Bottom"
                             Orientation="Vertical"
                             HorizontalAlignment="Left"

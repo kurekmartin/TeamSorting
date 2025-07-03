@@ -153,6 +153,14 @@ public class Teams : ObservableObject
         }
     }
 
+    public void UnlockCurrentMembers()
+    {
+        foreach (Team team in _teamList)
+        {
+            team.UnlockMembers();
+        }
+    }
+
     //TODO: move sorting to separate class
     public async Task SortToTeams(UserControl visual, int? numberOfTeams = null)
     {
