@@ -267,4 +267,7 @@ Chcete pokračovat?</value>
         <value>Zachovat aktuální členy v týmech a rozdělit zbývající členy.
 </value>
     </data>
+    <data name="Data_ValidateCsvHeader_MissingHeader" xml:space="preserve">
+        <value>Chybí hlavička souboru</value>
+    </data>
 </root>

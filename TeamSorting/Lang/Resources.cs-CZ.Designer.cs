@@ -261,6 +261,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chybí hlavička souboru.
+        /// </summary>
+        public static string Data_ValidateCsvHeader_MissingHeader {
+            get {
+                return ResourceManager.GetString("Data_ValidateCsvHeader_MissingHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Priorita.
         /// </summary>
         public static string DisciplineInfo_Priority {
