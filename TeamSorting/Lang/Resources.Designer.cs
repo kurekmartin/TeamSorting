@@ -742,6 +742,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow team changing and sort.
+        /// </summary>
+        public static string TeamsView_UnlockMembersAndSort_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string WarningDialog_Cancel_Button {

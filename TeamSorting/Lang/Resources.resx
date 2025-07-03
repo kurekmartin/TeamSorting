@@ -256,4 +256,7 @@ Do you want to continue?</value>
     <data name="TeamsView_LockTeamsAndSortRestOfMembers_Button" xml:space="preserve">
         <value>Keep teams and sort</value>
     </data>
+    <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
+        <value>Allow team changing and sort</value>
+    </data>
 </root>

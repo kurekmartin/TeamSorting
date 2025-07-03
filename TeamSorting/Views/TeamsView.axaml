@@ -98,6 +98,9 @@
                             Click="CreateNewTeamCombinationButton_OnClick"
                             Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}" />
                     <Button DockPanel.Dock="Top"
+                            Click="UnlockMembersAndSortButton_OnClick"
+                            Content="{x:Static lang:Resources.TeamsView_UnlockMembersAndSort_Button}" />
+                    <Button DockPanel.Dock="Top"
                             Click="LockTeamsAndSortRestOfMembers_OnClick"
                             Content="{x:Static lang:Resources.TeamsView_LockTeamsAndSortRestOfMembers_Button}" />
                     <Button DockPanel.Dock="Top"

@@ -255,4 +255,7 @@ Chcete pokračovat?</value>
     <data name="TeamsView_LockTeamsAndSortRestOfMembers_Button" xml:space="preserve">
         <value>Zachovat týmy a rozřadit</value>
     </data>
+    <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
+        <value>Povolit změny týmu a rozřadit</value>
+    </data>
 </root>
