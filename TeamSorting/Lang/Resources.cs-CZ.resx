@@ -249,4 +249,10 @@ Chcete pokračovat?</value>
     <data name="TeamsView_ControlsSection_Teams" xml:space="preserve">
         <value>Týmy</value>
     </data>
+    <data name="TeamsView_FillTeams_Button" xml:space="preserve">
+        <value>Rozdělit zbývající členy</value>
+    </data>
+    <data name="TeamsView_LockTeamsAndSortRestOfMembers_Button" xml:space="preserve">
+        <value>Zachovat týmy a rozřadit</value>
+    </data>
 </root>

@@ -642,6 +642,24 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rozdělit zbývající členy.
+        /// </summary>
+        public static string TeamsView_FillTeams_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_FillTeams_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zachovat týmy a rozřadit.
+        /// </summary>
+        public static string TeamsView_LockTeamsAndSortRestOfMembers_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Zakázat změnu týmu.
         /// </summary>
         public static string TeamsView_MemberCard_PinMember {

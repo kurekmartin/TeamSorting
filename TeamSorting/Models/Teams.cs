@@ -145,20 +145,26 @@ public class Teams : ObservableObject
         MembersWithoutTeam.SortCriteria = sortCriteria;
     }
 
-    public void LockCurrentMembers()
+    public List<Member> LockCurrentMembers()
     {
+        List<Member> changedMembers = [];
         foreach (Team team in _teamList)
         {
-            team.LockMembers();
+            changedMembers.AddRange(team.LockMembers());
         }
+
+        return changedMembers;
     }
 
-    public void UnlockCurrentMembers()
+    public List<Member> UnlockCurrentMembers()
     {
+        List<Member> changedMembers = [];
         foreach (Team team in _teamList)
         {
-            team.UnlockMembers();
+            changedMembers.AddRange(team.UnlockMembers());
         }
+
+        return changedMembers;
     }
 
     //TODO: move sorting to separate class

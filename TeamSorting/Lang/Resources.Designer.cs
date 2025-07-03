@@ -652,6 +652,24 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sort rest of members.
+        /// </summary>
+        public static string TeamsView_FillTeams_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_FillTeams_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep teams and sort.
+        /// </summary>
+        public static string TeamsView_LockTeamsAndSortRestOfMembers_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disallow changing team.
         /// </summary>
         public static string TeamsView_MemberCard_PinMember {
@@ -711,15 +729,6 @@ namespace TeamSorting.Lang {
         public static string TeamsView_SortByMemberName_Label {
             get {
                 return ResourceManager.GetString("TeamsView_SortByMemberName_Label", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sort rest of members.
-        /// </summary>
-        public static string TeamsView_SortRestOfMembers_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_SortRestOfMembers_Button", resourceCulture);
             }
         }
         

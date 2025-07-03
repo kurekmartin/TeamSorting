@@ -235,9 +235,6 @@ Do you want to continue?</value>
     <data name="Data_ValidateCsvHeader_MissingHeader" xml:space="preserve">
         <value>Header is missing</value>
     </data>
-    <data name="TeamsView_SortRestOfMembers_Button" xml:space="preserve">
-        <value>Sort rest of members</value>
-    </data>
     <data name="TeamsView_MemberCard_PinMember" xml:space="preserve">
         <value>Disallow changing team</value>
     </data>
@@ -252,5 +249,11 @@ Do you want to continue?</value>
     </data>
     <data name="TeamsView_ControlsSection_Teams" xml:space="preserve">
         <value>Teams</value>
+    </data>
+    <data name="TeamsView_FillTeams_Button" xml:space="preserve">
+        <value>Sort rest of members</value>
+    </data>
+    <data name="TeamsView_LockTeamsAndSortRestOfMembers_Button" xml:space="preserve">
+        <value>Keep teams and sort</value>
     </data>
 </root>

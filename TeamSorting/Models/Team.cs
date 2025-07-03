@@ -215,19 +215,29 @@ public class Team : ObservableObject
         return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m => m.Name)).ToList());
     }
 
-    public void LockMembers()
+    public List<Member> LockMembers()
     {
+        List<Member> changedMembers = [];
         foreach (Member member in _members)
         {
+            if (!member.AllowTeamChange) continue;
             member.AllowTeamChange = false;
+            changedMembers.Add(member);
         }
+
+        return changedMembers;
     }
-    
-    public void UnlockMembers()
+
+    public List<Member> UnlockMembers()
     {
+        List<Member> changedMembers = [];
         foreach (Member member in _members)
         {
+            if (member.AllowTeamChange) continue;
             member.AllowTeamChange = true;
+            changedMembers.Add(member);
         }
+
+        return changedMembers;
     }
 }

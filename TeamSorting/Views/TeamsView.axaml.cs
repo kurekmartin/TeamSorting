@@ -70,8 +70,8 @@ public partial class TeamsView : UserControl
 
     private async void MemberCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not Control control 
-            || DataContext is not TeamsViewModel teamsViewModel 
+        if (sender is not Control control
+            || DataContext is not TeamsViewModel teamsViewModel
             || teamsViewModel.Teams.SortingInProgress)
         {
             return;
@@ -254,12 +254,26 @@ public partial class TeamsView : UserControl
         button.IsEnabled = true;
     }
 
-    private async void SortRestOfMembers_OnClick(object? sender, RoutedEventArgs e)
+    private async void LockTeamsAndSortRestOfMembers_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button) return;
         button.IsEnabled = false;
         context.Teams.LockCurrentMembers();
         await context.Teams.SortToTeams(this);
+        button.IsEnabled = true;
+    }
+
+    private async void FillTeams_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        button.IsEnabled = false;
+        List<Member> changedMembers = context.Teams.LockCurrentMembers();
+        await context.Teams.SortToTeams(this);
+        foreach (Member changedMember in changedMembers)
+        {
+            changedMember.AllowTeamChange = true;
+        }
+
         button.IsEnabled = true;
     }
 
