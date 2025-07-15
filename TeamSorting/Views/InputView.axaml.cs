@@ -87,7 +87,7 @@ public partial class InputView : UserControl
 
         button.IsEnabled = false;
         context.Teams.UnlockCurrentMembers();
-        await context.Teams.SortToTeams(this, (int)(NumberOfTeams.Value ?? 1));
+        await context.Teams.SortToTeams((int)(NumberOfTeams.Value ?? 1));
         button.IsEnabled = true;
 
         mainWindowViewModel.SwitchToTeamsView();

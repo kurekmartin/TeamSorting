@@ -1,15 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using Avalonia.Controls;
-using Avalonia.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using TeamSorting.Enums;
 using TeamSorting.Lang;
 using TeamSorting.Sorting;
-using TeamSorting.ViewModels;
-using TeamSorting.Views;
 
 namespace TeamSorting.Models;
 
@@ -168,7 +164,7 @@ public class Teams : ObservableObject
     }
 
     //TODO: move sorting to separate class
-    public async Task SortToTeams(UserControl visual, int? numberOfTeams = null)
+    public async Task SortToTeams(int? numberOfTeams = null)
     {
         SortingInProgress = true;
         var teamsToCreate = 0;

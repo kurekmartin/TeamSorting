@@ -252,7 +252,7 @@ public partial class TeamsView : UserControl
 
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
-        await context.Teams.SortToTeams(this);
+        await context.Teams.SortToTeams();
         button.IsEnabled = true;
         Cursor = Cursor.Default;
     }
@@ -264,7 +264,7 @@ public partial class TeamsView : UserControl
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         context.Teams.UnlockCurrentMembers();
-        await context.Teams.SortToTeams(this);
+        await context.Teams.SortToTeams();
         button.IsEnabled = true;
         Cursor = Cursor.Default;
     }
@@ -276,7 +276,7 @@ public partial class TeamsView : UserControl
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         context.Teams.LockCurrentMembers();
-        await context.Teams.SortToTeams(this);
+        await context.Teams.SortToTeams();
         button.IsEnabled = true;
         Cursor = Cursor.Default;
     }
@@ -288,7 +288,7 @@ public partial class TeamsView : UserControl
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         List<Member> changedMembers = context.Teams.LockCurrentMembers();
-        await context.Teams.SortToTeams(this);
+        await context.Teams.SortToTeams();
         foreach (Member changedMember in changedMembers)
         {
             changedMember.AllowTeamChange = true;
