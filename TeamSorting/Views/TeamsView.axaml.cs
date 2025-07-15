@@ -248,7 +248,7 @@ public partial class TeamsView : UserControl
 
     private async void CreateNewTeamCombinationButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
 
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
@@ -259,7 +259,7 @@ public partial class TeamsView : UserControl
 
     private async void UnlockMembersAndSortButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
 
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
@@ -271,8 +271,8 @@ public partial class TeamsView : UserControl
 
     private async void LockTeamsAndSortRestOfMembers_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
-        
+        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
+
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         context.Teams.LockCurrentMembers();
@@ -283,8 +283,8 @@ public partial class TeamsView : UserControl
 
     private async void FillTeams_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
-        
+        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
+
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         List<Member> changedMembers = context.Teams.LockCurrentMembers();
