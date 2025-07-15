@@ -30,7 +30,7 @@ public class Team : ObservableObject
             case NotifyCollectionChangedAction.Reset:
                 OnPropertyChanged(nameof(IsValid));
                 OnPropertyChanged(nameof(AvgScores));
-                OnPropertyChanged(nameof(SortedMembers));
+                SortMembers();
                 break;
         }
     }
@@ -50,77 +50,83 @@ public class Team : ObservableObject
         set
         {
             SetProperty(ref _memberSortCriteria, value);
-            OnPropertyChanged(nameof(SortedMembers));
+            SortMembers();
         }
     }
 
-    public List<Member> SortedMembers
+    private void SortMembers()
     {
-        get
+        List<Member> sortedMembers;
+        if (SortCriteria.SortOrder == SortOrder.Asc)
         {
-            List<Member> sortedMembers;
-            if (SortCriteria.SortOrder == SortOrder.Asc)
-            {
-                if (SortCriteria.Discipline is null)
-                {
-                    sortedMembers = Members.OrderBy(member => member.Name).ToList();
-                    LogMembersOrder(sortedMembers);
-                    return sortedMembers;
-                }
-
-                sortedMembers = Members.OrderBy(member =>
-                                           member.Records
-                                                 .First(record =>
-                                                     record.Key == SortCriteria.Discipline.Id)
-                                                 .Value.DecimalValue)
-                                       .ToList();
-                LogMembersOrder(sortedMembers);
-                return sortedMembers;
-            }
-
             if (SortCriteria.Discipline is null)
             {
-                sortedMembers = Members.OrderByDescending(member => member.Name).ToList();
-                LogMembersOrder(sortedMembers);
-                return sortedMembers;
+                sortedMembers = Members.OrderBy(member => member.Name).ToList();
+                MoveMembersByList(sortedMembers);
+                return;
             }
 
-            sortedMembers = Members.OrderByDescending(member =>
+            sortedMembers = Members.OrderBy(member =>
                                        member.Records
                                              .First(record =>
                                                  record.Key == SortCriteria.Discipline.Id)
                                              .Value.DecimalValue)
                                    .ToList();
-            LogMembersOrder(sortedMembers);
-            return sortedMembers;
+            MoveMembersByList(sortedMembers);
+            return;
+        }
+
+        if (SortCriteria.Discipline is null)
+        {
+            sortedMembers = Members.OrderByDescending(member => member.Name).ToList();
+            MoveMembersByList(sortedMembers);
+            return;
+        }
+
+        sortedMembers = Members.OrderByDescending(member =>
+                                   member.Records
+                                         .First(record =>
+                                             record.Key == SortCriteria.Discipline.Id)
+                                         .Value.DecimalValue)
+                               .ToList();
+        MoveMembersByList(sortedMembers);
+    }
+
+    private void MoveMembersByList(List<Member> members)
+    {
+        foreach (Member member in members)
+        {
+            int oldIndex = _members.IndexOf(member);
+            if (oldIndex == -1) continue;
+            int newIndex = members.IndexOf(member);
+            if (oldIndex == newIndex) continue;
+            _members.Move(oldIndex, newIndex);
         }
     }
 
-    private void LogMembersOrder(List<Member> sortedMembers)
+    private int GetMemberSortIndex(Member member)
     {
-#if DEBUG
-        if (SortCriteria.Discipline is not null)
+        var i = 0;
+        for (; i < _members.Count; i++)
         {
-            _logger?.LogDebug("Sorted members for {TeamName} by discipline {DisciplineName}", Name, SortCriteria.Discipline.Name);
-        }
-        else
-        {
-            _logger?.LogDebug("Sorted members for {TeamName} by name", Name);
-        }
-
-        foreach (var member in sortedMembers)
-        {
-            if (SortCriteria.Discipline is not null)
+            int compareResult;
+            if (SortCriteria.Discipline is null)
             {
-                var value = member.Records.First(record => record.Key == SortCriteria.Discipline.Id);
-                _logger?.LogDebug("{MemberName}: {ValueValue}", member.Name, value.Value.Value);
+                compareResult = string.CompareOrdinal(member.Name, _members[i].Name);
             }
             else
             {
-                _logger?.LogDebug("{MemberName}", member.Name);
+                compareResult = member.Records[SortCriteria.Discipline.Id].DecimalValue.CompareTo(_members[i].Records[SortCriteria.Discipline.Id].DecimalValue);
+            }
+
+            if (SortCriteria.SortOrder == SortOrder.Asc && compareResult < 0
+                || SortCriteria.SortOrder == SortOrder.Desc && compareResult > 0)
+            {
+                return i;
             }
         }
-#endif
+
+        return i;
     }
 
     public bool DisableValidation => TeamType == TeamType.UnsortedTeam;
@@ -133,7 +139,6 @@ public class Team : ObservableObject
 
     public void AddMembers(IEnumerable<Member> members)
     {
-        //TODO pause collection changed events while adding
         foreach (Member member in members)
         {
             AddMember(member);
@@ -150,7 +155,8 @@ public class Team : ObservableObject
             member.AllowTeamChange = true;
         }
 
-        _members.Add(member);
+        int index = GetMemberSortIndex(member);
+        _members.Insert(index, member);
     }
 
 
