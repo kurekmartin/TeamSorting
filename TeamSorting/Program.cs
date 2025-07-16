@@ -14,7 +14,7 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        const string outputTemplate = "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+        const string outputTemplate = "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
         Log.Logger = new LoggerConfiguration()
                      .MinimumLevel.Debug()
                      .WriteTo.Console(outputTemplate: outputTemplate)
@@ -24,6 +24,7 @@ sealed class Program
                          retainedFileCountLimit: 1,
                          shared: true,
                          outputTemplate: outputTemplate)
+                     .Enrich.WithProcessId()
                      .CreateLogger();
 
         Log.Information("Application starting");
