@@ -1,9 +1,9 @@
 ﻿### New
-- add ability to sort only part of teams
-  - you can select which members are able to change teams
-  - add predefined actions to easily sort part of the team without manually pinning members to the team
-- add logging to file for easier troubleshooting
+- none
 
 ### Changed
-- optimized sorting of members inside teams
-- rewrote logic for data handling for easier maintenance
+- improved logging from multiple running instances
+
+### Fixed
+- crash when using partial sorting and there are no members left to sort
+- crash when loading CSV and existing list of members was not empty
