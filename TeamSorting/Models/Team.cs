@@ -170,7 +170,7 @@ public class Team : ObservableObject
     public void RemoveAllMembers()
     {
         _logger?.LogInformation("Removing all members from team {teamId}", Id);
-        foreach (Member member in _members)
+        foreach (Member member in _members.ToList())
         {
             RemoveMember(member);
         }
