@@ -20,6 +20,13 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
 
     public string Sort(List<Member> members, List<Team> teams, ProgressValues progress, string? seed = null)
     {
+        List<Member> membersToSort = members.Where(member => member.AllowTeamChange).ToList();
+        if (membersToSort.Count == 0)
+        {
+            logger.LogInformation("No members to sort");
+            return seed ?? string.Empty;
+        }
+
         var stopwatch = Stopwatch.StartNew();
         logger.LogInformation("Sorting using evolutionary algorithm");
         logger.LogInformation("Sorting settings:" +
@@ -38,7 +45,6 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         progress.IsIndeterminate = true;
         progress.Text = Lang.Resources.Sorting_ProgressText;
 
-        List<Member> membersToSort = members.Where(member => member.AllowTeamChange).ToList();
         int membersCount = members.Count;
 
         if (string.IsNullOrWhiteSpace(seed))
