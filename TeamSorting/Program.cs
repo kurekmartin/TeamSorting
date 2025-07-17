@@ -15,10 +15,11 @@ sealed class Program
     public static void Main(string[] args)
     {
         const string outputTemplate = "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
+        string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log", "TeamSorting.log");
         Log.Logger = new LoggerConfiguration()
                      .MinimumLevel.Debug()
                      .WriteTo.Console(outputTemplate: outputTemplate)
-                     .WriteTo.File(path: @"log\TeamSorting.log",
+                     .WriteTo.File(path: logPath,
                          restrictedToMinimumLevel: LogEventLevel.Information,
                          rollingInterval: RollingInterval.Day,
                          retainedFileCountLimit: 1,
@@ -28,6 +29,7 @@ sealed class Program
                      .CreateLogger();
 
         Log.Information("Application starting");
+        Log.Debug("Writing log to folder {path}", Path.GetDirectoryName(logPath));
         Log.Information("Version: {versionNumber}", System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "unknown");
         Log.Information("System: {architecture} - {os}",
             System.Runtime.InteropServices.RuntimeInformation.OSArchitecture,
