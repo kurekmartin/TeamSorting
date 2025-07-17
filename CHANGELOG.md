@@ -2,8 +2,7 @@
 - none
 
 ### Changed
-- improved logging from multiple running instances
+- none
 
 ### Fixed
-- crash when using partial sorting and there are no members left to sort
-- crash when loading CSV and existing list of members was not empty
+- log file not being created on some linux distributions
