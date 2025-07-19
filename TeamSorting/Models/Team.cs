@@ -25,6 +25,9 @@ public class Team : ObservableObject
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
+                OnPropertyChanged(nameof(IsValid));
+                OnPropertyChanged(nameof(AvgScores));
+                break;
             case NotifyCollectionChangedAction.Remove:
             case NotifyCollectionChangedAction.Replace:
             case NotifyCollectionChangedAction.Reset:
