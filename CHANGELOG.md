@@ -5,4 +5,4 @@
 - none
 
 ### Fixed
-- log file not being created on some linux distributions
+- occasional crash when adding a new member on input view
