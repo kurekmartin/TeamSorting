@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <!-- Add Resources Here -->
+    <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
+    <SolidColorBrush x:Key="TextControlBorderBrush">LightGray</SolidColorBrush> 
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver">DarkGray</SolidColorBrush> 
+    <SolidColorBrush x:Key="ComboBoxBorderBrush">LightGray</SolidColorBrush> 
+    <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">DarkGray</SolidColorBrush> 
+</ResourceDictionary>
