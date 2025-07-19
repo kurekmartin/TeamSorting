@@ -13,6 +13,9 @@
         <FluentTheme />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
         <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
+        
+        <StyleInclude Source="Controls/Styles/TreeDataGridStyles.axaml"/>
+        
         <StyleInclude Source="Controls/MemberCard.axaml"/>
         <StyleInclude Source="Controls/IconRadioButton.axaml"/>
         <StyleInclude Source="Controls/TimeSpanPicker.axaml"/>
