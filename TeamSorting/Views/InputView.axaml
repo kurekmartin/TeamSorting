@@ -177,7 +177,8 @@
                 <TreeDataGrid
                     Name="Members"
                     Source="{Binding TreeDataGridSource}"
-                    AutoDragDropRows="False">
+                    AutoDragDropRows="False"
+                    SelectionChanging="Members_OnSelectionChanging">
                     <TreeDataGrid.Resources>
                         <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
                             <controls:ValidationTextBlock ValidatedText="{Binding Name}"

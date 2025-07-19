@@ -224,4 +224,9 @@ public partial class InputView : UserControl
             context.ClearData();
         }
     }
+
+    private void Members_OnSelectionChanging(object? sender, CancelEventArgs e)
+    {
+        e.Cancel = true;
+    }
 }
