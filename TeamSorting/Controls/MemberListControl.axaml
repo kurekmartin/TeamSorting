@@ -11,8 +11,11 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <StackPanel>
-                    <Button i:Attached.Icon="mdi-pencil-outline">
+                <Grid ColumnDefinitions="Auto, *">
+                    <Button Grid.Column="0"
+                            i:Attached.Icon="mdi-pencil-outline"
+                            Background="Transparent"
+                            Padding="5">
                         <Button.Flyout>
                             <Flyout Placement="RightEdgeAlignedTop">
                                 <controls:MemberListSelection
@@ -22,8 +25,9 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <ItemsControl Name="MemberList"
-                        ItemsSource="{Binding SelectedMembersSorted, RelativeSource={RelativeSource TemplatedParent}}">
+                    <ItemsControl Grid.Column="1"
+                                  Name="MemberList"
+                                  ItemsSource="{Binding SelectedMembersSorted, RelativeSource={RelativeSource TemplatedParent}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />
@@ -34,17 +38,19 @@
                                 <DataTemplate.DataType>
                                     <x:Type TypeName="models:Member"></x:Type>
                                 </DataTemplate.DataType>
-                                <Border Padding="2"
+                                <Border Padding="4"
                                         BorderThickness="1"
-                                        BorderBrush="Black"
-                                        CornerRadius="5"
+                                        BorderBrush="LightGray"
+                                        CornerRadius="8"
                                         Margin="3">
                                     <StackPanel Orientation="Horizontal">
-                                        <Button Command="{Binding RemoveMember, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:MemberListControl}}"
-                                                CommandParameter="{Binding .}"
-                                                i:Attached.Icon="mdi-close"
-                                                Padding="2"
-                                                Margin="0,0,3,0"/>
+                                        <Button
+                                            Command="{Binding RemoveMember, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:MemberListControl}}"
+                                            CommandParameter="{Binding .}"
+                                            i:Attached.Icon="mdi-close"
+                                            Padding="2"
+                                            Margin="0,0,3,0" 
+                                            Background="Transparent"/>
                                         <TextBlock Text="{Binding Name}"
                                                    VerticalAlignment="Center" />
                                     </StackPanel>
@@ -52,7 +58,7 @@
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
-                </StackPanel>
+                </Grid>
             </ControlTemplate>
         </Setter>
     </Style>
