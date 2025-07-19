@@ -66,7 +66,7 @@
         <Border Grid.Row="0"
                 DockPanel.Dock="Top"
                 Padding="8"
-                BoxShadow="0 0 8 0 LightGray">
+                BoxShadow="0 0 8 0 Gray">
             <DockPanel>
                 <DockPanel>
                     <StackPanel DockPanel.Dock="Top"
@@ -170,7 +170,7 @@
                 Margin="8"
                 BorderThickness="0"
                 CornerRadius="8"
-                BoxShadow="0 0 8 0 LightGray">
+                BoxShadow="0 0 8 0 Gray">
             <Border BorderThickness="0"
                     ClipToBounds="True"
                     CornerRadius="{Binding $parent[Border].CornerRadius}">
@@ -182,7 +182,7 @@
                         <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
                             <controls:ValidationTextBlock ValidatedText="{Binding Name}"
                                                           VerticalAlignment="Center"
-                                                          Margin="4,2">
+                                                          Margin="4,8">
                             </controls:ValidationTextBlock>
                         </DataTemplate>
                         <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
@@ -191,7 +191,9 @@
                         <DataTemplate x:Key="RemoveMemberCell">
                             <Button Click="RemoveMemberButton_OnClick"
                                     ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"
-                                    i:Attached.Icon="mdi-close" />
+                                    i:Attached.Icon="mdi-close"
+                                    Background="Transparent"
+                                    Padding="5" />
                         </DataTemplate>
                         <DataTemplate x:Key="WithCell" DataType="models:Member">
                             <controls:MemberListControl

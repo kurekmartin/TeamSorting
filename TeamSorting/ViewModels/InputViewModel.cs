@@ -237,31 +237,83 @@ public class InputViewModel : ViewModelBase
         TreeDataGridSource.Columns.Remove(disciplineColumn);
     }
 
-    private DockPanel CreateDisciplineColumnHeader(DisciplineInfo discipline)
+    private StackPanel CreateDisciplineColumnHeader(DisciplineInfo discipline)
     {
-        var panel = new DockPanel
+        var panel = new StackPanel
         {
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            VerticalAlignment = VerticalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Orientation = Orientation.Horizontal,
+            Spacing = 4,
             Tag = discipline.Id
         };
+
 
         var removeButton = new Button
         {
             HorizontalAlignment = HorizontalAlignment.Left,
-            [DockPanel.DockProperty] = Dock.Left,
             [Attached.IconProperty] = "mdi-close",
-            Margin = new Thickness(0, 0, 5, 0),
             [ToolTip.TipProperty] = Resources.InputView_RemoveDiscipline_Button
         };
         removeButton.Click += RemoveDiscipline_Button_OnClick;
         panel.Children.Add(removeButton);
 
+
+        var text = new TextBlock
+        {
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
+            Margin = new Thickness(0,0,5,0)
+        };
+        var textBinding = new Binding
+        {
+            Source = discipline,
+            Path = nameof(DisciplineInfo.Name)
+        };
+        text.Bind(TextBlock.TextProperty, textBinding);
+        panel.Children.Add(text);
+
+        var iconPanel = new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            HorizontalAlignment = HorizontalAlignment.Left,
+            VerticalAlignment = VerticalAlignment.Center,
+            Spacing = 2
+        };
+        panel.Children.Add(iconPanel);
+
+        var iconType = new Icon
+        {
+            FontSize = 20,
+            HorizontalAlignment = HorizontalAlignment.Right
+        };
+        var iconTypeBinding = new Binding
+        {
+            Source = discipline,
+            Path = nameof(DisciplineInfo.DataType),
+            Converter = new DisciplineTypeToIconConverter()
+        };
+        iconType.Bind(Icon.ValueProperty, iconTypeBinding);
+        iconPanel.Children.Add(iconType);
+
+        var iconSort = new Icon
+        {
+            FontSize = 20,
+            HorizontalAlignment = HorizontalAlignment.Right
+        };
+        var iconSortBinding = new Binding
+        {
+            Source = discipline,
+            Path = nameof(DisciplineInfo.SortOrder),
+            Converter = new DisciplineSortToIconConverter()
+        };
+        iconSort.Bind(Icon.ValueProperty, iconSortBinding);
+        iconPanel.Children.Add(iconSort);
+
         var priorityField = new NumericUpDown
         {
             AllowSpin = true,
             ShowButtonSpinner = false,
-            [DockPanel.DockProperty] = Dock.Right,
             Minimum = DisciplineInfo.PriorityMin,
             Maximum = DisciplineInfo.PriorityMax,
             FormatString = "0",
@@ -276,51 +328,6 @@ public class InputViewModel : ViewModelBase
         };
         priorityField.Bind(NumericUpDown.ValueProperty, priorityBinding);
         panel.Children.Add(priorityField);
-
-        var iconSort = new Icon
-        {
-            FontSize = 20,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            [DockPanel.DockProperty] = Dock.Right
-        };
-        var iconSortBinding = new Binding
-        {
-            Source = discipline,
-            Path = nameof(DisciplineInfo.SortOrder),
-            Converter = new DisciplineSortToIconConverter()
-        };
-        iconSort.Bind(Icon.ValueProperty, iconSortBinding);
-        panel.Children.Add(iconSort);
-
-        var iconType = new Icon
-        {
-            FontSize = 20,
-            HorizontalAlignment = HorizontalAlignment.Right,
-            [DockPanel.DockProperty] = Dock.Right
-        };
-        var iconTypeBinding = new Binding
-        {
-            Source = discipline,
-            Path = nameof(DisciplineInfo.DataType),
-            Converter = new DisciplineTypeToIconConverter()
-        };
-        iconType.Bind(Icon.ValueProperty, iconTypeBinding);
-        panel.Children.Add(iconType);
-
-        var text = new TextBlock
-        {
-            VerticalAlignment = VerticalAlignment.Center,
-            HorizontalAlignment = HorizontalAlignment.Stretch,
-            Padding = new Thickness(0, 0, 10, 0),
-            [DockPanel.DockProperty] = Dock.Left
-        };
-        var textBinding = new Binding
-        {
-            Source = discipline,
-            Path = nameof(DisciplineInfo.Name)
-        };
-        text.Bind(TextBlock.TextProperty, textBinding);
-        panel.Children.Add(text);
 
         return panel;
     }
