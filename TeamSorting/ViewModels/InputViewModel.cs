@@ -317,7 +317,6 @@ public class InputViewModel : ViewModelBase
             Minimum = DisciplineInfo.PriorityMin,
             Maximum = DisciplineInfo.PriorityMax,
             FormatString = "0",
-            HorizontalContentAlignment = HorizontalAlignment.Right,
             MinWidth = 40,
             [ToolTip.TipProperty] = Resources.DisciplineInfo_Priority
         };
