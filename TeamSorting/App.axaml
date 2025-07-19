@@ -23,4 +23,12 @@
         <StyleInclude Source="Controls/MemberListControl.axaml"/>
         <StyleInclude Source="Controls/ValidationTextBlock.axaml"/>
     </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Controls/Styles/Resources.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
