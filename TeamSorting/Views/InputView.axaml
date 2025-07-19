@@ -60,121 +60,159 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,*,40"
+    <Grid RowDefinitions="Auto, *"
           VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch">
-        <DockPanel Grid.Row="0"
-                   HorizontalAlignment="Stretch"
-                   DockPanel.Dock="Top">
+        <Border Grid.Row="0"
+                DockPanel.Dock="Top"
+                Padding="8"
+                BoxShadow="0 0 8 0 LightGray">
             <DockPanel>
-                <Button DockPanel.Dock="Top"
-                        Click="LoadData_OnClick"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Content="{x:Static lang:Resources.InputView_LoadData_Button}" />
-                <Button Click="DeleteDataButton_OnClick"
-                        DockPanel.Dock="Top"
-                        Content="{x:Static lang:Resources.InputView_DeleteData_Button}" />
-                <DockPanel HorizontalAlignment="Left"
-                           VerticalAlignment="Bottom"
-                           DockPanel.Dock="Bottom">
-                    <TextBox Text="{Binding NewDisciplineName}"
-                             Watermark="{x:Static lang:Resources.InputView_NewDiscipline_Watermark}"
-                             Width="200"
-                             KeyDown="AddDisciplineTextBox_OnKeyDown"
-                             DockPanel.Dock="Left" />
-                    <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
-                              x:Name="DisciplineTypeComboBox"
-                              Loaded="ComboBox_OnLoaded">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <ComboBox ItemsSource="{Binding SortOrder}"
-                              x:Name="DisciplineSortOrderComboBox"
-                              Loaded="ComboBox_OnLoaded">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                    <Button VerticalAlignment="Center"
-                            Click="AddDisciplineButton_OnClick"
-                            Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}">
-                    </Button>
+                <DockPanel>
+                    <StackPanel DockPanel.Dock="Top"
+                                Spacing="4"
+                                VerticalAlignment="Top"
+                                HorizontalAlignment="Left">
+                        <Button
+                            Click="LoadData_OnClick"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Content="{x:Static lang:Resources.InputView_LoadData_Button}" />
+                        <Button Click="DeleteDataButton_OnClick"
+                                DockPanel.Dock="Top"
+                                Content="{x:Static lang:Resources.InputView_DeleteData_Button}" />
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom"
+                                Orientation="Vertical"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"
+                                Spacing="4"
+                                Margin="0,20,0,0">
+                        <StackPanel Orientation="Horizontal"
+                                    VerticalAlignment="Bottom"
+                                    HorizontalAlignment="Left"
+                                    Spacing="4">
+                            <TextBox Text="{Binding NewMemberName}"
+                                     Watermark="{x:Static lang:Resources.InputView_NewMember_TextBox_Watermark}"
+                                     IsVisible="True"
+                                     Width="200"
+                                     KeyDown="NewMemberTextBox_OnKeyDown"
+                                     DockPanel.Dock="Left" />
+                            <Button VerticalAlignment="Center"
+                                    Click="NewMemberTextBox_OnClick"
+                                    Content="{x:Static lang:Resources.InputView_NewMember_Button}" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom"
+                                    Spacing="4">
+                            <TextBox Text="{Binding NewDisciplineName}"
+                                     Watermark="{x:Static lang:Resources.InputView_NewDiscipline_Watermark}"
+                                     Width="200"
+                                     KeyDown="AddDisciplineTextBox_OnKeyDown"
+                                     DockPanel.Dock="Left" />
+                            <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
+                                      x:Name="DisciplineTypeComboBox"
+                                      Loaded="ComboBox_OnLoaded">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <ComboBox ItemsSource="{Binding SortOrder}"
+                                      x:Name="DisciplineSortOrderComboBox"
+                                      Loaded="ComboBox_OnLoaded">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock
+                                            Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                            <Button VerticalAlignment="Center"
+                                    Click="AddDisciplineButton_OnClick"
+                                    Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}">
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </DockPanel>
+
+                <DockPanel HorizontalAlignment="Right"
+                           DockPanel.Dock="Right">
+                    <Button DockPanel.Dock="Top"
+                            Click="ShowTeamsButton_OnClick"
+                            HorizontalAlignment="Right"
+                            Content="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
+                    <StackPanel DockPanel.Dock="Bottom"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Bottom"
+                                Orientation="Vertical"
+                                Spacing="4">
+                        <NumericUpDown x:Name="NumberOfTeams"
+                                       Value="{Binding NumberOfTeams}"
+                                       FormatString="0"
+                                       Minimum="1"
+                                       Maximum="10" />
+                        <TextBox MaxLength="10"
+                                 Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
+                                 Text="{Binding Teams.InputSeed}" />
+                        <Button Click="SortToTeams_OnClick"
+                                Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
+                    </StackPanel>
                 </DockPanel>
             </DockPanel>
-            <StackPanel Orientation="Vertical"
-                        HorizontalAlignment="Right"
-                        Spacing="5">
-                <Button Click="ShowTeamsButton_OnClick"
-                        HorizontalAlignment="Right"
-                        Content="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
-                <NumericUpDown x:Name="NumberOfTeams"
-                               Value="{Binding NumberOfTeams}"
-                               FormatString="0"
-                               Minimum="1"
-                               Maximum="10" />
-                <TextBox MaxLength="10"
-                         Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
-                         Text="{Binding Teams.InputSeed}" />
-                <Button Click="SortToTeams_OnClick"
-                        Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
-            </StackPanel>
-        </DockPanel>
+        </Border>
 
-        <TreeDataGrid Grid.Row="1"
-                      Name="Members"
-                      Source="{Binding TreeDataGridSource}"
-                      AutoDragDropRows="False">
-            <TreeDataGrid.Resources>
-                <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
-                    <controls:ValidationTextBlock ValidatedText="{Binding Name}"
-                                                  VerticalAlignment="Center"
-                                                  Margin="4,2">
-                    </controls:ValidationTextBlock>
-                </DataTemplate>
-                <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
-                    <TextBox Text="{Binding Name}" />
-                </DataTemplate>
-                <DataTemplate x:Key="RemoveMemberCell">
-                    <Button Click="RemoveMemberButton_OnClick"
-                            ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"
-                            i:Attached.Icon="mdi-close" />
-                </DataTemplate>
-                <DataTemplate x:Key="WithCell" DataType="models:Member">
-                    <controls:MemberListControl
-                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
-                        CurrentMember="{Binding .}"
-                        SelectedMembers="{Binding With}"/>
-                </DataTemplate>
-                <DataTemplate x:Key="NotWithCell" DataType="models:Member">
-                    <controls:MemberListControl
-                        AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
-                        CurrentMember="{Binding .}"
-                        SelectedMembers="{Binding NotWith}"/>
-                </DataTemplate>
-            </TreeDataGrid.Resources>
-            <TreeDataGrid.Styles>
-                <Style Selector="TreeDataGrid TreeDataGridRow:nth-last-child(2n)">
-                    <Setter Property="Background" Value="#20808080" />
-                </Style>
-            </TreeDataGrid.Styles>
-        </TreeDataGrid>
-        <DockPanel Grid.Row="2"
-                   VerticalAlignment="Center">
-            <TextBox Text="{Binding NewMemberName}"
-                     Watermark="{x:Static lang:Resources.InputView_NewMember_TextBox_Watermark}"
-                     IsVisible="True"
-                     Width="200"
-                     KeyDown="NewMemberTextBox_OnKeyDown"
-                     DockPanel.Dock="Left" />
-            <Button VerticalAlignment="Center"
-                    Click="NewMemberTextBox_OnClick"
-                    Content="{x:Static lang:Resources.InputView_NewMember_Button}" />
-        </DockPanel>
+        <Border Grid.Row="1"
+                Margin="8"
+                BorderThickness="0"
+                CornerRadius="8"
+                BoxShadow="0 0 8 0 LightGray">
+            <Border BorderThickness="0"
+                    ClipToBounds="True"
+                    CornerRadius="{Binding $parent[Border].CornerRadius}">
+                <TreeDataGrid
+                    Name="Members"
+                    Source="{Binding TreeDataGridSource}"
+                    AutoDragDropRows="False">
+                    <TreeDataGrid.Resources>
+                        <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
+                            <controls:ValidationTextBlock ValidatedText="{Binding Name}"
+                                                          VerticalAlignment="Center"
+                                                          Margin="4,2">
+                            </controls:ValidationTextBlock>
+                        </DataTemplate>
+                        <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
+                            <TextBox Text="{Binding Name}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="RemoveMemberCell">
+                            <Button Click="RemoveMemberButton_OnClick"
+                                    ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"
+                                    i:Attached.Icon="mdi-close" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="WithCell" DataType="models:Member">
+                            <controls:MemberListControl
+                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
+                                CurrentMember="{Binding .}"
+                                SelectedMembers="{Binding With}" />
+                        </DataTemplate>
+                        <DataTemplate x:Key="NotWithCell" DataType="models:Member">
+                            <controls:MemberListControl
+                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
+                                CurrentMember="{Binding .}"
+                                SelectedMembers="{Binding NotWith}" />
+                        </DataTemplate>
+                    </TreeDataGrid.Resources>
+                    <TreeDataGrid.Styles>
+                        <Style Selector="TreeDataGrid TreeDataGridRow:nth-last-child(2n)">
+                            <Setter Property="Background" Value="#20808080" />
+                        </Style>
+                    </TreeDataGrid.Styles>
+                </TreeDataGrid>
+            </Border>
+        </Border>
     </Grid>
 </UserControl>
