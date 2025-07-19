@@ -84,7 +84,7 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
     public bool IsValidDestination(Member member, Control? destination)
     {
         Visual? teamControl;
-        if (destination is Grid && destination is { DataContext: Team, Name: "Team" })
+        if (destination is { DataContext: Team, Name: "Team" })
         {
             teamControl = destination;
         }
@@ -92,7 +92,6 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
         {
             teamControl = destination?
                           .GetVisualAncestors()
-                          .OfType<Grid>()
                           .FirstOrDefault(ancestor => ancestor is { Name: "Team", DataContext: Team });
         }
 
