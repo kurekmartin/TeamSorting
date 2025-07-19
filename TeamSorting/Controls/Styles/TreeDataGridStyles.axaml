@@ -1,5 +1,6 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="https://github.com/projektanker/icons.avalonia">
     <Design.PreviewWith>
         <Border Padding="20">
             <!-- Add Controls for Previewer Here -->
@@ -24,5 +25,9 @@
     
     <Style Selector="TreeDataGridTemplateCell">
         <Setter Property="Padding" Value="4"/>
+    </Style>
+    
+    <Style Selector="TreeDataGridTemplateCell avalonia|Icon">
+        <Setter Property="FontSize" Value="18"/>
     </Style>
 </Styles>
