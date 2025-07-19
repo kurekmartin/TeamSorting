@@ -187,7 +187,8 @@
                             </controls:ValidationTextBlock>
                         </DataTemplate>
                         <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
-                            <TextBox Text="{Binding Name}" />
+                            <TextBox Text="{Binding Name}"
+                                     VerticalAlignment="Center"/>
                         </DataTemplate>
                         <DataTemplate x:Key="RemoveMemberCell">
                             <Button Click="RemoveMemberButton_OnClick"
