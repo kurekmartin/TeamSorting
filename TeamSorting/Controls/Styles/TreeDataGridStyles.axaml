@@ -27,6 +27,10 @@
         <Setter Property="Padding" Value="4"/>
     </Style>
     
+    <Style Selector="TreeDataGridTemplateCell Button">
+        <Setter Property="MinHeight" Value="0"/>
+    </Style>
+    
     <Style Selector="TreeDataGridTemplateCell avalonia|Icon">
         <Setter Property="FontSize" Value="18"/>
     </Style>
