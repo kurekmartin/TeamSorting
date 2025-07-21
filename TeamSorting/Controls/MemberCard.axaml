@@ -32,29 +32,37 @@
     </Style>
 
     <!-- Allow team change toggle -->
-    <Style Selector="controls|MemberCard Border.AllowPinMember ToggleButton#ToggleTeamChange">
-        <Setter Property="IsVisible" Value="True"/>
+    <Style Selector="controls|MemberCard Border:not(.AllowPinMember) ToggleButton#ToggleTeamChange">
+        <Setter Property="IsVisible" Value="False" />
     </Style>
-    
+
+    <Style Selector="controls|MemberCard Border.AllowPinMember ToggleButton#ToggleTeamChange">
+        <Setter Property="Opacity" Value="0" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+
+    <Style Selector="controls|MemberCard:pointerover Border.AllowPinMember ToggleButton#ToggleTeamChange">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="IsHitTestVisible" Value="True" />
+    </Style>
+
+    <Style Selector="controls|MemberCard ToggleButton:unchecked#ToggleTeamChange">
+        <Setter Property="Opacity" Value="1" />
+        <Setter Property="IsHitTestVisible" Value="True" />
+    </Style>
+
     <Style Selector="ToggleButton:checked">
         <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_PinMember}" />
     </Style>
-    
+
     <Style Selector="ToggleButton:unchecked">
         <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_UnpinMember}" />
-    </Style>
-    
-    <Style Selector="ToggleButton i|Icon.allow-team-change">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-    <Style Selector="ToggleButton:checked i|Icon.allow-team-change">
-        <Setter Property="IsVisible" Value="True" />
     </Style>
 
     <Style Selector="ToggleButton i|Icon.not-allow-team-change">
         <Setter Property="IsVisible" Value="True" />
     </Style>
-    <Style Selector="ToggleButton:checked i|Icon.not-allow-team-change">
+    <Style Selector="ToggleButton i|Icon.allow-team-change">
         <Setter Property="IsVisible" Value="False" />
     </Style>
 
@@ -93,9 +101,9 @@
     <Style Selector="TextBlock#WithMemberValue.Invalid">
         <Setter Property="Background" Value="Tomato" />
     </Style>
-    
+
     <Style Selector="controls|MemberCard Border.AllowTeamChange">
-        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Cursor" Value="Hand" />
     </Style>
 
 
@@ -107,11 +115,11 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Border HorizontalAlignment="Stretch"
-                        CornerRadius="5"
+                        CornerRadius="8"
                         Background="White"
-                        BorderThickness="1"
-                        BorderBrush="LightGray"
-                        ClipToBounds="True"
+                        Padding="4"
+                        Margin="8,6"
+                        BoxShadow="0 0 8 0 Gray"
                         Classes.AllowTeamChange="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
                         Classes.AllowPinMember="{Binding Member.Team.CanPinMember, RelativeSource={RelativeSource TemplatedParent}}">
                     <StackPanel Orientation="Vertical"
@@ -126,7 +134,7 @@
                                        DockPanel.Dock="Left"
                                        VerticalAlignment="Center" />
                             <StackPanel DockPanel.Dock="Right"
-                                        VerticalAlignment="Center" 
+                                        VerticalAlignment="Center"
                                         HorizontalAlignment="Right"
                                         Orientation="Horizontal">
                                 <!-- Button is visible only when member is in team that allows pinning members -->
@@ -134,7 +142,6 @@
                                               HorizontalAlignment="Right"
                                               Background="Transparent"
                                               IsChecked="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
-                                              IsVisible="False"
                                               Name="ToggleTeamChange"
                                               Width="40"
                                               Height="40">
