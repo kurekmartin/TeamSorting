@@ -144,8 +144,15 @@
                            DockPanel.Dock="Right">
                     <Button DockPanel.Dock="Top"
                             Click="ShowTeamsButton_OnClick"
-                            HorizontalAlignment="Right"
-                            Content="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
+                            HorizontalAlignment="Right">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
+                            <i:Icon Value="mdi-arrow-right"
+                                    FontSize="16"
+                                    Margin="4,0,0,0" />
+                        </StackPanel>
+                    </Button>
+
                     <StackPanel DockPanel.Dock="Bottom"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Bottom"
