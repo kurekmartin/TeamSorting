@@ -154,7 +154,7 @@
                     </Button>
 
                     <StackPanel DockPanel.Dock="Bottom"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Stretch"
                                 VerticalAlignment="Bottom"
                                 Orientation="Vertical"
                                 Spacing="4">
@@ -167,6 +167,7 @@
                                  Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
                                  Text="{Binding Teams.InputSeed}" />
                         <Button Click="SortToTeams_OnClick"
+                                HorizontalAlignment="Right"
                                 Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
                     </StackPanel>
                 </DockPanel>
