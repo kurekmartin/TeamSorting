@@ -13,6 +13,10 @@
         <converters:DisciplineRecordValueConverter x:Key="DisciplineRecordValueConverter" />
     </Styles.Resources>
 
+    <Style Selector="controls|MemberCard">
+        <Setter Property="ClipToBounds" Value="False" />
+    </Style>
+
     <Style Selector="ItemsControl.MemberList:empty">
         <Setter Property="IsVisible" Value="False" />
     </Style>
