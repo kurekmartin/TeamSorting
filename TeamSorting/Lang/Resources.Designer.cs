@@ -625,6 +625,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete team.
+        /// </summary>
+        public static string TeamsView_DeleteTeam_Tooltip {
+            get {
+                return ResourceManager.GetString("TeamsView_DeleteTeam_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team differences:.
         /// </summary>
         public static string TeamsView_Differences_Label {

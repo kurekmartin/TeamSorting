@@ -269,4 +269,7 @@ Do you want to continue?</value>
     <data name="TeamsView_FillTeams_ToolTip" xml:space="preserve">
         <value>Keep the current members in the teams and sort the remaining members.</value>
     </data>
+    <data name="TeamsView_DeleteTeam_Tooltip" xml:space="preserve">
+        <value>Delete team</value>
+    </data>
 </root>

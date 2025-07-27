@@ -624,6 +624,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Odstranit tým.
+        /// </summary>
+        public static string TeamsView_DeleteTeam_Tooltip {
+            get {
+                return ResourceManager.GetString("TeamsView_DeleteTeam_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rozdíly mezi týmy:.
         /// </summary>
         public static string TeamsView_Differences_Label {

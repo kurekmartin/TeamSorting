@@ -36,16 +36,12 @@
     </Style>
 
     <!-- Allow team change toggle -->
-    <Style Selector="controls|MemberCard Border:not(.AllowPinMember) ToggleButton#ToggleTeamChange">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="controls|MemberCard Border.AllowPinMember ToggleButton#ToggleTeamChange">
+    <Style Selector="controls|MemberCard Border#PART_OuterBorder ToggleButton#ToggleTeamChange">
         <Setter Property="Opacity" Value="0" />
         <Setter Property="IsHitTestVisible" Value="False" />
     </Style>
 
-    <Style Selector="controls|MemberCard:pointerover Border.AllowPinMember ToggleButton#ToggleTeamChange">
+    <Style Selector="controls|MemberCard:pointerover Border#PART_OuterBorder.AllowPinMember ToggleButton#ToggleTeamChange">
         <Setter Property="Opacity" Value="1" />
         <Setter Property="IsHitTestVisible" Value="True" />
     </Style>
@@ -55,11 +51,11 @@
         <Setter Property="IsHitTestVisible" Value="True" />
     </Style>
 
-    <Style Selector="ToggleButton:checked">
+    <Style Selector="ToggleButton#ToggleTeamChange:checked">
         <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_PinMember}" />
     </Style>
 
-    <Style Selector="ToggleButton:unchecked">
+    <Style Selector="ToggleButton#ToggleTeamChange:unchecked">
         <Setter Property="ToolTip.Tip" Value="{x:Static lang:Resources.TeamsView_MemberCard_UnpinMember}" />
     </Style>
 
@@ -118,132 +114,139 @@
         <Setter Property="Cursor" Value="Arrow" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border HorizontalAlignment="Stretch"
+                <Border Name="PART_OuterBorder"
+                        HorizontalAlignment="Stretch"
                         CornerRadius="8"
                         Background="White"
-                        Padding="4"
                         Margin="8,6"
                         BoxShadow="0 0 8 0 Gray"
                         Classes.AllowTeamChange="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
                         Classes.AllowPinMember="{Binding Member.Team.CanPinMember, RelativeSource={RelativeSource TemplatedParent}}">
-                    <StackPanel Orientation="Vertical"
-                                HorizontalAlignment="Stretch"
-                                Classes.Invalid="{Binding !Member.IsValid,RelativeSource={RelativeSource TemplatedParent}}">
-                        <DockPanel Name="CardHeader"
-                                   VerticalAlignment="Stretch"
-                                   HorizontalAlignment="Stretch">
-                            <TextBlock Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
-                                       FontWeight="Bold"
-                                       Margin="10"
-                                       DockPanel.Dock="Left"
-                                       VerticalAlignment="Center" />
-                            <StackPanel DockPanel.Dock="Right"
-                                        VerticalAlignment="Center"
-                                        HorizontalAlignment="Right"
-                                        Orientation="Horizontal">
-                                <!-- Button is visible only when member is in team that allows pinning members -->
-                                <ToggleButton VerticalAlignment="Center"
-                                              HorizontalAlignment="Right"
-                                              Background="Transparent"
-                                              IsChecked="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
-                                              Name="ToggleTeamChange"
-                                              Width="40"
-                                              Height="40">
-                                    <Panel>
-                                        <i:Icon Classes="allow-team-change"
-                                                Value="mdi:pin-off"
-                                                FontSize="20" />
-                                        <i:Icon Classes="not-allow-team-change"
-                                                Value="mdi:pin"
-                                                FontSize="20" />
-                                    </Panel>
-                                </ToggleButton>
-                                <ToggleButton VerticalAlignment="Center"
-                                              HorizontalAlignment="Right"
-                                              Background="Transparent"
-                                              IsChecked="{TemplateBinding ShowDetail}"
-                                              Name="ToggleDetail"
-                                              Width="40"
-                                              Height="40">
-                                    <Panel>
-                                        <i:Icon Classes="collapsed"
-                                                Value="mdi:chevron-up"
-                                                FontSize="20" />
-                                        <i:Icon Classes="expanded"
-                                                Value="mdi:chevron-down"
-                                                FontSize="20" />
-                                    </Panel>
-                                </ToggleButton>
+                    <Border BorderThickness="0"
+                            ClipToBounds="True"
+                            CornerRadius="{Binding $parent[Border].CornerRadius}">
+                        <StackPanel Orientation="Vertical"
+                                    HorizontalAlignment="Stretch"
+                                    Classes.Invalid="{Binding !Member.IsValid,RelativeSource={RelativeSource TemplatedParent}}">
+                            <DockPanel Name="CardHeader"
+                                       VerticalAlignment="Stretch"
+                                       HorizontalAlignment="Stretch">
+                                <TextBlock
+                                    Text="{Binding Member.Name, RelativeSource={RelativeSource TemplatedParent}}"
+                                    FontWeight="Bold"
+                                    Margin="10"
+                                    DockPanel.Dock="Left"
+                                    VerticalAlignment="Center" />
+                                <StackPanel DockPanel.Dock="Right"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Right"
+                                            Orientation="Horizontal"
+                                            Margin="2"
+                                            Spacing="2">
+                                    <!-- Button is visible only when member is in team that allows pinning members -->
+                                    <ToggleButton VerticalAlignment="Center"
+                                                  HorizontalAlignment="Right"
+                                                  Background="Transparent"
+                                                  IsChecked="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
+                                                  Name="ToggleTeamChange"
+                                                  Width="40"
+                                                  Height="40">
+                                        <Panel>
+                                            <i:Icon Classes="allow-team-change"
+                                                    Value="mdi:pin-off"
+                                                    FontSize="20" />
+                                            <i:Icon Classes="not-allow-team-change"
+                                                    Value="mdi:pin"
+                                                    FontSize="20" />
+                                        </Panel>
+                                    </ToggleButton>
+                                    <ToggleButton VerticalAlignment="Center"
+                                                  HorizontalAlignment="Right"
+                                                  Background="Transparent"
+                                                  IsChecked="{TemplateBinding ShowDetail}"
+                                                  Name="ToggleDetail"
+                                                  Width="40"
+                                                  Height="40">
+                                        <Panel>
+                                            <i:Icon Classes="collapsed"
+                                                    Value="mdi:chevron-up"
+                                                    FontSize="20" />
+                                            <i:Icon Classes="expanded"
+                                                    Value="mdi:chevron-down"
+                                                    FontSize="20" />
+                                        </Panel>
+                                    </ToggleButton>
+                                </StackPanel>
+                            </DockPanel>
+                            <Separator IsVisible="{Binding #ToggleDetail.IsChecked }"
+                                       Margin="0" />
+                            <StackPanel Margin="10"
+                                        IsVisible="{Binding #ToggleDetail.IsChecked }">
+                                <TextBlock Text="With"
+                                           FontWeight="Bold"
+                                           IsVisible="{Binding #MemberWithList.IsVisible}" />
+                                <ItemsControl Classes="MemberList"
+                                              Name="MemberWithList"
+                                              ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.DataType>
+                                                <x:Type TypeName="generic:KeyValuePair"
+                                                        x:TypeArguments="x:String,x:Boolean" />
+                                            </DataTemplate.DataType>
+                                            <TextBlock Name="WithMemberValue"
+                                                       Text="{Binding Key}"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5,0,0,0"
+                                                       Classes.Invalid="{Binding !Value}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
+                                <TextBlock Text="Not With"
+                                           FontWeight="Bold"
+                                           IsVisible="{Binding #MemberNotWithList.IsVisible}" />
+                                <ItemsControl Classes="MemberList"
+                                              Name="MemberNotWithList"
+                                              ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.DataType>
+                                                <x:Type TypeName="generic:KeyValuePair"
+                                                        x:TypeArguments="x:String,x:Boolean" />
+                                            </DataTemplate.DataType>
+                                            <TextBlock Name="NotWithMemberValue"
+                                                       Text="{Binding Key}"
+                                                       HorizontalAlignment="Left"
+                                                       Margin="5,0,0,0"
+                                                       Classes.Invalid="{Binding !Value}" />
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                                <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}" />
+                                <ItemsControl
+                                    ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.DataType>
+                                                <x:Type TypeName="models:DisciplineRecord" />
+                                            </DataTemplate.DataType>
+                                            <DockPanel Margin="0,0,0,2">
+                                                <TextBlock
+                                                    Text="{Binding DisciplineInfo.Name}"
+                                                    FontWeight="Bold"
+                                                    HorizontalAlignment="Left"
+                                                    Margin="0,0,5,0" />
+                                                <TextBlock
+                                                    Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                    HorizontalAlignment="Right" />
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
                             </StackPanel>
-                        </DockPanel>
-                        <Separator IsVisible="{Binding #ToggleDetail.IsChecked }"
-                                   Margin="0" />
-                        <StackPanel Margin="10"
-                                    IsVisible="{Binding #ToggleDetail.IsChecked }">
-                            <TextBlock Text="With"
-                                       FontWeight="Bold"
-                                       IsVisible="{Binding #MemberWithList.IsVisible}" />
-                            <ItemsControl Classes="MemberList"
-                                          Name="MemberWithList"
-                                          ItemsSource="{Binding Member.WithValidation, RelativeSource={RelativeSource TemplatedParent}}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DataTemplate.DataType>
-                                            <x:Type TypeName="generic:KeyValuePair"
-                                                    x:TypeArguments="x:String,x:Boolean" />
-                                        </DataTemplate.DataType>
-                                        <TextBlock Name="WithMemberValue"
-                                                   Text="{Binding Key}"
-                                                   HorizontalAlignment="Left"
-                                                   Margin="5,0,0,0"
-                                                   Classes.Invalid="{Binding !Value}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <Separator IsVisible="{Binding #MemberWithList.IsVisible}" />
-                            <TextBlock Text="Not With"
-                                       FontWeight="Bold"
-                                       IsVisible="{Binding #MemberNotWithList.IsVisible}" />
-                            <ItemsControl Classes="MemberList"
-                                          Name="MemberNotWithList"
-                                          ItemsSource="{Binding Member.NotWithValidation, RelativeSource={RelativeSource TemplatedParent}}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DataTemplate.DataType>
-                                            <x:Type TypeName="generic:KeyValuePair"
-                                                    x:TypeArguments="x:String,x:Boolean" />
-                                        </DataTemplate.DataType>
-                                        <TextBlock Name="NotWithMemberValue"
-                                                   Text="{Binding Key}"
-                                                   HorizontalAlignment="Left"
-                                                   Margin="5,0,0,0"
-                                                   Classes.Invalid="{Binding !Value}" />
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                            <Separator IsVisible="{Binding #MemberNotWithList.IsVisible}" />
-                            <ItemsControl
-                                ItemsSource="{Binding Member.Records.Values, RelativeSource={RelativeSource TemplatedParent}}">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DataTemplate.DataType>
-                                            <x:Type TypeName="models:DisciplineRecord" />
-                                        </DataTemplate.DataType>
-                                        <DockPanel Margin="0,0,0,2">
-                                            <TextBlock
-                                                Text="{Binding DisciplineInfo.Name}"
-                                                FontWeight="Bold"
-                                                HorizontalAlignment="Left"
-                                                Margin="0,0,5,0" />
-                                            <TextBlock
-                                                Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
-                                                HorizontalAlignment="Right" />
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
                         </StackPanel>
-                    </StackPanel>
+                    </Border>
                 </Border>
             </ControlTemplate>
         </Setter>

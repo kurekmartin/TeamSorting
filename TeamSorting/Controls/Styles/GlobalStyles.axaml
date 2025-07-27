@@ -23,4 +23,8 @@
     <Style Selector="NumericUpDown Border">
         <Setter Property="ClipToBounds" Value="True"/>
     </Style>
+
+    <Style Selector="#Team:not(.Valid) Border#Header">
+        <Setter Property="Background" Value="Tomato" />
+    </Style>
 </Styles>

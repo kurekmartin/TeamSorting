@@ -270,4 +270,7 @@ Chcete pokračovat?</value>
     <data name="Data_ValidateCsvHeader_MissingHeader" xml:space="preserve">
         <value>Chybí hlavička souboru</value>
     </data>
+    <data name="TeamsView_DeleteTeam_Tooltip" xml:space="preserve">
+        <value>Odstranit tým</value>
+    </data>
 </root>
