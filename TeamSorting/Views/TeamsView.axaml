@@ -280,7 +280,7 @@
                       HorizontalScrollBarVisibility="Auto"
                       Padding="8,8,8,0">
             <ItemsControl ItemsSource="{Binding Teams.TeamList}"
-                          ClipToBounds="False                          ">
+                          ClipToBounds="False">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="1" />
