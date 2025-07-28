@@ -129,22 +129,12 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
 
     private static void AddTeamHighlight(Visual? control)
     {
-        Border? highlight = control?.GetLogicalChildren().OfType<Border>()
-                                   .FirstOrDefault(child => child.Name == "TeamHighlight");
-        if (highlight != null)
-        {
-            highlight.IsVisible = true;
-        }
+        control?.Classes.Add("Highlight");
     }
 
     private void RemoveTeamHighlight(Visual? control)
     {
-        Border? highlight = control?.GetLogicalChildren().OfType<Border>()
-                                   .FirstOrDefault(child => child.Name == "TeamHighlight");
-        if (highlight != null)
-        {
-            highlight.IsVisible = false;
-        }
+        control?.Classes.Remove("Highlight");
 
         _dragOverTeam = null;
     }

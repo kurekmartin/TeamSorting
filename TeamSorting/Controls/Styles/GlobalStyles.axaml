@@ -15,16 +15,40 @@
     <Style Selector="NumericUpDown[ButtonSpinnerLocation=Right][ShowButtonSpinner=True] TextBox">
         <Setter Property="CornerRadius" Value="8,0,0,8" />
     </Style>
-    
+
     <Style Selector="NumericUpDown[ButtonSpinnerLocation=Left][ShowButtonSpinner=True] TextBox">
         <Setter Property="CornerRadius" Value="0,8,8,0" />
     </Style>
-    
+
     <Style Selector="NumericUpDown Border">
-        <Setter Property="ClipToBounds" Value="True"/>
+        <Setter Property="ClipToBounds" Value="True" />
     </Style>
 
     <Style Selector="#Team:not(.Valid) Border#Header">
         <Setter Property="Background" Value="Tomato" />
+    </Style>
+
+    <Style Selector="#Team Border#Header">
+        <Setter Property="Background" Value="White" />
+    </Style>
+    
+    <Style Selector="#Team Border#Header ItemsControl:empty">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    
+    <Style Selector="#Team:not(.Highlight) Border#TeamHighlight">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    
+    <Style Selector="#Team.Highlight Border#TeamHighlight">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+    
+    <Style Selector="#Team.Highlight Border#Header">
+        <Setter Property="BoxShadow" Value="0 0 16 Gray" />
+    </Style>
+
+    <Style Selector="#Team:not(.Highlight) Border#Header">
+        <Setter Property="BoxShadow" Value="0 0 12 Gray" />
     </Style>
 </Styles>

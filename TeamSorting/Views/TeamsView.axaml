@@ -220,7 +220,7 @@
 
         <!-- Members without team -->
         <Border DockPanel.Dock="Right"
-                Padding="8"
+                Padding="8,8,8,0"
                 BoxShadow="0 0 12 0 Gray"
                 MinWidth="150"
                 Background="White"
@@ -229,15 +229,18 @@
             <Grid Name="Team"
                   VerticalAlignment="Stretch"
                   HorizontalAlignment="Stretch"
-                  Background="Transparent"
-                  DataContext="{Binding Teams.MembersWithoutTeam}">
-                <DockPanel>
-                    <StackPanel Orientation="Vertical"
-                                DockPanel.Dock="Top">
+                  DataContext="{Binding Teams.MembersWithoutTeam}"
+                  Classes.Valid="{Binding IsValid}">
+                <Grid RowDefinitions="Auto, *">
+                    <Border Grid.Row="0"
+                            Name="Header"
+                            CornerRadius="8"
+                            ZIndex="5">
                         <StackPanel VerticalAlignment="Center"
                                     HorizontalAlignment="Center"
                                     Orientation="Horizontal"
-                                    Spacing="8">
+                                    Spacing="8"
+                                    Margin="5">
                             <TextBlock Text="{Binding Name}"
                                        FontWeight="Bold"
                                        HorizontalAlignment="Center"
@@ -254,10 +257,11 @@
                                            VerticalAlignment="Bottom" />
                             </StackPanel>
                         </StackPanel>
-                    </StackPanel>
-                    <ScrollViewer>
+                    </Border>
+                    <ScrollViewer Grid.Row="1">
                         <ItemsControl ItemsSource="{Binding Members}"
-                                      DockPanel.Dock="Top">
+                                      DockPanel.Dock="Top"
+                                      Padding="0,5,0,10">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <controls:MemberCard Member="{Binding .}"
@@ -266,15 +270,16 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </ScrollViewer>
-                </DockPanel>
-                <Border Name="TeamHighlight"
-                        Background="Aqua"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        IsHitTestVisible="False"
-                        Opacity="0.5"
-                        CornerRadius="5"
-                        IsVisible="False" />
+                    <Border Grid.Row="1"
+                            Name="TeamHighlight"
+                            Background="Aqua"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            IsHitTestVisible="False"
+                            Opacity="0.5"
+                            CornerRadius="8"
+                            Margin="0,5,0,5" />
+                </Grid>
             </Grid>
         </Border>
 
@@ -293,13 +298,11 @@
                         <Grid Name="Team"
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch"
-                              Background="Transparent"
                               Margin="4,0,8,0"
                               Classes.Valid="{Binding IsValid}">
-                            <DockPanel>
-                                <Border Name="Header"
-                                        DockPanel.Dock="Top"
-                                        BoxShadow="0 0 12 Gray"
+                            <Grid RowDefinitions="Auto, *">
+                                <Border Grid.Row="0"
+                                        Name="Header"
                                         CornerRadius="8"
                                         ZIndex="5">
                                     <StackPanel Orientation="Vertical"
@@ -309,7 +312,8 @@
                                                         VerticalAlignment="Center"
                                                         Orientation="Horizontal"
                                                         HorizontalAlignment="Center"
-                                                        Spacing="8">
+                                                        Spacing="8"
+                                                        Margin="0,0,8,0">
                                                 <TextBlock Text="{Binding Name}"
                                                            FontWeight="Bold"
                                                            HorizontalAlignment="Center"
@@ -357,9 +361,10 @@
                                         </ItemsControl>
                                     </StackPanel>
                                 </Border>
-                                <ScrollViewer>
+                                <ScrollViewer Grid.Row="1">
                                     <ItemsControl ItemsSource="{Binding Members}"
-                                                  DockPanel.Dock="Top">
+                                                  DockPanel.Dock="Top"
+                                                  Padding="0,5,0,10">
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <controls:MemberCard Member="{Binding .}"
@@ -368,15 +373,16 @@
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
                                 </ScrollViewer>
-                            </DockPanel>
-                            <Border Name="TeamHighlight"
-                                    Background="Aqua"
-                                    HorizontalAlignment="Stretch"
-                                    VerticalAlignment="Stretch"
-                                    IsHitTestVisible="False"
-                                    Opacity="0.5"
-                                    CornerRadius="5"
-                                    IsVisible="False" />
+                                <Border Grid.Row="1"
+                                        Name="TeamHighlight"
+                                        Background="Aqua"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                        IsHitTestVisible="False"
+                                        Opacity="0.5"
+                                        CornerRadius="8"
+                                        Margin="0,5,0,0" />
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
