@@ -137,7 +137,7 @@ public class Team : ObservableObject
 
     public bool IsValid
     {
-        get { return !DisableValidation && Members.All(member => member.IsValid); }
+        get { return DisableValidation || Members.All(member => member.IsValid); }
     }
 
     public void AddMembers(IEnumerable<Member> members)
