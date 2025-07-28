@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using TeamSorting.ViewModels;
 
 namespace TeamSorting.Views;
 
@@ -22,6 +23,11 @@ public partial class MainWindow : Window
     {
         _logger?.LogInformation("Window loaded");
         base.OnLoaded(e);
+        
+        if (DataContext is MainWindowViewModel context)
+        {
+            context.CheckForUpdates();
+        }
     }
 
     public async Task<WarningDialogResult> ShowWarningDialog(WarningDialog warningDialog)

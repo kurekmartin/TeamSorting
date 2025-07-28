@@ -525,6 +525,15 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New version available. Show download page..
+        /// </summary>
+        public static string MainWindow_NewVersion_Download_Button {
+            get {
+                return ResourceManager.GetString("MainWindow_NewVersion_Download_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string MemberListSelection_Search {

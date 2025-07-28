@@ -272,4 +272,7 @@ Do you want to continue?</value>
     <data name="TeamsView_DeleteTeam_Tooltip" xml:space="preserve">
         <value>Delete team</value>
     </data>
+    <data name="MainWindow_NewVersion_Download_Button" xml:space="preserve">
+        <value>New version available. Show download page.</value>
+    </data>
 </root>
