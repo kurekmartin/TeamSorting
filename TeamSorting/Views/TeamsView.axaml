@@ -284,10 +284,10 @@
         </Border>
 
         <ScrollViewer VerticalScrollBarVisibility="Disabled"
-                      HorizontalScrollBarVisibility="Auto"
-                      Padding="8,8,8,0">
+                      HorizontalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Teams.TeamList}"
-                          ClipToBounds="False">
+                          ClipToBounds="False"
+                          Margin="8,8,8,0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <UniformGrid Rows="1" />
@@ -298,7 +298,7 @@
                         <Grid Name="Team"
                               VerticalAlignment="Stretch"
                               HorizontalAlignment="Stretch"
-                              Margin="4,0,8,0"
+                              Margin="8,0"
                               Classes.Valid="{Binding IsValid}">
                             <Grid RowDefinitions="Auto, *">
                                 <Border Grid.Row="0"
