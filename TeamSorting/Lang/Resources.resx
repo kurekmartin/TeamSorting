@@ -217,8 +217,8 @@ Do you want to continue?</value>
     <data name="InputView_DeleteData_Button" xml:space="preserve">
         <value>Delete data</value>
     </data>
-    <data name="TeamsView_CreateNewCombination_Button" xml:space="preserve">
-        <value>Create new combination</value>
+    <data name="TeamsView_NewCombination_Button" xml:space="preserve">
+        <value>New combination</value>
     </data>
     <data name="Sorting_ProgressText" xml:space="preserve">
         <value>Sorting in progress...</value>
@@ -256,7 +256,7 @@ Do you want to continue?</value>
     <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
         <value>Allow team changing and sort</value>
     </data>
-    <data name="TeamsView_CreateNewCombination_ToolTip" xml:space="preserve">
+    <data name="TeamsView_NewCombination_ToolTip" xml:space="preserve">
         <value>Keep the pinned members and create a new combination of the remaining members.</value>
     </data>
     <data name="TeamsView_UnlockMembersAndSort_ToolTip" xml:space="preserve">

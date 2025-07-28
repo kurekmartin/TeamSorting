@@ -246,54 +246,13 @@ public partial class TeamsView : UserControl
         }
     }
 
-    private async void CreateNewTeamCombinationButton_OnClick(object? sender, RoutedEventArgs e)
+    private async void NewCombinationButton_OnClick(object? sender, RoutedEventArgs e)
     {
         if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
 
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         await context.Teams.SortToTeams();
-        button.IsEnabled = true;
-        Cursor = Cursor.Default;
-    }
-
-    private async void UnlockMembersAndSortButton_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
-
-        Cursor = new Cursor(StandardCursorType.Wait);
-        button.IsEnabled = false;
-        context.Teams.UnlockCurrentMembers();
-        await context.Teams.SortToTeams();
-        button.IsEnabled = true;
-        Cursor = Cursor.Default;
-    }
-
-    private async void LockTeamsAndSortRestOfMembers_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
-
-        Cursor = new Cursor(StandardCursorType.Wait);
-        button.IsEnabled = false;
-        context.Teams.LockCurrentMembers();
-        await context.Teams.SortToTeams();
-        button.IsEnabled = true;
-        Cursor = Cursor.Default;
-    }
-
-    private async void FillTeams_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
-
-        Cursor = new Cursor(StandardCursorType.Wait);
-        button.IsEnabled = false;
-        List<Member> changedMembers = context.Teams.LockCurrentMembers();
-        await context.Teams.SortToTeams();
-        foreach (Member changedMember in changedMembers)
-        {
-            changedMember.AllowTeamChange = true;
-        }
-
         button.IsEnabled = true;
         Cursor = Cursor.Default;
     }

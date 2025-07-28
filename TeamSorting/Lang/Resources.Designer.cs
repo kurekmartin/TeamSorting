@@ -588,24 +588,6 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Create new combination.
-        /// </summary>
-        public static string TeamsView_CreateNewCombination_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_CreateNewCombination_Button", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Keep the pinned members and create a new combination of the remaining members..
-        /// </summary>
-        public static string TeamsView_CreateNewCombination_ToolTip {
-            get {
-                return ResourceManager.GetString("TeamsView_CreateNewCombination_ToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error saving file:
         ///{0}.
         /// </summary>
@@ -730,6 +712,24 @@ namespace TeamSorting.Lang {
         public static string TeamsView_MemberMoved_Message {
             get {
                 return ResourceManager.GetString("TeamsView_MemberMoved_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New combination.
+        /// </summary>
+        public static string TeamsView_NewCombination_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_NewCombination_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Keep the pinned members and create a new combination of the remaining members..
+        /// </summary>
+        public static string TeamsView_NewCombination_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_NewCombination_ToolTip", resourceCulture);
             }
         }
         

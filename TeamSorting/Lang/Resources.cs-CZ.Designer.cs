@@ -587,24 +587,6 @@ namespace TeamSorting.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Vytvořit novou kombinaci.
-        /// </summary>
-        public static string TeamsView_CreateNewCombination_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_CreateNewCombination_Button", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Zachovat připnuté členy a vytvořit novou kombinaci zostatních členů..
-        /// </summary>
-        public static string TeamsView_CreateNewCombination_ToolTip {
-            get {
-                return ResourceManager.GetString("TeamsView_CreateNewCombination_ToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Chyba při ukládání souboru:
         ///{0}.
         /// </summary>
@@ -730,6 +712,24 @@ namespace TeamSorting.Lang {
         public static string TeamsView_MemberMoved_Message {
             get {
                 return ResourceManager.GetString("TeamsView_MemberMoved_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nová kombinace.
+        /// </summary>
+        public static string TeamsView_NewCombination_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_NewCombination_Button", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Zachovat připnuté členy a vytvořit novou kombinaci zostatních členů..
+        /// </summary>
+        public static string TeamsView_NewCombination_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_NewCombination_ToolTip", resourceCulture);
             }
         }
         

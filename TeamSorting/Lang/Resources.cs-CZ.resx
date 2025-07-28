@@ -216,8 +216,8 @@ Chcete pokračovat?</value>
     <data name="InputView_DeleteData_Button" xml:space="preserve">
         <value>Smazat data</value>
     </data>
-    <data name="TeamsView_CreateNewCombination_Button" xml:space="preserve">
-        <value>Vytvořit novou kombinaci</value>
+    <data name="TeamsView_NewCombination_Button" xml:space="preserve">
+        <value>Nová kombinace</value>
     </data>
     <data name="Sorting_ProgressText" xml:space="preserve">
         <value>Probíhá rozřazení...</value>
@@ -252,7 +252,7 @@ Chcete pokračovat?</value>
     <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
         <value>Povolit změny týmu a rozřadit</value>
     </data>
-    <data name="TeamsView_CreateNewCombination_ToolTip" xml:space="preserve">
+    <data name="TeamsView_NewCombination_ToolTip" xml:space="preserve">
         <value>Zachovat připnuté členy a vytvořit novou kombinaci zostatních členů.</value>
     </data>
     <data name="TeamsView_UnlockMembersAndSort_ToolTip" xml:space="preserve">

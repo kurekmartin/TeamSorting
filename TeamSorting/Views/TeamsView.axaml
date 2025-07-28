@@ -133,18 +133,9 @@
                                     Spacing="4">
                             <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Sorting}"
                                        FontWeight="Bold" />
-                            <Button Click="CreateNewTeamCombinationButton_OnClick"
-                                    Content="{x:Static lang:Resources.TeamsView_CreateNewCombination_Button}"
-                                    ToolTip.Tip="{x:Static lang:Resources.TeamsView_CreateNewCombination_ToolTip}" />
-                            <Button Click="UnlockMembersAndSortButton_OnClick"
-                                    Content="{x:Static lang:Resources.TeamsView_UnlockMembersAndSort_Button}"
-                                    ToolTip.Tip="{x:Static lang:Resources.TeamsView_UnlockMembersAndSort_ToolTip}" />
-                            <Button Click="LockTeamsAndSortRestOfMembers_OnClick"
-                                    Content="{x:Static lang:Resources.TeamsView_LockTeamsAndSortRestOfMembers_Button}"
-                                    ToolTip.Tip="{x:Static lang:Resources.TeamsView_LockTeamsAndSortRestOfMembers_ToolTip}" />
-                            <Button Click="FillTeams_OnClick"
-                                    Content="{x:Static lang:Resources.TeamsView_FillTeams_Button}"
-                                    ToolTip.Tip="{x:Static lang:Resources.TeamsView_FillTeams_ToolTip}" />
+                            <Button Click="NewCombinationButton_OnClick"
+                                    Content="{x:Static lang:Resources.TeamsView_NewCombination_Button}"
+                                    ToolTip.Tip="{x:Static lang:Resources.TeamsView_NewCombination_ToolTip}" />
                             <StackPanel Orientation="Horizontal"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Bottom"
@@ -154,7 +145,6 @@
                                 <SelectableTextBlock Text="{Binding Teams.UsedSeed}" />
                             </StackPanel>
                         </StackPanel>
-
 
                         <StackPanel Orientation="Vertical"
                                     DockPanel.Dock="Top"
