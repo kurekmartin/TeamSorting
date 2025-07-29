@@ -1,8 +1,10 @@
 ﻿### New
-- none
+- redesigned UI (dark mode support will come later)
+- show that new version is available
 
 ### Changed
-- none
+- removed extra sorting methods
+  - every method can be recreated using pinning and default sorting
 
 ### Fixed
-- occasional crash when adding a new member on input view
+- none
