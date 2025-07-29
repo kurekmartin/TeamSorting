@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -35,5 +37,25 @@ public partial class MainWindow : Window
         warningDialog.Position = Position; //fix for WindowStartupLocation="CenterOwner" not working
         var result = await warningDialog.ShowDialog<WarningDialogResult>(this);
         return result;
+    }
+
+    private void NewVersionPageButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainWindowViewModel context || string.IsNullOrEmpty(context.ReleaseUrl))
+        {
+            return;
+        }
+
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            Process.Start(new ProcessStartInfo(context.ReleaseUrl)
+            {
+                UseShellExecute = true
+            });
+        }
+        else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+        {
+            Process.Start("xdg-open", context.ReleaseUrl);
+        }
     }
 }

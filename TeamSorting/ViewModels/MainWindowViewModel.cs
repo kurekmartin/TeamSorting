@@ -8,6 +8,7 @@ namespace TeamSorting.ViewModels;
 public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, TeamsViewModel teamsViewModel, InputViewModel inputViewModel, Teams teams) : ViewModelBase
 {
     private ViewModelBase _contentViewModel = inputViewModel;
+    private bool _newVersionAvailable;
 
     public Teams Teams { get; } = teams;
 
@@ -21,7 +22,12 @@ public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, TeamsViewM
     public string Version =>
         $"v{System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "?.?.?"}";
 
-    public bool NewVersionAvailable { get; private set; }
+    public bool NewVersionAvailable
+    {
+        get => _newVersionAvailable;
+        private set => SetProperty(ref _newVersionAvailable, value);
+    }
+
     public string ReleaseUrl { get; private set; } = string.Empty;
 
     public void SwitchToTeamsView()

@@ -12,21 +12,42 @@
         Icon="/Assets/avalonia-logo.ico"
         Title="TeamSorting"
         Focusable="True">
+    <Window.Styles>
+        <Style Selector="Button#NewVersionPageButton /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button#NewVersionPageButton">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </Window.Styles>
+
     <Grid RowDefinitions="*,Auto">
         <TransitioningContentControl Grid.Row="0"
                                      Content="{Binding ContentViewModel}"
                                      DockPanel.Dock="Top" />
         <StackPanel Grid.Row="1"
                     Background="LightGray"
-                    Height="25"
                     VerticalAlignment="Bottom">
-            <!-- TODO add open page -->
-            <Button avalonia:Attached.Icon="download-circle-outline"
-                    ToolTip.Tip="{x:Static lang:Resources.MainWindow_NewVersion_Download_Button}"
-                    IsVisible="{Binding NewVersionAvailable}" />
-            <TextBlock Text="{Binding Version}"
-                       Margin="3"
-                       HorizontalAlignment="Right" />
+            <StackPanel Orientation="Horizontal"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Center">
+                <Button Name="NewVersionPageButton"
+                        avalonia:Attached.Icon="mdi-download-circle-outline"
+                        ToolTip.Tip="{x:Static lang:Resources.MainWindow_NewVersion_Download_Button}"
+                        IsVisible="{Binding NewVersionAvailable}"
+                        Click="NewVersionPageButton_OnClick"
+                        Margin="2"
+                        Padding="2"
+                        MinHeight="0"
+                        FontSize="17"
+                        Foreground="OrangeRed" />
+                
+                <TextBlock Text="{Binding Version}"
+                           Margin="3"
+                           HorizontalAlignment="Right"
+                           VerticalAlignment="Center" />
+            </StackPanel>
         </StackPanel>
         <!-- Overlay -->
         <Border Grid.Row=""
