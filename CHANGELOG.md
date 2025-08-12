@@ -1,10 +1,14 @@
 ﻿### New
-- redesigned UI (dark mode support will come later)
-- show that new version is available
+- none
 
 ### Changed
-- removed extra sorting methods
-  - every method can be recreated using pinning and default sorting
+- allow using point and comma as decimal separator independent of system settings
+- log number of members to sort, pinning of member
 
 ### Fixed
-- none
+- handle unexpected crash and write stack trace to log file
+- crash when loading CSV with invalid number format
+- crash when sorting members to teams
+- removal of discipline column from input table
+- update used seed when starting sorting from teams view
+- prevent adding member or discipline with empty name
