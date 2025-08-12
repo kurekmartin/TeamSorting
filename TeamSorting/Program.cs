@@ -35,9 +35,21 @@ sealed class Program
             System.Runtime.InteropServices.RuntimeInformation.OSArchitecture,
             System.Runtime.InteropServices.RuntimeInformation.OSDescription
         );
-        
-        BuildAvaloniaApp()
-            .StartWithClassicDesktopLifetime(args);
+
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args);
+        }
+        catch (Exception e)
+        {
+            Log.Fatal(e, "Application terminated unexpectedly");
+            throw;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
@@ -46,8 +58,8 @@ sealed class Program
         IconProvider.Current.Register<MaterialDesignIconProvider>();
 
         return AppBuilder.Configure<App>()
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace();
+                         .UsePlatformDetect()
+                         .WithInterFont()
+                         .LogToTrace();
     }
 }
