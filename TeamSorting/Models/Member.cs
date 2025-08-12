@@ -6,6 +6,7 @@ using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace TeamSorting.Models;
 
@@ -153,7 +154,11 @@ public class Member : ObservableObject, INotifyDataErrorInfo
     public bool AllowTeamChange
     {
         get => _allowTeamChange;
-        set => SetProperty(ref _allowTeamChange, value);
+        set
+        {
+            _logger?.LogInformation("Setting AllowTeamChange for member {memberId} to {value}", Id, value);
+            SetProperty(ref _allowTeamChange, value);
+        }
     }
 
     public Team? Team
