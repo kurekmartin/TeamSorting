@@ -11,16 +11,16 @@ public class DisciplineRecord : ObservableObject
         DisciplineInfo = disciplineInfo;
         SetValueFromString(value);
     }
-    
+
     private static readonly string[] TimeFormats =
     [
-        $@"hh\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
-        $@"h\:mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        @"hh\:mm\:ss\.f",
+        @"h\:mm\:ss\.f",
         @"h\:mm\:ss",
         @"hh\:mm\:ss",
-        $@"mm\:ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        @"mm\:ss\.f",
         @"mm\:ss",
-        $@"ss\{CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator}f",
+        @"ss\.f",
         @"ss"
     ];
 
@@ -28,14 +28,15 @@ public class DisciplineRecord : ObservableObject
 
     public void SetValueFromString(string value)
     {
+        string normalizedValue = value.Replace(',', '.');
         Value = DisciplineInfo.DataType switch
         {
             DisciplineDataType.Time => string.IsNullOrWhiteSpace(value)
                 ? TimeSpan.Zero
-                : TimeSpan.ParseExact(value, TimeFormats, CultureInfo.CurrentCulture),
+                : TimeSpan.ParseExact(normalizedValue, TimeFormats, CultureInfo.InvariantCulture),
             DisciplineDataType.Number => string.IsNullOrWhiteSpace(value)
                 ? decimal.Zero
-                : decimal.Parse(value),
+                : decimal.Parse(normalizedValue, NumberStyles.Any, CultureInfo.InvariantCulture),
             _ => throw new FormatException()
         };
     }
