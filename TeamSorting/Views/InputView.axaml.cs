@@ -118,7 +118,11 @@ public partial class InputView : UserControl
 
     private void AddMember()
     {
-        var context = (InputViewModel)DataContext!;
+        if (DataContext is not InputViewModel context || string.IsNullOrWhiteSpace(context.NewMemberName))
+        {
+            return;
+        }
+
         var member = new Member(context.NewMemberName);
         context.Members.AddMember(member);
         context.NewMemberName = string.Empty;
