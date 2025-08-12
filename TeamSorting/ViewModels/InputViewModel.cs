@@ -338,8 +338,8 @@ public class InputViewModel : ViewModelBase
             return;
         }
 
-        var panel = button.FindLogicalAncestorOfType<DockPanel>();
-        if (panel is not { DataContext: InputViewModel context, Tag: Guid disciplineId })
+        var panel = button.FindLogicalAncestorOfType<StackPanel>();
+        if (panel is not { DataContext: InputViewModel, Tag: Guid disciplineId })
         {
             return;
         }
