@@ -57,7 +57,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
 
         var random = new Random(seed.GetHashCode());
         int minTeamSize = GetMinSizeOfTeams(members.Count, teams);
-        logger.LogInformation("Total members {memberCount}, min team size: {teamSize}", members.Count, string.Join(", ", minTeamSize));
+        logger.LogInformation("Total members: {memberCount}, members to sort: {membersToSort}, min team size: {teamSize}", members.Count, membersToSort.Count, string.Join(", ", minTeamSize));
         var currentGeneration = new List<SortGeneration>(GenerationSize);
         for (var i = 0; i < GenerationSize; i++)
         {
