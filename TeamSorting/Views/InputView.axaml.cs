@@ -176,7 +176,11 @@ public partial class InputView : UserControl
 
     private void AddDiscipline()
     {
-        var context = (InputViewModel)DataContext!;
+        if (DataContext is not InputViewModel context || string.IsNullOrWhiteSpace(context.NewDisciplineName))
+        {
+            return;
+        }
+
         var disciplineType = (DisciplineDataType)(DisciplineTypeComboBox.SelectedItem ?? DisciplineDataType.Number);
         var disciplineSortOrder = (SortOrder)(DisciplineSortOrderComboBox.SelectionBoxItem ?? SortOrder.Asc);
         var discipline = new DisciplineInfo(context.NewDisciplineName)
