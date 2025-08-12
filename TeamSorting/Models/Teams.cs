@@ -74,6 +74,7 @@ public class Teams : ObservableObject
     }
 
     private readonly ObservableCollection<Team> _teamList = [];
+    private string _usedSeed = string.Empty;
 
     public ReadOnlyObservableCollection<Team> TeamList { get; }
 
@@ -88,7 +89,12 @@ public class Teams : ObservableObject
 
     public ProgressValues Progress { get; } = new();
     public string InputSeed { get; set; } = string.Empty;
-    public string UsedSeed { get; set; } = string.Empty;
+
+    public string UsedSeed
+    {
+        get => _usedSeed;
+        set => SetProperty(ref _usedSeed, value);
+    }
 
     public bool AddTeam(Team team)
     {
