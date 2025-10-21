@@ -152,7 +152,7 @@ public class Teams : ObservableObject
         List<Member> changedMembers = [];
         foreach (Team team in _teamList)
         {
-            changedMembers.AddRange(team.LockMembers());
+            changedMembers.AddRange(team.PinMembers());
         }
 
         return changedMembers;
@@ -163,7 +163,7 @@ public class Teams : ObservableObject
         List<Member> changedMembers = [];
         foreach (Team team in _teamList)
         {
-            changedMembers.AddRange(team.UnlockMembers());
+            changedMembers.AddRange(team.UnpinMembers());
         }
 
         return changedMembers;

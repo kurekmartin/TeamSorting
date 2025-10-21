@@ -218,7 +218,7 @@ public class Team : ObservableObject
         return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m => m.Name)).ToList());
     }
 
-    public List<Member> LockMembers()
+    public List<Member> PinMembers()
     {
         List<Member> changedMembers = [];
         foreach (Member member in _members)
@@ -231,7 +231,7 @@ public class Team : ObservableObject
         return changedMembers;
     }
 
-    public List<Member> UnlockMembers()
+    public List<Member> UnpinMembers()
     {
         List<Member> changedMembers = [];
         foreach (Member member in _members)
