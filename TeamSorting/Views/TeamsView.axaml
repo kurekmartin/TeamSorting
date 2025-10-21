@@ -327,12 +327,15 @@
                                                     <MenuFlyout>
                                                         <MenuItem Header="Delete"
                                                                   Click="DeleteTeamButton_OnClick"
-                                                                  ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}" />
+                                                                  ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}"
+                                                                  i:MenuItem.Icon="mdi-delete" />
                                                         <MenuItem Header="-" />
                                                         <MenuItem Header="Pin all"
-                                                                  Click="PinTeamMembersMenuItem_OnClick" />
+                                                                  Click="PinTeamMembersMenuItem_OnClick"
+                                                                  i:MenuItem.Icon="mdi-pin" />
                                                         <MenuItem Header="Unpin all"
-                                                                  Click="UnpinTeamMembersMenuItem_OnClick" />
+                                                                  Click="UnpinTeamMembersMenuItem_OnClick"
+                                                                  i:MenuItem.Icon="mdi-pin-off" />
                                                     </MenuFlyout>
                                                 </Button.Flyout>
                                             </Button>
