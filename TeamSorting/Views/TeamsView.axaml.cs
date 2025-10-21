@@ -268,4 +268,20 @@ public partial class TeamsView : UserControl
         if (DataContext is not TeamsViewModel context) return;
         context.Teams.UnlockCurrentMembers();
     }
+
+    private void PinTeamMembersMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel)
+        {
+            team.PinMembers();
+        }
+    }
+
+    private void UnpinTeamMembersMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel)
+        {
+            team.UnpinMembers();
+        }
+    }
 }

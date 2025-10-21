@@ -320,14 +320,22 @@
                                                                VerticalAlignment="Bottom" />
                                                 </StackPanel>
                                             </StackPanel>
-                                            <Button DockPanel.Dock="Right"
-                                                    VerticalAlignment="Top"
-                                                    HorizontalAlignment="Right"
-                                                    i:Attached.Icon="mdi-close"
-                                                    Foreground="DarkRed"
-                                                    Click="DeleteTeamButton_OnClick"
-                                                    Background="Transparent"
-                                                    ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}" />
+                                            <Button HorizontalAlignment="Right"
+                                                    i:Attached.Icon="mdi-dots-vertical"
+                                                    Background="Transparent">
+                                                <Button.Flyout>
+                                                    <MenuFlyout>
+                                                        <MenuItem Header="Delete"
+                                                                  Click="DeleteTeamButton_OnClick"
+                                                                  ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}" />
+                                                        <MenuItem Header="-" />
+                                                        <MenuItem Header="Pin all"
+                                                                  Click="PinTeamMembersMenuItem_OnClick" />
+                                                        <MenuItem Header="Unpin all"
+                                                                  Click="UnpinTeamMembersMenuItem_OnClick" />
+                                                    </MenuFlyout>
+                                                </Button.Flyout>
+                                            </Button>
                                         </DockPanel>
                                         <ItemsControl ItemsSource="{Binding AvgScores}"
                                                       Margin="5">
