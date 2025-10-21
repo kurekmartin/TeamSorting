@@ -2,6 +2,7 @@
 using Projektanker.Icons.Avalonia;
 using Projektanker.Icons.Avalonia.MaterialDesign;
 using Serilog;
+using Serilog.Core;
 using Serilog.Events;
 
 namespace TeamSorting;
@@ -15,18 +16,24 @@ sealed class Program
     public static void Main(string[] args)
     {
         const string outputTemplate = "[{ProcessId}] {Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level:u3}] [{SourceContext}] {Message:lj}{NewLine}{Exception}";
-        string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log", "TeamSorting.log");
-        Log.Logger = new LoggerConfiguration()
-                     .MinimumLevel.Debug()
-                     .WriteTo.Console(outputTemplate: outputTemplate)
-                     .WriteTo.File(path: logPath,
-                         restrictedToMinimumLevel: LogEventLevel.Information,
-                         rollingInterval: RollingInterval.Day,
-                         retainedFileCountLimit: 1,
-                         shared: true,
-                         outputTemplate: outputTemplate)
-                     .Enrich.WithProcessId()
-                     .CreateLogger();
+        var logPath = string.Empty;
+        LoggerConfiguration loggerConfig = new LoggerConfiguration()
+                                           .MinimumLevel.Debug()
+                                           .WriteTo.Console(outputTemplate: outputTemplate)
+                                           .Enrich.WithProcessId();
+
+#if !DEBUG
+        logPath = Path.Combine(Constants.LogDirectory, "TeamSorting.log");
+        loggerConfig
+            .WriteTo.File(path: logPath,
+                restrictedToMinimumLevel: LogEventLevel.Information,
+                rollingInterval: RollingInterval.Day,
+                retainedFileCountLimit: 1,
+                shared: true,
+                outputTemplate: outputTemplate);
+#endif
+
+        Log.Logger = loggerConfig.CreateLogger();
 
         Log.Information("Application starting");
         Log.Debug("Writing log to folder {path}", Path.GetDirectoryName(logPath));
