@@ -1,14 +1,13 @@
 ﻿using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TeamSorting.Enums;
 
 namespace TeamSorting.Models;
 
-public class Team : ObservableObject
+public class Team : ValidatableObservableObject
 {
     private readonly ILogger? _logger = Ioc.Default.GetService<ILogger<Team>>();
 
@@ -34,7 +33,20 @@ public class Team : ObservableObject
 
     public Guid Id { get; } = Guid.NewGuid();
 
-    public string Name { get; set; }
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (SetProperty(ref _name, value))
+            {
+                ValidateProperty(value);
+            }
+        }
+    }
+
+    private string _name = string.Empty;
+
     public TeamType TeamType { get; }
     public ReadOnlyObservableCollection<Member> Members { get; }
     private readonly ObservableCollection<Member> _members = [];

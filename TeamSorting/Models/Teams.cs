@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using TeamSorting.Enums;
@@ -105,6 +106,8 @@ public class Teams : ObservableObject
 
         _logger.LogInformation("Adding team {teamId}", team.Id);
         _teamList.Add(team);
+        team.ErrorsChanged += TeamOnErrorsChanged;
+        OnPropertyChanged(nameof(CanExportTeams));
         _teamNumber++;
 
         return true;
@@ -126,6 +129,8 @@ public class Teams : ObservableObject
 
         _logger.LogInformation("Removing team {teamId}", team.Id);
         bool result = _teamList.Remove(team);
+        team.ErrorsChanged -= TeamOnErrorsChanged;
+        OnPropertyChanged(nameof(CanExportTeams));
         return result;
     }
 
@@ -192,4 +197,47 @@ public class Teams : ObservableObject
         UsedSeed = seed ?? string.Empty;
         SortingInProgress = false;
     }
+
+    public void ValidateTeamNames()
+    {
+        ClearTeamErrors(nameof(Team.Name));
+        CheckForDuplicateTeamNames();
+        CheckTeamEmptyNames();
+    }
+
+    private void CheckTeamEmptyNames()
+    {
+        IEnumerable<Team> teamsWithEmptyNames = TeamList.Where(team => string.IsNullOrWhiteSpace(team.Name));
+        foreach (Team team in teamsWithEmptyNames)
+        {
+            team.AddError(nameof(Team.Name),"Team name cannot be empty.");
+        }
+    }
+
+    private void CheckForDuplicateTeamNames()
+    {
+        IEnumerable<Team> duplicateTeams = TeamList.GroupBy(team => team.Name).Where(group => group.Count() > 1).SelectMany(group => group);
+
+        foreach (Team duplicateTeam in duplicateTeams)
+        {
+            duplicateTeam.AddError(nameof(Team.Name), "Teams cannot have the same name.");
+        }
+    }
+
+    private void ClearTeamErrors(string propertyName)
+    {
+        foreach (Team team in TeamList)
+        {
+            team.ClearErrors(propertyName);
+        }
+    }
+
+    private void TeamOnErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
+    {
+        OnPropertyChanged(nameof(HasErrors));
+        OnPropertyChanged(nameof(CanExportTeams));
+    }
+
+    public bool HasErrors => TeamList.Any(t => t.HasErrors);
+    public bool CanExportTeams => !HasErrors && TeamList.Count > 0;
 }

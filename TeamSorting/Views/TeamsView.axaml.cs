@@ -284,4 +284,10 @@ public partial class TeamsView : UserControl
             team.UnpinMembers();
         }
     }
+
+    private void TextBox_TeamNameOnTextChanged(object? sender, TextChangedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        teamsViewModel.Teams.ValidateTeamNames();
+    }
 }

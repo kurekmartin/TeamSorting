@@ -97,7 +97,8 @@
                             <Button Click="AddTeamButton_OnClick"
                                     Content="{x:Static lang:Resources.TeamsView_AddTeam_Button}" />
                             <Button Click="ExportTeamsToCsv_OnClick"
-                                    Content="{x:Static lang:Resources.TeamsView_ExportToCSV_Button}" />
+                                    Content="{x:Static lang:Resources.TeamsView_ExportToCSV_Button}"
+                                    IsEnabled="{Binding Teams.CanExportTeams}"/>
                             <StackPanel Orientation="Horizontal"
                                         Margin="0,0,0,2"
                                         DockPanel.Dock="Top"
@@ -304,10 +305,11 @@
                                                         HorizontalAlignment="Center"
                                                         Spacing="8"
                                                         Margin="0,0,8,0">
-                                                <TextBlock Text="{Binding Name}"
-                                                           FontWeight="Bold"
-                                                           HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center" />
+                                                <TextBox Text="{Binding Name}"
+                                                         FontWeight="Bold"
+                                                         HorizontalAlignment="Center"
+                                                         VerticalAlignment="Center"
+                                                         TextChanged="TextBox_TeamNameOnTextChanged"/>
                                                 <StackPanel Orientation="Horizontal"
                                                             VerticalAlignment="Center">
                                                     <i:Icon Value="mdi-account-group"
