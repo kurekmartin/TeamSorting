@@ -310,6 +310,12 @@ public class InputViewModel : ViewModelBase
         iconSort.Bind(Icon.ValueProperty, iconSortBinding);
         iconPanel.Children.Add(iconSort);
 
+        var iconPriority = new Icon
+        {
+            FontSize = 20,
+            Value = "mdi-priority-high",
+            Margin = new Thickness(5,0,0,0),
+        };
         var priorityField = new NumericUpDown
         {
             AllowSpin = true,
@@ -318,7 +324,8 @@ public class InputViewModel : ViewModelBase
             Maximum = DisciplineInfo.PriorityMax,
             FormatString = "0",
             MinWidth = 40,
-            [ToolTip.TipProperty] = Resources.DisciplineInfo_Priority
+            [ToolTip.TipProperty] = Resources.DisciplineInfo_Priority,
+            InnerLeftContent = iconPriority
         };
         var priorityBinding = new Binding
         {
