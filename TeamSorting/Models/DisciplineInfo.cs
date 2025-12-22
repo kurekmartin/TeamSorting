@@ -5,7 +5,7 @@ namespace TeamSorting.Models;
 
 public class DisciplineInfo(string name) : ObservableObject
 {
-    private int _priority = PriorityMax;
+    private int _priority = PriorityMin;
 
     public void UpdateMinMax(decimal value)
     {

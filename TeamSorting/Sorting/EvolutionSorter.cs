@@ -198,7 +198,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         {
             decimal min = disciplineScore.Value.Min();
             decimal max = disciplineScore.Value.Max();
-            score += decimal.Abs(min - max) * (DisciplineInfo.PriorityMax + 1 - disciplineScore.Key.Priority) * PriorityMultiplier;
+            score += decimal.Abs(min - max) * disciplineScore.Key.Priority * PriorityMultiplier;
         }
 
         return score;
