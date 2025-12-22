@@ -276,4 +276,10 @@ Chcete pokračovat?</value>
     <data name="MainWindow_NewVersion_Download_Button" xml:space="preserve">
         <value>K dispozici je nová verze. Zobrazit stránku ke stažení.</value>
     </data>
+    <data name="TeamsView_DuplicateTeamNames_Error" xml:space="preserve">
+        <value>Týmy nemohou mít stejné jméno.</value>
+    </data>
+    <data name="TeamsView_TeamEmptyName_Error" xml:space="preserve">
+        <value>Název týmu nemůže být prázdný.</value>
+    </data>
 </root>

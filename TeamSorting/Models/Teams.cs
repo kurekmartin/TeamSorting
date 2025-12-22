@@ -210,7 +210,7 @@ public class Teams : ObservableObject
         IEnumerable<Team> teamsWithEmptyNames = TeamList.Where(team => string.IsNullOrWhiteSpace(team.Name));
         foreach (Team team in teamsWithEmptyNames)
         {
-            team.AddError(nameof(Team.Name),"Team name cannot be empty.");
+            team.AddError(nameof(Team.Name),Resources.TeamsView_TeamEmptyName_Error);
         }
     }
 
@@ -220,7 +220,7 @@ public class Teams : ObservableObject
 
         foreach (Team duplicateTeam in duplicateTeams)
         {
-            duplicateTeam.AddError(nameof(Team.Name), "Teams cannot have the same name.");
+            duplicateTeam.AddError(nameof(Team.Name), Resources.TeamsView_DuplicateTeamNames_Error);
         }
     }
 

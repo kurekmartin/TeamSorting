@@ -275,4 +275,10 @@ Do you want to continue?</value>
     <data name="MainWindow_NewVersion_Download_Button" xml:space="preserve">
         <value>New version available. Show download page.</value>
     </data>
+    <data name="TeamsView_TeamEmptyName_Error" xml:space="preserve">
+        <value>Team name cannot be empty.</value>
+    </data>
+    <data name="TeamsView_DuplicateTeamNames_Error" xml:space="preserve">
+        <value>Teams cannot have the same name.</value>
+    </data>
 </root>
