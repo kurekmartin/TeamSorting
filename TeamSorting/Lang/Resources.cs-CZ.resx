@@ -48,10 +48,10 @@
     <data name="InputView_RemoveMember_Button_Tooltip" xml:space="preserve">
         <value>Odstranit člena</value>
     </data>
-    <data name="InputView_Seed_Watermark" xml:space="preserve">
+    <data name="TeamsView_Seed_Watermark" xml:space="preserve">
         <value>Semínko</value>
     </data>
-    <data name="InputView_Sort_WarningDialog_Message" xml:space="preserve">
+    <data name="TeamsView_Sort_WarningDialog_Message" xml:space="preserve">
         <value>Aktuální kombinace členů bude zahozena.
 Chcete zahodit aktuální kombinaci členů?</value>
     </data>
@@ -59,9 +59,9 @@ Chcete zahodit aktuální kombinaci členů?</value>
         <value>Exportovat týmy do CSV</value>
     </data>
     <data name="InputView_LoadData_Button" xml:space="preserve">
-        <value>Načíst data</value>
+        <value>Načíst z CSV souboru</value>
     </data>
-    <data name="InputView_SortToTeams_Button" xml:space="preserve">
+    <data name="TeamsView_SortToTeams_Button" xml:space="preserve">
         <value>Rozdělit do týmů</value>
     </data>
     <data name="TeamsView_Back_Button" xml:space="preserve">
@@ -177,12 +177,12 @@ Očekávaný formát je {0}</value>
 {0}</value>
     </data>
     <data name="InputView_ShowTeams_Button" xml:space="preserve">
-        <value>Zobrazit týmy</value>
+        <value>Týmy</value>
     </data>
-    <data name="InputView_Sort_WarningDialog_Cancel" xml:space="preserve">
+    <data name="TeamsView_Sort_WarningDialog_Cancel" xml:space="preserve">
         <value>Zrušit</value>
     </data>
-    <data name="InputView_Sort_WarningDialog_Delete" xml:space="preserve">
+    <data name="TeamsView_Sort_WarningDialog_Delete" xml:space="preserve">
         <value>Smazat</value>
     </data>
     <data name="InputView_DeleteData_WarningDialog_Message" xml:space="preserve">
@@ -281,5 +281,20 @@ Chcete pokračovat?</value>
     </data>
     <data name="TeamsView_TeamEmptyName_Error" xml:space="preserve">
         <value>Název týmu nemůže být prázdný.</value>
+    </data>
+    <data name="InputView_Data_Button" xml:space="preserve">
+        <value>Data</value>
+    </data>
+    <data name="InputView_Add_Button" xml:space="preserve">
+        <value>Přidat</value>
+    </data>
+    <data name="InputView_AddMember_MenuItem" xml:space="preserve">
+        <value>Přidat člena</value>
+    </data>
+    <data name="InputView_AddDiscipline_MenuItem" xml:space="preserve">
+        <value>Přidat disciplínu</value>
+    </data>
+    <data name="InputView_AddToolbarClose_Button" xml:space="preserve">
+        <value>Hotovo</value>
     </data>
 </root>

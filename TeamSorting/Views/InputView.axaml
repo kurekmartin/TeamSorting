@@ -10,7 +10,8 @@
              xmlns:lang="clr-namespace:TeamSorting.Lang"
              xmlns:converter="clr-namespace:TeamSorting.Converters"
              xmlns:controls="clr-namespace:TeamSorting.Controls"
-             xmlns:models="clr-namespace:TeamSorting.Models">
+             xmlns:models="clr-namespace:TeamSorting.Models"
+             KeyDown="InputElement_OnKeyDown">
     <UserControl.Resources>
         <converter:EnumDisplayNameConvertor x:Key="EnumDisplayNameConvertor" />
     </UserControl.Resources>
@@ -21,121 +22,145 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto, *"
+    <Grid RowDefinitions="Auto, Auto, *"
           VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch">
         <Border Grid.Row="0"
-                DockPanel.Dock="Top"
                 Padding="8"
                 BoxShadow="0 0 8 0 Gray">
             <DockPanel>
-                <DockPanel>
-                    <StackPanel DockPanel.Dock="Top"
-                                Spacing="4"
-                                VerticalAlignment="Top"
-                                HorizontalAlignment="Left">
-                        <Button
-                            Click="LoadData_OnClick"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            Content="{x:Static lang:Resources.InputView_LoadData_Button}" />
-                        <Button Click="DeleteDataButton_OnClick"
-                                DockPanel.Dock="Top"
-                                Content="{x:Static lang:Resources.InputView_DeleteData_Button}" />
+                <Button HorizontalAlignment="Left"
+                        DockPanel.Dock="Left">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static lang:Resources.InputView_Data_Button}"
+                                   VerticalAlignment="Center" />
+                        <i:Icon Value="mdi-chevron-down"
+                                FontSize="20"
+                                Margin="4,0,0,0" />
                     </StackPanel>
+                    <Button.Flyout>
+                        <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                            <MenuItem Header="{x:Static lang:Resources.InputView_LoadData_Button}"
+                                      Click="LoadData_OnClick"
+                                      i:MenuItem.Icon="mdi-file-delimited" />
+                            <MenuItem Header="{x:Static lang:Resources.InputView_DeleteData_Button}"
+                                      Click="DeleteDataButton_OnClick"
+                                      i:MenuItem.Icon="mdi-delete" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
 
-                    <StackPanel DockPanel.Dock="Bottom"
-                                Orientation="Vertical"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Left"
-                                Spacing="4"
-                                Margin="0,20,0,0">
-                        <StackPanel Orientation="Horizontal"
-                                    VerticalAlignment="Bottom"
-                                    HorizontalAlignment="Left"
-                                    Spacing="4">
-                            <TextBox Text="{Binding NewMemberName}"
-                                     Watermark="{x:Static lang:Resources.InputView_NewMember_TextBox_Watermark}"
-                                     IsVisible="True"
-                                     Width="200"
-                                     KeyDown="NewMemberTextBox_OnKeyDown"
-                                     DockPanel.Dock="Left" />
-                            <Button VerticalAlignment="Center"
-                                    Click="NewMemberTextBox_OnClick"
-                                    Content="{x:Static lang:Resources.InputView_NewMember_Button}" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Bottom"
-                                    Spacing="4">
-                            <TextBox Text="{Binding NewDisciplineName}"
-                                     Watermark="{x:Static lang:Resources.InputView_NewDiscipline_Watermark}"
-                                     Width="200"
-                                     KeyDown="AddDisciplineTextBox_OnKeyDown"
-                                     DockPanel.Dock="Left" />
-                            <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
-                                      x:Name="DisciplineTypeComboBox"
-                                      Loaded="ComboBox_OnLoaded">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock
-                                            Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <ComboBox ItemsSource="{Binding SortOrder}"
-                                      x:Name="DisciplineSortOrderComboBox"
-                                      Loaded="ComboBox_OnLoaded">
-                                <ComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock
-                                            Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
-                                    </DataTemplate>
-                                </ComboBox.ItemTemplate>
-                            </ComboBox>
-                            <Button VerticalAlignment="Center"
-                                    Click="AddDisciplineButton_OnClick"
-                                    Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}">
-                            </Button>
-                        </StackPanel>
+                <Button HorizontalAlignment="Left"
+                        DockPanel.Dock="Left"
+                        Margin="5 0 0 0">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static lang:Resources.InputView_Add_Button}"
+                                   VerticalAlignment="Center" />
+                        <i:Icon Value="mdi-chevron-down"
+                                FontSize="20"
+                                Margin="4,0,0,0" />
                     </StackPanel>
-                </DockPanel>
+                    <Button.Flyout>
+                        <MenuFlyout Placement="BottomEdgeAlignedLeft">
+                            <MenuItem Header="{x:Static lang:Resources.InputView_AddMember_MenuItem}"
+                                      Click="AddMemberMenuItem_OnClick" />
+                            <MenuItem Header="{x:Static lang:Resources.InputView_AddDiscipline_MenuItem}"
+                                      Click="AddDisciplineMenuItem_OnClick" />
+                        </MenuFlyout>
+                    </Button.Flyout>
+                </Button>
 
-                <DockPanel HorizontalAlignment="Right"
-                           DockPanel.Dock="Right">
-                    <Button DockPanel.Dock="Top"
-                            Click="ShowTeamsButton_OnClick"
-                            HorizontalAlignment="Right">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
-                            <i:Icon Value="mdi-arrow-right"
-                                    FontSize="16"
-                                    Margin="4,0,0,0" />
-                        </StackPanel>
-                    </Button>
-
-                    <StackPanel DockPanel.Dock="Bottom"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Bottom"
-                                Orientation="Vertical"
-                                Spacing="4">
-                        <NumericUpDown x:Name="NumberOfTeams"
-                                       Value="{Binding NumberOfTeams}"
-                                       FormatString="0"
-                                       Minimum="1"
-                                       Maximum="10" />
-                        <TextBox MaxLength="10"
-                                 Watermark="{x:Static lang:Resources.InputView_Seed_Watermark}"
-                                 Text="{Binding Teams.InputSeed}" />
-                        <Button Click="SortToTeams_OnClick"
-                                HorizontalAlignment="Right"
-                                Content="{x:Static lang:Resources.InputView_SortToTeams_Button}" />
+                <Button DockPanel.Dock="Right"
+                        Click="ShowTeamsButton_OnClick"
+                        HorizontalAlignment="Right">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
+                        <i:Icon Value="mdi-arrow-right"
+                                FontSize="16"
+                                Margin="4,0,0,0" />
                     </StackPanel>
-                </DockPanel>
+                </Button>
             </DockPanel>
         </Border>
 
         <Border Grid.Row="1"
+                Margin="8"
+                BorderThickness="0"
+                CornerRadius="8"
+                BoxShadow="0 0 8 0 Gray"
+                IsVisible="{Binding ShowAddMemberToolbar}"
+                Padding="4">
+            <DockPanel HorizontalAlignment="Stretch">
+                <TextBox Text="{Binding NewMemberName}"
+                         Watermark="{x:Static lang:Resources.InputView_NewMember_TextBox_Watermark}"
+                         IsVisible="True"
+                         Width="200"
+                         KeyDown="NewMemberTextBox_OnKeyDown"
+                         DockPanel.Dock="Left" />
+                <Button DockPanel.Dock="Left"
+                        VerticalAlignment="Center"
+                        Margin="4 0 0 0"
+                        Click="NewMemberTextBox_OnClick"
+                        Content="{x:Static lang:Resources.InputView_NewMember_Button}" />
+                <Button DockPanel.Dock="Right"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Click="AddToolbarCloseButton_OnClick"
+                        Content="{x:Static lang:Resources.InputView_AddToolbarClose_Button}" />
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Row="1"
+                Margin="8"
+                BorderThickness="0"
+                CornerRadius="8"
+                BoxShadow="0 0 8 0 Gray"
+                IsVisible="{Binding ShowAddDisciplineToolbar}"
+                Padding="4">
+            <DockPanel HorizontalAlignment="Stretch">
+                <TextBox Text="{Binding NewDisciplineName}"
+                         Watermark="{x:Static lang:Resources.InputView_NewDiscipline_Watermark}"
+                         Width="200"
+                         KeyDown="AddDisciplineTextBox_OnKeyDown"
+                         DockPanel.Dock="Left" />
+                <ComboBox ItemsSource="{Binding DisciplineDataTypes}"
+                          x:Name="DisciplineTypeComboBox"
+                          Margin="4 0 0 0"
+                          Loaded="ComboBox_OnLoaded"
+                          DockPanel.Dock="Left">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <ComboBox ItemsSource="{Binding SortOrder}"
+                          x:Name="DisciplineSortOrderComboBox"
+                          Margin="4 0 0 0"
+                          Loaded="ComboBox_OnLoaded"
+                          DockPanel.Dock="Left">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock
+                                Text="{Binding ., Converter={StaticResource EnumDisplayNameConvertor}}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                <Button VerticalAlignment="Center"
+                        DockPanel.Dock="Left"
+                        Margin="4 0 0 0"
+                        Click="AddDisciplineButton_OnClick"
+                        Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}" />
+                <Button DockPanel.Dock="Right"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Right"
+                        Click="AddToolbarCloseButton_OnClick"
+                        Content="{x:Static lang:Resources.InputView_AddToolbarClose_Button}" />
+            </DockPanel>
+        </Border>
+
+        <Border Grid.Row="2"
                 Margin="8"
                 BorderThickness="0"
                 CornerRadius="8"
@@ -157,7 +182,7 @@
                         </DataTemplate>
                         <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
                             <TextBox Text="{Binding Name}"
-                                     VerticalAlignment="Center"/>
+                                     VerticalAlignment="Center" />
                         </DataTemplate>
                         <DataTemplate x:Key="RemoveMemberCell">
                             <Button Click="RemoveMemberButton_OnClick"

@@ -105,15 +105,15 @@ namespace TeamSorting.Lang {
             }
         }
         
-        public static string InputView_Seed_Watermark {
+        public static string TeamsView_Seed_Watermark {
             get {
-                return ResourceManager.GetString("InputView_Seed_Watermark", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Seed_Watermark", resourceCulture);
             }
         }
         
-        public static string InputView_Sort_WarningDialog_Message {
+        public static string TeamsView_Sort_WarningDialog_Message {
             get {
-                return ResourceManager.GetString("InputView_Sort_WarningDialog_Message", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Sort_WarningDialog_Message", resourceCulture);
             }
         }
         
@@ -129,9 +129,9 @@ namespace TeamSorting.Lang {
             }
         }
         
-        public static string InputView_SortToTeams_Button {
+        public static string TeamsView_SortToTeams_Button {
             get {
-                return ResourceManager.GetString("InputView_SortToTeams_Button", resourceCulture);
+                return ResourceManager.GetString("TeamsView_SortToTeams_Button", resourceCulture);
             }
         }
         
@@ -357,15 +357,15 @@ namespace TeamSorting.Lang {
             }
         }
         
-        public static string InputView_Sort_WarningDialog_Cancel {
+        public static string TeamsView_Sort_WarningDialog_Cancel {
             get {
-                return ResourceManager.GetString("InputView_Sort_WarningDialog_Cancel", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Sort_WarningDialog_Cancel", resourceCulture);
             }
         }
         
-        public static string InputView_Sort_WarningDialog_Delete {
+        public static string TeamsView_Sort_WarningDialog_Delete {
             get {
-                return ResourceManager.GetString("InputView_Sort_WarningDialog_Delete", resourceCulture);
+                return ResourceManager.GetString("TeamsView_Sort_WarningDialog_Delete", resourceCulture);
             }
         }
         
@@ -552,6 +552,36 @@ namespace TeamSorting.Lang {
         public static string TeamsView_TeamEmptyName_Error {
             get {
                 return ResourceManager.GetString("TeamsView_TeamEmptyName_Error", resourceCulture);
+            }
+        }
+        
+        public static string InputView_Data_Button {
+            get {
+                return ResourceManager.GetString("InputView_Data_Button", resourceCulture);
+            }
+        }
+        
+        public static string InputView_Add_Button {
+            get {
+                return ResourceManager.GetString("InputView_Add_Button", resourceCulture);
+            }
+        }
+        
+        public static string InputView_AddMember_MenuItem {
+            get {
+                return ResourceManager.GetString("InputView_AddMember_MenuItem", resourceCulture);
+            }
+        }
+        
+        public static string InputView_AddDiscipline_MenuItem {
+            get {
+                return ResourceManager.GetString("InputView_AddDiscipline_MenuItem", resourceCulture);
+            }
+        }
+        
+        public static string InputView_AddToolbarClose_Button {
+            get {
+                return ResourceManager.GetString("InputView_AddToolbarClose_Button", resourceCulture);
             }
         }
     }

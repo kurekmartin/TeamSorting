@@ -12,7 +12,7 @@ using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
-public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil, Members members) : ViewModelBase
+public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil) : ViewModelBase
 {
     public const string MemberFormat = "member-card-format";
     public const string DragActiveClass = "drag-active";
@@ -21,6 +21,7 @@ public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUti
     private MemberCard? _draggingMemberCard;
     private Timer? _timer;
     private Visual? _dragOverTeam;
+    public int NumberOfTeams { get; set; } = 2;
 
     public MemberCard? DraggingMemberCard
     {

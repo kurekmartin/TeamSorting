@@ -32,6 +32,24 @@ public class InputViewModel : ViewModelBase
     public int NumberOfTeams { get; set; } = 2;
     private string _newMemberName = string.Empty;
 
+    public AddMode AddMode
+    {
+        get => _addMode;
+        set
+        {
+            if (!SetProperty(ref _addMode, value))
+            {
+                return;
+            }
+
+            OnPropertyChanged(nameof(ShowAddMemberToolbar));
+            OnPropertyChanged(nameof(ShowAddDisciplineToolbar));
+        }
+    }
+
+    public bool ShowAddMemberToolbar => AddMode == AddMode.Member;
+    public bool ShowAddDisciplineToolbar => AddMode == AddMode.Discipline;
+
     public string NewMemberName
     {
         get => _newMemberName;
@@ -39,6 +57,7 @@ public class InputViewModel : ViewModelBase
     }
 
     private string _newDisciplineName = string.Empty;
+    private AddMode _addMode = AddMode.None;
 
     public string NewDisciplineName
     {
@@ -263,7 +282,7 @@ public class InputViewModel : ViewModelBase
         {
             VerticalAlignment = VerticalAlignment.Center,
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            Margin = new Thickness(0,0,5,0)
+            Margin = new Thickness(0, 0, 5, 0)
         };
         var textBinding = new Binding
         {
@@ -314,7 +333,7 @@ public class InputViewModel : ViewModelBase
         {
             FontSize = 20,
             Value = "mdi-priority-high",
-            Margin = new Thickness(5,0,0,0),
+            Margin = new Thickness(5, 0, 0, 0),
         };
         var priorityField = new NumericUpDown
         {

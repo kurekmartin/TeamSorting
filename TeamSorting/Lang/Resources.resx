@@ -24,7 +24,7 @@
     <data name="InputView_RemoveDiscipline_Button" xml:space="preserve">
         <value>Remove discipline</value>
     </data>
-    <data name="InputView_Sort_WarningDialog_Message" xml:space="preserve">
+    <data name="TeamsView_Sort_WarningDialog_Message" xml:space="preserve">
         <value>Current combination of members will be discarded.
 Do you want to discard current combination of members?</value>
     </data>
@@ -37,7 +37,7 @@ Do you want to discard current combination of members?</value>
     <data name="InputView_AddDiscipline_Button" xml:space="preserve">
         <value>Add Discipline</value>
     </data>
-    <data name="InputView_Seed_Watermark" xml:space="preserve">
+    <data name="TeamsView_Seed_Watermark" xml:space="preserve">
         <value>Seed</value>
     </data>
     <data name="InputView_RemoveMember_Button_Tooltip" xml:space="preserve">
@@ -59,9 +59,9 @@ Do you want to discard current combination of members?</value>
         <value>Add member</value>
     </data>
     <data name="InputView_LoadData_Button" xml:space="preserve">
-        <value>Load data</value>
+        <value>Load from CSV file</value>
     </data>
-    <data name="InputView_SortToTeams_Button" xml:space="preserve">
+    <data name="TeamsView_SortToTeams_Button" xml:space="preserve">
         <value>Sort to teams</value>
     </data>
     <data name="TeamsView_Back_Button" xml:space="preserve">
@@ -178,12 +178,12 @@ Expected format is {0}</value>
 {0}</value>
     </data>
     <data name="InputView_ShowTeams_Button" xml:space="preserve">
-        <value>Show teams</value>
+        <value>Teams</value>
     </data>
-    <data name="InputView_Sort_WarningDialog_Cancel" xml:space="preserve">
+    <data name="TeamsView_Sort_WarningDialog_Cancel" xml:space="preserve">
         <value>Cancel</value>
     </data>
-    <data name="InputView_Sort_WarningDialog_Delete" xml:space="preserve">
+    <data name="TeamsView_Sort_WarningDialog_Delete" xml:space="preserve">
         <value>Delete</value>
     </data>
     <data name="InputView_DeleteData_WarningDialog_Message" xml:space="preserve">
@@ -280,5 +280,20 @@ Do you want to continue?</value>
     </data>
     <data name="TeamsView_DuplicateTeamNames_Error" xml:space="preserve">
         <value>Teams cannot have the same name.</value>
+    </data>
+    <data name="InputView_Data_Button" xml:space="preserve">
+        <value>Data</value>
+    </data>
+    <data name="InputView_Add_Button" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="InputView_AddMember_MenuItem" xml:space="preserve">
+        <value>Add Member</value>
+    </data>
+    <data name="InputView_AddDiscipline_MenuItem" xml:space="preserve">
+        <value>Add Discipline</value>
+    </data>
+    <data name="InputView_AddToolbarClose_Button" xml:space="preserve">
+        <value>Done</value>
     </data>
 </root>
