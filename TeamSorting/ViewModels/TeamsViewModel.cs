@@ -1,4 +1,5 @@
-﻿using Avalonia;
+﻿using System.Collections.Specialized;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.LogicalTree;
@@ -12,26 +13,52 @@ using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
-public class TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil) : ViewModelBase
+public class TeamsViewModel : ViewModelBase
 {
     public const string MemberFormat = "member-card-format";
     public const string DragActiveClass = "drag-active";
+    public Teams Teams { get; }
+    public Disciplines Disciplines { get; }
+    public CsvUtil CsvUtil { get; }
     public WindowNotificationManager? NotificationManager { get; set; }
     private MemberSortCriteria _teamsSortCriteria;
     private MemberCard? _draggingMemberCard;
     private Timer? _timer;
     private Visual? _dragOverTeam;
-    public int NumberOfTeams { get; set; } = 2;
+    private int _numberOfTeams = 2;
+
+    public TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil)
+    {
+        Teams = teams;
+        Disciplines = disciplines;
+        CsvUtil = csvUtil;
+
+        ((INotifyCollectionChanged)teams.TeamList).CollectionChanged += TeamsOnCollectionChanged;
+    }
+
+    private void TeamsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Reset:
+                NumberOfTeams = Teams.TeamList.Count;
+                break;
+        }
+    }
+
+    public int NumberOfTeams
+    {
+        get => _numberOfTeams;
+        set => SetProperty(ref _numberOfTeams, value);
+    }
 
     public MemberCard? DraggingMemberCard
     {
         get => _draggingMemberCard;
         set => SetProperty(ref _draggingMemberCard, value);
     }
-
-    public Teams Teams { get; } = teams;
-    public Disciplines Disciplines { get; } = disciplines;
-    public CsvUtil CsvUtil { get; } = csvUtil;
 
     public MemberSortCriteria TeamsSortCriteria
     {

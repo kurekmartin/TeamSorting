@@ -119,11 +119,10 @@ public class Teams : ObservableObject
         return true;
     }
 
-    public Team CreateAndAddTeam()
+    public bool CreateAndAddTeam()
     {
         var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber), TeamType.SortTeam);
-        AddTeam(team);
-        return team;
+        return AddTeam(team);
     }
 
     public bool RemoveTeam(Team team)
