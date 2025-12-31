@@ -52,8 +52,10 @@
         <value>Semínko</value>
     </data>
     <data name="TeamsView_Sort_WarningDialog_Message" xml:space="preserve">
-        <value>Aktuální kombinace členů bude zahozena.
-Chcete zahodit aktuální kombinaci členů?</value>
+        <value>Cílový počet týmů je nižší, než aktuální počet týmů. 
+Následující týmy budou smazány:
+{0}
+Chcete tyto týmy smazat?</value>
     </data>
     <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
         <value>Exportovat týmy do CSV</value>

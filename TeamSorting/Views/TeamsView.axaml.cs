@@ -248,12 +248,41 @@ public partial class TeamsView : UserControl
 
     private async void NewCombinationButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context || sender is not Button button || context.Teams.TeamList.Count == 0) return;
+        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        var window = TopLevel.GetTopLevel(this);
+        if (window is not MainWindow { DataContext: MainWindowViewModel } mainWindow)
+        {
+            return;
+        }
+
+        int currentNumberOfTeams = context.Teams.TeamList.Count;
+        int targetNumberOfTeams = context.NumberOfTeams;
+        if (currentNumberOfTeams > targetNumberOfTeams)
+        {
+            List<Team> teamsToDelete = context.Teams.TeamList.Skip(targetNumberOfTeams).ToList();
+            string teamNamesToDelete = string.Join(", ", teamsToDelete.Select(team => team.Name));
+
+            string message = string.Format(Lang.Resources.TeamsView_Sort_WarningDialog_Message, teamNamesToDelete);
+            var dialog = new WarningDialog(
+                message: message,
+                confirmButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Delete,
+                cancelButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Cancel);
+
+            WarningDialogResult result = await mainWindow.ShowWarningDialog(dialog);
+
+            if (result == WarningDialogResult.Cancel)
+            {
+                return;
+            }
+
+            teamsToDelete.ForEach(team => context.Teams.RemoveTeam(team));
+        }
 
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
-        await context.Teams.SortToTeams();
+        await context.Teams.SortToTeams(targetNumberOfTeams);
         button.IsEnabled = true;
+        context.Teams.InputSeed = string.Empty;
         Cursor = Cursor.Default;
     }
 
@@ -289,40 +318,5 @@ public partial class TeamsView : UserControl
     {
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         teamsViewModel.Teams.ValidateTeamNames();
-    }
-
-    private async void SortToTeams_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
-        var window = TopLevel.GetTopLevel(this);
-        if (window is not MainWindow { DataContext: MainWindowViewModel } mainWindow)
-        {
-            return;
-        }
-
-        if (context.Teams.TeamList.Count > 0)
-        {
-            var dialog = new WarningDialog(
-                message: Lang.Resources.TeamsView_Sort_WarningDialog_Message,
-                confirmButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Delete,
-                cancelButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Cancel);
-
-            WarningDialogResult result = await mainWindow.ShowWarningDialog(dialog);
-
-            if (result == WarningDialogResult.Cancel)
-            {
-                return;
-            }
-        }
-
-        mainWindow.Cursor = new Cursor(StandardCursorType.Wait);
-
-        button.IsEnabled = false;
-        context.Teams.UnlockCurrentMembers();
-        context.Teams.RemoveAllTeams();
-        await context.Teams.SortToTeams(context.NumberOfTeams);
-        button.IsEnabled = true;
-
-        mainWindow.Cursor = Cursor.Default;
     }
 }

@@ -66,11 +66,6 @@
                                         Name="SidePanelSorting">
                                 <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Sorting}"
                                            FontWeight="Bold" />
-                                <StackPanel DockPanel.Dock="Bottom"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Bottom"
-                                            Orientation="Vertical"
-                                            Spacing="4">
                                     <NumericUpDown x:Name="NumberOfTeams"
                                                    Value="{Binding NumberOfTeams}"
                                                    FormatString="0"
@@ -79,10 +74,6 @@
                                     <TextBox MaxLength="10"
                                              Watermark="{x:Static lang:Resources.TeamsView_Seed_Watermark}"
                                              Text="{Binding Teams.InputSeed}" />
-                                    <Button Click="SortToTeams_OnClick"
-                                            HorizontalAlignment="Left"
-                                            Content="{x:Static lang:Resources.TeamsView_SortToTeams_Button}" />
-                                </StackPanel>
                                 <Button Click="NewCombinationButton_OnClick"
                                         Content="{x:Static lang:Resources.TeamsView_NewCombination_Button}"
                                         ToolTip.Tip="{x:Static lang:Resources.TeamsView_NewCombination_ToolTip}" />

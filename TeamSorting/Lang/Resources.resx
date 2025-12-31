@@ -25,8 +25,10 @@
         <value>Remove discipline</value>
     </data>
     <data name="TeamsView_Sort_WarningDialog_Message" xml:space="preserve">
-        <value>Current combination of members will be discarded.
-Do you want to discard current combination of members?</value>
+        <value>Desired number of teams is lower than current number of teams. 
+Following teams will be deleted:
+{0}
+Do you want to delete these teams?</value>
     </data>
     <data name="TeamsView_ExportTeamsToCsv_FileDialogTitle" xml:space="preserve">
         <value>Export Teams to CSV</value>
