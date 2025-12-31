@@ -29,7 +29,6 @@ public class InputViewModel : ViewModelBase
     public Teams Teams { get; }
     public CsvUtil CsvUtil { get; }
     public FlatTreeDataGridSource<Member> TreeDataGridSource { get; }
-    public int NumberOfTeams { get; set; } = 2;
     private string _newMemberName = string.Empty;
 
     public AddMode AddMode
