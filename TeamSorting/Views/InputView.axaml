@@ -168,48 +168,56 @@
             <Border BorderThickness="0"
                     ClipToBounds="True"
                     CornerRadius="{Binding $parent[Border].CornerRadius}">
-                <TreeDataGrid
-                    Name="Members"
-                    Source="{Binding TreeDataGridSource}"
-                    AutoDragDropRows="False"
-                    SelectionChanging="Members_OnSelectionChanging">
-                    <TreeDataGrid.Resources>
-                        <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
-                            <controls:ValidationTextBlock ValidatedText="{Binding Name}"
-                                                          VerticalAlignment="Center"
-                                                          Margin="4,8">
-                            </controls:ValidationTextBlock>
-                        </DataTemplate>
-                        <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
-                            <TextBox Text="{Binding Name}"
-                                     VerticalAlignment="Center" />
-                        </DataTemplate>
-                        <DataTemplate x:Key="RemoveMemberCell">
-                            <Button Click="RemoveMemberButton_OnClick"
-                                    ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"
-                                    i:Attached.Icon="mdi-close"
-                                    Background="Transparent"
-                                    Padding="5" />
-                        </DataTemplate>
-                        <DataTemplate x:Key="WithCell" DataType="models:Member">
-                            <controls:MemberListControl
-                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
-                                CurrentMember="{Binding .}"
-                                SelectedMembers="{Binding With}" />
-                        </DataTemplate>
-                        <DataTemplate x:Key="NotWithCell" DataType="models:Member">
-                            <controls:MemberListControl
-                                AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
-                                CurrentMember="{Binding .}"
-                                SelectedMembers="{Binding NotWith}" />
-                        </DataTemplate>
-                    </TreeDataGrid.Resources>
-                    <TreeDataGrid.Styles>
-                        <Style Selector="TreeDataGrid TreeDataGridRow:nth-last-child(2n)">
-                            <Setter Property="Background" Value="#20808080" />
-                        </Style>
-                    </TreeDataGrid.Styles>
-                </TreeDataGrid>
+                <Grid>
+                    <Label HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Content="{x:Static lang:Resources.InputView_EmptyInputTable_Label}"
+                           FontWeight="Bold"
+                           Foreground="DarkGray"
+                           IsVisible="{Binding MembersEmpty }" />
+                    <TreeDataGrid
+                        Name="Members"
+                        Source="{Binding TreeDataGridSource}"
+                        AutoDragDropRows="False"
+                        SelectionChanging="Members_OnSelectionChanging">
+                        <TreeDataGrid.Resources>
+                            <DataTemplate x:Key="MemberNameCell" DataType="models:Member">
+                                <controls:ValidationTextBlock ValidatedText="{Binding Name}"
+                                                              VerticalAlignment="Center"
+                                                              Margin="4,8">
+                                </controls:ValidationTextBlock>
+                            </DataTemplate>
+                            <DataTemplate x:Key="MemberNameCellEdit" DataType="models:Member">
+                                <TextBox Text="{Binding Name}"
+                                         VerticalAlignment="Center" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="RemoveMemberCell">
+                                <Button Click="RemoveMemberButton_OnClick"
+                                        ToolTip.Tip="{x:Static lang:Resources.InputView_RemoveMember_Button_Tooltip}"
+                                        i:Attached.Icon="mdi-close"
+                                        Background="Transparent"
+                                        Padding="5" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="WithCell" DataType="models:Member">
+                                <controls:MemberListControl
+                                    AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
+                                    CurrentMember="{Binding .}"
+                                    SelectedMembers="{Binding With}" />
+                            </DataTemplate>
+                            <DataTemplate x:Key="NotWithCell" DataType="models:Member">
+                                <controls:MemberListControl
+                                    AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
+                                    CurrentMember="{Binding .}"
+                                    SelectedMembers="{Binding NotWith}" />
+                            </DataTemplate>
+                        </TreeDataGrid.Resources>
+                        <TreeDataGrid.Styles>
+                            <Style Selector="TreeDataGrid TreeDataGridRow:nth-last-child(2n)">
+                                <Setter Property="Background" Value="#20808080" />
+                            </Style>
+                        </TreeDataGrid.Styles>
+                    </TreeDataGrid>
+                </Grid>
             </Border>
         </Border>
     </Grid>

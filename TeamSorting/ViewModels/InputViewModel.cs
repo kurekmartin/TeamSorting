@@ -47,6 +47,8 @@ public class InputViewModel : ViewModelBase
         }
     }
 
+    public bool MembersEmpty => Members.MemberList.Count == 0;
+
     public bool ShowAddMemberToolbar => AddMode == AddMode.Member;
     public bool ShowAddDisciplineToolbar => AddMode == AddMode.Discipline;
 
@@ -76,6 +78,7 @@ public class InputViewModel : ViewModelBase
         Teams = teams;
         CsvUtil = csvUtil;
         ((INotifyCollectionChanged)Disciplines.DisciplineList).CollectionChanged += DisciplinesOnCollectionChanged;
+        ((INotifyCollectionChanged)Members.MemberList).CollectionChanged += MembersOnCollectionChanged;
         TreeDataGridSource = new FlatTreeDataGridSource<Member>(Members.MemberList)
         {
             Columns =
@@ -103,6 +106,18 @@ public class InputViewModel : ViewModelBase
                 new TemplateColumn<Member>(Resources.InputView_DataGrid_ColumnHeader_NotWith, "NotWithCell", null, GridLength.Auto)
             }
         };
+    }
+
+    private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+            case NotifyCollectionChangedAction.Remove:
+            case NotifyCollectionChangedAction.Reset:
+                OnPropertyChanged(nameof(MembersEmpty));
+                break;
+        }
     }
 
     private void DisciplinesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

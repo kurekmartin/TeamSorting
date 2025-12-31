@@ -297,4 +297,7 @@ Chcete pokračovat?</value>
     <data name="InputView_AddToolbarClose_Button" xml:space="preserve">
         <value>Hotovo</value>
     </data>
+    <data name="InputView_EmptyInputTable_Label" xml:space="preserve">
+        <value>Začněte přidáním disciplín a členů</value>
+    </data>
 </root>

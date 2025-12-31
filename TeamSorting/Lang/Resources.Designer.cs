@@ -584,5 +584,11 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("InputView_AddToolbarClose_Button", resourceCulture);
             }
         }
+        
+        public static string InputView_EmptyInputTable_Label {
+            get {
+                return ResourceManager.GetString("InputView_EmptyInputTable_Label", resourceCulture);
+            }
+        }
     }
 }

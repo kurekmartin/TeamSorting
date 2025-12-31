@@ -296,4 +296,7 @@ Do you want to continue?</value>
     <data name="InputView_AddToolbarClose_Button" xml:space="preserve">
         <value>Done</value>
     </data>
+    <data name="InputView_EmptyInputTable_Label" xml:space="preserve">
+        <value>Start by adding disciplines and members</value>
+    </data>
 </root>
