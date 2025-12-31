@@ -253,7 +253,7 @@ Chcete pokračovat?</value>
         <value>Povolit změny týmu a rozřadit</value>
     </data>
     <data name="TeamsView_NewCombination_ToolTip" xml:space="preserve">
-        <value>Zachovat připnuté členy a vytvořit novou kombinaci zostatních členů.</value>
+        <value>Zachovat připnuté členy a vytvořit novou kombinaci z ostatních členů.</value>
     </data>
     <data name="TeamsView_UnlockMembersAndSort_ToolTip" xml:space="preserve">
         <value>Odepnout všechny členy a vytvořit novou kombinaci.
