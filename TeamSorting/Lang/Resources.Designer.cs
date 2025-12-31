@@ -129,12 +129,6 @@ namespace TeamSorting.Lang {
             }
         }
         
-        public static string TeamsView_SortToTeams_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_SortToTeams_Button", resourceCulture);
-            }
-        }
-        
         public static string TeamsView_Back_Button {
             get {
                 return ResourceManager.GetString("TeamsView_Back_Button", resourceCulture);
@@ -162,12 +156,6 @@ namespace TeamSorting.Lang {
         public static string TeamsView_Seed_Label {
             get {
                 return ResourceManager.GetString("TeamsView_Seed_Label", resourceCulture);
-            }
-        }
-        
-        public static string TeamsView_TeamIsValid_ToolTip {
-            get {
-                return ResourceManager.GetString("TeamsView_TeamIsValid_ToolTip", resourceCulture);
             }
         }
         
@@ -231,12 +219,6 @@ namespace TeamSorting.Lang {
             }
         }
         
-        public static string Data_LoadFromFile_Success {
-            get {
-                return ResourceManager.GetString("Data_LoadFromFile_Success", resourceCulture);
-            }
-        }
-        
         public static string Data_ValidateCsvHeader_MissingColumns_Error {
             get {
                 return ResourceManager.GetString("Data_ValidateCsvHeader_MissingColumns_Error", resourceCulture);
@@ -276,12 +258,6 @@ namespace TeamSorting.Lang {
         public static string Data_LoadMembersData_UnknownMemberInConstrains_Error {
             get {
                 return ResourceManager.GetString("Data_LoadMembersData_UnknownMemberInConstrains_Error", resourceCulture);
-            }
-        }
-        
-        public static string Data_LoadMembersData_DuplicateMembersInConstarins_Warning {
-            get {
-                return ResourceManager.GetString("Data_LoadMembersData_DuplicateMembersInConstarins_Warning", resourceCulture);
             }
         }
         
@@ -489,45 +465,9 @@ namespace TeamSorting.Lang {
             }
         }
         
-        public static string TeamsView_FillTeams_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_FillTeams_Button", resourceCulture);
-            }
-        }
-        
-        public static string TeamsView_LockTeamsAndSortRestOfMembers_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_Button", resourceCulture);
-            }
-        }
-        
-        public static string TeamsView_UnlockMembersAndSort_Button {
-            get {
-                return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_Button", resourceCulture);
-            }
-        }
-        
         public static string TeamsView_NewCombination_ToolTip {
             get {
                 return ResourceManager.GetString("TeamsView_NewCombination_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string TeamsView_UnlockMembersAndSort_ToolTip {
-            get {
-                return ResourceManager.GetString("TeamsView_UnlockMembersAndSort_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string TeamsView_LockTeamsAndSortRestOfMembers_ToolTip {
-            get {
-                return ResourceManager.GetString("TeamsView_LockTeamsAndSortRestOfMembers_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string TeamsView_FillTeams_ToolTip {
-            get {
-                return ResourceManager.GetString("TeamsView_FillTeams_ToolTip", resourceCulture);
             }
         }
         

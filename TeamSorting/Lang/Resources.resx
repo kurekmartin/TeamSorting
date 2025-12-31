@@ -63,9 +63,6 @@ Do you want to delete these teams?</value>
     <data name="InputView_LoadData_Button" xml:space="preserve">
         <value>Load from CSV file</value>
     </data>
-    <data name="TeamsView_SortToTeams_Button" xml:space="preserve">
-        <value>Sort to teams</value>
-    </data>
     <data name="TeamsView_Back_Button" xml:space="preserve">
         <value>Back</value>
     </data>
@@ -80,9 +77,6 @@ Do you want to delete these teams?</value>
     </data>
     <data name="TeamsView_Seed_Label" xml:space="preserve">
         <value>Seed</value>
-    </data>
-    <data name="TeamsView_TeamIsValid_ToolTip" xml:space="preserve">
-        <value>Team is valid: {0}</value>
     </data>
     <data name="Data_TeamName_Template" xml:space="preserve">
         <value>Team{0}</value>
@@ -114,9 +108,6 @@ Do you want to delete these teams?</value>
     <data name="Data_LoadFromFile_Error" xml:space="preserve">
         <value>Error reading data from file</value>
     </data>
-    <data name="Data_LoadFromFile_Success" xml:space="preserve">
-        <value>Successfully loaded data from file</value>
-    </data>
     <data name="Data_ValidateCsvHeader_MissingColumns_Error" xml:space="preserve">
         <value>Header doesn't contain columns: </value>
     </data>
@@ -140,9 +131,6 @@ Valid values: {2}</value>
     </data>
     <data name="Data_LoadMembersData_UnknownMemberInConstrains_Error" xml:space="preserve">
         <value>Found unknown members in combination constrains: {0}</value>
-    </data>
-    <data name="Data_LoadMembersData_DuplicateMembersInConstarins_Warning" xml:space="preserve">
-        <value>Found duplicate members in combination constrains</value>
     </data>
     <data name="Data_LoadMembersData_WrongDisciplineRecordFormat_Error" xml:space="preserve">
         <value>Wrong format of discipline record value.
@@ -249,27 +237,8 @@ Do you want to continue?</value>
     <data name="TeamsView_ControlsSection_Teams" xml:space="preserve">
         <value>Teams</value>
     </data>
-    <data name="TeamsView_FillTeams_Button" xml:space="preserve">
-        <value>Sort rest of members</value>
-    </data>
-    <data name="TeamsView_LockTeamsAndSortRestOfMembers_Button" xml:space="preserve">
-        <value>Keep teams and sort</value>
-    </data>
-    <data name="TeamsView_UnlockMembersAndSort_Button" xml:space="preserve">
-        <value>Allow team changing and sort</value>
-    </data>
     <data name="TeamsView_NewCombination_ToolTip" xml:space="preserve">
         <value>Keep the pinned members and create a new combination of the remaining members.</value>
-    </data>
-    <data name="TeamsView_UnlockMembersAndSort_ToolTip" xml:space="preserve">
-        <value>Unpin all members and create a new combination.</value>
-    </data>
-    <data name="TeamsView_LockTeamsAndSortRestOfMembers_ToolTip" xml:space="preserve">
-        <value>Pin all members in teams and create a new combination from the remaining members.
-</value>
-    </data>
-    <data name="TeamsView_FillTeams_ToolTip" xml:space="preserve">
-        <value>Keep the current members in the teams and sort the remaining members.</value>
     </data>
     <data name="TeamsView_DeleteTeam_Tooltip" xml:space="preserve">
         <value>Delete team</value>
