@@ -26,6 +26,7 @@ public class TeamsViewModel : ViewModelBase
     private Timer? _timer;
     private Visual? _dragOverTeam;
     private int _numberOfTeams = 2;
+    private bool _showUnsortedMembers = true;
 
     public TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil)
     {
@@ -52,6 +53,12 @@ public class TeamsViewModel : ViewModelBase
     {
         get => _numberOfTeams;
         set => SetProperty(ref _numberOfTeams, value);
+    }
+
+    public bool ShowUnsortedMembers
+    {
+        get => _showUnsortedMembers;
+        set => SetProperty(ref _showUnsortedMembers, value);
     }
 
     public MemberCard? DraggingMemberCard

@@ -349,4 +349,16 @@ public partial class TeamsView : UserControl
 
         teamsViewModel.Teams.RemoveAllTeams();
     }
+
+    private void HideUnsortedMembersButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        teamsViewModel.ShowUnsortedMembers = false;
+    }
+
+    private void ShowUnsortedMembersButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        teamsViewModel.ShowUnsortedMembers = true;
+    }
 }

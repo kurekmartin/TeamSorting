@@ -14,6 +14,7 @@
              xmlns:converter="clr-namespace:TeamSorting.Converters">
     <UserControl.Resources>
         <converter:DisciplineRecordValueConverter x:Key="DisciplineRecordValueConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
     </UserControl.Resources>
     <UserControl.Styles>
         <Style Selector="i|Icon#TeamValidityIcon.Valid">
@@ -32,415 +33,452 @@
         </Style>
     </UserControl.Styles>
 
-    <DockPanel Name="TeamViewContainer"
-               DragDrop.AllowDrop="True"
-               Background="Transparent">
-        <Border DockPanel.Dock="Left"
-                Padding="8"
-                BoxShadow="0 0 12 0 Gray"
-                MinWidth="150"
-                Background="White"
-                HorizontalAlignment="Left"
-                ZIndex="10">
-            <DockPanel Margin="5,0">
-                <Button DockPanel.Dock="Top"
-                        Click="Back_OnClick"
-                        VerticalAlignment="Top"
-                        Margin="0,0,0,20">
-                    <StackPanel Orientation="Horizontal">
-                        <i:Icon Value="mdi-arrow-left"
-                                FontSize="16"
-                                Margin="0,0,4,0" />
-                        <TextBlock Text="{x:Static lang:Resources.TeamsView_Back_Button}" />
-                    </StackPanel>
-                </Button>
-                <ScrollViewer>
-                    <StackPanel Orientation="Vertical">
-                        <Border BorderThickness="0 0 0 1"
-                                BorderBrush="LightGray"
-                                Margin="0 0 0 8">
-                            <StackPanel Orientation="Vertical"
-                                        DockPanel.Dock="Top"
-                                        Margin="0,0,0,8"
-                                        Spacing="4"
-                                        Name="SidePanelSorting">
-                                <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Sorting}"
-                                           FontWeight="Bold" />
-                                <NumericUpDown x:Name="NumberOfTeams"
-                                               Value="{Binding NumberOfTeams}"
-                                               FormatString="0"
-                                               Minimum="1"
-                                               Maximum="10" />
-                                <TextBox MaxLength="10"
-                                         Watermark="{x:Static lang:Resources.TeamsView_Seed_Watermark}"
-                                         Text="{Binding Teams.InputSeed}" />
-                                <Button Click="NewCombinationButton_OnClick"
-                                        Content="{x:Static lang:Resources.TeamsView_NewCombination_Button}"
-                                        ToolTip.Tip="{x:Static lang:Resources.TeamsView_NewCombination_ToolTip}" />
-                                <StackPanel Orientation="Horizontal"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Bottom"
-                                            Spacing="4">
-                                    <TextBlock Text="{x:Static lang:Resources.TeamsView_Seed_Label}"
-                                               FontWeight="Medium" />
-                                    <SelectableTextBlock Text="{Binding Teams.UsedSeed}" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
-
-                        <Border BorderThickness="0 0 0 1"
-                                BorderBrush="LightGray"
-                                Margin="0 0 0 8">
-                            <StackPanel Orientation="Vertical"
-                                        DockPanel.Dock="Top"
-                                        Margin="0,0,0,8"
-                                        Spacing="4"
-                                        Name="SidePanelTeams">
-                                <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Teams}"
-                                           FontWeight="Bold" />
-                                <Button Click="AddTeamButton_OnClick">
-                                    <StackPanel Orientation="Horizontal"
-                                                VerticalAlignment="Center">
-                                        <i:Icon Value="mdi-plus"
-                                                Margin="0 0 4 0" />
-                                        <TextBlock Text="{x:Static lang:Resources.TeamsView_AddTeam_Button}" />
-                                    </StackPanel>
-                                </Button>
-                                <Button Click="DeleteAllTeamsButton_OnClick">
-                                    <StackPanel Orientation="Horizontal"
-                                                VerticalAlignment="Center">
-                                        <i:Icon Value="mdi-delete"
-                                                Margin="0 0 4 0" />
-                                        <TextBlock Text="{x:Static lang:Resources.TeamsView_DeleteAllTeams_Button}" />
-                                    </StackPanel>
-                                </Button>
-                                
-                                <Button Click="ExportTeamsToCsv_OnClick"
-                                        IsEnabled="{Binding Teams.CanExportTeams}"
-                                        Margin="0 4 0 0">
-                                    <StackPanel Orientation="Horizontal"
-                                                VerticalAlignment="Center">
-                                        <i:Icon Value="mdi-file-export"
-                                                Margin="0 0 4 0" />
-                                        <TextBlock Text="{x:Static lang:Resources.TeamsView_ExportToCSV_Button}" />
-                                    </StackPanel>
-                                </Button>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0,4,0,0"
+    <Grid>
+        <DockPanel Name="TeamViewContainer"
+                   DragDrop.AllowDrop="True"
+                   Background="Transparent">
+            <Border DockPanel.Dock="Left"
+                    Padding="8"
+                    BoxShadow="0 0 12 0 Gray"
+                    MinWidth="150"
+                    Background="White"
+                    HorizontalAlignment="Left"
+                    ZIndex="10">
+                <DockPanel Margin="5,0">
+                    <Button DockPanel.Dock="Top"
+                            Click="Back_OnClick"
+                            VerticalAlignment="Top"
+                            Margin="0,0,0,20">
+                        <StackPanel Orientation="Horizontal">
+                            <i:Icon Value="mdi-arrow-left"
+                                    FontSize="16"
+                                    Margin="0,0,4,0" />
+                            <TextBlock Text="{x:Static lang:Resources.TeamsView_Back_Button}" />
+                        </StackPanel>
+                    </Button>
+                    <ScrollViewer>
+                        <StackPanel Orientation="Vertical">
+                            <Border BorderThickness="0 0 0 1"
+                                    BorderBrush="LightGray"
+                                    Margin="0 0 0 8">
+                                <StackPanel Orientation="Vertical"
                                             DockPanel.Dock="Top"
-                                            Spacing="5">
-                                    <controls:IconRadioButton Name="SortAscRadioButton"
-                                                              GroupName="SortOrder"
-                                                              Icon="mdi-sort-ascending"
-                                                              Size="27"
-                                                              IsChecked="True"
-                                                              IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
-                                    <controls:IconRadioButton Name="SortDescRadioButton"
-                                                              GroupName="SortOrder"
-                                                              Icon="mdi-sort-descending"
-                                                              Size="27"
-                                                              IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
-                                    <ComboBox x:Name="SortCriteriaComboBox"
-                                              SelectionChanged="SortCriteriaComboBox_OnSelectionChanged">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <DataTemplate.DataType>
-                                                    <x:Type TypeName="models:ComboBoxSortCriteria" />
-                                                </DataTemplate.DataType>
-                                                <TextBlock Text="{Binding DisplayText}" />
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
-                                    </ComboBox>
+                                            Margin="0,0,0,8"
+                                            Spacing="4"
+                                            Name="SidePanelSorting">
+                                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Sorting}"
+                                               FontWeight="Bold" />
+                                    <NumericUpDown x:Name="NumberOfTeams"
+                                                   Value="{Binding NumberOfTeams}"
+                                                   FormatString="0"
+                                                   Minimum="1"
+                                                   Maximum="10" />
+                                    <TextBox MaxLength="10"
+                                             Watermark="{x:Static lang:Resources.TeamsView_Seed_Watermark}"
+                                             Text="{Binding Teams.InputSeed}" />
+                                    <Button Click="NewCombinationButton_OnClick"
+                                            Content="{x:Static lang:Resources.TeamsView_NewCombination_Button}"
+                                            ToolTip.Tip="{x:Static lang:Resources.TeamsView_NewCombination_ToolTip}" />
+                                    <StackPanel Orientation="Horizontal"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Bottom"
+                                                Spacing="4">
+                                        <TextBlock Text="{x:Static lang:Resources.TeamsView_Seed_Label}"
+                                                   FontWeight="Medium" />
+                                        <SelectableTextBlock Text="{Binding Teams.UsedSeed}" />
+                                    </StackPanel>
                                 </StackPanel>
-                            </StackPanel>
-                        </Border>
+                            </Border>
 
-                        <Border BorderThickness="0 0 0 1"
-                                BorderBrush="LightGray"
-                                Margin="0 0 0 8">
-                            <StackPanel Orientation="Vertical"
-                                        DockPanel.Dock="Top"
-                                        Margin="0,0,0,8"
-                                        Spacing="2"
-                                        Name="SidePanelMembers">
-                                <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Members}"
-                                           FontWeight="Bold" />
-                                <StackPanel Orientation="Horizontal">
-                                    <Button i:Attached.Icon="mdi-eye"
-                                            Click="ShowMemberDetailsButton_OnClick"
-                                            Background="Transparent" />
-                                    <Button i:Attached.Icon="mdi-eye-off"
-                                            Click="HideMemberDetailsButton_OnClick"
-                                            Background="Transparent" />
-                                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ShowMemberDetails_Label}"
-                                               Margin="0,0,5,0"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                                <StackPanel Orientation="Horizontal"
-                                            Margin="0,0,0,2"
-                                            DockPanel.Dock="Top">
-                                    <Button i:Attached.Icon="mdi-pin"
-                                            Click="PinMembersButton_OnClick"
-                                            Background="Transparent" />
-                                    <Button i:Attached.Icon="mdi-pin-off"
-                                            Click="UnpinMembersButton_OnClick"
-                                            Background="Transparent" />
-                                    <TextBlock Text="{x:Static lang:Resources.TeamsView_PinMembers_Label}"
-                                               Margin="0,0,5,0"
-                                               VerticalAlignment="Center" />
-                                </StackPanel>
-                            </StackPanel>
-                        </Border>
+                            <Border BorderThickness="0 0 0 1"
+                                    BorderBrush="LightGray"
+                                    Margin="0 0 0 8">
+                                <StackPanel Orientation="Vertical"
+                                            DockPanel.Dock="Top"
+                                            Margin="0,0,0,8"
+                                            Spacing="4"
+                                            Name="SidePanelTeams">
+                                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Teams}"
+                                               FontWeight="Bold" />
+                                    <Button Click="AddTeamButton_OnClick">
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <i:Icon Value="mdi-plus"
+                                                    Margin="0 0 4 0" />
+                                            <TextBlock Text="{x:Static lang:Resources.TeamsView_AddTeam_Button}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <Button Click="DeleteAllTeamsButton_OnClick">
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <i:Icon Value="mdi-delete"
+                                                    Margin="0 0 4 0" />
+                                            <TextBlock Text="{x:Static lang:Resources.TeamsView_DeleteAllTeams_Button}" />
+                                        </StackPanel>
+                                    </Button>
 
-                        <StackPanel Orientation="Vertical"
-                                    DockPanel.Dock="Top"
-                                    Margin="0,8,0,0">
-                            <TextBlock Text="{x:Static lang:Resources.TeamsView_Differences_Label}"
-                                       FontWeight="Bold" />
-                            <ItemsControl ItemsSource="{Binding Disciplines.DisciplineDelta}"
-                                          HorizontalAlignment="Left">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DataTemplate.DataType>
-                                            <x:Type TypeName="generic:KeyValuePair"
-                                                    x:TypeArguments="models:DisciplineInfo,x:Object" />
-                                        </DataTemplate.DataType>
-                                        <DockPanel Margin="0,0,0,2">
-                                            <TextBlock DockPanel.Dock="Left"
-                                                       Text="{Binding Key.Name}"
-                                                       FontWeight="Bold"
-                                                       Margin="0,0,5,0"
-                                                       VerticalAlignment="Center" />
-                                            <TextBlock DockPanel.Dock="Right"
-                                                       Text="{Binding Value,Converter={StaticResource DisciplineRecordValueConverter}}"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Right" />
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-
-                        <StackPanel Orientation="Vertical"
-                                    DockPanel.Dock="Top"
-                                    Margin="0,8,0,0">
-                            <TextBlock Text="{x:Static lang:Resources.TeamsView_DisciplineAverages_Label}"
-                                       FontWeight="Bold" />
-                            <ItemsControl ItemsSource="{Binding Disciplines.DisciplineAverage}"
-                                          HorizontalAlignment="Left">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <DataTemplate.DataType>
-                                            <x:Type TypeName="generic:KeyValuePair"
-                                                    x:TypeArguments="models:DisciplineInfo,x:Object" />
-                                        </DataTemplate.DataType>
-                                        <DockPanel Margin="0,0,0,2">
-                                            <TextBlock DockPanel.Dock="Left"
-                                                       Text="{Binding Key.Name}"
-                                                       FontWeight="Bold"
-                                                       Margin="0,0,5,0"
-                                                       VerticalAlignment="Center" />
-                                            <TextBlock DockPanel.Dock="Right"
-                                                       Text="{Binding Value,Converter={StaticResource DisciplineRecordValueConverter}}"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Right" />
-                                        </DockPanel>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </StackPanel>
-                    </StackPanel>
-                </ScrollViewer>
-            </DockPanel>
-        </Border>
-
-        <!-- Members without team -->
-        <Border DockPanel.Dock="Right"
-                Padding="8,8,8,0"
-                BoxShadow="0 0 12 0 Gray"
-                MinWidth="150"
-                Background="White"
-                HorizontalAlignment="Right"
-                ZIndex="10">
-            <Grid Name="Team"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch"
-                  DataContext="{Binding Teams.MembersWithoutTeam}"
-                  Classes.Valid="{Binding IsValid}">
-                <Grid RowDefinitions="Auto, *">
-                    <Border Grid.Row="0"
-                            Name="Header"
-                            CornerRadius="8"
-                            ZIndex="5">
-                        <StackPanel VerticalAlignment="Center"
-                                    HorizontalAlignment="Center"
-                                    Orientation="Horizontal"
-                                    Spacing="8"
-                                    Margin="5">
-                            <TextBlock Text="{Binding Name}"
-                                       FontWeight="Bold"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center" />
-                            <StackPanel Orientation="Horizontal"
-                                        VerticalAlignment="Center">
-                                <i:Icon Value="mdi-account-group"
-                                        FontSize="16"
-                                        VerticalAlignment="Top"
-                                        Margin="0,0,2,0" />
-                                <TextBlock Text="{Binding Members.Count}"
-                                           DockPanel.Dock="Right"
-                                           HorizontalAlignment="Right"
-                                           VerticalAlignment="Bottom" />
-                            </StackPanel>
-                        </StackPanel>
-                    </Border>
-                    <ScrollViewer Grid.Row="1">
-                        <ItemsControl ItemsSource="{Binding Members}"
-                                      DockPanel.Dock="Top"
-                                      Padding="0,5,0,10">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <controls:MemberCard Member="{Binding .}"
-                                                         PointerPressed="MemberCard_OnPointerPressed" />
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                    <Border Grid.Row="1"
-                            Name="TeamHighlight"
-                            Background="Aqua"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch"
-                            IsHitTestVisible="False"
-                            Opacity="0.5"
-                            CornerRadius="8"
-                            Margin="0,5,0,5" />
-                </Grid>
-            </Grid>
-        </Border>
-
-        <ScrollViewer VerticalScrollBarVisibility="Disabled"
-                      HorizontalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Teams.TeamList}"
-                          ClipToBounds="False"
-                          Margin="8,8,8,0">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="1" />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Name="Team"
-                              VerticalAlignment="Stretch"
-                              HorizontalAlignment="Stretch"
-                              Margin="8,0"
-                              Classes.Valid="{Binding IsValid}">
-                            <Grid RowDefinitions="Auto, *">
-                                <Border Grid.Row="0"
-                                        Name="Header"
-                                        CornerRadius="8"
-                                        ZIndex="5">
-                                    <StackPanel Orientation="Vertical"
-                                                Margin="8">
-                                        <DockPanel>
-                                            <StackPanel DockPanel.Dock="Left"
-                                                        VerticalAlignment="Center"
-                                                        Orientation="Horizontal"
-                                                        HorizontalAlignment="Center"
-                                                        Spacing="8"
-                                                        Margin="0,0,8,0">
-                                                <TextBox Text="{Binding Name}"
-                                                         FontWeight="Bold"
-                                                         HorizontalAlignment="Center"
-                                                         VerticalAlignment="Center"
-                                                         TextChanged="TextBox_TeamNameOnTextChanged" />
-                                                <StackPanel Orientation="Horizontal"
-                                                            VerticalAlignment="Center">
-                                                    <i:Icon Value="mdi-account-group"
-                                                            FontSize="16"
-                                                            VerticalAlignment="Top"
-                                                            Margin="0,0,2,0" />
-                                                    <TextBlock Text="{Binding Members.Count}"
-                                                               DockPanel.Dock="Right"
-                                                               HorizontalAlignment="Right"
-                                                               VerticalAlignment="Bottom" />
-                                                </StackPanel>
-                                            </StackPanel>
-                                            <Button HorizontalAlignment="Right"
-                                                    i:Attached.Icon="mdi-dots-vertical"
-                                                    Background="Transparent">
-                                                <Button.Flyout>
-                                                    <MenuFlyout>
-                                                        <MenuItem Header="Delete"
-                                                                  Click="DeleteTeamButton_OnClick"
-                                                                  ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}"
-                                                                  i:MenuItem.Icon="mdi-delete" />
-                                                        <MenuItem Header="-" />
-                                                        <MenuItem Header="Pin all"
-                                                                  Click="PinTeamMembersMenuItem_OnClick"
-                                                                  i:MenuItem.Icon="mdi-pin" />
-                                                        <MenuItem Header="Unpin all"
-                                                                  Click="UnpinTeamMembersMenuItem_OnClick"
-                                                                  i:MenuItem.Icon="mdi-pin-off" />
-                                                    </MenuFlyout>
-                                                </Button.Flyout>
-                                            </Button>
-                                        </DockPanel>
-                                        <ItemsControl ItemsSource="{Binding AvgScores}"
-                                                      Margin="5">
-                                            <ItemsControl.ItemTemplate>
+                                    <Button Click="ExportTeamsToCsv_OnClick"
+                                            IsEnabled="{Binding Teams.CanExportTeams}"
+                                            Margin="0 4 0 0">
+                                        <StackPanel Orientation="Horizontal"
+                                                    VerticalAlignment="Center">
+                                            <i:Icon Value="mdi-file-export"
+                                                    Margin="0 0 4 0" />
+                                            <TextBlock Text="{x:Static lang:Resources.TeamsView_ExportToCSV_Button}" />
+                                        </StackPanel>
+                                    </Button>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,4,0,0"
+                                                DockPanel.Dock="Top"
+                                                Spacing="5">
+                                        <controls:IconRadioButton Name="SortAscRadioButton"
+                                                                  GroupName="SortOrder"
+                                                                  Icon="mdi-sort-ascending"
+                                                                  Size="27"
+                                                                  IsChecked="True"
+                                                                  IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
+                                        <controls:IconRadioButton Name="SortDescRadioButton"
+                                                                  GroupName="SortOrder"
+                                                                  Icon="mdi-sort-descending"
+                                                                  Size="27"
+                                                                  IsCheckedChanged="ToggleButton_OnIsCheckedChanged" />
+                                        <ComboBox x:Name="SortCriteriaComboBox"
+                                                  SelectionChanged="SortCriteriaComboBox_OnSelectionChanged">
+                                            <ComboBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <DataTemplate.DataType>
-                                                        <x:Type TypeName="generic:KeyValuePair"
-                                                                x:TypeArguments="models:DisciplineInfo,x:Object" />
+                                                        <x:Type TypeName="models:ComboBoxSortCriteria" />
                                                     </DataTemplate.DataType>
-                                                    <DockPanel Margin="0,0,0,2">
-                                                        <TextBlock Text="{Binding Key.Name}"
-                                                                   FontWeight="Bold"
-                                                                   HorizontalAlignment="Left"
-                                                                   Margin="0,0,5,0" />
-                                                        <TextBlock
-                                                            Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
-                                                            HorizontalAlignment="Right" />
-                                                    </DockPanel>
+                                                    <TextBlock Text="{Binding DisplayText}" />
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <Border BorderThickness="0 0 0 1"
+                                    BorderBrush="LightGray"
+                                    Margin="0 0 0 8">
+                                <StackPanel Orientation="Vertical"
+                                            DockPanel.Dock="Top"
+                                            Margin="0,0,0,8"
+                                            Spacing="2"
+                                            Name="SidePanelMembers">
+                                    <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Members}"
+                                               FontWeight="Bold" />
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button i:Attached.Icon="mdi-eye"
+                                                Click="ShowMemberDetailsButton_OnClick"
+                                                Background="Transparent" />
+                                        <Button i:Attached.Icon="mdi-eye-off"
+                                                Click="HideMemberDetailsButton_OnClick"
+                                                Background="Transparent" />
+                                        <TextBlock Text="{x:Static lang:Resources.TeamsView_ShowMemberDetails_Label}"
+                                                   Margin="0,0,5,0"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal"
+                                                Margin="0,0,0,2"
+                                                DockPanel.Dock="Top">
+                                        <Button i:Attached.Icon="mdi-pin"
+                                                Click="PinMembersButton_OnClick"
+                                                Background="Transparent" />
+                                        <Button i:Attached.Icon="mdi-pin-off"
+                                                Click="UnpinMembersButton_OnClick"
+                                                Background="Transparent" />
+                                        <TextBlock Text="{x:Static lang:Resources.TeamsView_PinMembers_Label}"
+                                                   Margin="0,0,5,0"
+                                                   VerticalAlignment="Center" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <StackPanel Orientation="Vertical"
+                                        DockPanel.Dock="Top"
+                                        Margin="0,8,0,0">
+                                <TextBlock Text="{x:Static lang:Resources.TeamsView_Differences_Label}"
+                                           FontWeight="Bold" />
+                                <ItemsControl ItemsSource="{Binding Disciplines.DisciplineDelta}"
+                                              HorizontalAlignment="Left">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.DataType>
+                                                <x:Type TypeName="generic:KeyValuePair"
+                                                        x:TypeArguments="models:DisciplineInfo,x:Object" />
+                                            </DataTemplate.DataType>
+                                            <DockPanel Margin="0,0,0,2">
+                                                <TextBlock DockPanel.Dock="Left"
+                                                           Text="{Binding Key.Name}"
+                                                           FontWeight="Bold"
+                                                           Margin="0,0,5,0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock DockPanel.Dock="Right"
+                                                           Text="{Binding Value,Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Right" />
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+
+                            <StackPanel Orientation="Vertical"
+                                        DockPanel.Dock="Top"
+                                        Margin="0,8,0,0">
+                                <TextBlock Text="{x:Static lang:Resources.TeamsView_DisciplineAverages_Label}"
+                                           FontWeight="Bold" />
+                                <ItemsControl ItemsSource="{Binding Disciplines.DisciplineAverage}"
+                                              HorizontalAlignment="Left">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <DataTemplate.DataType>
+                                                <x:Type TypeName="generic:KeyValuePair"
+                                                        x:TypeArguments="models:DisciplineInfo,x:Object" />
+                                            </DataTemplate.DataType>
+                                            <DockPanel Margin="0,0,0,2">
+                                                <TextBlock DockPanel.Dock="Left"
+                                                           Text="{Binding Key.Name}"
+                                                           FontWeight="Bold"
+                                                           Margin="0,0,5,0"
+                                                           VerticalAlignment="Center" />
+                                                <TextBlock DockPanel.Dock="Right"
+                                                           Text="{Binding Value,Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Right" />
+                                            </DockPanel>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </StackPanel>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+
+            <!-- Members without team -->
+            <Border DockPanel.Dock="Right"
+                    Padding="8,8,8,0"
+                    BoxShadow="0 0 12 0 Gray"
+                    MinWidth="150"
+                    Background="White"
+                    HorizontalAlignment="Right"
+                    ZIndex="10"
+                    IsVisible="{Binding ShowUnsortedMembers}">
+                <Grid Name="Team"
+                      VerticalAlignment="Stretch"
+                      HorizontalAlignment="Stretch"
+                      DataContext="{Binding Teams.MembersWithoutTeam}"
+                      Classes.Valid="{Binding IsValid}">
+                    <Grid RowDefinitions="Auto, *">
+                        <StackPanel Grid.Row="0"
+                                    ZIndex="5"
+                                    Orientation="Horizontal">
+                            <Button i:Attached.Icon="mdi-arrow-right"
+                                    VerticalAlignment="Stretch"
+                                    Background="Transparent"
+                                    Margin="0 0 4 0"
+                                    Click="HideUnsortedMembersButton_OnClick" />
+                            <Border Name="Header"
+                                    CornerRadius="8">
+                                <StackPanel VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                            Orientation="Horizontal"
+                                            Spacing="8"
+                                            Margin="8">
+                                    <TextBlock Text="{Binding Name}"
+                                               FontWeight="Bold"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center" />
+                                    <StackPanel Orientation="Horizontal"
+                                                VerticalAlignment="Center">
+                                        <i:Icon Value="mdi-account-group"
+                                                FontSize="16"
+                                                VerticalAlignment="Top"
+                                                Margin="0,0,2,0" />
+                                        <TextBlock Text="{Binding Members.Count}"
+                                                   DockPanel.Dock="Right"
+                                                   HorizontalAlignment="Right"
+                                                   VerticalAlignment="Bottom" />
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                        <ScrollViewer Grid.Row="1">
+                            <ItemsControl ItemsSource="{Binding Members}"
+                                          DockPanel.Dock="Top"
+                                          Padding="0,5,0,10">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <controls:MemberCard Member="{Binding .}"
+                                                             PointerPressed="MemberCard_OnPointerPressed" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                        <Border Grid.Row="1"
+                                Name="TeamHighlight"
+                                Background="Aqua"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                IsHitTestVisible="False"
+                                Opacity="0.5"
+                                CornerRadius="8"
+                                Margin="0,5,0,5" />
+                    </Grid>
+                </Grid>
+            </Border>
+
+            <ScrollViewer VerticalScrollBarVisibility="Disabled"
+                          HorizontalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Teams.TeamList}"
+                              ClipToBounds="False"
+                              Margin="8,8,8,0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="1" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Name="Team"
+                                  VerticalAlignment="Stretch"
+                                  HorizontalAlignment="Stretch"
+                                  Margin="8,0"
+                                  Classes.Valid="{Binding IsValid}">
+                                <Grid RowDefinitions="Auto, *">
+                                    <Border Grid.Row="0"
+                                            Name="Header"
+                                            CornerRadius="8"
+                                            ZIndex="5">
+                                        <StackPanel Orientation="Vertical"
+                                                    Margin="8">
+                                            <DockPanel>
+                                                <StackPanel DockPanel.Dock="Left"
+                                                            VerticalAlignment="Center"
+                                                            Orientation="Horizontal"
+                                                            HorizontalAlignment="Center"
+                                                            Spacing="8"
+                                                            Margin="0,0,8,0">
+                                                    <TextBox Text="{Binding Name}"
+                                                             FontWeight="Bold"
+                                                             HorizontalAlignment="Center"
+                                                             VerticalAlignment="Center"
+                                                             TextChanged="TextBox_TeamNameOnTextChanged" />
+                                                    <StackPanel Orientation="Horizontal"
+                                                                VerticalAlignment="Center">
+                                                        <i:Icon Value="mdi-account-group"
+                                                                FontSize="16"
+                                                                VerticalAlignment="Top"
+                                                                Margin="0,0,2,0" />
+                                                        <TextBlock Text="{Binding Members.Count}"
+                                                                   DockPanel.Dock="Right"
+                                                                   HorizontalAlignment="Right"
+                                                                   VerticalAlignment="Bottom" />
+                                                    </StackPanel>
+                                                </StackPanel>
+                                                <Button HorizontalAlignment="Right"
+                                                        i:Attached.Icon="mdi-dots-vertical"
+                                                        Background="Transparent">
+                                                    <Button.Flyout>
+                                                        <MenuFlyout>
+                                                            <MenuItem Header="Delete"
+                                                                      Click="DeleteTeamButton_OnClick"
+                                                                      ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}"
+                                                                      i:MenuItem.Icon="mdi-delete" />
+                                                            <MenuItem Header="-" />
+                                                            <MenuItem Header="Pin all"
+                                                                      Click="PinTeamMembersMenuItem_OnClick"
+                                                                      i:MenuItem.Icon="mdi-pin" />
+                                                            <MenuItem Header="Unpin all"
+                                                                      Click="UnpinTeamMembersMenuItem_OnClick"
+                                                                      i:MenuItem.Icon="mdi-pin-off" />
+                                                        </MenuFlyout>
+                                                    </Button.Flyout>
+                                                </Button>
+                                            </DockPanel>
+                                            <ItemsControl ItemsSource="{Binding AvgScores}"
+                                                          Margin="5">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <DataTemplate.DataType>
+                                                            <x:Type TypeName="generic:KeyValuePair"
+                                                                    x:TypeArguments="models:DisciplineInfo,x:Object" />
+                                                        </DataTemplate.DataType>
+                                                        <DockPanel Margin="0,0,0,2">
+                                                            <TextBlock Text="{Binding Key.Name}"
+                                                                       FontWeight="Bold"
+                                                                       HorizontalAlignment="Left"
+                                                                       Margin="0,0,5,0" />
+                                                            <TextBlock
+                                                                Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                                HorizontalAlignment="Right" />
+                                                        </DockPanel>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
+                                        </StackPanel>
+                                    </Border>
+                                    <ScrollViewer Grid.Row="1">
+                                        <ItemsControl ItemsSource="{Binding Members}"
+                                                      DockPanel.Dock="Top"
+                                                      Padding="0,5,0,10">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <controls:MemberCard Member="{Binding .}"
+                                                                         PointerPressed="MemberCard_OnPointerPressed" />
                                                 </DataTemplate>
                                             </ItemsControl.ItemTemplate>
                                         </ItemsControl>
-                                    </StackPanel>
-                                </Border>
-                                <ScrollViewer Grid.Row="1">
-                                    <ItemsControl ItemsSource="{Binding Members}"
-                                                  DockPanel.Dock="Top"
-                                                  Padding="0,5,0,10">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate>
-                                                <controls:MemberCard Member="{Binding .}"
-                                                                     PointerPressed="MemberCard_OnPointerPressed" />
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </ScrollViewer>
-                                <Border Grid.Row="1"
-                                        Name="TeamHighlight"
-                                        Background="Aqua"
-                                        HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        IsHitTestVisible="False"
-                                        Opacity="0.5"
-                                        CornerRadius="8"
-                                        Margin="0,5,0,0" />
+                                    </ScrollViewer>
+                                    <Border Grid.Row="1"
+                                            Name="TeamHighlight"
+                                            Background="Aqua"
+                                            HorizontalAlignment="Stretch"
+                                            VerticalAlignment="Stretch"
+                                            IsHitTestVisible="False"
+                                            Opacity="0.5"
+                                            CornerRadius="8"
+                                            Margin="0,5,0,0" />
+                                </Grid>
                             </Grid>
-                        </Grid>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-        <controls:MemberCard Name="GhostCard"
-                             Classes="Drag"
-                             IsHitTestVisible="False"
-                             VerticalAlignment="Center"
-                             HorizontalAlignment="Center"
-                             ZIndex="10" />
-    </DockPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+            <controls:MemberCard Name="GhostCard"
+                                 Classes="Drag"
+                                 IsHitTestVisible="False"
+                                 VerticalAlignment="Center"
+                                 HorizontalAlignment="Center"
+                                 ZIndex="10" />
+        </DockPanel>
+
+        <Border IsVisible="{Binding ShowUnsortedMembers, Converter={StaticResource BooleanNegationConverter}}"
+                VerticalAlignment="Top"
+                HorizontalAlignment="Right"
+                Padding="8"
+                BoxShadow="0 0 12 0 Gray"
+                CornerRadius="0 0 0 8"
+                Background="White">
+            <StackPanel Orientation="Vertical"
+                        Spacing="4"
+                        DataContext="{Binding Teams.MembersWithoutTeam}">
+                <Button i:Attached.Icon="mdi-arrow-left"
+                        Click="ShowUnsortedMembersButton_OnClick" />
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <i:Icon Value="mdi-account-group"
+                            FontSize="16"
+                            VerticalAlignment="Top"
+                            Margin="0,0,2,0" />
+                    <TextBlock Text="{Binding Members.Count}"
+                               DockPanel.Dock="Right"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Bottom" />
+                </StackPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
 </UserControl>
