@@ -319,4 +319,34 @@ public partial class TeamsView : UserControl
         if (DataContext is not TeamsViewModel teamsViewModel) return;
         teamsViewModel.Teams.ValidateTeamNames();
     }
+
+    private async void DeleteAllTeamsButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is not TeamsViewModel teamsViewModel) return;
+
+        if (teamsViewModel.Teams.TeamList.Count == 0)
+        {
+            return;
+        }
+
+        var window = TopLevel.GetTopLevel(this);
+        if (window is not MainWindow { DataContext: MainWindowViewModel } mainWindow)
+        {
+            return;
+        }
+
+        var dialog = new WarningDialog(
+            message: Lang.Resources.TeamsView_DeleteAllTeams_WarningDialog_Message,
+            confirmButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Delete,
+            cancelButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Cancel);
+
+        WarningDialogResult result = await mainWindow.ShowWarningDialog(dialog);
+
+        if (result == WarningDialogResult.Cancel)
+        {
+            return;
+        }
+
+        teamsViewModel.Teams.RemoveAllTeams();
+    }
 }

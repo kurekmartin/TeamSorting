@@ -270,4 +270,11 @@ Do you want to continue?</value>
     <data name="InputView_EmptyInputTable_Label" xml:space="preserve">
         <value>Start by adding disciplines and members</value>
     </data>
+    <data name="TeamsView_DeleteAllTeams_Button" xml:space="preserve">
+        <value>Delete teams</value>
+    </data>
+    <data name="TeamsView_DeleteAllTeams_WarningDialog_Message" xml:space="preserve">
+        <value>All teams will be deleted.
+Do you want to delete all teams?</value>
+    </data>
 </root>

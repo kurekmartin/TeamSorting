@@ -590,5 +590,17 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("InputView_EmptyInputTable_Label", resourceCulture);
             }
         }
+        
+        public static string TeamsView_DeleteAllTeams_WarningDialog_Message {
+            get {
+                return ResourceManager.GetString("TeamsView_DeleteAllTeams_WarningDialog_Message", resourceCulture);
+            }
+        }
+        
+        public static string TeamsView_DeleteAllTeams_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_DeleteAllTeams_Button", resourceCulture);
+            }
+        }
     }
 }

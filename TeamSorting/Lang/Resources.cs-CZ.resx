@@ -302,4 +302,11 @@ Chcete pokračovat?</value>
     <data name="InputView_EmptyInputTable_Label" xml:space="preserve">
         <value>Začněte přidáním disciplín a členů</value>
     </data>
+    <data name="TeamsView_DeleteAllTeams_WarningDialog_Message" xml:space="preserve">
+        <value>Všechny týmy budou smazány.
+Chcete smazat všechny týmy?</value>
+    </data>
+    <data name="TeamsView_DeleteAllTeams_Button" xml:space="preserve">
+        <value>Smazat týmy</value>
+    </data>
 </root>
