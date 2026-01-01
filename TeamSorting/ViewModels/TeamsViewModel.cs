@@ -2,9 +2,7 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
-using Avalonia.Threading;
 using Avalonia.VisualTree;
 using TeamSorting.Controls;
 using TeamSorting.Lang;
@@ -23,7 +21,6 @@ public class TeamsViewModel : ViewModelBase
     public WindowNotificationManager? NotificationManager { get; set; }
     private MemberSortCriteria _teamsSortCriteria;
     private MemberCard? _draggingMemberCard;
-    private Timer? _timer;
     private Visual? _dragOverTeam;
     private int _numberOfTeams = 2;
     private bool _showUnsortedMembers = true;
@@ -130,12 +127,6 @@ public class TeamsViewModel : ViewModelBase
                           .FirstOrDefault(ancestor => ancestor is { Name: "Team", DataContext: Team });
         }
 
-        if (teamControl is not null)
-        {
-            _timer ??= new Timer(_ => CheckDrag());
-            ResetTimer();
-        }
-
         if (teamControl == _dragOverTeam) return true;
 
         if (teamControl is null)
@@ -172,17 +163,5 @@ public class TeamsViewModel : ViewModelBase
         control?.Classes.Remove("Highlight");
 
         _dragOverTeam = null;
-    }
-
-    private void ResetTimer()
-    {
-        _timer?.Change(100, 100);
-    }
-
-    private void CheckDrag()
-    {
-        Dispatcher.UIThread.Post(() => RemoveTeamHighlight(_dragOverTeam));
-        _timer?.Dispose();
-        _timer = null;
     }
 }
