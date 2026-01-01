@@ -31,6 +31,13 @@
         <Style Selector="controls|MemberCard.Drag Border">
             <Setter Property="BoxShadow" Value="0 0 16 Gray" />
         </Style>
+
+        <Style Selector="ItemsControl.teams-scroll-area">
+            <Setter Property="Padding" Value="0 0 50 0" />
+            </Style>
+        <Style Selector="ItemsControl.teams-scroll-area.reset-offset">
+            <Setter Property="Padding" Value="0" />
+        </Style>
     </UserControl.Styles>
 
     <Grid>
@@ -333,7 +340,9 @@
                           HorizontalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Teams.TeamList}"
                               ClipToBounds="False"
-                              Margin="8,8,8,0">
+                              Margin="8,8,8,0"
+                              Classes="teams-scroll-area"
+                              Classes.reset-offset="{Binding ShowUnsortedMembers}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
                             <UniformGrid Rows="1" />
