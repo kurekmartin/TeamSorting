@@ -372,7 +372,8 @@
                                                              FontWeight="Bold"
                                                              HorizontalAlignment="Center"
                                                              VerticalAlignment="Center"
-                                                             TextChanged="TextBox_TeamNameOnTextChanged" />
+                                                             TextChanged="TextBox_TeamNameOnTextChanged"
+                                                             Padding="10,6,10,5"/>
                                                     <StackPanel Orientation="Horizontal"
                                                                 VerticalAlignment="Center">
                                                         <i:Icon Value="mdi-account-group"
