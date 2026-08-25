@@ -84,22 +84,25 @@
     <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
     </Style>
     <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-        <Setter Property="Background" Value="#80808080" />
+        <Setter Property="Background" Value="{DynamicResource AppHoverBrush}" />
         <Setter Property="BorderBrush" Value="Transparent" />
-        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
     </Style>
 
     <Style Selector="StackPanel.Invalid > DockPanel#CardHeader">
-        <Setter Property="Background" Value="Tomato" />
+        <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
+        <Setter Property="TextElement.Foreground" Value="{DynamicResource AppInvalidForegroundBrush}" />
     </Style>
     <Style Selector="TextBlock#NotWithMemberValue.Invalid">
-        <Setter Property="Background" Value="Tomato" />
+        <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource AppInvalidForegroundBrush}" />
     </Style>
     <Style Selector="TextBlock#WithMemberValue.Invalid">
-        <Setter Property="Background" Value="Tomato" />
+        <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource AppInvalidForegroundBrush}" />
     </Style>
 
     <Style Selector="controls|MemberCard Border.AllowTeamChange">
@@ -117,9 +120,9 @@
                 <Border Name="PART_OuterBorder"
                         HorizontalAlignment="Stretch"
                         CornerRadius="8"
-                        Background="White"
+                        Background="{DynamicResource AppSurfaceBrush}"
                         Margin="8,6"
-                        BoxShadow="0 0 8 0 Gray"
+                        BoxShadow="{DynamicResource AppCardShadow}"
                         Classes.AllowTeamChange="{Binding Member.AllowTeamChange, RelativeSource={RelativeSource TemplatedParent}}"
                         Classes.AllowPinMember="{Binding Member.Team.CanPinMember, RelativeSource={RelativeSource TemplatedParent}}">
                     <Border BorderThickness="0"

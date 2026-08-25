@@ -1,9 +1,49 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <!-- Add Resources Here -->
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="AppSurfaceBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppSecondarySurfaceBrush">#FFF0F0F0</SolidColorBrush>
+            <SolidColorBrush x:Key="AppSubtleSurfaceBrush">#14000000</SolidColorBrush>
+            <SolidColorBrush x:Key="AppBorderBrush">#33000000</SolidColorBrush>
+            <SolidColorBrush x:Key="AppMutedForegroundBrush">#FF666666</SolidColorBrush>
+            <SolidColorBrush x:Key="AppHoverBrush">#1F000000</SolidColorBrush>
+            <SolidColorBrush x:Key="AppSuccessBrush">#FF107C10</SolidColorBrush>
+            <SolidColorBrush x:Key="AppErrorBrush">#FFC42B1C</SolidColorBrush>
+            <SolidColorBrush x:Key="AppInvalidBackgroundBrush">#FFFF8066</SolidColorBrush>
+            <SolidColorBrush x:Key="AppInvalidForegroundBrush">#FF000000</SolidColorBrush>
+            <SolidColorBrush x:Key="AppUpdateBrush">#FFD83B01</SolidColorBrush>
+            <SolidColorBrush x:Key="AppDropHighlightBrush">#6600B7C3</SolidColorBrush>
+            <SolidColorBrush x:Key="AppDestructiveBackgroundBrush">#FFC42B1C</SolidColorBrush>
+            <SolidColorBrush x:Key="AppDestructiveForegroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppOverlayBackgroundBrush">#CCFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppOverlayForegroundBrush">#FF000000</SolidColorBrush>
+            <BoxShadows x:Key="AppCardShadow">0 0 8 0 #66000000</BoxShadows>
+            <BoxShadows x:Key="AppPanelShadow">0 0 12 0 #66000000</BoxShadows>
+            <BoxShadows x:Key="AppHighlightShadow">0 0 16 0 #80000000</BoxShadows>
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Dark">
+            <SolidColorBrush x:Key="AppSurfaceBrush">#FF1F1F1F</SolidColorBrush>
+            <SolidColorBrush x:Key="AppSecondarySurfaceBrush">#FF2D2D2D</SolidColorBrush>
+            <SolidColorBrush x:Key="AppSubtleSurfaceBrush">#14FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppBorderBrush">#4DFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppMutedForegroundBrush">#FFB3B3B3</SolidColorBrush>
+            <SolidColorBrush x:Key="AppHoverBrush">#29FFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppSuccessBrush">#FF6CCB5F</SolidColorBrush>
+            <SolidColorBrush x:Key="AppErrorBrush">#FFFF99A4</SolidColorBrush>
+            <SolidColorBrush x:Key="AppInvalidBackgroundBrush">#FF8C3A3A</SolidColorBrush>
+            <SolidColorBrush x:Key="AppInvalidForegroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppUpdateBrush">#FFFFB900</SolidColorBrush>
+            <SolidColorBrush x:Key="AppDropHighlightBrush">#6650E6FF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppDestructiveBackgroundBrush">#FFB10E1C</SolidColorBrush>
+            <SolidColorBrush x:Key="AppDestructiveForegroundBrush">#FFFFFFFF</SolidColorBrush>
+            <SolidColorBrush x:Key="AppOverlayBackgroundBrush">#CC1F1F1F</SolidColorBrush>
+            <SolidColorBrush x:Key="AppOverlayForegroundBrush">#FFFFFFFF</SolidColorBrush>
+            <BoxShadows x:Key="AppCardShadow">0 0 8 0 #CC000000</BoxShadows>
+            <BoxShadows x:Key="AppPanelShadow">0 0 12 0 #CC000000</BoxShadows>
+            <BoxShadows x:Key="AppHighlightShadow">0 0 16 0 #E6000000</BoxShadows>
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+
     <CornerRadius x:Key="ControlCornerRadius">8</CornerRadius>
-    <SolidColorBrush x:Key="TextControlBorderBrush">LightGray</SolidColorBrush> 
-    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver">DarkGray</SolidColorBrush> 
-    <SolidColorBrush x:Key="ComboBoxBorderBrush">LightGray</SolidColorBrush> 
-    <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver">DarkGray</SolidColorBrush> 
 </ResourceDictionary>

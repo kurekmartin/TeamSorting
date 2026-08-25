@@ -7,7 +7,7 @@
     </Design.PreviewWith>
 
     <Style Selector="Border.Checked">
-        <Setter Property="Background" Value="LightGray" />
+        <Setter Property="Background" Value="{DynamicResource AppHoverBrush}" />
     </Style>
 
     <Style Selector="controls|IconRadioButton">

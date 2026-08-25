@@ -15,7 +15,7 @@
         SystemDecorations="None"
         CanResize="False"
         ShowInTaskbar="False"
-        Background="White">
+        Background="{DynamicResource AppSurfaceBrush}">
 
     <Grid Margin="30"
           RowDefinitions="Auto,*,Auto">

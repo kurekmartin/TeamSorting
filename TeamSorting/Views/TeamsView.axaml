@@ -19,17 +19,17 @@
     <UserControl.Styles>
         <Style Selector="i|Icon#TeamValidityIcon.Valid">
             <Setter Property="Value" Value="mdi-check-circle" />
-            <Setter Property="Foreground" Value="Green" />
+            <Setter Property="Foreground" Value="{DynamicResource AppSuccessBrush}" />
         </Style>
         <Style Selector="i|Icon#TeamValidityIcon">
             <Setter Property="Value" Value="mdi-close-circle" />
-            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="Foreground" Value="{DynamicResource AppErrorBrush}" />
         </Style>
         <Style Selector="controls|MemberCard.drag-active">
             <Setter Property="Opacity" Value="0.5" />
         </Style>
         <Style Selector="controls|MemberCard.Drag Border">
-            <Setter Property="BoxShadow" Value="0 0 16 Gray" />
+            <Setter Property="BoxShadow" Value="{DynamicResource AppHighlightShadow}" />
         </Style>
 
         <Style Selector="ItemsControl.teams-scroll-area">
@@ -46,9 +46,9 @@
                    Background="Transparent">
             <Border DockPanel.Dock="Left"
                     Padding="8"
-                    BoxShadow="0 0 12 0 Gray"
+                    BoxShadow="{DynamicResource AppPanelShadow}"
                     MinWidth="150"
-                    Background="White"
+                    Background="{DynamicResource AppSurfaceBrush}"
                     HorizontalAlignment="Left"
                     ZIndex="10">
                 <DockPanel Margin="5,0">
@@ -66,7 +66,7 @@
                     <ScrollViewer>
                         <StackPanel Orientation="Vertical">
                             <Border BorderThickness="0 0 0 1"
-                                    BorderBrush="LightGray"
+                                    BorderBrush="{DynamicResource AppBorderBrush}"
                                     Margin="0 0 0 8">
                                 <StackPanel Orientation="Vertical"
                                             DockPanel.Dock="Top"
@@ -98,7 +98,7 @@
                             </Border>
 
                             <Border BorderThickness="0 0 0 1"
-                                    BorderBrush="LightGray"
+                                    BorderBrush="{DynamicResource AppBorderBrush}"
                                     Margin="0 0 0 8">
                                 <StackPanel Orientation="Vertical"
                                             DockPanel.Dock="Top"
@@ -165,7 +165,7 @@
                             </Border>
 
                             <Border BorderThickness="0 0 0 1"
-                                    BorderBrush="LightGray"
+                                    BorderBrush="{DynamicResource AppBorderBrush}"
                                     Margin="0 0 0 8">
                                 <StackPanel Orientation="Vertical"
                                             DockPanel.Dock="Top"
@@ -266,9 +266,9 @@
             <!-- Members without team -->
             <Border DockPanel.Dock="Right"
                     Padding="8,8,8,0"
-                    BoxShadow="0 0 12 0 Gray"
+                    BoxShadow="{DynamicResource AppPanelShadow}"
                     MinWidth="150"
-                    Background="White"
+                    Background="{DynamicResource AppSurfaceBrush}"
                     HorizontalAlignment="Right"
                     ZIndex="10"
                     IsVisible="{Binding ShowUnsortedMembers}">
@@ -325,11 +325,10 @@
                         </ScrollViewer>
                         <Border Grid.Row="1"
                                 Name="TeamHighlight"
-                                Background="Aqua"
+                                Background="{DynamicResource AppDropHighlightBrush}"
                                 HorizontalAlignment="Stretch"
                                 VerticalAlignment="Stretch"
                                 IsHitTestVisible="False"
-                                Opacity="0.5"
                                 CornerRadius="8"
                                 Margin="0,5,0,5" />
                     </Grid>
@@ -442,11 +441,10 @@
                                     </ScrollViewer>
                                     <Border Grid.Row="1"
                                             Name="TeamHighlight"
-                                            Background="Aqua"
+                                            Background="{DynamicResource AppDropHighlightBrush}"
                                             HorizontalAlignment="Stretch"
                                             VerticalAlignment="Stretch"
                                             IsHitTestVisible="False"
-                                            Opacity="0.5"
                                             CornerRadius="8"
                                             Margin="0,5,0,0" />
                                 </Grid>
@@ -467,9 +465,9 @@
                 VerticalAlignment="Top"
                 HorizontalAlignment="Right"
                 Padding="8"
-                BoxShadow="0 0 12 0 Gray"
+                BoxShadow="{DynamicResource AppPanelShadow}"
                 CornerRadius="0 0 0 8"
-                Background="White">
+                Background="{DynamicResource AppSurfaceBrush}">
             <StackPanel Orientation="Vertical"
                         Spacing="4"
                         DataContext="{Binding Teams.MembersWithoutTeam}">

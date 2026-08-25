@@ -14,7 +14,7 @@
         SystemDecorations="None"
         CanResize="False"
         ShowInTaskbar="False"
-        Background="White">
+        Background="{DynamicResource AppSurfaceBrush}">
 
     <DockPanel Margin="30">
         <TextBlock Name="Message"
@@ -38,7 +38,8 @@
                     Click="Confirm_OnClick"
                     HorizontalAlignment="Right"
                     DockPanel.Dock="Right"
-                    Background="Red"
+                    Background="{DynamicResource AppDestructiveBackgroundBrush}"
+                    Foreground="{DynamicResource AppDestructiveForegroundBrush}"
                     Content="{x:Static lang:Resources.WarningDialog_Confirm_Button}" />
         </DockPanel>
     </DockPanel>

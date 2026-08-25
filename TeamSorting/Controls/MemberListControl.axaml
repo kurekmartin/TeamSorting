@@ -40,7 +40,7 @@
                                 </DataTemplate.DataType>
                                 <Border Padding="4"
                                         BorderThickness="1"
-                                        BorderBrush="LightGray"
+                                        BorderBrush="{DynamicResource AppBorderBrush}"
                                         CornerRadius="8"
                                         Margin="3">
                                     <StackPanel Orientation="Horizontal">

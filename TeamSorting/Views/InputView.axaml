@@ -27,7 +27,8 @@
           HorizontalAlignment="Stretch">
         <Border Grid.Row="0"
                 Padding="8"
-                BoxShadow="0 0 8 0 Gray">
+                Background="{DynamicResource AppSurfaceBrush}"
+                BoxShadow="{DynamicResource AppCardShadow}">
             <DockPanel>
                 <Button HorizontalAlignment="Left"
                         DockPanel.Dock="Left">
@@ -87,7 +88,8 @@
                 Margin="8"
                 BorderThickness="0"
                 CornerRadius="8"
-                BoxShadow="0 0 8 0 Gray"
+                Background="{DynamicResource AppSurfaceBrush}"
+                BoxShadow="{DynamicResource AppCardShadow}"
                 IsVisible="{Binding ShowAddMemberToolbar}"
                 Padding="4">
             <DockPanel HorizontalAlignment="Stretch">
@@ -114,7 +116,8 @@
                 Margin="8"
                 BorderThickness="0"
                 CornerRadius="8"
-                BoxShadow="0 0 8 0 Gray"
+                Background="{DynamicResource AppSurfaceBrush}"
+                BoxShadow="{DynamicResource AppCardShadow}"
                 IsVisible="{Binding ShowAddDisciplineToolbar}"
                 Padding="4">
             <DockPanel HorizontalAlignment="Stretch">
@@ -164,7 +167,8 @@
                 Margin="8"
                 BorderThickness="0"
                 CornerRadius="8"
-                BoxShadow="0 0 8 0 Gray">
+                Background="{DynamicResource AppSurfaceBrush}"
+                BoxShadow="{DynamicResource AppCardShadow}">
             <Border BorderThickness="0"
                     ClipToBounds="True"
                     CornerRadius="{Binding $parent[Border].CornerRadius}">
@@ -173,7 +177,7 @@
                            VerticalAlignment="Center"
                            Content="{x:Static lang:Resources.InputView_EmptyInputTable_Label}"
                            FontWeight="Bold"
-                           Foreground="DarkGray"
+                           Foreground="{DynamicResource AppMutedForegroundBrush}"
                            IsVisible="{Binding MembersEmpty }" />
                     <TreeDataGrid
                         Name="Members"
@@ -213,7 +217,7 @@
                         </TreeDataGrid.Resources>
                         <TreeDataGrid.Styles>
                             <Style Selector="TreeDataGrid TreeDataGridRow:nth-last-child(2n)">
-                                <Setter Property="Background" Value="#20808080" />
+                                <Setter Property="Background" Value="{DynamicResource AppSubtleSurfaceBrush}" />
                             </Style>
                         </TreeDataGrid.Styles>
                     </TreeDataGrid>

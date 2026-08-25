@@ -27,7 +27,7 @@
                                      Content="{Binding ContentViewModel}"
                                      DockPanel.Dock="Top" />
         <StackPanel Grid.Row="1"
-                    Background="LightGray"
+                    Background="{DynamicResource AppSecondarySurfaceBrush}"
                     VerticalAlignment="Bottom">
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Right"
@@ -41,7 +41,7 @@
                         Padding="2"
                         MinHeight="0"
                         FontSize="17"
-                        Foreground="OrangeRed" />
+                        Foreground="{DynamicResource AppUpdateBrush}" />
                 
                 <TextBlock Text="{Binding Version}"
                            Margin="3"
@@ -51,8 +51,7 @@
         </StackPanel>
         <!-- Overlay -->
         <Border Grid.Row=""
-                Background="White"
-                Opacity="0.7"
+                Background="{DynamicResource AppOverlayBackgroundBrush}"
                 IsVisible="{Binding Teams.SortingInProgress}" />
         <Border Grid.Row=""
                 Background="Transparent"
@@ -62,7 +61,7 @@
                 <Label VerticalAlignment="Center"
                        HorizontalAlignment="Center"
                        FontSize="30"
-                       Foreground="Black"
+                       Foreground="{DynamicResource AppOverlayForegroundBrush}"
                        Content="{Binding Teams.Progress.Text}" />
                 <ProgressBar IsIndeterminate="{Binding Teams.Progress.IsIndeterminate}"
                              Minimum="{Binding Teams.Progress.Minimum}"
