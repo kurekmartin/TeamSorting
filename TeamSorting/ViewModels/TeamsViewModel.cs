@@ -92,14 +92,19 @@ public class TeamsViewModel : ViewModelBase
 
     public void Drop(Member member, Control? destination)
     {
-        Visual? teamControl =
-            destination?.GetVisualAncestors().FirstOrDefault(ancestor => ancestor.DataContext is Team);
-        if (teamControl?.DataContext is not Team team) return;
+        TeamControl? teamControl = FindTeamControl(destination);
+        if (teamControl?.Team is not { } team)
+        {
+            return;
+        }
 
         Team? oldTeam = member.Team;
         bool moved = member.MoveToTeam(team);
 
-        if (!moved) return;
+        if (!moved)
+        {
+            return;
+        }
 
         Team? newTeam = member.Team;
         string message = string.Format(Resources.TeamsView_MemberMoved_Message, member.Name, oldTeam?.Name,
@@ -115,19 +120,12 @@ public class TeamsViewModel : ViewModelBase
 
     public bool IsValidDestination(Member member, Control? destination)
     {
-        Visual? teamControl;
-        if (destination is { DataContext: Team, Name: "Team" })
-        {
-            teamControl = destination;
-        }
-        else
-        {
-            teamControl = destination?
-                          .GetVisualAncestors()
-                          .FirstOrDefault(ancestor => ancestor is { Name: "Team", DataContext: Team });
-        }
+        TeamControl? teamControl = FindTeamControl(destination);
 
-        if (teamControl == _dragOverTeam) return true;
+        if (teamControl == _dragOverTeam)
+        {
+            return true;
+        }
 
         if (teamControl is null)
         {
@@ -140,7 +138,7 @@ public class TeamsViewModel : ViewModelBase
             RemoveTeamHighlight(_dragOverTeam);
         }
 
-        if (teamControl.DataContext is Team team && team == member.Team)
+        if (teamControl.Team == member.Team)
         {
             _dragOverTeam = teamControl;
             return true;
@@ -151,6 +149,13 @@ public class TeamsViewModel : ViewModelBase
         AddTeamHighlight(_dragOverTeam);
 
         return true;
+    }
+
+    private static TeamControl? FindTeamControl(Control? destination)
+    {
+        TeamControl? teamControl = destination as TeamControl
+                                   ?? destination?.GetVisualAncestors().OfType<TeamControl>().FirstOrDefault();
+        return teamControl is { IsCompact: false } ? teamControl : null;
     }
 
     private static void AddTeamHighlight(Visual? control)

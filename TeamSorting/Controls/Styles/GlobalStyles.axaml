@@ -24,35 +24,6 @@
         <Setter Property="ClipToBounds" Value="True" />
     </Style>
 
-    <Style Selector="#Team:not(.Valid) Border#Header">
-        <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
-        <Setter Property="TextElement.Foreground" Value="{DynamicResource AppInvalidForegroundBrush}" />
-    </Style>
-
-    <Style Selector="#Team Border#Header">
-        <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
-    </Style>
-
-    <Style Selector="#Team Border#Header ItemsControl:empty">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="#Team:not(.Highlight) Border#TeamHighlight">
-        <Setter Property="IsVisible" Value="False" />
-    </Style>
-
-    <Style Selector="#Team.Highlight Border#TeamHighlight">
-        <Setter Property="IsVisible" Value="True" />
-    </Style>
-
-    <Style Selector="#Team.Highlight Border#Header">
-        <Setter Property="BoxShadow" Value="{DynamicResource AppHighlightShadow}" />
-    </Style>
-
-    <Style Selector="#Team:not(.Highlight) Border#Header">
-        <Setter Property="BoxShadow" Value="{DynamicResource AppPanelShadow}" />
-    </Style>
-
     <Style Selector="DataValidationErrors">
         <Setter Property="Template">
             <ControlTemplate>

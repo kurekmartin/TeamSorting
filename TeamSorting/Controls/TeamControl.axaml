@@ -1,0 +1,166 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:TeamSorting.Controls"
+             xmlns:models="clr-namespace:TeamSorting.Models"
+             xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Runtime"
+             xmlns:i="https://github.com/projektanker/icons.avalonia"
+             xmlns:lang="clr-namespace:TeamSorting.Lang"
+             xmlns:converter="clr-namespace:TeamSorting.Converters"
+             x:Class="TeamSorting.Controls.TeamControl"
+             x:DataType="controls:TeamControl"
+             x:Name="Root"
+             mc:Ignorable="d"
+             d:DesignWidth="260"
+             d:DesignHeight="450"
+             Classes.Valid="{Binding Team.IsValid, ElementName=Root}"
+             Classes.Unsorted="{Binding IsUnsorted, ElementName=Root}">
+    <UserControl.Resources>
+        <converter:DisciplineRecordValueConverter x:Key="DisciplineRecordValueConverter" />
+        <converter:BooleanNegationConverter x:Key="BooleanNegationConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="controls|TeamControl:not(.Valid) Border#Header">
+            <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
+            <Setter Property="TextElement.Foreground" Value="{DynamicResource AppInvalidForegroundBrush}" />
+        </Style>
+        <Style Selector="controls|TeamControl Border#Header">
+            <Setter Property="Background" Value="{DynamicResource AppSurfaceBrush}" />
+        </Style>
+        <Style Selector="controls|TeamControl:not(.Highlight) Border#TeamHighlight">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+        <Style Selector="controls|TeamControl.Highlight Border#TeamHighlight">
+            <Setter Property="IsVisible" Value="True" />
+        </Style>
+        <Style Selector="controls|TeamControl.Highlight Border#Header">
+            <Setter Property="BoxShadow" Value="{DynamicResource AppHighlightShadow}" />
+        </Style>
+        <Style Selector="controls|TeamControl:not(.Highlight) Border#Header">
+            <Setter Property="BoxShadow" Value="{DynamicResource AppPanelShadow}" />
+        </Style>
+        <Style Selector="controls|TeamControl.Unsorted Grid#HeaderContainer">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="48,12,12,0" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <StackPanel Orientation="Horizontal"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    IsVisible="{Binding IsCompact, ElementName=Root}">
+            <i:Icon Value="mdi-account-group"
+                    FontSize="16"
+                    Margin="0,0,2,0" />
+            <TextBlock Text="{Binding Team.Members.Count, ElementName=Root}"
+                       VerticalAlignment="Center" />
+        </StackPanel>
+
+        <Grid RowDefinitions="Auto,*"
+              IsVisible="{Binding IsCompact, ElementName=Root, Converter={StaticResource BooleanNegationConverter}}">
+            <Grid Grid.Row="0"
+                  Name="HeaderContainer"
+                  ZIndex="5">
+                <Border Name="Header"
+                        CornerRadius="8">
+                    <StackPanel Orientation="Vertical"
+                                Margin="8">
+                        <DockPanel>
+                            <StackPanel DockPanel.Dock="Left"
+                                        VerticalAlignment="Center"
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        Spacing="8"
+                                        Margin="0,0,8,0">
+                                <TextBox Text="{Binding Team.Name, ElementName=Root}"
+                                         IsVisible="{Binding IsUnsorted, ElementName=Root, Converter={StaticResource BooleanNegationConverter}}"
+                                         FontWeight="Bold"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"
+                                         TextChanged="TeamName_OnTextChanged"
+                                         Padding="10,6,10,5" />
+                                <TextBlock Text="{Binding Team.Name, ElementName=Root}"
+                                           IsVisible="{Binding IsUnsorted, ElementName=Root}"
+                                           FontWeight="Bold"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center" />
+                                <StackPanel Orientation="Horizontal"
+                                            VerticalAlignment="Center">
+                                    <i:Icon Value="mdi-account-group"
+                                            FontSize="16"
+                                            VerticalAlignment="Top"
+                                            Margin="0,0,2,0" />
+                                    <TextBlock Text="{Binding Team.Members.Count, ElementName=Root}"
+                                               VerticalAlignment="Bottom" />
+                                </StackPanel>
+                            </StackPanel>
+                            <Button HorizontalAlignment="Right"
+                                    IsVisible="{Binding IsUnsorted, ElementName=Root, Converter={StaticResource BooleanNegationConverter}}"
+                                    i:Attached.Icon="mdi-dots-vertical"
+                                    Background="Transparent">
+                                <Button.Flyout>
+                                    <MenuFlyout>
+                                        <MenuItem Header="Delete"
+                                                  Click="DeleteTeam_OnClick"
+                                                  ToolTip.Tip="{x:Static lang:Resources.TeamsView_DeleteTeam_Tooltip}"
+                                                  i:MenuItem.Icon="mdi-delete" />
+                                        <MenuItem Header="-" />
+                                        <MenuItem Header="Pin all"
+                                                  Click="PinMembers_OnClick"
+                                                  i:MenuItem.Icon="mdi-pin" />
+                                        <MenuItem Header="Unpin all"
+                                                  Click="UnpinMembers_OnClick"
+                                                  i:MenuItem.Icon="mdi-pin-off" />
+                                    </MenuFlyout>
+                                </Button.Flyout>
+                            </Button>
+                        </DockPanel>
+                        <ItemsControl ItemsSource="{Binding Team.AvgScores, ElementName=Root}"
+                                      IsVisible="{Binding IsUnsorted, ElementName=Root, Converter={StaticResource BooleanNegationConverter}}"
+                                      Margin="5">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <DataTemplate.DataType>
+                                        <x:Type TypeName="generic:KeyValuePair"
+                                                x:TypeArguments="models:DisciplineInfo,x:Object" />
+                                    </DataTemplate.DataType>
+                                    <DockPanel Margin="0,0,0,2">
+                                        <TextBlock Text="{Binding Key.Name}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Left"
+                                                   Margin="0,0,5,0" />
+                                        <TextBlock Text="{Binding Value, Converter={StaticResource DisciplineRecordValueConverter}}"
+                                                   HorizontalAlignment="Right" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <ScrollViewer Grid.Row="1">
+                <ItemsControl ItemsSource="{Binding Team.Members, ElementName=Root}"
+                              Padding="0,5,0,10">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="models:Member">
+                            <controls:MemberCard Member="{Binding .}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <Border Grid.Row="1"
+                    Name="TeamHighlight"
+                    Background="{DynamicResource AppDropHighlightBrush}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsHitTestVisible="False"
+                    CornerRadius="8"
+                    Margin="0,5,0,0" />
+        </Grid>
+    </Grid>
+</UserControl>

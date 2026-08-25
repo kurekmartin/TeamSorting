@@ -31,9 +31,17 @@ public partial class TeamsView : UserControl
 
     private void DragLeave(object? sender, DragEventArgs e)
     {
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        if (DataContext is not TeamsViewModel teamsViewModel)
+        {
+            return;
+        }
+
         object? data = e.Data.Get(TeamsViewModel.MemberFormat);
-        if (data is not Member member) return;
+        if (data is not Member member)
+        {
+            return;
+        }
+
         teamsViewModel.IsValidDestination(member, e.Source as Control);
     }
 
@@ -45,23 +53,31 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        if (DataContext is not TeamsViewModel teamsViewModel)
+        {
+            return;
+        }
+
         teamsViewModel.Drop(member, e.Source as Control);
     }
 
     private void DragOver(object? sender, DragEventArgs e)
     {
         Point currentPosition = e.GetPosition(TeamViewContainer);
-
-        double offsetX = currentPosition.X - _ghostPosition.X;
-        double offsetY = currentPosition.Y - _ghostPosition.Y;
-
-        GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
+        UpdateGhostPosition(currentPosition);
 
         e.DragEffects = DragDropEffects.Move;
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        if (DataContext is not TeamsViewModel teamsViewModel)
+        {
+            return;
+        }
+
         object? data = e.Data.Get(TeamsViewModel.MemberFormat);
-        if (data is not Member member) return;
+        if (data is not Member member)
+        {
+            return;
+        }
+
         if (!teamsViewModel.IsValidDestination(member, e.Source as Control))
         {
             e.DragEffects = DragDropEffects.None;
@@ -70,20 +86,29 @@ public partial class TeamsView : UserControl
 
     private async void MemberCard_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not Control control
-            || DataContext is not TeamsViewModel teamsViewModel
+        if (DataContext is not TeamsViewModel teamsViewModel
             || teamsViewModel.Teams.SortingInProgress)
         {
             return;
         }
 
-        PointerPoint point = e.GetCurrentPoint(control);
+        MemberCard? memberCard = e.Source as MemberCard
+                                 ?? (e.Source as Visual)?.GetVisualAncestors().OfType<MemberCard>().FirstOrDefault();
+        if (memberCard is null)
+        {
+            return;
+        }
+
+        PointerPoint point = e.GetCurrentPoint(memberCard);
         if (!point.Properties.IsLeftButtonPressed)
         {
             return;
         }
 
-        if (sender is not MemberCard memberCard || !memberCard.Member.AllowTeamChange) return;
+        if (!memberCard.Member.AllowTeamChange)
+        {
+            return;
+        }
 
         memberCard.Copy(GhostCard);
         _mouseOffset = e.GetPosition(memberCard);
@@ -95,9 +120,7 @@ public partial class TeamsView : UserControl
         _ghostPosition = new Point(ghostPos.X + _mouseOffset.X, ghostPos.Y + _mouseOffset.Y);
 
         Point mousePos = e.GetPosition(TeamViewContainer);
-        double offsetX = mousePos.X - _ghostPosition.X;
-        double offsetY = mousePos.Y - _ghostPosition.Y + _mouseOffset.X;
-        GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
+        UpdateGhostPosition(mousePos);
 
         teamsViewModel.StartDrag(memberCard);
 
@@ -108,25 +131,34 @@ public partial class TeamsView : UserControl
         GhostCard.IsVisible = false;
     }
 
+    private void UpdateGhostPosition(Point pointerPosition)
+    {
+        double offsetX = pointerPosition.X - _ghostPosition.X;
+        double offsetY = pointerPosition.Y - _ghostPosition.Y;
+        GhostCard.RenderTransform = new TranslateTransform(offsetX, offsetY);
+    }
+
     protected override void OnInitialized()
     {
-        if (DataContext is TeamsViewModel context)
+        if (DataContext is not TeamsViewModel context)
         {
-            context.NotificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this))
-            {
-                Position = NotificationPosition.BottomRight,
-                Margin = new Thickness(0, 0, 0, 35)
-            };
-
-            var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
-
-            List<ComboBoxSortCriteria> items = [nameItem];
-            items.AddRange(context.Disciplines.DisciplineList.Select(discipline =>
-                new ComboBoxSortCriteria(discipline.Name, discipline)));
-
-            SortCriteriaComboBox.ItemsSource = items.OrderBy(criteria => criteria.DisplayText).ToList();
-            SortCriteriaComboBox.SelectedValue = nameItem;
+            return;
         }
+
+        context.NotificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this))
+        {
+            Position = NotificationPosition.BottomRight,
+            Margin = new Thickness(0, 0, 0, 35)
+        };
+
+        var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
+
+        List<ComboBoxSortCriteria> items = [nameItem];
+        items.AddRange(context.Disciplines.DisciplineList.Select(discipline =>
+            new ComboBoxSortCriteria(discipline.Name, discipline)));
+
+        SortCriteriaComboBox.ItemsSource = items.OrderBy(criteria => criteria.DisplayText).ToList();
+        SortCriteriaComboBox.SelectedValue = nameItem;
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -146,20 +178,24 @@ public partial class TeamsView : UserControl
 
     private async void ExportTeamsToCsv_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context) return;
-        var storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
+        if (DataContext is not TeamsViewModel context)
+        {
+            return;
+        }
+
+        IStorageProvider? storageProvider = TopLevel.GetTopLevel(this)?.StorageProvider;
         if (storageProvider is null)
         {
             return;
         }
 
-        var file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions()
+        IStorageFile? file = await storageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
         {
             Title = Lang.Resources.TeamsView_ExportTeamsToCsv_FileDialogTitle,
-            FileTypeChoices = new[]
-            {
+            FileTypeChoices =
+            [
                 new FilePickerFileType("csv") { Patterns = ["*.csv"] }
-            }
+            ]
         });
 
         if (file is null)
@@ -188,8 +224,8 @@ public partial class TeamsView : UserControl
 
     private void ShowMemberDetailsButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        var cards = this.GetVisualDescendants().OfType<MemberCard>();
-        foreach (var card in cards)
+        IEnumerable<MemberCard> cards = this.GetVisualDescendants().OfType<MemberCard>();
+        foreach (MemberCard card in cards)
         {
             card.ShowDetail = true;
         }
@@ -197,8 +233,8 @@ public partial class TeamsView : UserControl
 
     private void HideMemberDetailsButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        var cards = this.GetVisualDescendants().OfType<MemberCard>();
-        foreach (var card in cards)
+        IEnumerable<MemberCard> cards = this.GetVisualDescendants().OfType<MemberCard>();
+        foreach (MemberCard card in cards)
         {
             card.ShowDetail = false;
         }
@@ -216,17 +252,19 @@ public partial class TeamsView : UserControl
 
     private void ToggleButton_OnIsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (sender is IconRadioButton { IsChecked: true } && DataContext is TeamsViewModel context)
+        if (sender is not IconRadioButton { IsChecked: true } || DataContext is not TeamsViewModel context)
         {
-            if (sender.Equals(SortAscRadioButton))
-            {
-                context.TeamsSortCriteria = new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Asc);
-            }
-            else if (sender.Equals(SortDescRadioButton))
-            {
-                context.TeamsSortCriteria =
-                    new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Desc);
-            }
+            return;
+        }
+
+        if (sender.Equals(SortAscRadioButton))
+        {
+            context.TeamsSortCriteria = new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Asc);
+        }
+        else if (sender.Equals(SortDescRadioButton))
+        {
+            context.TeamsSortCriteria =
+                new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Desc);
         }
     }
 
@@ -258,7 +296,11 @@ public partial class TeamsView : UserControl
 
     private async void NewCombinationButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context || sender is not Button button) return;
+        if (DataContext is not TeamsViewModel context || sender is not Button button)
+        {
+            return;
+        }
+
         var window = TopLevel.GetTopLevel(this);
         if (window is not MainWindow { DataContext: MainWindowViewModel } mainWindow)
         {
@@ -299,41 +341,40 @@ public partial class TeamsView : UserControl
 
     private void PinMembersButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context) return;
+        if (DataContext is not TeamsViewModel context)
+        {
+            return;
+        }
+
         context.Teams.LockCurrentMembers();
     }
 
     private void UnpinMembersButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel context) return;
+        if (DataContext is not TeamsViewModel context)
+        {
+            return;
+        }
+
         context.Teams.UnlockCurrentMembers();
     }
 
-    private void PinTeamMembersMenuItem_OnClick(object? sender, RoutedEventArgs e)
+    private void TextBox_TeamNameOnTextChanged(object? sender, RoutedEventArgs e)
     {
-        if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel)
+        if (DataContext is not TeamsViewModel teamsViewModel)
         {
-            team.PinMembers();
+            return;
         }
-    }
 
-    private void UnpinTeamMembersMenuItem_OnClick(object? sender, RoutedEventArgs e)
-    {
-        if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel)
-        {
-            team.UnpinMembers();
-        }
-    }
-
-    private void TextBox_TeamNameOnTextChanged(object? sender, TextChangedEventArgs e)
-    {
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
         teamsViewModel.Teams.ValidateTeamNames();
     }
 
     private async void DeleteAllTeamsButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        if (DataContext is not TeamsViewModel teamsViewModel)
+        {
+            return;
+        }
 
         if (teamsViewModel.Teams.TeamList.Count == 0)
         {
@@ -363,13 +404,21 @@ public partial class TeamsView : UserControl
 
     private void HideUnsortedMembersButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        if (DataContext is not TeamsViewModel teamsViewModel)
+        {
+            return;
+        }
+
         teamsViewModel.ShowUnsortedMembers = false;
     }
 
     private void ShowUnsortedMembersButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is not TeamsViewModel teamsViewModel) return;
+        if (DataContext is not TeamsViewModel teamsViewModel)
+        {
+            return;
+        }
+
         teamsViewModel.ShowUnsortedMembers = true;
     }
 }
