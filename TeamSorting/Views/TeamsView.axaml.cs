@@ -240,9 +240,19 @@ public partial class TeamsView : UserControl
 
     private void DeleteTeamButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (sender is Control { DataContext: Team team } && DataContext is TeamsViewModel context)
+        if (sender is not TeamControl { Team: { } team } || DataContext is not TeamsViewModel context)
         {
-            context.Teams.RemoveTeam(team);
+            return;
+        }
+
+        bool showUnsortedMembersAfterDeletion =
+            !context.ShowUnsortedMembers && context.Teams.MembersWithoutTeam.Members.Count == 0;
+
+        context.Teams.RemoveTeam(team);
+
+        if (showUnsortedMembersAfterDeletion && context.Teams.MembersWithoutTeam.Members.Count > 0)
+        {
+            context.ShowUnsortedMembers = true;
         }
     }
 
@@ -278,6 +288,7 @@ public partial class TeamsView : UserControl
             teamsToDelete.ForEach(team => context.Teams.RemoveTeam(team));
         }
 
+        context.ShowUnsortedMembers = false;
         Cursor = new Cursor(StandardCursorType.Wait);
         button.IsEnabled = false;
         await context.Teams.SortToTeams(targetNumberOfTeams);
