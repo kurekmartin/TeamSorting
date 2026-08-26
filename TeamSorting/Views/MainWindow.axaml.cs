@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -25,11 +26,19 @@ public partial class MainWindow : Window
     {
         _logger?.LogInformation("Window loaded");
         base.OnLoaded(e);
-        
-        if (DataContext is MainWindowViewModel context)
+
+        if (DataContext is not MainWindowViewModel context)
         {
-            context.CheckForUpdates();
+            return;
         }
+
+        context.TeamsViewModel.NotificationManager ??= new WindowNotificationManager(this)
+        {
+            Position = NotificationPosition.BottomRight,
+            Margin = new Thickness(0, 0, 0, 35)
+        };
+
+        context.CheckForUpdates();
     }
 
     public async Task<WarningDialogResult> ShowWarningDialog(WarningDialog warningDialog)

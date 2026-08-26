@@ -166,10 +166,22 @@ public class Member : ObservableObject, INotifyDataErrorInfo
         get => _team;
         set
         {
-            if (_team == value) return;
+            if (_team == value)
+            {
+                return;
+            }
+
+            if (_team is not null)
+            {
+                ((INotifyCollectionChanged)_team.Members).CollectionChanged -= MembersOnCollectionChanged;
+            }
+
             _team = value;
-            if (_team is null) return;
-            ((INotifyCollectionChanged)_team.Members).CollectionChanged += MembersOnCollectionChanged;
+            if (_team is not null)
+            {
+                ((INotifyCollectionChanged)_team.Members).CollectionChanged += MembersOnCollectionChanged;
+            }
+
             OnPropertyChanged(nameof(WithValidation));
             OnPropertyChanged(nameof(NotWithValidation));
             OnPropertyChanged(nameof(IsValid));

@@ -145,11 +145,18 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        context.NotificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this))
+        if (context.NotificationManager is null)
         {
-            Position = NotificationPosition.BottomRight,
-            Margin = new Thickness(0, 0, 0, 35)
-        };
+            var topLevel = TopLevel.GetTopLevel(this);
+            if (topLevel is not null)
+            {
+                context.NotificationManager = new WindowNotificationManager(topLevel)
+                {
+                    Position = NotificationPosition.BottomRight,
+                    Margin = new Thickness(0, 0, 0, 35)
+                };
+            }
+        }
 
         var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
 

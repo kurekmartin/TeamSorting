@@ -56,11 +56,31 @@ public class MemberListControl : TemplatedControl
         get => _selectedMembers;
         set
         {
-            SelectedMembers.CollectionChanged -= SelectedMembersOnCollectionChanged;
+            _selectedMembers.CollectionChanged -= SelectedMembersOnCollectionChanged;
+
             SetAndRaise(SelectedMembersProperty, ref _selectedMembers, value);
-            SelectedMembers.CollectionChanged += SelectedMembersOnCollectionChanged;
-            SelectedMembersSorted = SelectedMembers.OrderBy(member => member.Name).ToList();
+
+            if (VisualRoot is not null)
+            {
+                _selectedMembers.CollectionChanged += SelectedMembersOnCollectionChanged;
+            }
+
+            SelectedMembersSorted = _selectedMembers.OrderBy(member => member.Name).ToList();
         }
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        _selectedMembers.CollectionChanged -= SelectedMembersOnCollectionChanged;
+        _selectedMembers.CollectionChanged += SelectedMembersOnCollectionChanged;
+        SelectedMembersSorted = _selectedMembers.OrderBy(member => member.Name).ToList();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        _selectedMembers.CollectionChanged -= SelectedMembersOnCollectionChanged;
     }
 
     private void SelectedMembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)

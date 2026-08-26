@@ -142,7 +142,10 @@ public class Teams : ObservableObject
     public void RemoveAllTeams()
     {
         _logger.LogInformation("Removing all teams.");
-        _teamList.Clear();
+        foreach (Team team in _teamList.ToList())
+        {
+            RemoveTeam(team);
+        }
         _teamNumber = 1;
     }
 

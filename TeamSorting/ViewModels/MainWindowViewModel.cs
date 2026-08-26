@@ -11,6 +11,7 @@ public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, TeamsViewM
     private bool _newVersionAvailable;
 
     public Teams Teams { get; } = teams;
+    public TeamsViewModel TeamsViewModel => teamsViewModel;
 
     public ViewModelBase ContentViewModel
     {

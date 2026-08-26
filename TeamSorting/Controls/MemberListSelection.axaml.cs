@@ -143,6 +143,11 @@ public class MemberListSelection : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         _logger?.LogDebug("ApplyTemplate");
+        if (_listBox is not null)
+        {
+            _listBox.SelectionChanged -= ListBoxOnSelectionChanged;
+        }
+
         object? listboxObject = e.NameScope.Find("MemberSelectionListBox");
         if (listboxObject is not ListBox listBox)
         {
