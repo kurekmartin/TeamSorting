@@ -9,6 +9,7 @@ namespace TeamSorting.Models;
 public class Members : ObservableObject
 {
     private readonly ObservableCollection<Member> _memberList = [];
+    private List<Member>? _sortedMembers;
 
     public ReadOnlyObservableCollection<Member> MemberList { get; }
     private readonly ILogger<Members> _logger;
@@ -19,13 +20,14 @@ public class Members : ObservableObject
         MemberList = new ReadOnlyObservableCollection<Member>(_memberList);
     }
 
-    public List<Member> SortedMembers => _memberList.OrderBy(m => m.Name).ToList();
+    public List<Member> SortedMembers => _sortedMembers ??= _memberList.OrderBy(m => m.Name).ToList();
 
     public bool AddMember(Member member)
     {
         _logger.LogInformation("Adding member {memberId}", member.Id);
         member.PropertyChanged += MemberOnPropertyChanged;
         _memberList.Add(member);
+        _sortedMembers = null;
         ValidateMemberDuplicates();
         OnPropertyChanged(nameof(SortedMembers));
         return true;
@@ -34,6 +36,7 @@ public class Members : ObservableObject
     public bool RemoveMember(Member member)
     {
         _logger.LogInformation("Removing member {memberId}", member.Id);
+        member.PropertyChanged -= MemberOnPropertyChanged;
         bool result = _memberList.Remove(member);
         if (result)
         {
@@ -43,13 +46,17 @@ public class Members : ObservableObject
             ValidateMemberDuplicates();
         }
 
+        _sortedMembers = null;
         OnPropertyChanged(nameof(SortedMembers));
         return result;
     }
 
     public void RemoveAllMembers()
     {
-        _memberList.Clear();
+        foreach (Member member in _memberList.ToList())
+        {
+            RemoveMember(member);
+        }
     }
 
     public Member? GetMemberByName(string name)
@@ -119,7 +126,9 @@ public class Members : ObservableObject
 
         if (e.PropertyName == nameof(Member.Name))
         {
+            _sortedMembers = null;
             ValidateMemberDuplicates();
+            OnPropertyChanged(nameof(SortedMembers));
         }
     }
 

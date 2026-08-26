@@ -69,6 +69,11 @@ public class TeamsViewModel : ViewModelBase
         get => _teamsSortCriteria;
         set
         {
+            if (_teamsSortCriteria == value)
+            {
+                return;
+            }
+
             _teamsSortCriteria = value;
             Teams.SortTeamsByCriteria(_teamsSortCriteria);
         }

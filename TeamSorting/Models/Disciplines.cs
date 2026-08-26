@@ -37,6 +37,7 @@ public class Disciplines : ObservableObject
                     team.PropertyChanged += TeamOnPropertyChanged;
                 }
 
+                _disciplineDelta = null;
                 OnPropertyChanged(nameof(DisciplineDelta));
                 break;
             case NotifyCollectionChangedAction.Remove:
@@ -45,6 +46,7 @@ public class Disciplines : ObservableObject
                     team.PropertyChanged -= TeamOnPropertyChanged;
                 }
 
+                _disciplineDelta = null;
                 OnPropertyChanged(nameof(DisciplineDelta));
                 break;
             case NotifyCollectionChangedAction.Replace:
@@ -58,9 +60,11 @@ public class Disciplines : ObservableObject
                     team.PropertyChanged -= TeamOnPropertyChanged;
                 }
 
+                _disciplineDelta = null;
                 OnPropertyChanged(nameof(DisciplineDelta));
                 break;
             case NotifyCollectionChangedAction.Reset:
+                _disciplineDelta = null;
                 OnPropertyChanged(nameof(DisciplineDelta));
                 break;
         }
@@ -71,6 +75,7 @@ public class Disciplines : ObservableObject
         if (sender?.GetType() == typeof(Team) &&
             e.PropertyName == nameof(Team.AvgScores))
         {
+            _disciplineDelta = null;
             OnPropertyChanged(nameof(DisciplineDelta));
         }
     }
@@ -89,6 +94,8 @@ public class Disciplines : ObservableObject
                     }
                 }
 
+                _disciplineAverage = null;
+                OnPropertyChanged(nameof(DisciplineAverage));
                 break;
             case NotifyCollectionChangedAction.Remove:
                 foreach (Member member in e.OldItems!)
@@ -96,6 +103,8 @@ public class Disciplines : ObservableObject
                     member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
                 }
 
+                _disciplineAverage = null;
+                OnPropertyChanged(nameof(DisciplineAverage));
                 break;
             case NotifyCollectionChangedAction.Replace:
                 foreach (Member member in e.NewItems!)
@@ -112,80 +121,88 @@ public class Disciplines : ObservableObject
                     member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
                 }
 
+                _disciplineAverage = null;
+                OnPropertyChanged(nameof(DisciplineAverage));
+                break;
+            case NotifyCollectionChangedAction.Reset:
+                _disciplineAverage = null;
+                OnPropertyChanged(nameof(DisciplineAverage));
                 break;
         }
     }
 
     private void MemberOnDisciplineRecordChanged(object? sender, EventArgs e)
     {
+        _disciplineAverage = null;
         OnPropertyChanged(nameof(DisciplineAverage));
     }
 
-    public Dictionary<DisciplineInfo, object> DisciplineDelta
+    private Dictionary<DisciplineInfo, object>? _disciplineDelta;
+    private Dictionary<DisciplineInfo, object>? _disciplineAverage;
+
+    public Dictionary<DisciplineInfo, object> DisciplineDelta => _disciplineDelta ??= CalculateDisciplineDelta();
+
+    private Dictionary<DisciplineInfo, object> CalculateDisciplineDelta()
     {
-        get
+        var dict = new Dictionary<DisciplineInfo, object>();
+        foreach (DisciplineInfo discipline in DisciplineList)
         {
-            var dict = new Dictionary<DisciplineInfo, object>();
-            foreach (DisciplineInfo discipline in DisciplineList)
+            if (_teams.TeamList.All(team => team.Members.Count == 0))
             {
-                if (_teams.TeamList.All(team => team.Members.Count == 0))
-                {
-                    dict.Add(discipline, 0);
-                    continue;
-                }
-
-                List<object> teamScores = _teams.TeamList.Where(team => team.Members.Count > 0)
-                                                .Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
-
-                switch (discipline.DataType)
-                {
-                    case DisciplineDataType.Time:
-                    {
-                        TimeSpan minTimeSpan = teamScores.Select(o => (TimeSpan)o).Min();
-                        TimeSpan maxTimeSpan = teamScores.Select(o => (TimeSpan)o).Max();
-                        TimeSpan diffTimeSpan = maxTimeSpan - minTimeSpan;
-                        dict.Add(discipline, diffTimeSpan);
-                        break;
-                    }
-                    case DisciplineDataType.Number:
-                    {
-                        decimal min = teamScores.Select(o => (decimal)o).Min();
-                        decimal max = teamScores.Select(o => (decimal)o).Max();
-                        decimal diff = max - min;
-                        dict.Add(discipline, Math.Round(diff, 2));
-                        break;
-                    }
-                    default:
-                        dict.Add(discipline, 0);
-                        break;
-                }
+                dict.Add(discipline, 0);
+                continue;
             }
 
-            return dict;
+            List<object> teamScores = _teams.TeamList.Where(team => team.Members.Count > 0)
+                                            .Select(t => t.GetAverageValueByDiscipline(discipline)).ToList();
+
+            switch (discipline.DataType)
+            {
+                case DisciplineDataType.Time:
+                {
+                    TimeSpan minTimeSpan = teamScores.Select(o => (TimeSpan)o).Min();
+                    TimeSpan maxTimeSpan = teamScores.Select(o => (TimeSpan)o).Max();
+                    TimeSpan diffTimeSpan = maxTimeSpan - minTimeSpan;
+                    dict.Add(discipline, diffTimeSpan);
+                    break;
+                }
+                case DisciplineDataType.Number:
+                {
+                    decimal min = teamScores.Select(o => (decimal)o).Min();
+                    decimal max = teamScores.Select(o => (decimal)o).Max();
+                    decimal diff = max - min;
+                    dict.Add(discipline, Math.Round(diff, 2));
+                    break;
+                }
+                default:
+                    dict.Add(discipline, 0);
+                    break;
+            }
         }
+
+        return dict;
     }
 
-    public Dictionary<DisciplineInfo, object> DisciplineAverage
-    {
-        get
-        {
-            var dict = new Dictionary<DisciplineInfo, object>();
-            foreach (DisciplineInfo discipline in DisciplineList)
-            {
-                IEnumerable<DisciplineRecord> records = _members.MemberList.Select(member => member.GetRecord(discipline));
-                object average = discipline.DataType switch
-                {
-                    DisciplineDataType.Time when _members.MemberList.Count == 0 => TimeSpan.Zero,
-                    DisciplineDataType.Time => new TimeSpan(records.Sum(record => ((TimeSpan)record.Value).Ticks) / _members.MemberList.Count),
-                    DisciplineDataType.Number when _members.MemberList.Count == 0 => 0,
-                    DisciplineDataType.Number => records.Sum(record => (decimal)record.Value) / _members.MemberList.Count,
-                    _ => 0
-                };
-                dict.Add(discipline, average);
-            }
+    public Dictionary<DisciplineInfo, object> DisciplineAverage => _disciplineAverage ??= CalculateDisciplineAverage();
 
-            return dict;
+    private Dictionary<DisciplineInfo, object> CalculateDisciplineAverage()
+    {
+        var dict = new Dictionary<DisciplineInfo, object>();
+        foreach (DisciplineInfo discipline in DisciplineList)
+        {
+            IEnumerable<DisciplineRecord> records = _members.MemberList.Select(member => member.GetRecord(discipline));
+            object average = discipline.DataType switch
+            {
+                DisciplineDataType.Time when _members.MemberList.Count == 0 => TimeSpan.Zero,
+                DisciplineDataType.Time => new TimeSpan(records.Sum(record => ((TimeSpan)record.Value).Ticks) / _members.MemberList.Count),
+                DisciplineDataType.Number when _members.MemberList.Count == 0 => 0,
+                DisciplineDataType.Number => records.Sum(record => (decimal)record.Value) / _members.MemberList.Count,
+                _ => 0
+            };
+            dict.Add(discipline, average);
         }
+
+        return dict;
     }
 
     public bool AddDiscipline(DisciplineInfo discipline)
@@ -202,6 +219,10 @@ public class Disciplines : ObservableObject
             AddDisciplineRecord(member, discipline, "");
         }
 
+        _disciplineDelta = null;
+        _disciplineAverage = null;
+        OnPropertyChanged(nameof(DisciplineDelta));
+        OnPropertyChanged(nameof(DisciplineAverage));
         return true;
     }
 
@@ -215,12 +236,20 @@ public class Disciplines : ObservableObject
             member.RemoveDisciplineRecord(discipline.Id);
         }
 
+        _disciplineDelta = null;
+        _disciplineAverage = null;
+        OnPropertyChanged(nameof(DisciplineDelta));
+        OnPropertyChanged(nameof(DisciplineAverage));
         return result;
     }
 
     public void RemoveAllDisciplines()
     {
         _disciplineList.Clear();
+        _disciplineDelta = null;
+        _disciplineAverage = null;
+        OnPropertyChanged(nameof(DisciplineDelta));
+        OnPropertyChanged(nameof(DisciplineAverage));
     }
 
     public DisciplineInfo? GetDisciplineById(Guid id)

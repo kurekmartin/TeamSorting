@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using System.Collections.Specialized;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Input;
@@ -158,20 +159,49 @@ public partial class TeamsView : UserControl
             }
         }
 
-        var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
+        ((INotifyCollectionChanged)context.Disciplines.DisciplineList).CollectionChanged += DisciplineListOnCollectionChanged;
+        UpdateSortCriteria();
+    }
 
-        List<ComboBoxSortCriteria> items = [nameItem];
-        items.AddRange(context.Disciplines.DisciplineList.Select(discipline =>
-            new ComboBoxSortCriteria(discipline.Name, discipline)));
-
-        SortCriteriaComboBox.ItemsSource = items.OrderBy(criteria => criteria.DisplayText).ToList();
-        SortCriteriaComboBox.SelectedValue = nameItem;
+    private void DisciplineListOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        UpdateSortCriteria();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         GhostCard.IsVisible = false;
         base.OnLoaded(e);
+    }
+
+    private void UpdateSortCriteria()
+    {
+        if (DataContext is not TeamsViewModel context)
+        {
+            return;
+        }
+
+        var selected = SortCriteriaComboBox.SelectedValue as ComboBoxSortCriteria;
+        var nameItem = new ComboBoxSortCriteria(Lang.Resources.InputView_DataGrid_ColumnHeader_Name, null);
+
+        List<ComboBoxSortCriteria> items = [nameItem];
+        items.AddRange(context.Disciplines.DisciplineList.Select(discipline =>
+            new ComboBoxSortCriteria(discipline.Name, discipline)));
+
+        List<ComboBoxSortCriteria> orderedItems = items.OrderBy(criteria => criteria.DisplayText).ToList();
+        SortCriteriaComboBox.ItemsSource = orderedItems;
+        if (selected is not null && orderedItems.FirstOrDefault(i => Equals(i.Value, selected.Value)) is { } existing)
+        {
+            SortCriteriaComboBox.SelectedValue = existing;
+        }
+        else if (context.TeamsSortCriteria.Discipline is not null && orderedItems.FirstOrDefault(i => Equals(i.Value, context.TeamsSortCriteria.Discipline)) is { } matching)
+        {
+            SortCriteriaComboBox.SelectedValue = matching;
+        }
+        else
+        {
+            SortCriteriaComboBox.SelectedValue = nameItem;
+        }
     }
 
     private void Back_OnClick(object? sender, RoutedEventArgs e)
@@ -252,8 +282,11 @@ public partial class TeamsView : UserControl
         if (DataContext is TeamsViewModel context && e.AddedItems.Count > 0 &&
             e.AddedItems[0] is ComboBoxSortCriteria item)
         {
-            context.TeamsSortCriteria =
-                new MemberSortCriteria((DisciplineInfo?)item.Value, context.TeamsSortCriteria.SortOrder);
+            var newCriteria = new MemberSortCriteria((DisciplineInfo?)item.Value, context.TeamsSortCriteria.SortOrder);
+            if (context.TeamsSortCriteria != newCriteria)
+            {
+                context.TeamsSortCriteria = newCriteria;
+            }
         }
     }
 
@@ -266,12 +299,19 @@ public partial class TeamsView : UserControl
 
         if (sender.Equals(SortAscRadioButton))
         {
-            context.TeamsSortCriteria = new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Asc);
+            var newCriteria = new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Asc);
+            if (context.TeamsSortCriteria != newCriteria)
+            {
+                context.TeamsSortCriteria = newCriteria;
+            }
         }
         else if (sender.Equals(SortDescRadioButton))
         {
-            context.TeamsSortCriteria =
-                new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Desc);
+            var newCriteria = new MemberSortCriteria(context.TeamsSortCriteria.Discipline, SortOrder.Desc);
+            if (context.TeamsSortCriteria != newCriteria)
+            {
+                context.TeamsSortCriteria = newCriteria;
+            }
         }
     }
 

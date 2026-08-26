@@ -23,9 +23,9 @@
     </Window.Styles>
 
     <Grid RowDefinitions="*,Auto">
-        <TransitioningContentControl Grid.Row="0"
-                                     Content="{Binding ContentViewModel}"
-                                     DockPanel.Dock="Top" />
+        <ContentControl Grid.Row="0"
+                        Content="{Binding ContentViewModel}"
+                        DockPanel.Dock="Top" />
         <StackPanel Grid.Row="1"
                     Background="{DynamicResource AppSecondarySurfaceBrush}"
                     VerticalAlignment="Bottom">

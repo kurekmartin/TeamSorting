@@ -7,11 +7,18 @@ namespace TeamSorting;
 
 public class ViewLocator : IDataTemplate
 {
+    private readonly Dictionary<object, Control> _cache = new();
+
     [Localizable(false)]
     public Control? Build(object? data)
     {
         if (data is null)
             return null;
+
+        if (_cache.TryGetValue(data, out Control? cachedControl))
+        {
+            return cachedControl;
+        }
 
         var name = data.GetType().FullName!.Replace("ViewModel", "View", StringComparison.Ordinal);
         var type = Type.GetType(name);
@@ -20,6 +27,7 @@ public class ViewLocator : IDataTemplate
         {
             var control = (Control)Activator.CreateInstance(type)!;
             control.DataContext = data;
+            _cache[data] = control;
             return control;
         }
 

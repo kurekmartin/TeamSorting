@@ -172,6 +172,16 @@ public class MemberListSelection : TemplatedControl
         SearchText = string.Empty;
     }
 
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+        if (_listBox is not null)
+        {
+            _listBox.SelectionChanged -= ListBoxOnSelectionChanged;
+            _listBox = null;
+        }
+    }
+
     private void ListBoxOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         foreach (object item in e.AddedItems)

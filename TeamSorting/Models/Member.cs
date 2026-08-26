@@ -6,7 +6,7 @@ using Avalonia.Collections;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog;
+using TeamSorting.Lang;
 
 namespace TeamSorting.Models;
 
@@ -24,24 +24,35 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             ClearErrors(nameof(Name));
             if (string.IsNullOrWhiteSpace(value))
             {
-                AddError(nameof(Name), Lang.Resources.InputView_Member_EmptyName_Error);
+                AddError(nameof(Name), Resources.InputView_Member_EmptyName_Error);
             }
 
-            SetProperty(ref _name, value);
+            if (SetProperty(ref _name, value))
+            {
+                _sortedWith = null;
+                _withValidation = null;
+                _sortedNotWith = null;
+                _notWithValidation = null;
+            }
         }
     }
 
+    private List<Member>? _sortedWith;
+    private Dictionary<string, bool>? _withValidation;
+    private List<Member>? _sortedNotWith;
+    private Dictionary<string, bool>? _notWithValidation;
+
     public ObservableCollection<Member> With { get; } = [];
-    public List<Member> SortedWith => With.OrderBy(member => member.Name).ToList();
+    public List<Member> SortedWith => _sortedWith ??= With.OrderBy(member => member.Name).ToList();
 
     //TODO add list of warnings during loading
-    public Dictionary<string, bool> WithValidation => ValidateWith();
+    public Dictionary<string, bool> WithValidation => _withValidation ??= ValidateWith();
 
     public ObservableCollection<Member> NotWith { get; } = [];
-    public List<Member> SortedNotWith => NotWith.OrderBy(member => member.Name).ToList();
+    public List<Member> SortedNotWith => _sortedNotWith ??= NotWith.OrderBy(member => member.Name).ToList();
 
     //TODO add list of warnings during loading
-    public Dictionary<string, bool> NotWithValidation => ValidateNotWith();
+    public Dictionary<string, bool> NotWithValidation => _notWithValidation ??= ValidateNotWith();
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
 
     private bool _allowTeamChange = true;
@@ -100,7 +111,11 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                     }
                 }
 
+                _sortedNotWith = null;
+                _notWithValidation = null;
                 OnPropertyChanged(nameof(SortedNotWith));
+                OnPropertyChanged(nameof(NotWithValidation));
+                OnPropertyChanged(nameof(IsValid));
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems is not null)
@@ -111,10 +126,19 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                     }
                 }
 
+                _sortedNotWith = null;
+                _notWithValidation = null;
                 OnPropertyChanged(nameof(SortedNotWith));
+                OnPropertyChanged(nameof(NotWithValidation));
+                OnPropertyChanged(nameof(IsValid));
                 break;
             case NotifyCollectionChangedAction.Replace:
+            case NotifyCollectionChangedAction.Reset:
+                _sortedNotWith = null;
+                _notWithValidation = null;
                 OnPropertyChanged(nameof(SortedNotWith));
+                OnPropertyChanged(nameof(NotWithValidation));
+                OnPropertyChanged(nameof(IsValid));
                 break;
         }
     }
@@ -132,7 +156,11 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                     }
                 }
 
+                _sortedWith = null;
+                _withValidation = null;
                 OnPropertyChanged(nameof(SortedWith));
+                OnPropertyChanged(nameof(WithValidation));
+                OnPropertyChanged(nameof(IsValid));
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems is not null)
@@ -143,10 +171,19 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                     }
                 }
 
+                _sortedWith = null;
+                _withValidation = null;
                 OnPropertyChanged(nameof(SortedWith));
+                OnPropertyChanged(nameof(WithValidation));
+                OnPropertyChanged(nameof(IsValid));
                 break;
             case NotifyCollectionChangedAction.Replace:
+            case NotifyCollectionChangedAction.Reset:
+                _sortedWith = null;
+                _withValidation = null;
                 OnPropertyChanged(nameof(SortedWith));
+                OnPropertyChanged(nameof(WithValidation));
+                OnPropertyChanged(nameof(IsValid));
                 break;
         }
     }
@@ -182,6 +219,8 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 ((INotifyCollectionChanged)_team.Members).CollectionChanged += MembersOnCollectionChanged;
             }
 
+            _withValidation = null;
+            _notWithValidation = null;
             OnPropertyChanged(nameof(WithValidation));
             OnPropertyChanged(nameof(NotWithValidation));
             OnPropertyChanged(nameof(IsValid));
@@ -190,6 +229,8 @@ public class Member : ObservableObject, INotifyDataErrorInfo
 
     private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        _withValidation = null;
+        _notWithValidation = null;
         OnPropertyChanged(nameof(WithValidation));
         OnPropertyChanged(nameof(NotWithValidation));
         OnPropertyChanged(nameof(IsValid));

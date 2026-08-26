@@ -24,11 +24,42 @@ public class Team : ValidatableObservableObject
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
+                if (e.NewItems is not null)
+                {
+                    foreach (Member member in e.NewItems.OfType<Member>())
+                    {
+                        member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
+                    }
+                }
+                _avgScores = null;
+                OnPropertyChanged(nameof(IsValid));
+                OnPropertyChanged(nameof(AvgScores));
+                break;
             case NotifyCollectionChangedAction.Remove:
+                if (e.OldItems is not null)
+                {
+                    foreach (Member member in e.OldItems.OfType<Member>())
+                    {
+                        member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
+                    }
+                }
+                _avgScores = null;
+                OnPropertyChanged(nameof(IsValid));
+                OnPropertyChanged(nameof(AvgScores));
+                break;
+            case NotifyCollectionChangedAction.Replace:
+            case NotifyCollectionChangedAction.Reset:
+                _avgScores = null;
                 OnPropertyChanged(nameof(IsValid));
                 OnPropertyChanged(nameof(AvgScores));
                 break;
         }
+    }
+
+    private void MemberOnDisciplineRecordChanged(object? sender, EventArgs e)
+    {
+        _avgScores = null;
+        OnPropertyChanged(nameof(AvgScores));
     }
 
     public Guid Id { get; } = Guid.NewGuid();
@@ -58,8 +89,10 @@ public class Team : ValidatableObservableObject
         private get => _memberSortCriteria;
         set
         {
-            SetProperty(ref _memberSortCriteria, value);
-            SortMembers();
+            if (SetProperty(ref _memberSortCriteria, value))
+            {
+                SortMembers();
+            }
         }
     }
 
@@ -106,9 +139,17 @@ public class Team : ValidatableObservableObject
         foreach (Member member in members)
         {
             int oldIndex = _members.IndexOf(member);
-            if (oldIndex == -1) continue;
+            if (oldIndex == -1)
+            {
+                continue;
+            }
+
             int newIndex = members.IndexOf(member);
-            if (oldIndex == newIndex) continue;
+            if (oldIndex == newIndex)
+            {
+                continue;
+            }
+
             _members.Move(oldIndex, newIndex);
         }
     }
@@ -185,20 +226,21 @@ public class Team : ValidatableObservableObject
         }
     }
 
-    public Dictionary<DisciplineInfo, object> AvgScores
-    {
-        get
-        {
-            Dictionary<DisciplineInfo, object> dictionary = [];
-            var records = Members.SelectMany(member => member.Records.Values);
-            var disciplines = records.Select(record => record.DisciplineInfo).Distinct();
-            foreach (var discipline in disciplines)
-            {
-                dictionary[discipline] = GetAverageValueByDiscipline(discipline);
-            }
+    private Dictionary<DisciplineInfo, object>? _avgScores;
 
-            return dictionary;
+    public Dictionary<DisciplineInfo, object> AvgScores => _avgScores ??= CalculateAvgScores();
+
+    private Dictionary<DisciplineInfo, object> CalculateAvgScores()
+    {
+        Dictionary<DisciplineInfo, object> dictionary = [];
+        IEnumerable<DisciplineRecord> records = Members.SelectMany(member => member.Records.Values);
+        IEnumerable<DisciplineInfo> disciplines = records.Select(record => record.DisciplineInfo).Distinct();
+        foreach (DisciplineInfo discipline in disciplines)
+        {
+            dictionary[discipline] = GetAverageValueByDiscipline(discipline);
         }
+
+        return dictionary;
     }
 
     public object GetAverageValueByDiscipline(DisciplineInfo discipline)
@@ -216,16 +258,16 @@ public class Team : ValidatableObservableObject
 
     public static int InvalidMemberCount(IEnumerable<Member> members)
     {
-        var invalidMembers = GetInvalidMembers(members);
+        (List<string> invalidWith, List<string> invalidNotWith) invalidMembers = GetInvalidMembers(members);
         return invalidMembers.invalidWith.Count + invalidMembers.invalidNotWith.Count;
     }
 
     public static (List<string> invalidWith, List<string> invalidNotWith) GetInvalidMembers(IEnumerable<Member> members)
     {
-        var memberList = members.ToList();
-        var memberNames = memberList.Select(member => member.Name).ToList();
-        var with = memberList.SelectMany(member => member.With.Select(m => m.Name)).ToList();
-        var notWith = memberList.SelectMany(member => member.NotWith);
+        List<Member> memberList = members.ToList();
+        List<string> memberNames = memberList.Select(member => member.Name).ToList();
+        List<string> with = memberList.SelectMany(member => member.With.Select(m => m.Name)).ToList();
+        IEnumerable<Member> notWith = memberList.SelectMany(member => member.NotWith);
 
         return (with.Except(memberNames).ToList(), memberNames.Intersect(notWith.Select(m => m.Name)).ToList());
     }
@@ -235,7 +277,11 @@ public class Team : ValidatableObservableObject
         List<Member> changedMembers = [];
         foreach (Member member in _members)
         {
-            if (!member.AllowTeamChange) continue;
+            if (!member.AllowTeamChange)
+            {
+                continue;
+            }
+
             member.AllowTeamChange = false;
             changedMembers.Add(member);
         }
@@ -248,7 +294,11 @@ public class Team : ValidatableObservableObject
         List<Member> changedMembers = [];
         foreach (Member member in _members)
         {
-            if (member.AllowTeamChange) continue;
+            if (member.AllowTeamChange)
+            {
+                continue;
+            }
+
             member.AllowTeamChange = true;
             changedMembers.Add(member);
         }
