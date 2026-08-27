@@ -13,7 +13,7 @@ namespace TeamSorting.Models;
 public class Member : ObservableObject, INotifyDataErrorInfo
 {
     private readonly ILogger<Member>? _logger = Ioc.Default.GetService<ILogger<Member>>();
-    public event EventHandler? DisciplineRecordChanged;
+    public event EventHandler<DisciplineRecordChangedEventArgs>? DisciplineRecordChanged;
     public Guid Id { get; } = Guid.NewGuid();
 
     public string Name
@@ -94,7 +94,10 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             is nameof(DisciplineRecord.DecimalValue)
             or nameof(DisciplineRecord.Value))
         {
-            DisciplineRecordChanged?.Invoke(this, EventArgs.Empty);
+            if (sender is DisciplineRecord record)
+            {
+                DisciplineRecordChanged?.Invoke(this, new DisciplineRecordChangedEventArgs(record));
+            }
         }
     }
 

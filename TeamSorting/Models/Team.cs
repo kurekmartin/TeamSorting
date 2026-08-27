@@ -28,6 +28,7 @@ public class Team : ValidatableObservableObject
                 {
                     foreach (Member member in e.NewItems.OfType<Member>())
                     {
+                        member.PropertyChanged += MemberOnPropertyChanged;
                         member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
                     }
                 }
@@ -40,6 +41,7 @@ public class Team : ValidatableObservableObject
                 {
                     foreach (Member member in e.OldItems.OfType<Member>())
                     {
+                        member.PropertyChanged -= MemberOnPropertyChanged;
                         member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
                     }
                 }
@@ -48,7 +50,35 @@ public class Team : ValidatableObservableObject
                 OnPropertyChanged(nameof(AvgScores));
                 break;
             case NotifyCollectionChangedAction.Replace:
+                if (e.OldItems is not null)
+                {
+                    foreach (Member member in e.OldItems.OfType<Member>())
+                    {
+                        member.PropertyChanged -= MemberOnPropertyChanged;
+                        member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
+                    }
+                }
+
+                if (e.NewItems is not null)
+                {
+                    foreach (Member member in e.NewItems.OfType<Member>())
+                    {
+                        member.PropertyChanged += MemberOnPropertyChanged;
+                        member.DisciplineRecordChanged += MemberOnDisciplineRecordChanged;
+                    }
+                }
+
+                _avgScores = null;
+                OnPropertyChanged(nameof(IsValid));
+                OnPropertyChanged(nameof(AvgScores));
+                break;
             case NotifyCollectionChangedAction.Reset:
+                foreach (Member member in _members)
+                {
+                    member.PropertyChanged -= MemberOnPropertyChanged;
+                    member.DisciplineRecordChanged -= MemberOnDisciplineRecordChanged;
+                }
+
                 _avgScores = null;
                 OnPropertyChanged(nameof(IsValid));
                 OnPropertyChanged(nameof(AvgScores));
@@ -56,10 +86,23 @@ public class Team : ValidatableObservableObject
         }
     }
 
-    private void MemberOnDisciplineRecordChanged(object? sender, EventArgs e)
+    private void MemberOnDisciplineRecordChanged(object? sender, DisciplineRecordChangedEventArgs e)
     {
         _avgScores = null;
         OnPropertyChanged(nameof(AvgScores));
+
+        if (SortCriteria.Discipline?.Id == e.Record.DisciplineInfo.Id)
+        {
+            SortMembers();
+        }
+    }
+
+    private void MemberOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Member.Name) && SortCriteria.Discipline is null)
+        {
+            SortMembers();
+        }
     }
 
     public Guid Id { get; } = Guid.NewGuid();

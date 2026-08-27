@@ -131,7 +131,7 @@ public class Disciplines : ObservableObject
         }
     }
 
-    private void MemberOnDisciplineRecordChanged(object? sender, EventArgs e)
+    private void MemberOnDisciplineRecordChanged(object? sender, DisciplineRecordChangedEventArgs e)
     {
         _disciplineAverage = null;
         OnPropertyChanged(nameof(DisciplineAverage));
