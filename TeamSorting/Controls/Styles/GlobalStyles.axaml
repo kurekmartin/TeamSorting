@@ -8,8 +8,45 @@
 
     <!-- Add Styles Here -->
     <Style Selector="Button">
+        <Setter Property="Cursor" Value="Hand" />
         <Setter Property="MinHeight" Value="32" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <Style Selector="NumericUpDown RepeatButton">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="NumericUpDown RepeatButton:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <Style Selector="MenuItem">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="MenuItem:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <Style Selector="ComboBox">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="ComboBox:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
+    </Style>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="Cursor" Value="Hand" />
+    </Style>
+
+    <Style Selector="ListBoxItem:disabled">
+        <Setter Property="Cursor" Value="Arrow" />
     </Style>
 
     <Style Selector="NumericUpDown[ButtonSpinnerLocation=Right][ShowButtonSpinner=True] TextBox">

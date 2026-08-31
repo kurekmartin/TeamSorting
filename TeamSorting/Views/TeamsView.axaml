@@ -31,6 +31,12 @@
         <Style Selector="controls|MemberCard.Drag Border">
             <Setter Property="BoxShadow" Value="{DynamicResource AppHighlightShadow}" />
         </Style>
+        <Style Selector="controls|IconRadioButton">
+            <Setter Property="Cursor" Value="Hand" />
+        </Style>
+        <Style Selector="controls|IconRadioButton:disabled">
+            <Setter Property="Cursor" Value="Arrow" />
+        </Style>
 
         <Style Selector="ItemsControl.teams-scroll-area">
             <Setter Property="Padding" Value="0 0 50 0" />
