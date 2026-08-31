@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 
@@ -7,6 +8,8 @@ namespace TeamSorting.Controls;
 
 public class TimeSpanPicker : TemplatedControl
 {
+    private NumericUpDown[] _parts = [];
+
     public static char Separator =>
         Convert.ToChar(Thread.CurrentThread.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
@@ -105,6 +108,35 @@ public class TimeSpanPicker : TemplatedControl
             _milliseconds = value;
             UpdateValue();
         }
+    }
+
+    internal int GetPartIndex(NumericUpDown part)
+    {
+        return Array.IndexOf(_parts, part);
+    }
+
+    internal bool FocusPart(int index)
+    {
+        if (index < 0 || index >= _parts.Length)
+        {
+            return false;
+        }
+
+        return _parts[index].FocusTextEditor();
+    }
+
+    internal int PartCount => _parts.Length;
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        _parts =
+        [
+            e.NameScope.Find<NumericUpDown>("Hours")!,
+            e.NameScope.Find<NumericUpDown>("Minutes")!,
+            e.NameScope.Find<NumericUpDown>("Seconds")!,
+            e.NameScope.Find<NumericUpDown>("Milliseconds")!
+        ];
     }
 
     private void UpdateValue()

@@ -144,7 +144,8 @@ public class InputViewModel : ViewModelBase
         TreeDataGridSource.Columns.CopyTo(columns, 0);
         foreach (IColumn<Member> column in columns)
         {
-            if (column.Tag is string tag && tag.StartsWith("Discipline-"))
+            if (column.Tag is string tag &&
+                tag.StartsWith(Constants.DisciplineColumnTagPrefix, StringComparison.Ordinal))
             {
                 TreeDataGridSource.Columns.Remove(column);
             }
@@ -229,7 +230,7 @@ public class InputViewModel : ViewModelBase
 
     private static string CreateDisciplineColumnTag(DisciplineInfo discipline)
     {
-        return $"Discipline-{discipline.Id}";
+        return $"{Constants.DisciplineColumnTagPrefix}{discipline.Id}";
     }
 
     private void RemoveDisciplineColumns(IList? disciplines)

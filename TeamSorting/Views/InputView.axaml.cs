@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Avalonia.Controls.Models.TreeDataGrid;
 using Avalonia.Controls.Primitives;
@@ -6,7 +7,11 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Avalonia.Platform.Storage;
+using Avalonia.Threading;
+using Avalonia.VisualTree;
+using TeamSorting.Controls;
 using TeamSorting.Enums;
+using TeamSorting.Extensions;
 using TeamSorting.Models;
 using TeamSorting.ViewModels;
 
@@ -17,6 +22,150 @@ public partial class InputView : UserControl
     public InputView()
     {
         InitializeComponent();
+        Members.ElementFactory = new InputTreeDataGridElementFactory();
+        Members.AddHandler(KeyDownEvent, Members_OnKeyDown, RoutingStrategies.Tunnel, handledEventsToo: true);
+    }
+
+    private void Members_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (!TryGetActiveDisciplineEditor(e, out NumericUpDown? editor, out NavigableTreeDataGridTemplateCell? currentCell))
+        {
+            return;
+        }
+
+        e.Handled = true;
+
+        if (e.Key == Key.Enter)
+        {
+            NavigateToCell(currentCell, currentCell.ColumnIndex, currentCell.RowIndex + 1, focusLastTimePart: false);
+            return;
+        }
+
+        int direction = e.KeyModifiers.HasFlag(KeyModifiers.Shift) ? -1 : 1;
+        var timePicker = editor.FindVisualAncestorOrSelf<TimeSpanPicker>();
+        if (timePicker is not null)
+        {
+            int partIndex = timePicker.GetPartIndex(editor);
+            int targetPartIndex = partIndex + direction;
+            if (targetPartIndex >= 0 && targetPartIndex < timePicker.PartCount)
+            {
+                timePicker.FocusPart(targetPartIndex);
+                return;
+            }
+        }
+
+        int targetColumn = FindDisciplineColumn(currentCell.ColumnIndex, direction);
+        if (targetColumn >= 0)
+        {
+            NavigateToCell(
+                currentCell,
+                targetColumn,
+                currentCell.RowIndex,
+                focusLastTimePart: direction < 0);
+        }
+    }
+
+    private bool TryGetActiveDisciplineEditor(
+        KeyEventArgs e,
+        [NotNullWhen(true)] out NumericUpDown? editor,
+        [NotNullWhen(true)] out NavigableTreeDataGridTemplateCell? cell)
+    {
+        editor = (e.Source as Control).FindVisualAncestorOrSelf<NumericUpDown>();
+        cell = null;
+
+        if (e.Key is not (Key.Enter or Key.Tab) ||
+            editor is null ||
+            !Members.TryGetCell(editor, out TreeDataGridCell? gridCell) ||
+            gridCell is not NavigableTreeDataGridTemplateCell { IsEditing: true } editableCell ||
+            !IsDisciplineColumn(editableCell.ColumnIndex))
+        {
+            return false;
+        }
+
+        cell = editableCell;
+        return true;
+    }
+
+    private void NavigateToCell(
+        NavigableTreeDataGridTemplateCell currentCell,
+        int columnIndex,
+        int rowIndex,
+        bool focusLastTimePart)
+    {
+        if (Members.Rows is null || rowIndex < 0 || rowIndex >= Members.Rows.Count)
+        {
+            return;
+        }
+
+        TreeDataGridRow? row = Members.TryGetRow(rowIndex) ?? Members.RowsPresenter?.BringIntoView(rowIndex) as TreeDataGridRow;
+        row?.ApplyTemplate();
+        row?.UpdateLayout();
+
+        NavigableTreeDataGridTemplateCell? targetCell = row?.TryGetCell(columnIndex) as NavigableTreeDataGridTemplateCell ??
+                                                        row?.CellsPresenter?.BringIntoView(columnIndex) as NavigableTreeDataGridTemplateCell;
+        if (targetCell is null)
+        {
+            return;
+        }
+
+        currentCell.CommitEdit();
+        targetCell.Focus();
+        targetCell.StartEdit();
+
+        Dispatcher.UIThread.Post(() => FocusEditor(targetCell, focusLastTimePart), DispatcherPriority.Input);
+    }
+
+    private static void FocusEditor(NavigableTreeDataGridTemplateCell cell, bool focusLastTimePart)
+    {
+        if (!cell.IsEditing)
+        {
+            return;
+        }
+
+        cell.ApplyTemplate();
+        cell.UpdateLayout();
+
+        TimeSpanPicker? timePicker = cell.GetVisualDescendants().OfType<TimeSpanPicker>().FirstOrDefault();
+        if (timePicker is not null)
+        {
+            timePicker.ApplyTemplate();
+            int partIndex = focusLastTimePart ? timePicker.PartCount - 1 : 0;
+            timePicker.FocusPart(partIndex);
+            return;
+        }
+
+        cell.GetVisualDescendants().OfType<NumericUpDown>().FirstOrDefault()?.FocusTextEditor();
+    }
+
+    private bool IsDisciplineColumn(int columnIndex)
+    {
+        IColumns? columns = Members.Columns;
+        return columns is not null &&
+               columnIndex >= 0 &&
+               columnIndex < columns.Count &&
+               columns[columnIndex].Tag is string tag &&
+               tag.StartsWith(Constants.DisciplineColumnTagPrefix, StringComparison.Ordinal);
+    }
+
+    private int FindDisciplineColumn(int currentColumn, int direction)
+    {
+        IColumns? columns = Members.Columns;
+        if (columns is null)
+        {
+            return -1;
+        }
+
+        for (int column = currentColumn + direction;
+             column >= 0 && column < columns.Count;
+             column += direction)
+        {
+            if (IsDisciplineColumn(column))
+            {
+                return column;
+            }
+        }
+
+        return -1;
     }
 
     [Localizable(false)]
