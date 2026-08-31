@@ -22,8 +22,18 @@ public partial class InputView : UserControl
     public InputView()
     {
         InitializeComponent();
-        Members.ElementFactory = new InputTreeDataGridElementFactory();
+        Members.ElementFactory = new InputTreeDataGridElementFactory(Cell_OnEditStarted);
         Members.AddHandler(KeyDownEvent, Members_OnKeyDown, RoutingStrategies.Tunnel, handledEventsToo: true);
+    }
+
+    private void Cell_OnEditStarted(NavigableTreeDataGridTemplateCell cell)
+    {
+        if (!IsDisciplineColumn(cell.ColumnIndex))
+        {
+            return;
+        }
+
+        Dispatcher.UIThread.Post(() => FocusEditor(cell, focusLastTimePart: false), DispatcherPriority.Input);
     }
 
     private void Members_OnKeyDown(object? sender, KeyEventArgs e)
