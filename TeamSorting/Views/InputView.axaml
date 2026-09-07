@@ -153,6 +153,10 @@
                 <Button VerticalAlignment="Center"
                         DockPanel.Dock="Left"
                         Margin="4 0 0 0"
+                        IsEnabled="{Binding CanAddDiscipline}"
+                        ToolTip.ShowOnDisabled="True"
+                        ToolTip.ServiceEnabled="{Binding IsNewDisciplineNameDuplicate}"
+                        ToolTip.Tip="{x:Static lang:Resources.InputView_DuplicateDiscipline_Error}"
                         Click="AddDisciplineButton_OnClick"
                         Content="{x:Static lang:Resources.InputView_AddDiscipline_Button}" />
                 <Button DockPanel.Dock="Right"

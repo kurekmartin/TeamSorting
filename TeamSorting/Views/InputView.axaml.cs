@@ -307,13 +307,15 @@ public partial class InputView : UserControl
 
         var disciplineType = (DisciplineDataType)(DisciplineTypeComboBox.SelectedItem ?? DisciplineDataType.Number);
         var disciplineSortOrder = (SortOrder)(DisciplineSortOrderComboBox.SelectionBoxItem ?? SortOrder.Asc);
-        var discipline = new DisciplineInfo(context.NewDisciplineName)
+        var discipline = new DisciplineInfo(context.NewDisciplineName.Trim())
         {
             DataType = disciplineType,
             SortOrder = disciplineSortOrder
         };
-        context.Disciplines.AddDiscipline(discipline);
-        //TODO error handling when discipline with same name exists 
+        if (!context.Disciplines.AddDiscipline(discipline))
+        {
+            return;
+        }
         context.NewDisciplineName = string.Empty;
         if (context.Members.MemberList.Count > 0)
         {

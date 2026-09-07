@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
@@ -21,8 +22,22 @@ using TeamSorting.Utils;
 
 namespace TeamSorting.ViewModels;
 
-public class InputViewModel : ViewModelBase
+public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
 {
+    private readonly Dictionary<string, List<string>> _errors = new();
+    public bool HasErrors => _errors.Count != 0;
+    public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
+
+    public IEnumerable GetErrors(string? propertyName)
+    {
+        if (string.IsNullOrEmpty(propertyName))
+        {
+            return _errors.Values.SelectMany(errorList => errorList);
+        }
+
+        return _errors.TryGetValue(propertyName, out List<string>? errors) ? errors : Enumerable.Empty<string>();
+    }
+
     private readonly ILogger<InputViewModel> _logger;
     public Disciplines Disciplines { get; }
     public Members Members { get; }
@@ -63,8 +78,34 @@ public class InputViewModel : ViewModelBase
     public string NewDisciplineName
     {
         get => _newDisciplineName;
-        set => SetProperty(ref _newDisciplineName, value);
+        set
+        {
+            if (SetProperty(ref _newDisciplineName, value))
+            {
+                ValidateNewDisciplineName();
+            }
+        }
     }
+
+    public bool IsNewDisciplineNameDuplicate => Disciplines.DisciplineList.Any(d =>
+        string.Equals(d.Name.Trim(), NewDisciplineName.Trim(), StringComparison.Ordinal) && NewDisciplineName.Trim().Length > 0);
+
+    private void ValidateNewDisciplineName()
+    {
+        const string property = nameof(NewDisciplineName);
+        _errors.Remove(property);
+        if (IsNewDisciplineNameDuplicate)
+        {
+            _errors[property] = [Resources.InputView_DuplicateDiscipline_Error];
+        }
+
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
+        OnPropertyChanged(nameof(HasErrors));
+        OnPropertyChanged(nameof(IsNewDisciplineNameDuplicate));
+        OnPropertyChanged(nameof(CanAddDiscipline));
+    }
+
+    public bool CanAddDiscipline => !IsNewDisciplineNameDuplicate;
 
     public static Array DisciplineDataTypes => Enum.GetValues(typeof(DisciplineDataType));
     public static Array SortOrder => Enum.GetValues(typeof(SortOrder));
@@ -121,6 +162,7 @@ public class InputViewModel : ViewModelBase
 
     private void DisciplinesOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        ValidateNewDisciplineName();
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:

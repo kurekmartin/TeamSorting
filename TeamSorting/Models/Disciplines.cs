@@ -207,7 +207,9 @@ public class Disciplines : ObservableObject
 
     public bool AddDiscipline(DisciplineInfo discipline)
     {
-        if (DisciplineList.Any(i => i.Name == discipline.Name))
+        // name should be trimmed when creating the discipline
+        string name = discipline.Name.Trim();
+        if (DisciplineList.Any(i => string.Equals(i.Name.Trim(), name, StringComparison.Ordinal)))
         {
             return false;
         }

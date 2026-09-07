@@ -80,6 +80,10 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("InputView_AddDiscipline_Button", resourceCulture);
             }
         }
+
+        public static string InputView_DuplicateDiscipline_Error {
+            get { return ResourceManager.GetString("InputView_DuplicateDiscipline_Error", resourceCulture); }
+        }
         
         public static string TeamsView_Seed_Watermark {
             get {

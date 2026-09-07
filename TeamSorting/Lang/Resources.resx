@@ -39,6 +39,9 @@ Do you want to delete these teams?</value>
     <data name="InputView_AddDiscipline_Button" xml:space="preserve">
         <value>Add Discipline</value>
     </data>
+    <data name="InputView_DuplicateDiscipline_Error" xml:space="preserve">
+        <value>A discipline with this name already exists.</value>
+    </data>
     <data name="TeamsView_Seed_Watermark" xml:space="preserve">
         <value>Seed</value>
     </data>

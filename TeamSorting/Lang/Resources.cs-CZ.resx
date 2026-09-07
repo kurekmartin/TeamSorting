@@ -21,6 +21,9 @@
     <data name="InputView_AddDiscipline_Button" xml:space="preserve">
         <value>Přidat disciplínu</value>
     </data>
+    <data name="InputView_DuplicateDiscipline_Error" xml:space="preserve">
+        <value>Disciplína s tímto názvem již existuje.</value>
+    </data>
     <data name="InputView_DataGrid_ColumnHeader_Name" xml:space="preserve">
         <value>Jméno</value>
     </data>

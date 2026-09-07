@@ -32,7 +32,7 @@ public class DisciplineInfo(string name) : ObservableObject
     }
 
     public Guid Id { get; } = Guid.NewGuid();
-    public string Name { get; set; } = name;
+    public string Name { get; set; } = name.Trim();
     public DisciplineDataType DataType { get; set; }
     public SortOrder SortOrder { get; set; }
 }
