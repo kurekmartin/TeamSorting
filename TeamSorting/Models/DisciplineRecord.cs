@@ -65,17 +65,15 @@ public class DisciplineRecord : ObservableObject
     {
         get
         {
-            decimal value;
-            try
+            decimal value = DecimalValue;
+            decimal range = DisciplineInfo.MaxValue - DisciplineInfo.MinValue;
+
+            if (range == 0m)
             {
-                value = (DecimalValue - DisciplineInfo.MinValue) / (DisciplineInfo.MaxValue - DisciplineInfo.MinValue);
-            }
-            catch
-            {
-                value = 1;
+                return 1m;
             }
 
-            return value;
+            return (value - DisciplineInfo.MinValue) / range;
         }
     }
 
