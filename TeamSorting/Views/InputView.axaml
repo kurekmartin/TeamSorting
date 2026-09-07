@@ -102,6 +102,10 @@
                 <Button DockPanel.Dock="Left"
                         VerticalAlignment="Center"
                         Margin="4 0 0 0"
+                        IsEnabled="{Binding CanAddMember}"
+                        ToolTip.ShowOnDisabled="True"
+                        ToolTip.ServiceEnabled="{Binding IsNewMemberNameDuplicate}"
+                        ToolTip.Tip="{x:Static lang:Resources.InputView_Member_DuplicateName_Error}"
                         Click="NewMemberTextBox_OnClick"
                         Content="{x:Static lang:Resources.InputView_NewMember_Button}" />
                 <Button DockPanel.Dock="Right"

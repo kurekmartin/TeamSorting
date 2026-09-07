@@ -61,7 +61,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
 
     public Member(string name)
     {
-        Name = name;
+        Name = name.Trim();
         With.CollectionChanged += WithOnCollectionChanged;
         NotWith.CollectionChanged += NotWithOnCollectionChanged;
         Records.CollectionChanged += RecordsOnCollectionChanged;

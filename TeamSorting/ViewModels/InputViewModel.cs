@@ -69,8 +69,34 @@ public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
     public string NewMemberName
     {
         get => _newMemberName;
-        set => SetProperty(ref _newMemberName, value);
+        set
+        {
+            if (SetProperty(ref _newMemberName, value))
+            {
+                ValidateNewMemberName();
+            }
+        }
     }
+
+    public bool IsNewMemberNameDuplicate => Members.MemberList.Any(member =>
+        string.Equals(member.Name.Trim(), NewMemberName.Trim(), StringComparison.Ordinal) && NewMemberName.Trim().Length > 0);
+
+    private void ValidateNewMemberName()
+    {
+        const string property = nameof(NewMemberName);
+        _errors.Remove(property);
+        if (IsNewMemberNameDuplicate)
+        {
+            _errors[property] = [Resources.InputView_Member_DuplicateName_Error];
+        }
+
+        ErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(property));
+        OnPropertyChanged(nameof(HasErrors));
+        OnPropertyChanged(nameof(IsNewMemberNameDuplicate));
+        OnPropertyChanged(nameof(CanAddMember));
+    }
+
+    public bool CanAddMember => !IsNewMemberNameDuplicate;
 
     private string _newDisciplineName = string.Empty;
     private AddMode _addMode = AddMode.None;
@@ -119,6 +145,7 @@ public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
         CsvUtil = csvUtil;
         ((INotifyCollectionChanged)Disciplines.DisciplineList).CollectionChanged += DisciplinesOnCollectionChanged;
         ((INotifyCollectionChanged)Members.MemberList).CollectionChanged += MembersOnCollectionChanged;
+        Members.PropertyChanged += MembersOnPropertyChanged;
         TreeDataGridSource = new FlatTreeDataGridSource<Member>(Members.MemberList)
         {
             Columns =
@@ -150,6 +177,7 @@ public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
 
     private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        ValidateNewMemberName();
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
@@ -157,6 +185,14 @@ public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
             case NotifyCollectionChangedAction.Reset:
                 OnPropertyChanged(nameof(MembersEmpty));
                 break;
+        }
+    }
+
+    private void MembersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Members.SortedMembers))
+        {
+            ValidateNewMemberName();
         }
     }
 

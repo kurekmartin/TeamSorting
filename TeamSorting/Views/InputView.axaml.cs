@@ -242,13 +242,19 @@ public partial class InputView : UserControl
 
     private void AddMember()
     {
-        if (DataContext is not InputViewModel context || string.IsNullOrWhiteSpace(context.NewMemberName))
+        if (DataContext is not InputViewModel context ||
+            string.IsNullOrWhiteSpace(context.NewMemberName) ||
+            !context.CanAddMember)
         {
             return;
         }
 
         var member = new Member(context.NewMemberName);
-        context.Members.AddMember(member);
+        if (!context.Members.AddMember(member))
+        {
+            return;
+        }
+
         context.NewMemberName = string.Empty;
 
         var members = this.FindControl<TreeDataGrid>("Members");
