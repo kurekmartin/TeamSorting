@@ -97,7 +97,7 @@ public class MemberListSelection : TemplatedControl
             {
                 continue;
             }
-            
+
             var newMember = new FilterableMember(member);
 
             // Find the correct insertion point
@@ -148,14 +148,22 @@ public class MemberListSelection : TemplatedControl
             _listBox.SelectionChanged -= ListBoxOnSelectionChanged;
         }
 
+        _listBox = null;
+
         object? listboxObject = e.NameScope.Find("MemberSelectionListBox");
         if (listboxObject is not ListBox listBox)
         {
             return;
         }
 
-        listBox.SelectionChanged += ListBoxOnSelectionChanged;
         _listBox = listBox;
+        SubscribeToSelectionChanges();
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        SubscribeToSelectionChanges();
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -178,8 +186,18 @@ public class MemberListSelection : TemplatedControl
         if (_listBox is not null)
         {
             _listBox.SelectionChanged -= ListBoxOnSelectionChanged;
-            _listBox = null;
         }
+    }
+
+    private void SubscribeToSelectionChanges()
+    {
+        if (_listBox is null)
+        {
+            return;
+        }
+
+        _listBox.SelectionChanged -= ListBoxOnSelectionChanged;
+        _listBox.SelectionChanged += ListBoxOnSelectionChanged;
     }
 
     private void ListBoxOnSelectionChanged(object? sender, SelectionChangedEventArgs e)
