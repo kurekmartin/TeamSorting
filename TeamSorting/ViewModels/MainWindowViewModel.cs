@@ -33,6 +33,12 @@ public class MainWindowViewModel(ILogger<MainWindowViewModel> logger, TeamsViewM
 
     public void SwitchToTeamsView()
     {
+        if (!inputViewModel.CanShowTeams)
+        {
+            logger.LogWarning("Cannot switch to teams view while member constraints contain errors");
+            return;
+        }
+
         logger.LogInformation("Switching to teams view");
         ContentViewModel = teamsViewModel;
     }

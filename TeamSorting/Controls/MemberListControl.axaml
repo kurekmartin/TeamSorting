@@ -1,8 +1,11 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:TeamSorting.Controls"
-        xmlns:i="https://github.com/projektanker/icons.avalonia"
-        xmlns:models="clr-namespace:TeamSorting.Models">
+        xmlns:converter="clr-namespace:TeamSorting.Converters"
+        xmlns:i="https://github.com/projektanker/icons.avalonia">
+    <Styles.Resources>
+        <converter:FormattedTextConverter x:Key="FormattedTextConverter" />
+    </Styles.Resources>
     <Design.PreviewWith>
         <controls:MemberListControl />
     </Design.PreviewWith>
@@ -11,7 +14,10 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="Auto, *">
+                <Border Name="ValidationBorder"
+                        Classes.Invalid="{Binding HasValidationErrors, RelativeSource={RelativeSource TemplatedParent}}"
+                        CornerRadius="8">
+                <Grid ColumnDefinitions="Auto,*,Auto">
                     <Button Grid.Column="0"
                             i:Attached.Icon="mdi-pencil-outline"
                             Background="Transparent"
@@ -27,7 +33,7 @@
                     </Button>
                     <ItemsControl Grid.Column="1"
                                   Name="MemberList"
-                                  ItemsSource="{Binding SelectedMembersSorted, RelativeSource={RelativeSource TemplatedParent}}">
+                                  ItemsSource="{Binding DisplayedMembers, RelativeSource={RelativeSource TemplatedParent}}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <WrapPanel Orientation="Horizontal" />
@@ -36,9 +42,11 @@
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
                                 <DataTemplate.DataType>
-                                    <x:Type TypeName="models:Member"></x:Type>
+                                    <x:Type TypeName="controls:MemberListItem"></x:Type>
                                 </DataTemplate.DataType>
-                                <Border Padding="4"
+                                <Border Classes="MemberChip"
+                                        Classes.Invalid="{Binding IsInvalid}"
+                                        Padding="4"
                                         BorderThickness="1"
                                         BorderBrush="{DynamicResource AppBorderBrush}"
                                         CornerRadius="8"
@@ -47,20 +55,49 @@
                                                 Margin="0,0,5,0">
                                         <Button
                                             Command="{Binding RemoveMember, RelativeSource={RelativeSource FindAncestor, AncestorType=controls:MemberListControl}}"
-                                            CommandParameter="{Binding .}"
+                                            CommandParameter="{Binding Member}"
                                             i:Attached.Icon="mdi-close"
                                             Padding="2"
                                             Margin="0,0,3,0" 
                                             Background="Transparent"/>
-                                        <TextBlock Text="{Binding Name}"
+                                        <TextBlock Text="{Binding Member.Name}"
                                                    VerticalAlignment="Center" />
                                     </StackPanel>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
+                    <Border Grid.Column="2"
+                            Background="Transparent"
+                            VerticalAlignment="Center"
+                            Margin="4"
+                            IsVisible="{Binding HasValidationErrors, RelativeSource={RelativeSource TemplatedParent}}">
+                        <ToolTip.Tip>
+                            <ItemsControl ItemsSource="{Binding ValidationErrors, RelativeSource={RelativeSource TemplatedParent}}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Inlines="{Binding ., Converter={StaticResource FormattedTextConverter}}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ToolTip.Tip>
+                        <i:Icon Value="mdi-alert-circle-outline"
+                                Foreground="{DynamicResource AppErrorBrush}" />
+                    </Border>
                 </Grid>
+                </Border>
             </ControlTemplate>
         </Setter>
+    </Style>
+    <Style Selector="controls|MemberListControl Border#ValidationBorder.Invalid">
+        <Setter Property="BorderBrush" Value="{DynamicResource AppErrorBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+    <Style Selector="controls|MemberListControl Border.MemberChip.Invalid">
+        <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AppErrorBrush}" />
+    </Style>
+    <Style Selector="controls|MemberListControl Border.MemberChip.Invalid TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource AppInvalidForegroundBrush}" />
     </Style>
 </Styles>

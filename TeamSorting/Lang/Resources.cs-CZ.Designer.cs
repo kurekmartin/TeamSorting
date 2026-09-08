@@ -50,9 +50,11 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("InputView_AddDiscipline_Button", resourceCulture);
             }
         }
-
+        
         public static string InputView_DuplicateDiscipline_Error {
-            get { return ResourceManager.GetString("InputView_DuplicateDiscipline_Error", resourceCulture); }
+            get {
+                return ResourceManager.GetString("InputView_DuplicateDiscipline_Error", resourceCulture);
+            }
         }
         
         public static string InputView_DataGrid_ColumnHeader_Name {
@@ -409,6 +411,18 @@ namespace TeamSorting.Lang {
             }
         }
         
+        public static string InputView_MemberConstraintConflict_Error {
+            get {
+                return ResourceManager.GetString("InputView_MemberConstraintConflict_Error", resourceCulture);
+            }
+        }
+        
+        public static string InputView_ConstraintErrors_BlockTeams_ToolTip {
+            get {
+                return ResourceManager.GetString("InputView_ConstraintErrors_BlockTeams_ToolTip", resourceCulture);
+            }
+        }
+        
         public static string TeamsView_MemberMoved_Message {
             get {
                 return ResourceManager.GetString("TeamsView_MemberMoved_Message", resourceCulture);
@@ -546,7 +560,7 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("MainWindow_NewVersion_Download_Button", resourceCulture);
             }
         }
-
+        
         public static string MainWindow_SwitchTheme_Button {
             get {
                 return ResourceManager.GetString("MainWindow_SwitchTheme_Button", resourceCulture);

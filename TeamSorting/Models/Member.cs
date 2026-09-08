@@ -45,15 +45,25 @@ public class Member : ObservableObject, INotifyDataErrorInfo
     public ObservableCollection<Member> With { get; } = [];
     public List<Member> SortedWith => _sortedWith ??= With.OrderBy(member => member.Name).ToList();
 
-    //TODO add list of warnings during loading
     public Dictionary<string, bool> WithValidation => _withValidation ??= ValidateWith();
 
     public ObservableCollection<Member> NotWith { get; } = [];
     public List<Member> SortedNotWith => _sortedNotWith ??= NotWith.OrderBy(member => member.Name).ToList();
 
-    //TODO add list of warnings during loading
     public Dictionary<string, bool> NotWithValidation => _notWithValidation ??= ValidateNotWith();
+    public IReadOnlyList<string> WithConstraintErrors { get; private set; } = [];
+
+    public IReadOnlyList<string> NotWithConstraintErrors { get; private set; } = [];
+
+    public IReadOnlyList<Member> InvalidWithMembers { get; private set; } = [];
+
+    public IReadOnlyList<Member> InvalidNotWithMembers { get; private set; } = [];
+
+    public IEnumerable<string> ConstraintErrors => WithConstraintErrors.Concat(NotWithConstraintErrors).Distinct();
+    public bool HasConstraintErrors => WithConstraintErrors.Count > 0 || NotWithConstraintErrors.Count > 0;
     public AvaloniaDictionary<Guid, DisciplineRecord> Records { get; } = [];
+
+    public event EventHandler? ConstraintsChanged;
 
     private bool _allowTeamChange = true;
     private Team? _team;
@@ -119,6 +129,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedNotWith));
                 OnPropertyChanged(nameof(NotWithValidation));
                 OnPropertyChanged(nameof(IsValid));
+                ConstraintsChanged?.Invoke(this, EventArgs.Empty);
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems is not null)
@@ -134,6 +145,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedNotWith));
                 OnPropertyChanged(nameof(NotWithValidation));
                 OnPropertyChanged(nameof(IsValid));
+                ConstraintsChanged?.Invoke(this, EventArgs.Empty);
                 break;
             case NotifyCollectionChangedAction.Replace:
             case NotifyCollectionChangedAction.Reset:
@@ -142,6 +154,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedNotWith));
                 OnPropertyChanged(nameof(NotWithValidation));
                 OnPropertyChanged(nameof(IsValid));
+                ConstraintsChanged?.Invoke(this, EventArgs.Empty);
                 break;
         }
     }
@@ -164,6 +177,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedWith));
                 OnPropertyChanged(nameof(WithValidation));
                 OnPropertyChanged(nameof(IsValid));
+                ConstraintsChanged?.Invoke(this, EventArgs.Empty);
                 break;
             case NotifyCollectionChangedAction.Remove:
                 if (e.OldItems is not null)
@@ -179,6 +193,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedWith));
                 OnPropertyChanged(nameof(WithValidation));
                 OnPropertyChanged(nameof(IsValid));
+                ConstraintsChanged?.Invoke(this, EventArgs.Empty);
                 break;
             case NotifyCollectionChangedAction.Replace:
             case NotifyCollectionChangedAction.Reset:
@@ -187,6 +202,7 @@ public class Member : ObservableObject, INotifyDataErrorInfo
                 OnPropertyChanged(nameof(SortedWith));
                 OnPropertyChanged(nameof(WithValidation));
                 OnPropertyChanged(nameof(IsValid));
+                ConstraintsChanged?.Invoke(this, EventArgs.Empty);
                 break;
         }
     }
@@ -246,6 +262,47 @@ public class Member : ObservableObject, INotifyDataErrorInfo
             return WithValidation.Values.All(val => val)
                    && NotWithValidation.Values.All(val => val);
         }
+    }
+
+    internal void SetConstraintErrors(
+        IEnumerable<string> withErrors,
+        IEnumerable<string> notWithErrors,
+        IEnumerable<Member> invalidWithMembers,
+        IEnumerable<Member> invalidNotWithMembers)
+    {
+        IReadOnlyList<string> newWithErrors = [.. withErrors.Distinct().Order()];
+        IReadOnlyList<string> newNotWithErrors = [.. notWithErrors.Distinct().Order()];
+        IReadOnlyList<Member> newInvalidWithMembers =
+        [
+            .. invalidWithMembers.Distinct()
+                                 .OrderBy(member => member.Name, StringComparer.CurrentCulture)
+                                 .ThenBy(member => member.Id)
+        ];
+        IReadOnlyList<Member> newInvalidNotWithMembers =
+        [
+            .. invalidNotWithMembers.Distinct()
+                                    .OrderBy(member => member.Name, StringComparer.CurrentCulture)
+                                    .ThenBy(member => member.Id)
+        ];
+
+        if (WithConstraintErrors.SequenceEqual(newWithErrors) &&
+            NotWithConstraintErrors.SequenceEqual(newNotWithErrors) &&
+            InvalidWithMembers.SequenceEqual(newInvalidWithMembers) &&
+            InvalidNotWithMembers.SequenceEqual(newInvalidNotWithMembers))
+        {
+            return;
+        }
+
+        WithConstraintErrors = newWithErrors;
+        NotWithConstraintErrors = newNotWithErrors;
+        InvalidWithMembers = newInvalidWithMembers;
+        InvalidNotWithMembers = newInvalidNotWithMembers;
+        OnPropertyChanged(nameof(WithConstraintErrors));
+        OnPropertyChanged(nameof(NotWithConstraintErrors));
+        OnPropertyChanged(nameof(InvalidWithMembers));
+        OnPropertyChanged(nameof(InvalidNotWithMembers));
+        OnPropertyChanged(nameof(ConstraintErrors));
+        OnPropertyChanged(nameof(HasConstraintErrors));
     }
 
     public void AddWithMember(Member member)

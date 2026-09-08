@@ -14,11 +14,15 @@
              KeyDown="InputElement_OnKeyDown">
     <UserControl.Resources>
         <converter:EnumDisplayNameConvertor x:Key="EnumDisplayNameConvertor" />
+        <converter:FormattedTextConverter x:Key="FormattedTextConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="controls|MemberListSelection">
             <Setter Property="MaxHeight" Value="300" />
+        </Style>
+        <Style Selector="Border.ConstraintInvalid">
+            <Setter Property="Background" Value="{DynamicResource AppInvalidBackgroundBrush}" />
         </Style>
     </UserControl.Styles>
 
@@ -73,6 +77,10 @@
 
                 <Button DockPanel.Dock="Right"
                         Click="ShowTeamsButton_OnClick"
+                        IsEnabled="{Binding CanShowTeams}"
+                        ToolTip.ShowOnDisabled="True"
+                        ToolTip.ServiceEnabled="{Binding !CanShowTeams}"
+                        ToolTip.Tip="{x:Static lang:Resources.InputView_ConstraintErrors_BlockTeams_ToolTip}"
                         HorizontalAlignment="Right">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{x:Static lang:Resources.InputView_ShowTeams_Button}" />
@@ -214,13 +222,17 @@
                                 <controls:MemberListControl
                                     AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
                                     CurrentMember="{Binding .}"
-                                    SelectedMembers="{Binding With}" />
+                                    SelectedMembers="{Binding With}"
+                                    InvalidMembers="{Binding InvalidWithMembers}"
+                                    ValidationErrors="{Binding WithConstraintErrors}" />
                             </DataTemplate>
                             <DataTemplate x:Key="NotWithCell" DataType="models:Member">
                                 <controls:MemberListControl
                                     AllMembers="{Binding $parent[UserControl].((viewModel:InputViewModel)DataContext).Members.SortedMembers}"
                                     CurrentMember="{Binding .}"
-                                    SelectedMembers="{Binding NotWith}" />
+                                    SelectedMembers="{Binding NotWith}"
+                                    InvalidMembers="{Binding InvalidNotWithMembers}"
+                                    ValidationErrors="{Binding NotWithConstraintErrors}" />
                             </DataTemplate>
                         </TreeDataGrid.Resources>
                         <TreeDataGrid.Styles>

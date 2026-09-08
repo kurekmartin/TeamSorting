@@ -84,6 +84,14 @@ namespace TeamSorting.Lang {
         public static string InputView_DuplicateDiscipline_Error {
             get { return ResourceManager.GetString("InputView_DuplicateDiscipline_Error", resourceCulture); }
         }
+
+        public static string InputView_MemberConstraintConflict_Error {
+            get { return ResourceManager.GetString("InputView_MemberConstraintConflict_Error", resourceCulture); }
+        }
+
+        public static string InputView_ConstraintErrors_BlockTeams_ToolTip {
+            get { return ResourceManager.GetString("InputView_ConstraintErrors_BlockTeams_ToolTip", resourceCulture); }
+        }
         
         public static string TeamsView_Seed_Watermark {
             get {

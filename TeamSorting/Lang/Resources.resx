@@ -198,6 +198,12 @@ Do you want to continue?</value>
     <data name="InputView_Member_DuplicateName_Error" xml:space="preserve">
         <value>Member with same name exists</value>
     </data>
+    <data name="InputView_MemberConstraintConflict_Error" xml:space="preserve">
+        <value>**{0}** must be with **{1}** through {2}, but they are also marked Not with.</value>
+    </data>
+    <data name="InputView_ConstraintErrors_BlockTeams_ToolTip" xml:space="preserve">
+        <value>Resolve the conflicting With and Not with conditions before opening teams.</value>
+    </data>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Member **{0}** moved from team **{1}** to team **{2}**.</value>
     </data>

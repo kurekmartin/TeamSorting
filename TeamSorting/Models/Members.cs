@@ -3,6 +3,7 @@ using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.Extensions.Logging;
 using TeamSorting.Lang;
+using TeamSorting.Validators;
 
 namespace TeamSorting.Models;
 
@@ -21,15 +22,18 @@ public class Members : ObservableObject
     }
 
     public List<Member> SortedMembers => _sortedMembers ??= _memberList.OrderBy(m => m.Name).ToList();
+    public bool HasConstraintErrors => _memberList.Any(member => member.HasConstraintErrors);
 
     public bool AddMember(Member member)
     {
         _logger.LogInformation("Adding member {memberId}", member.Id);
         member.PropertyChanged += MemberOnPropertyChanged;
+        member.ConstraintsChanged += MemberOnConstraintsChanged;
         _memberList.Add(member);
         _sortedMembers = null;
         ValidateMemberDuplicates();
         OnPropertyChanged(nameof(SortedMembers));
+        ValidateConstraints();
         return true;
     }
 
@@ -37,17 +41,20 @@ public class Members : ObservableObject
     {
         _logger.LogInformation("Removing member {memberId}", member.Id);
         member.PropertyChanged -= MemberOnPropertyChanged;
+        member.ConstraintsChanged -= MemberOnConstraintsChanged;
         bool result = _memberList.Remove(member);
         if (result)
         {
             member.Team?.RemoveMember(member);
             member.ClearWithMembers();
             member.ClearNotWithMembers();
+            member.SetConstraintErrors([], [], [], []);
             ValidateMemberDuplicates();
         }
 
         _sortedMembers = null;
         OnPropertyChanged(nameof(SortedMembers));
+        ValidateConstraints();
         return result;
     }
 
@@ -129,6 +136,33 @@ public class Members : ObservableObject
             _sortedMembers = null;
             ValidateMemberDuplicates();
             OnPropertyChanged(nameof(SortedMembers));
+            ValidateConstraints();
+        }
+    }
+
+    private void MemberOnConstraintsChanged(object? sender, EventArgs e)
+    {
+        ValidateConstraints();
+    }
+
+    private void ValidateConstraints()
+    {
+        bool hadErrors = HasConstraintErrors;
+        Dictionary<Member, MemberConstraintErrors> validation = MemberConstraintValidator.Validate(_memberList);
+
+        foreach (Member member in _memberList)
+        {
+            MemberConstraintErrors memberErrors = validation[member];
+            member.SetConstraintErrors(
+                memberErrors.With,
+                memberErrors.NotWith,
+                memberErrors.InvalidWithMembers,
+                memberErrors.InvalidNotWithMembers);
+        }
+
+        if (hadErrors != HasConstraintErrors)
+        {
+            OnPropertyChanged(nameof(HasConstraintErrors));
         }
     }
 

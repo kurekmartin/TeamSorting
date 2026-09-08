@@ -61,8 +61,4 @@
         <Generator>PublicResXFileCodeGenerator</Generator>
       </EmbeddedResource>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Validators\" />
-    </ItemGroup>
 </Project>

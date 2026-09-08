@@ -62,6 +62,7 @@ public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
     }
 
     public bool MembersEmpty => Members.MemberList.Count == 0;
+    public bool CanShowTeams => !Members.HasConstraintErrors;
 
     public bool ShowAddMemberToolbar => AddMode == AddMode.Member;
     public bool ShowAddDisciplineToolbar => AddMode == AddMode.Discipline;
@@ -190,9 +191,14 @@ public class InputViewModel : ViewModelBase, INotifyDataErrorInfo
 
     private void MembersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(Members.SortedMembers))
+        switch (e.PropertyName)
         {
-            ValidateNewMemberName();
+            case nameof(Members.HasConstraintErrors):
+                OnPropertyChanged(nameof(CanShowTeams));
+                break;
+            case nameof(Members.SortedMembers):
+                ValidateNewMemberName();
+                break;
         }
     }
 

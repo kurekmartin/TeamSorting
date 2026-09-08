@@ -185,6 +185,12 @@ public class Teams : ObservableObject
     //TODO: move sorting to separate class
     public async Task SortToTeams(int? numberOfTeams = null)
     {
+        if (_members.HasConstraintErrors)
+        {
+            _logger.LogWarning("Cannot start sorting while member constraints contain errors");
+            return;
+        }
+
         SortingInProgress = true;
         var teamsToCreate = 0;
         if (numberOfTeams is not null && _teamList.Count < numberOfTeams)

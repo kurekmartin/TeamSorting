@@ -209,6 +209,12 @@ Chcete pokračovat?</value>
     <data name="InputView_Member_DuplicateName_Error" xml:space="preserve">
         <value>Člen se stejným jménem již existuje</value>
     </data>
+    <data name="InputView_MemberConstraintConflict_Error" xml:space="preserve">
+        <value>Člen **{0}** musí být s členem **{1}** přes {2}, ale zároveň jsou označeni podmínkou „Nesmí být s“.</value>
+    </data>
+    <data name="InputView_ConstraintErrors_BlockTeams_ToolTip" xml:space="preserve">
+        <value>Před rozdělením do týmů vyřešte konfliktní podmínky „Musí být s“ a „Nesmí být s“.</value>
+    </data>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Člen **{0}** přesunut z týmu **{1}** do týmu **{2}**.</value>
     </data>
