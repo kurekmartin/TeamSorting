@@ -277,18 +277,18 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         List<Member> parent2Rest = [..parent2.Members[endIndex..], ..parent2.Members[..endIndex]];
         parent2Rest = parent2Rest.Except(parent1Section).ToList();
 
-        int endSectionSize = parent1.Members.Count - endIndex + 1;
+        int suffixLength = parent1.Members.Count - endIndex;
         SortGeneration child1 = new(
         [
-            ..parent1Rest[endSectionSize..],
-            ..parent2Section,
-            ..parent1Rest[..endSectionSize]
+            .. parent1Rest[suffixLength..],
+            .. parent2Section,
+            .. parent1Rest[..suffixLength]
         ]);
         SortGeneration child2 = new(
         [
-            ..parent2Rest[endSectionSize..],
-            ..parent1Section,
-            ..parent2Rest[..endSectionSize]
+            .. parent2Rest[suffixLength..],
+            .. parent1Section,
+            .. parent2Rest[..suffixLength]
         ]);
 
         return [child1, child2];
