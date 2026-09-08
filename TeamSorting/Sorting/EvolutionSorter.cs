@@ -167,6 +167,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
                 logger.LogError("NewMemberCount not set for current generation");
                 continue;
             }
+
             int newMemberCount = generation.NewMemberCount[team];
             List<Member> newMembers = generation.Members.Skip(startIndex).Take(newMemberCount).ToList();
             teamMembers.AddRange(newMembers);
@@ -230,7 +231,7 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
             KeyValuePair<Team, int> teamWithMinCapacity = generation.NewMemberCount.MinBy(pair => pair.Value + pair.Key.Members.Count(member => !member.AllowTeamChange));
             int minCapacity = teamWithMinCapacity.Key.Members.Count(member => !member.AllowTeamChange) + teamWithMinCapacity.Value;
             List<KeyValuePair<Team, int>> teamsWithMinCapacity = generation.NewMemberCount.Where(pair => pair.Value + pair.Key.Members.Count(member => !member.AllowTeamChange) == minCapacity).ToList();
-            
+
             int additionalTeamMemberIndex = random.Next(teamsWithMinCapacity.Count);
 
             KeyValuePair<Team, int> team = teamsWithMinCapacity[additionalTeamMemberIndex];
@@ -271,10 +272,10 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
         List<Member> parent1Section = parent1.Members[startIndex..endIndex];
         List<Member> parent2Section = parent2.Members[startIndex..endIndex];
 
-        List<Member> parent1Rest = [..parent1.Members[endIndex..], ..parent1.Members[..endIndex]];
+        List<Member> parent1Rest = [.. parent1.Members[endIndex..], .. parent1.Members[..endIndex]];
         parent1Rest = parent1Rest.Except(parent2Section).ToList();
 
-        List<Member> parent2Rest = [..parent2.Members[endIndex..], ..parent2.Members[..endIndex]];
+        List<Member> parent2Rest = [.. parent2.Members[endIndex..], .. parent2.Members[..endIndex]];
         parent2Rest = parent2Rest.Except(parent1Section).ToList();
 
         int suffixLength = parent1.Members.Count - endIndex;
