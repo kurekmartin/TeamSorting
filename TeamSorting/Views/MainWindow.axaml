@@ -26,12 +26,24 @@
         <ContentControl Grid.Row="0"
                         Content="{Binding ContentViewModel}"
                         DockPanel.Dock="Top" />
-        <StackPanel Grid.Row="1"
-                    Background="{DynamicResource AppSecondarySurfaceBrush}"
-                    VerticalAlignment="Bottom">
+        <Grid Grid.Row="1"
+              ColumnDefinitions="Auto,*,Auto"
+              Background="{DynamicResource AppSecondarySurfaceBrush}"
+              VerticalAlignment="Bottom">
+            <Button Grid.Column="0"
+                    avalonia:Attached.Icon="mdi-theme-light-dark"
+                    ToolTip.Tip="{x:Static lang:Resources.MainWindow_SwitchTheme_Button}"
+                    Click="SwitchThemeButton_OnClick"
+                    Margin="5,3"
+                    Padding="4"
+                    MinHeight="0"
+                    FontSize="17" />
+
             <StackPanel Orientation="Horizontal"
+                        Grid.Column="2"
                         HorizontalAlignment="Right"
-                        VerticalAlignment="Center">
+                        VerticalAlignment="Center"
+                        Margin="5,3">
                 <Button Name="NewVersionPageButton"
                         avalonia:Attached.Icon="mdi-download-circle-outline"
                         ToolTip.Tip="{x:Static lang:Resources.MainWindow_NewVersion_Download_Button}"
@@ -42,13 +54,13 @@
                         MinHeight="0"
                         FontSize="17"
                         Foreground="{DynamicResource AppUpdateBrush}" />
-                
+
                 <TextBlock Text="{Binding Version}"
-                           Margin="3"
+                           Margin="3,0"
                            HorizontalAlignment="Right"
                            VerticalAlignment="Center" />
             </StackPanel>
-        </StackPanel>
+        </Grid>
         <!-- Overlay -->
         <Border Grid.Row=""
                 Background="{DynamicResource AppOverlayBackgroundBrush}"

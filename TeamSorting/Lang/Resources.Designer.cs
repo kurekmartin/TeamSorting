@@ -486,6 +486,12 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("MainWindow_NewVersion_Download_Button", resourceCulture);
             }
         }
+
+        public static string MainWindow_SwitchTheme_Button {
+            get {
+                return ResourceManager.GetString("MainWindow_SwitchTheme_Button", resourceCulture);
+            }
+        }
         
         public static string TeamsView_TeamEmptyName_Error {
             get {

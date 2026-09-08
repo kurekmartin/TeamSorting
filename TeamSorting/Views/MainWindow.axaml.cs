@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
 using Avalonia.Interactivity;
+using Avalonia.Styling;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TeamSorting.ViewModels;
@@ -65,6 +66,23 @@ public partial class MainWindow : Window
         else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
             Process.Start("xdg-open", context.ReleaseUrl);
+        }
+    }
+
+    private void SwitchThemeButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        if (Application.Current is not { } application)
+        {
+            return;
+        }
+
+        if (application.ActualThemeVariant == ThemeVariant.Dark)
+        {
+            application.RequestedThemeVariant = ThemeVariant.Light;
+        }
+        else
+        {
+            application.RequestedThemeVariant = ThemeVariant.Dark;
         }
     }
 }
