@@ -232,8 +232,8 @@ public class EvolutionSorter(ILogger<EvolutionSorter> logger) : ISorter
             List<KeyValuePair<Team, int>> teamsWithMinCapacity = generation.NewMemberCount.Where(pair => pair.Value + pair.Key.Members.Count(member => !member.AllowTeamChange) == minCapacity).ToList();
             
             int additionalTeamMemberIndex = random.Next(teamsWithMinCapacity.Count);
-            
-            KeyValuePair<Team, int> team = generation.NewMemberCount.ElementAt(additionalTeamMemberIndex);
+
+            KeyValuePair<Team, int> team = teamsWithMinCapacity[additionalTeamMemberIndex];
             generation.NewMemberCount[team.Key]++;
         }
     }
