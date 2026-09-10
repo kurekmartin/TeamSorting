@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using TeamSorting.Actions;
 using TeamSorting.Models;
 using TeamSorting.Sorting;
 using TeamSorting.Utils;
@@ -14,6 +15,7 @@ public static class ServiceCollectionExtensions
         collection.AddSingleton<Members>();
         collection.AddSingleton<Disciplines>();
         collection.AddSingleton<Teams>();
+        collection.AddSingleton<UndoRedoHistory>();
         collection.AddTransient<MainWindowViewModel>();
         collection.AddSingleton<InputViewModel>();
         collection.AddSingleton<TeamsViewModel>();

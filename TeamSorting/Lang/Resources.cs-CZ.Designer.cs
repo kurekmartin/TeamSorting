@@ -429,6 +429,30 @@ namespace TeamSorting.Lang {
             }
         }
         
+        public static string TeamsView_Undo_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_Undo_Button", resourceCulture);
+            }
+        }
+        
+        public static string TeamsView_Redo_Button {
+            get {
+                return ResourceManager.GetString("TeamsView_Redo_Button", resourceCulture);
+            }
+        }
+        
+        public static string TeamsView_Undo_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_Undo_ToolTip", resourceCulture);
+            }
+        }
+        
+        public static string TeamsView_Redo_ToolTip {
+            get {
+                return ResourceManager.GetString("TeamsView_Redo_ToolTip", resourceCulture);
+            }
+        }
+        
         public static string Data_TeamName_Unsorted {
             get {
                 return ResourceManager.GetString("Data_TeamName_Unsorted", resourceCulture);

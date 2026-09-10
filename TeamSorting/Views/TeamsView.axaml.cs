@@ -20,6 +20,7 @@ public partial class TeamsView : UserControl
 {
     private Point _ghostPosition = new(0, 0);
     private Point _mouseOffset;
+    private TopLevel? _keyboardShortcutHost;
     private readonly ILogger<TeamsView>? _logger = Ioc.Default.GetService<ILogger<TeamsView>>();
 
     public TeamsView()
@@ -28,6 +29,44 @@ public partial class TeamsView : UserControl
         AddHandler(DragDrop.DragOverEvent, DragOver);
         AddHandler(DragDrop.DropEvent, Drop);
         AddHandler(DragDrop.DragLeaveEvent, DragLeave);
+    }
+
+    private void TeamsView_OnKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Handled || DataContext is not TeamsViewModel context || IsTextEditingSource(e.Source))
+        {
+            return;
+        }
+
+        KeyModifiers primaryModifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+        bool undo = e.Key == Key.Z && e.KeyModifiers == primaryModifier;
+        bool redo;
+        if (OperatingSystem.IsMacOS())
+        {
+            redo = e.Key == Key.Z && e.KeyModifiers == (primaryModifier | KeyModifiers.Shift);
+        }
+        else
+        {
+            redo = e.Key == Key.Y && e.KeyModifiers == primaryModifier
+                   || e.Key == Key.Z && e.KeyModifiers == (primaryModifier | KeyModifiers.Shift);
+        }
+
+        if (undo && context.UndoCommand.CanExecute(null))
+        {
+            context.UndoCommand.Execute(null);
+            e.Handled = true;
+        }
+        else if (redo && context.RedoCommand.CanExecute(null))
+        {
+            context.RedoCommand.Execute(null);
+            e.Handled = true;
+        }
+    }
+
+    private static bool IsTextEditingSource(object? source)
+    {
+        return source is TextBox
+               || (source as Visual)?.GetVisualAncestors().OfType<TextBox>().Any() == true;
     }
 
     private void DragLeave(object? sender, DragEventArgs e)
@@ -171,7 +210,16 @@ public partial class TeamsView : UserControl
     protected override void OnLoaded(RoutedEventArgs e)
     {
         GhostCard.IsVisible = false;
+        _keyboardShortcutHost = TopLevel.GetTopLevel(this);
+        _keyboardShortcutHost?.AddHandler(KeyDownEvent, TeamsView_OnKeyDown, RoutingStrategies.Tunnel);
         base.OnLoaded(e);
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        _keyboardShortcutHost?.RemoveHandler(KeyDownEvent, TeamsView_OnKeyDown);
+        _keyboardShortcutHost = null;
+        base.OnUnloaded(e);
     }
 
     private void UpdateSortCriteria()
@@ -333,6 +381,7 @@ public partial class TeamsView : UserControl
         bool showUnsortedMembersAfterDeletion =
             !context.ShowUnsortedMembers && context.Teams.MembersWithoutTeam.Members.Count == 0;
 
+        context.ClearHistory();
         context.Teams.RemoveTeam(team);
 
         if (showUnsortedMembersAfterDeletion && context.Teams.MembersWithoutTeam.Members.Count > 0)
@@ -374,7 +423,12 @@ public partial class TeamsView : UserControl
                 return;
             }
 
+            context.ClearHistory();
             teamsToDelete.ForEach(team => context.Teams.RemoveTeam(team));
+        }
+        else
+        {
+            context.ClearHistory();
         }
 
         context.ShowUnsortedMembers = false;
@@ -446,6 +500,7 @@ public partial class TeamsView : UserControl
             return;
         }
 
+        teamsViewModel.ClearHistory();
         teamsViewModel.Teams.RemoveAllTeams();
     }
 

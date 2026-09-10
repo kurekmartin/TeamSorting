@@ -218,6 +218,18 @@ Chcete pokračovat?</value>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Člen **{0}** přesunut z týmu **{1}** do týmu **{2}**.</value>
     </data>
+    <data name="TeamsView_Undo_Button" xml:space="preserve">
+        <value>Vrátit</value>
+    </data>
+    <data name="TeamsView_Redo_Button" xml:space="preserve">
+        <value>Znovu</value>
+    </data>
+    <data name="TeamsView_Undo_ToolTip" xml:space="preserve">
+        <value>Vrátit poslední akci</value>
+    </data>
+    <data name="TeamsView_Redo_ToolTip" xml:space="preserve">
+        <value>Znovu provést poslední akci</value>
+    </data>
     <data name="Data_TeamName_Unsorted" xml:space="preserve">
         <value>Nezařazení</value>
     </data>

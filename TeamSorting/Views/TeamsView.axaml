@@ -113,6 +113,17 @@
                                             Name="SidePanelTeams">
                                     <TextBlock Text="{x:Static lang:Resources.TeamsView_ControlsSection_Teams}"
                                                FontWeight="Bold" />
+                                    <StackPanel Orientation="Horizontal"
+                                                Spacing="4">
+                                        <Button i:Attached.Icon="mdi-undo"
+                                                Command="{Binding UndoCommand}"
+                                                ToolTip.Tip="{x:Static lang:Resources.TeamsView_Undo_ToolTip}"
+                                                AutomationProperties.Name="{x:Static lang:Resources.TeamsView_Undo_Button}" />
+                                        <Button i:Attached.Icon="mdi-redo"
+                                                Command="{Binding RedoCommand}"
+                                                ToolTip.Tip="{x:Static lang:Resources.TeamsView_Redo_ToolTip}"
+                                                AutomationProperties.Name="{x:Static lang:Resources.TeamsView_Redo_Button}" />
+                                    </StackPanel>
                                     <Button Click="AddTeamButton_OnClick">
                                         <StackPanel Orientation="Horizontal"
                                                     VerticalAlignment="Center">

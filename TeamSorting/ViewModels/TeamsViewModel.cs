@@ -1,9 +1,13 @@
 ﻿using System.Collections.Specialized;
+using System.ComponentModel;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Notifications;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.VisualTree;
+using CommunityToolkit.Mvvm.Input;
+using TeamSorting.Actions;
 using TeamSorting.Controls;
 using TeamSorting.Lang;
 using TeamSorting.Models;
@@ -19,23 +23,45 @@ public class TeamsViewModel : ViewModelBase
     public Disciplines Disciplines { get; }
     public CsvUtil CsvUtil { get; }
     public WindowNotificationManager? NotificationManager { get; set; }
+    public IRelayCommand UndoCommand { get; }
+    public IRelayCommand RedoCommand { get; }
+    private readonly UndoRedoHistory _history;
     private MemberSortCriteria _teamsSortCriteria;
     private MemberCard? _draggingMemberCard;
     private Visual? _dragOverTeam;
+    private object? _moveNotificationContent;
     private int _numberOfTeams = 2;
     private bool _showUnsortedMembers = true;
 
-    public TeamsViewModel(Teams teams, Disciplines disciplines, CsvUtil csvUtil)
+    public TeamsViewModel(
+        Teams teams,
+        Disciplines disciplines,
+        CsvUtil csvUtil,
+        Members members,
+        UndoRedoHistory history)
     {
         Teams = teams;
         Disciplines = disciplines;
         CsvUtil = csvUtil;
+        _history = history;
+        UndoCommand = new RelayCommand(Undo, CanUndo);
+        RedoCommand = new RelayCommand(Redo, CanRedo);
 
         ((INotifyCollectionChanged)teams.TeamList).CollectionChanged += TeamsOnCollectionChanged;
+        ((INotifyCollectionChanged)members.MemberList).CollectionChanged += MembersOnCollectionChanged;
+        teams.PropertyChanged += TeamsOnPropertyChanged;
+        history.StateChanged += HistoryOnStateChanged;
     }
 
     private void TeamsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
+        if (e.Action is NotifyCollectionChangedAction.Remove
+            or NotifyCollectionChangedAction.Replace
+            or NotifyCollectionChangedAction.Reset)
+        {
+            ClearHistory();
+        }
+
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
@@ -44,6 +70,62 @@ public class TeamsViewModel : ViewModelBase
                 NumberOfTeams = Teams.TeamList.Count;
                 break;
         }
+    }
+
+    private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        if (e.Action is NotifyCollectionChangedAction.Remove
+            or NotifyCollectionChangedAction.Replace
+            or NotifyCollectionChangedAction.Reset)
+        {
+            ClearHistory();
+        }
+    }
+
+    private void TeamsOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Teams.SortingInProgress))
+        {
+            NotifyCommandsCanExecuteChanged();
+        }
+    }
+
+    private void HistoryOnStateChanged(object? sender, EventArgs e)
+    {
+        CloseMoveNotification();
+        NotifyCommandsCanExecuteChanged();
+    }
+
+    private bool CanUndo()
+    {
+        return !Teams.SortingInProgress && _history.CanUndo;
+    }
+
+    private bool CanRedo()
+    {
+        return !Teams.SortingInProgress && _history.CanRedo;
+    }
+
+    private void NotifyCommandsCanExecuteChanged()
+    {
+        UndoCommand.NotifyCanExecuteChanged();
+        RedoCommand.NotifyCanExecuteChanged();
+    }
+
+    private void Undo()
+    {
+        _history.Undo();
+    }
+
+    private void Redo()
+    {
+        _history.Redo();
+    }
+
+    public void ClearHistory()
+    {
+        _history.Clear();
+        CloseMoveNotification();
     }
 
     public int NumberOfTeams
@@ -98,29 +180,63 @@ public class TeamsViewModel : ViewModelBase
     public void Drop(Member member, Control? destination)
     {
         TeamControl? teamControl = FindTeamControl(destination);
-        if (teamControl?.Team is not { } team)
+        if (teamControl?.Team is not { } newTeam)
         {
             return;
         }
 
         Team? oldTeam = member.Team;
-        bool moved = member.MoveToTeam(team);
+        if (oldTeam is null)
+        {
+            return;
+        }
+
+        bool moved = _history.Execute(new MoveMemberAction(member, oldTeam, newTeam));
 
         if (!moved)
         {
             return;
         }
 
-        Team? newTeam = member.Team;
+        newTeam = member.Team;
         string message = string.Format(Resources.TeamsView_MemberMoved_Message, member.Name, oldTeam?.Name,
             newTeam?.Name);
         var textbox = new TextBlock
         {
             TextWrapping = TextWrapping.Wrap,
-            Margin = new Thickness(10),
             Inlines = TextParser.Parse(message)
         };
-        NotificationManager?.Show(textbox, NotificationType.Success);
+        var undoButton = new Button
+        {
+            Content = Resources.TeamsView_Undo_Button,
+            Command = UndoCommand,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            Padding = new Thickness(0)
+        };
+        var content = new StackPanel
+        {
+            Margin = new Thickness(10),
+            Spacing = 8,
+            Children =
+            {
+                textbox,
+                undoButton
+            }
+        };
+
+        _moveNotificationContent = content;
+        NotificationManager?.Show(content, NotificationType.Success);
+    }
+
+    private void CloseMoveNotification()
+    {
+        if (_moveNotificationContent is null)
+        {
+            return;
+        }
+
+        NotificationManager?.Close(_moveNotificationContent);
+        _moveNotificationContent = null;
     }
 
     public bool IsValidDestination(Member member, Control? destination)

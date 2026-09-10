@@ -207,6 +207,18 @@ Do you want to continue?</value>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Member **{0}** moved from team **{1}** to team **{2}**.</value>
     </data>
+    <data name="TeamsView_Undo_Button" xml:space="preserve">
+        <value>Undo</value>
+    </data>
+    <data name="TeamsView_Redo_Button" xml:space="preserve">
+        <value>Redo</value>
+    </data>
+    <data name="TeamsView_Undo_ToolTip" xml:space="preserve">
+        <value>Undo the last action</value>
+    </data>
+    <data name="TeamsView_Redo_ToolTip" xml:space="preserve">
+        <value>Redo the last action</value>
+    </data>
     <data name="Data_TeamName_Unsorted" xml:space="preserve">
         <value>Unsorted</value>
     </data>
