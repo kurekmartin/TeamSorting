@@ -21,12 +21,13 @@ public sealed class UndoRedoHistory
 
     public bool CanUndo => _undoStack.Count > 0;
     public bool CanRedo => _redoStack.Count > 0;
+    public bool IsApplyingAction { get; private set; }
 
     public bool Execute(IUndoableAction action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
-        if (!action.Execute())
+        if (!Apply(action.Execute))
         {
             return false;
         }
@@ -50,7 +51,7 @@ public sealed class UndoRedoHistory
         }
 
         IUndoableAction action = _undoStack[^1];
-        if (!action.Undo())
+        if (!Apply(action.Undo))
         {
             return false;
         }
@@ -69,7 +70,7 @@ public sealed class UndoRedoHistory
         }
 
         IUndoableAction action = _redoStack[^1];
-        if (!action.Execute())
+        if (!Apply(action.Execute))
         {
             return false;
         }
@@ -95,5 +96,18 @@ public sealed class UndoRedoHistory
     private void OnStateChanged()
     {
         StateChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    private bool Apply(Func<bool> action)
+    {
+        IsApplyingAction = true;
+        try
+        {
+            return action();
+        }
+        finally
+        {
+            IsApplyingAction = false;
+        }
     }
 }

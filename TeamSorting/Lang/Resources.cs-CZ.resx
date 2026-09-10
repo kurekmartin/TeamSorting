@@ -218,6 +218,12 @@ Chcete pokračovat?</value>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Člen **{0}** přesunut z týmu **{1}** do týmu **{2}**.</value>
     </data>
+    <data name="TeamsView_TeamAdded_Message" xml:space="preserve">
+        <value>Tým **{0}** byl přidán.</value>
+    </data>
+    <data name="TeamsView_TeamDeleted_Message" xml:space="preserve">
+        <value>Tým **{0}** byl odstraněn.</value>
+    </data>
     <data name="TeamsView_Undo_Button" xml:space="preserve">
         <value>Vrátit</value>
     </data>

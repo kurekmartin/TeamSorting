@@ -428,6 +428,18 @@ namespace TeamSorting.Lang {
                 return ResourceManager.GetString("TeamsView_MemberMoved_Message", resourceCulture);
             }
         }
+
+        public static string TeamsView_TeamAdded_Message {
+            get {
+                return ResourceManager.GetString("TeamsView_TeamAdded_Message", resourceCulture);
+            }
+        }
+
+        public static string TeamsView_TeamDeleted_Message {
+            get {
+                return ResourceManager.GetString("TeamsView_TeamDeleted_Message", resourceCulture);
+            }
+        }
         
         public static string TeamsView_Undo_Button {
             get {

@@ -119,6 +119,21 @@ public class Teams : ObservableObject
         return true;
     }
 
+    internal bool RestoreTeam(Team team, int index)
+    {
+        if (_teamList.Contains(team))
+        {
+            return false;
+        }
+
+        _logger.LogInformation("Restoring team {teamId}", team.Id);
+        _teamList.Insert(Math.Clamp(index, 0, _teamList.Count), team);
+        team.ErrorsChanged += TeamOnErrorsChanged;
+        OnPropertyChanged(nameof(CanExportTeams));
+        ValidateTeamNames();
+        return true;
+    }
+
     public bool CreateAndAddTeam()
     {
         var team = new Team(string.Format(Resources.Data_TeamName_Template, _teamNumber), TeamType.SortTeam);

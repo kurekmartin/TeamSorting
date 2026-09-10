@@ -29,7 +29,7 @@ public class TeamsViewModel : ViewModelBase
     private MemberSortCriteria _teamsSortCriteria;
     private MemberCard? _draggingMemberCard;
     private Visual? _dragOverTeam;
-    private object? _moveNotificationContent;
+    private object? _actionNotificationContent;
     private int _numberOfTeams = 2;
     private bool _showUnsortedMembers = true;
 
@@ -48,16 +48,36 @@ public class TeamsViewModel : ViewModelBase
         RedoCommand = new RelayCommand(Redo, CanRedo);
 
         ((INotifyCollectionChanged)teams.TeamList).CollectionChanged += TeamsOnCollectionChanged;
+        ((INotifyCollectionChanged)teams.MembersWithoutTeam.Members).CollectionChanged +=
+            UnsortedMembersOnCollectionChanged;
         ((INotifyCollectionChanged)members.MemberList).CollectionChanged += MembersOnCollectionChanged;
         teams.PropertyChanged += TeamsOnPropertyChanged;
         history.StateChanged += HistoryOnStateChanged;
     }
 
+    private void UnsortedMembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+        switch (e.Action)
+        {
+            case NotifyCollectionChangedAction.Add:
+                ShowUnsortedMembers = true;
+                break;
+            case NotifyCollectionChangedAction.Remove when Teams.MembersWithoutTeam.Members.Count == 0:
+                ShowUnsortedMembers = false;
+                break;
+            case NotifyCollectionChangedAction.Replace:
+            case NotifyCollectionChangedAction.Reset:
+                ShowUnsortedMembers = Teams.MembersWithoutTeam.Members.Count > 0;
+                break;
+        }
+    }
+
     private void TeamsOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action is NotifyCollectionChangedAction.Remove
-            or NotifyCollectionChangedAction.Replace
-            or NotifyCollectionChangedAction.Reset)
+        if (!_history.IsApplyingAction
+            && e.Action is (NotifyCollectionChangedAction.Remove
+                or NotifyCollectionChangedAction.Replace
+                or NotifyCollectionChangedAction.Reset))
         {
             ClearHistory();
         }
@@ -74,9 +94,10 @@ public class TeamsViewModel : ViewModelBase
 
     private void MembersOnCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (e.Action is NotifyCollectionChangedAction.Remove
-            or NotifyCollectionChangedAction.Replace
-            or NotifyCollectionChangedAction.Reset)
+        if (!_history.IsApplyingAction
+            && e.Action is (NotifyCollectionChangedAction.Remove
+                or NotifyCollectionChangedAction.Replace
+                or NotifyCollectionChangedAction.Reset))
         {
             ClearHistory();
         }
@@ -92,7 +113,7 @@ public class TeamsViewModel : ViewModelBase
 
     private void HistoryOnStateChanged(object? sender, EventArgs e)
     {
-        CloseMoveNotification();
+        CloseActionNotification();
         NotifyCommandsCanExecuteChanged();
     }
 
@@ -125,7 +146,32 @@ public class TeamsViewModel : ViewModelBase
     public void ClearHistory()
     {
         _history.Clear();
-        CloseMoveNotification();
+        CloseActionNotification();
+    }
+
+    public bool AddTeam()
+    {
+        var action = new AddTeamAction(Teams);
+        if (!_history.Execute(action) || action.Team is null)
+        {
+            return false;
+        }
+
+        string message = string.Format(Resources.TeamsView_TeamAdded_Message, action.Team.Name);
+        ShowActionNotification(message);
+        return true;
+    }
+
+    public bool DeleteTeam(Team team)
+    {
+        if (!_history.Execute(new DeleteTeamAction(Teams, team)))
+        {
+            return false;
+        }
+
+        string message = string.Format(Resources.TeamsView_TeamDeleted_Message, team.Name);
+        ShowActionNotification(message);
+        return true;
     }
 
     public int NumberOfTeams
@@ -201,6 +247,11 @@ public class TeamsViewModel : ViewModelBase
         newTeam = member.Team;
         string message = string.Format(Resources.TeamsView_MemberMoved_Message, member.Name, oldTeam?.Name,
             newTeam?.Name);
+        ShowActionNotification(message);
+    }
+
+    private void ShowActionNotification(string message)
+    {
         var textbox = new TextBlock
         {
             TextWrapping = TextWrapping.Wrap,
@@ -224,19 +275,19 @@ public class TeamsViewModel : ViewModelBase
             }
         };
 
-        _moveNotificationContent = content;
+        _actionNotificationContent = content;
         NotificationManager?.Show(content, NotificationType.Success);
     }
 
-    private void CloseMoveNotification()
+    private void CloseActionNotification()
     {
-        if (_moveNotificationContent is null)
+        if (_actionNotificationContent is null)
         {
             return;
         }
 
-        NotificationManager?.Close(_moveNotificationContent);
-        _moveNotificationContent = null;
+        NotificationManager?.Close(_actionNotificationContent);
+        _actionNotificationContent = null;
     }
 
     public bool IsValidDestination(Member member, Control? destination)

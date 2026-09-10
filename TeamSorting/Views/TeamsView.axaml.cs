@@ -367,7 +367,7 @@ public partial class TeamsView : UserControl
     {
         if (DataContext is TeamsViewModel context)
         {
-            context.Teams.CreateAndAddTeam();
+            context.AddTeam();
         }
     }
 
@@ -378,16 +378,7 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        bool showUnsortedMembersAfterDeletion =
-            !context.ShowUnsortedMembers && context.Teams.MembersWithoutTeam.Members.Count == 0;
-
-        context.ClearHistory();
-        context.Teams.RemoveTeam(team);
-
-        if (showUnsortedMembersAfterDeletion && context.Teams.MembersWithoutTeam.Members.Count > 0)
-        {
-            context.ShowUnsortedMembers = true;
-        }
+        context.DeleteTeam(team);
     }
 
     private async void NewCombinationButton_OnClick(object? sender, RoutedEventArgs e)

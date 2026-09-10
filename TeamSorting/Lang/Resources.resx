@@ -207,6 +207,12 @@ Do you want to continue?</value>
     <data name="TeamsView_MemberMoved_Message" xml:space="preserve">
         <value>Member **{0}** moved from team **{1}** to team **{2}**.</value>
     </data>
+    <data name="TeamsView_TeamAdded_Message" xml:space="preserve">
+        <value>Team **{0}** added.</value>
+    </data>
+    <data name="TeamsView_TeamDeleted_Message" xml:space="preserve">
+        <value>Team **{0}** deleted.</value>
+    </data>
     <data name="TeamsView_Undo_Button" xml:space="preserve">
         <value>Undo</value>
     </data>
