@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,17 +6,9 @@
         xmlns:lang="clr-namespace:TeamSorting.Lang"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TeamSorting.Views.WarningDialog"
-        Title="WarningDialog"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="SystemChrome"
-        WindowStartupLocation="CenterOwner"
-        SizeToContent="WidthAndHeight"
-        SystemDecorations="None"
-        CanResize="False"
-        ShowInTaskbar="False"
-        Background="{DynamicResource AppSurfaceBrush}">
+        MaxWidth="360">
 
-    <DockPanel Margin="30">
+    <DockPanel>
         <TextBlock Name="Message"
                    Text="Warning text"
                    VerticalAlignment="Stretch"
@@ -43,4 +35,4 @@
                     Content="{x:Static lang:Resources.WarningDialog_Confirm_Button}" />
         </DockPanel>
     </DockPanel>
-</Window>
+</UserControl>

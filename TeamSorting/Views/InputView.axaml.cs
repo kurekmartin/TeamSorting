@@ -207,13 +207,7 @@ public partial class InputView : UserControl
             var window = TopLevel.GetTopLevel(this);
             if (window is MainWindow { DataContext: MainWindowViewModel } mainWindow)
             {
-                var dialog = new CsvErrorDialog
-                {
-                    DataContext = new CsvErrorViewModel(loadDataErrors),
-                    MaxHeight = mainWindow.Height * 0.9,
-                    MaxWidth = mainWindow.Width * 0.9
-                };
-                await dialog.ShowDialog(mainWindow);
+                await mainWindow.ShowCsvErrorDialogAsync(new CsvErrorViewModel(loadDataErrors));
             }
         }
     }
@@ -340,29 +334,27 @@ public partial class InputView : UserControl
 
     private async void DeleteDataButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        if (DataContext is InputViewModel context)
+        if (DataContext is not InputViewModel context)
         {
-            var window = TopLevel.GetTopLevel(this);
-            if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
-            {
-                var dialog = new WarningDialog(
-                    message: Lang.Resources.InputView_DeleteData_WarningDialog_Message,
-                    confirmButtonText: Lang.Resources.InputView_DeleteData_WarningDialog_Delete,
-                    cancelButtonText: Lang.Resources.InputView_DeleteData_WarningDialog_Cancel)
-                {
-                    Position = mainWindow.Position //fix for WindowStartupLocation="CenterOwner" not working
-                };
-                var result = await dialog.ShowDialog<WarningDialogResult>(mainWindow);
-                if (result == WarningDialogResult.Cancel)
-                {
-                    return;
-                }
+            return;
+        }
 
-                mainWindowViewModel.SwitchToInputView();
+        var window = TopLevel.GetTopLevel(this);
+        if (window is MainWindow { DataContext: MainWindowViewModel mainWindowViewModel } mainWindow)
+        {
+            WarningDialogResult result = await mainWindow.ShowWarningDialogAsync(
+                message: Lang.Resources.InputView_DeleteData_WarningDialog_Message,
+                confirmButtonText: Lang.Resources.InputView_DeleteData_WarningDialog_Delete,
+                cancelButtonText: Lang.Resources.InputView_DeleteData_WarningDialog_Cancel);
+            if (result == WarningDialogResult.Cancel)
+            {
+                return;
             }
 
-            context.ClearData();
+            mainWindowViewModel.SwitchToInputView();
         }
+
+        context.ClearData();
     }
 
     private void Members_OnSelectionChanging(object? sender, CancelEventArgs e)

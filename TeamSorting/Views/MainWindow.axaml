@@ -22,51 +22,51 @@
         </Style>
     </Window.Styles>
 
-    <Grid RowDefinitions="*,Auto">
-        <ContentControl Grid.Row="0"
-                        Content="{Binding ContentViewModel}"
-                        DockPanel.Dock="Top" />
-        <Grid Grid.Row="1"
-              ColumnDefinitions="Auto,*,Auto"
-              Background="{DynamicResource AppSecondarySurfaceBrush}"
-              VerticalAlignment="Bottom">
-            <Button Grid.Column="0"
-                    avalonia:Attached.Icon="mdi-theme-light-dark"
-                    ToolTip.Tip="{x:Static lang:Resources.MainWindow_SwitchTheme_Button}"
-                    Click="SwitchThemeButton_OnClick"
-                    Margin="5,3"
-                    Padding="4"
-                    MinHeight="0"
-                    FontSize="17" />
-
-            <StackPanel Orientation="Horizontal"
-                        Grid.Column="2"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Margin="5,3">
-                <Button Name="NewVersionPageButton"
-                        avalonia:Attached.Icon="mdi-download-circle-outline"
-                        ToolTip.Tip="{x:Static lang:Resources.MainWindow_NewVersion_Download_Button}"
-                        IsVisible="{Binding NewVersionAvailable}"
-                        Click="NewVersionPageButton_OnClick"
-                        Margin="2"
-                        Padding="2"
+    <Grid>
+        <Grid Name="ApplicationContent" RowDefinitions="*,Auto">
+            <ContentControl Grid.Row="0"
+                            Content="{Binding ContentViewModel}"
+                            DockPanel.Dock="Top" />
+            <Grid Grid.Row="1"
+                  ColumnDefinitions="Auto,*,Auto"
+                  Background="{DynamicResource AppSecondarySurfaceBrush}"
+                  VerticalAlignment="Bottom">
+                <Button Grid.Column="0"
+                        avalonia:Attached.Icon="mdi-theme-light-dark"
+                        ToolTip.Tip="{x:Static lang:Resources.MainWindow_SwitchTheme_Button}"
+                        Click="SwitchThemeButton_OnClick"
+                        Margin="5,3"
+                        Padding="4"
                         MinHeight="0"
-                        FontSize="17"
-                        Foreground="{DynamicResource AppUpdateBrush}" />
+                        FontSize="17" />
 
-                <TextBlock Text="{Binding Version}"
-                           Margin="3,0"
-                           HorizontalAlignment="Right"
-                           VerticalAlignment="Center" />
-            </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Grid.Column="2"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="5,3">
+                    <Button Name="NewVersionPageButton"
+                            avalonia:Attached.Icon="mdi-download-circle-outline"
+                            ToolTip.Tip="{x:Static lang:Resources.MainWindow_NewVersion_Download_Button}"
+                            IsVisible="{Binding NewVersionAvailable}"
+                            Click="NewVersionPageButton_OnClick"
+                            Margin="2"
+                            Padding="2"
+                            MinHeight="0"
+                            FontSize="17"
+                            Foreground="{DynamicResource AppUpdateBrush}" />
+
+                    <TextBlock Text="{Binding Version}"
+                               Margin="3,0"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
         </Grid>
-        <!-- Overlay -->
-        <Border Grid.Row=""
-                Background="{DynamicResource AppOverlayBackgroundBrush}"
+
+        <Border Background="{DynamicResource AppOverlayBackgroundBrush}"
                 IsVisible="{Binding Teams.SortingInProgress}" />
-        <Border Grid.Row=""
-                Background="Transparent"
+        <Border Background="Transparent"
                 IsVisible="{Binding Teams.SortingInProgress}">
             <StackPanel VerticalAlignment="Center"
                         HorizontalAlignment="Center">
@@ -84,5 +84,21 @@
                              HorizontalAlignment="Center" />
             </StackPanel>
         </Border>
+
+        <Grid Name="DialogOverlay"
+              IsVisible="False"
+              Background="{DynamicResource AppDialogOverlayBackgroundBrush}">
+            <Border Margin="24"
+                    Padding="30"
+                    MaxWidth="1000"
+                    MaxHeight="700"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="{DynamicResource AppSurfaceBrush}"
+                    CornerRadius="{DynamicResource ControlCornerRadius}"
+                    BoxShadow="{DynamicResource AppPanelShadow}">
+                <ContentControl Name="DialogContent" />
+            </Border>
+        </Grid>
     </Grid>
 </Window>

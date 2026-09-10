@@ -290,6 +290,28 @@ public class TeamsViewModel : ViewModelBase
         _actionNotificationContent = null;
     }
 
+    internal void SuppressNotifications()
+    {
+        NotificationManager?.CloseAll();
+        _actionNotificationContent = null;
+
+        if (NotificationManager is not null)
+        {
+            NotificationManager.IsVisible = false;
+        }
+    }
+
+    internal void RestoreNotifications()
+    {
+        if (NotificationManager is null)
+        {
+            return;
+        }
+
+        NotificationManager.CloseAll();
+        NotificationManager.IsVisible = true;
+    }
+
     public bool IsValidDestination(Member member, Control? destination)
     {
         TeamControl? teamControl = FindTeamControl(destination);

@@ -33,7 +33,10 @@ public partial class TeamsView : UserControl
 
     private void TeamsView_OnKeyDown(object? sender, KeyEventArgs e)
     {
-        if (e.Handled || DataContext is not TeamsViewModel context || IsTextEditingSource(e.Source))
+        if (e.Handled ||
+            TopLevel.GetTopLevel(this) is MainWindow { IsDialogOpen: true } ||
+            DataContext is not TeamsViewModel context ||
+            IsTextEditingSource(e.Source))
         {
             return;
         }
@@ -402,12 +405,10 @@ public partial class TeamsView : UserControl
             string teamNamesToDelete = string.Join(", ", teamsToDelete.Select(team => team.Name));
 
             string message = string.Format(Lang.Resources.TeamsView_Sort_WarningDialog_Message, teamNamesToDelete);
-            var dialog = new WarningDialog(
+            WarningDialogResult result = await mainWindow.ShowWarningDialogAsync(
                 message: message,
                 confirmButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Delete,
                 cancelButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Cancel);
-
-            WarningDialogResult result = await mainWindow.ShowWarningDialog(dialog);
 
             if (result == WarningDialogResult.Cancel)
             {
@@ -479,12 +480,10 @@ public partial class TeamsView : UserControl
             return;
         }
 
-        var dialog = new WarningDialog(
+        WarningDialogResult result = await mainWindow.ShowWarningDialogAsync(
             message: Lang.Resources.TeamsView_DeleteAllTeams_WarningDialog_Message,
             confirmButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Delete,
             cancelButtonText: Lang.Resources.TeamsView_Sort_WarningDialog_Cancel);
-
-        WarningDialogResult result = await mainWindow.ShowWarningDialog(dialog);
 
         if (result == WarningDialogResult.Cancel)
         {

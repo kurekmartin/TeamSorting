@@ -1,4 +1,4 @@
-﻿<Window xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,18 +7,12 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="TeamSorting.Views.CsvErrorDialog"
         x:DataType="viewModels:CsvErrorViewModel"
-        Title="CsvErrorList"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="SystemChrome"
-        WindowStartupLocation="CenterOwner"
-        SizeToContent="WidthAndHeight"
-        SystemDecorations="None"
-        CanResize="False"
-        ShowInTaskbar="False"
-        Background="{DynamicResource AppSurfaceBrush}">
+        MinWidth="320"
+        MinHeight="200"
+        MaxWidth="800"
+        MaxHeight="500">
 
-    <Grid Margin="30"
-          RowDefinitions="Auto,*,Auto">
+    <Grid RowDefinitions="Auto,*,Auto">
         <TextBlock Name="Message"
                    Grid.Row="0"
                    Text="{x:Static lang:Resources.CsvErrorDialog_Title}"
@@ -58,4 +52,4 @@
                     Content="{x:Static lang:Resources.CsvErrorDialog_Ok_Button}" />
         </DockPanel>
     </Grid>
-</Window>
+</UserControl>

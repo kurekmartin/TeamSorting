@@ -3,9 +3,15 @@ using Avalonia.Interactivity;
 
 namespace TeamSorting.Views;
 
-public partial class WarningDialog : Window
+public partial class WarningDialog : UserControl
 {
-    public WarningDialog(string message = null!, string? confirmButtonText = null, string? cancelButtonText = null)
+    public event Action<WarningDialogResult>? CloseRequested;
+
+    public WarningDialog() : this(string.Empty)
+    {
+    }
+
+    public WarningDialog(string message, string? confirmButtonText = null, string? cancelButtonText = null)
     {
         InitializeComponent();
         Message.Text = message;
@@ -15,12 +21,22 @@ public partial class WarningDialog : Window
 
     private void Cancel_OnClick(object? sender, RoutedEventArgs e)
     {
-        Close(WarningDialogResult.Cancel);
+        Cancel();
     }
 
     private void Confirm_OnClick(object? sender, RoutedEventArgs e)
     {
-        Close(WarningDialogResult.Confirm);
+        CloseRequested?.Invoke(WarningDialogResult.Confirm);
+    }
+
+    internal void Cancel()
+    {
+        CloseRequested?.Invoke(WarningDialogResult.Cancel);
+    }
+
+    internal void FocusInitialControl()
+    {
+        BtnCancel.Focus();
     }
 }
 

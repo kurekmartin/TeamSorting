@@ -3,8 +3,10 @@ using Avalonia.Interactivity;
 
 namespace TeamSorting.Views;
 
-public partial class CsvErrorDialog : Window
+public partial class CsvErrorDialog : UserControl
 {
+    public event Action? CloseRequested;
+
     public CsvErrorDialog()
     {
         InitializeComponent();
@@ -12,6 +14,16 @@ public partial class CsvErrorDialog : Window
 
     private void OkButton_OnClick(object? sender, RoutedEventArgs e)
     {
-        Close();
+        CloseDialog();
+    }
+
+    internal void CloseDialog()
+    {
+        CloseRequested?.Invoke();
+    }
+
+    internal void FocusInitialControl()
+    {
+        OkButton.Focus();
     }
 }
